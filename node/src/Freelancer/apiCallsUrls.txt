@@ -1,0 +1,43 @@
+
+// create (POST)
+
+http://localhost:5000/api/freelancer/create
+
+body = {
+    "Name" : "test",
+    "Surname" : "test",
+    "Username" : "test",
+    "PhoneNumber" : 0000000,
+    "Email" : "test",
+    "Password" : "test"
+}
+
+-----------------------------------------------------------------------------------------
+
+// verify account (PUT)
+
+http://localhost:5000/api/freelancer/verify/test/test
+
+
+-----------------------------------------------------------------------------------------
+
+// auth (POST)
+
+http://localhost:5000/api/freelancer/auth
+
+body = {
+    "Email" : "test",
+    "Password" : "test"
+}
+
+-----------------------------------------------------------------------------------------
+
+
+// Profile (POST)
+
+http://localhost:5000/api/freelancer/profile
+
+body = {
+    "Email" : "test",
+    "Password" : "test"
+}
