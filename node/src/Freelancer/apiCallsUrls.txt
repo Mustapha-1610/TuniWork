@@ -7,7 +7,7 @@ body = {
     "Name" : "test",
     "Surname" : "test",
     "Username" : "test",
-    "PhoneNumber" : 0000000,
+    "PhoneNumber" : 666,
     "Email" : "test",
     "Password" : "test"
 }
@@ -16,7 +16,7 @@ body = {
 
 // verify account (PUT)
 
-http://localhost:5000/api/freelancer/verify/test/test
+http://localhost:5000/api/freelancer/verify/:freeLancerId/:VerificationCode
 
 
 -----------------------------------------------------------------------------------------
