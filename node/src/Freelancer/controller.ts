@@ -41,6 +41,8 @@ export const create = async (req: express.Request, res: express.Response) => {
       Email,
       VerificationCode: VerificationCode,
     });
+
+    
     await SendFreelancerAccountConfirmationMail(
       freeLancer.Name,
       freeLancer.Email,
