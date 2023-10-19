@@ -41,3 +41,10 @@ body = {
     "Email" : "test",
     "Password" : "test"
 }
+
+-----------------------------------------------------------------------------------------
+
+// Logout (POST)
+
+http://localhost:5000/api/freelancer/logout
+

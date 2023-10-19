@@ -18,6 +18,7 @@ export const SendFreelancerAccountConfirmationMail = async (
   freelancerId: any,
   VerificationCode: String
 ) => {
+  
   // transport houwa jesr from chkoun to amal  html body message chnouwa f wostou
   await transport
     .sendMail({

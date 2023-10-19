@@ -15,4 +15,5 @@ freelancerRouter.post("/auth", freelancerController.auth);
 freelancerRouter.post("/profile", freelancerController.getProfile);
 
 freelancerRouter.post("/logout", freelancerController.logout);
+
 export default freelancerRouter;
