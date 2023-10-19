@@ -3,14 +3,14 @@
 
 http://localhost:5000/api/freelancer/create
 
-body = {
-    "Name" : "test",
-    "Surname" : "test",
-    "Username" : "test",
-    "PhoneNumber" : 666,
-    "Email" : "test",
-    "Password" : "test"
-}
+    body = {
+        "Name" : "test",
+        "Surname" : "test",
+        "Username" : "test",
+        "PhoneNumber" : 666,
+        "Email" : "test",
+        "Password" : "test"
+    }
 
 -----------------------------------------------------------------------------------------
 
