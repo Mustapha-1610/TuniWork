@@ -15,7 +15,7 @@ const customerSchema = new Schema({
   },
   PhoneNumber: {
     type: Number,
-    required: true,
+    required: false,
   },
   ProfilePicture: {
     type: String,
@@ -30,17 +30,6 @@ const customerSchema = new Schema({
   Password: {
     type: String,
     required: true,
-  },
-  VerificationCode: {
-    type: String,
-  },
-  AccountActivationStatus: {
-    type: Boolean,
-    default: true,
-  },
-  AccountVerficiationStatus: {
-    type: Boolean,
-    default: false,
   },
 });
 export default mongoose.model("customer", customerSchema);
