@@ -57,6 +57,7 @@ export const create = async (req: express.Request, res: express.Response) => {
       VerificationCode +=
         characters[Math.floor(Math.random() * characters.length)];
     }
+<<<<<<< HEAD
     let freeLancer: any;
     ProfilePicture
       ? (freeLancer = await freelancer.create({
@@ -92,6 +93,17 @@ export const create = async (req: express.Request, res: express.Response) => {
           WorkTitle,
           Speciality,
         }));
+=======
+    const freeLancer = await freelancer.create({
+      Name,
+      Surname,
+      Username,
+      PhoneNumber,
+      Password: securePassword,
+      Email,
+      VerificationCode: VerificationCode,
+    });
+>>>>>>> 0183fd5521e01346027ec1f79f31708a2f9ab76b
     await SendFreelancerAccountConfirmationMail(
       freeLancer.Name,
       freeLancer.Email,
@@ -105,7 +117,7 @@ export const create = async (req: express.Request, res: express.Response) => {
   }
 };
 
-// function to verify freelancer account (Mustapha)
+// function to verify freelancer account (Muèstapha)
 export const verifyAccount = async (
   req: express.Request,
   res: express.Response
