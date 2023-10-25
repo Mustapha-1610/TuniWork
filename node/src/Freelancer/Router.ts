@@ -16,4 +16,9 @@ freelancerRouter.post("/profile", freelancerController.getProfile);
 
 freelancerRouter.post("/logout", freelancerController.logout);
 
+freelancerRouter.put(
+  "/resetPassword/:freelancerId",
+  freelancerController.passwordReset
+);
+
 export default freelancerRouter;
