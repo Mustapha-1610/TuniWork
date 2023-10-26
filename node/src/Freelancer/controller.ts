@@ -8,10 +8,35 @@ import { freeLancerRouteProtection } from "./routeProtectionMiddleware";
 
 // function to create a freelancer account (Mustapha)
 export const create = async (req: express.Request, res: express.Response) => {
-  console.log();
-  const { Name, Surname, Username, PhoneNumber, Email, Password } = req.body;
+  const {
+    Name,
+    Surname,
+    PhoneNumber,
+    Email,
+    Password,
+    ProfilePicture,
+    HourlyRate,
+    PayPerTaskRate,
+    Languages,
+    EstimateWorkLocation,
+    WorkTitle,
+    Speciality,
+  } = req.body;
   try {
-    if (!Name || !Surname || !Username || !PhoneNumber || !Email || !Password) {
+    if (
+      !Name ||
+      !Surname ||
+      !PhoneNumber ||
+      !Email ||
+      !Password ||
+      !ProfilePicture ||
+      !HourlyRate ||
+      !PayPerTaskRate ||
+      !Languages ||
+      !EstimateWorkLocation ||
+      !WorkTitle ||
+      !Speciality
+    ) {
       return res.json({ error: "Missing Input(s)" });
     }
     // ylawej 3la freelancer 3andou ya nafs ya nafs phone number ya nafs l mail
@@ -32,6 +57,43 @@ export const create = async (req: express.Request, res: express.Response) => {
       VerificationCode +=
         characters[Math.floor(Math.random() * characters.length)];
     }
+<<<<<<< HEAD
+    let freeLancer: any;
+    ProfilePicture
+      ? (freeLancer = await freelancer.create({
+          Name,
+          Surname,
+          PhoneNumber,
+          Password: securePassword,
+          Email,
+          VerificationCode: VerificationCode,
+          ProfilePicture: ProfilePicture,
+          PayRate: {
+            HourlyRate: HourlyRate,
+            PayPerTaskRate: PayPerTaskRate,
+          },
+          Languages,
+          EstimateWorkLocation,
+          WorkTitle,
+          Speciality,
+        }))
+      : (freeLancer = await freelancer.create({
+          Name,
+          Surname,
+          PhoneNumber,
+          Password: securePassword,
+          Email,
+          VerificationCode: VerificationCode,
+          PayRate: {
+            HourlyRate: HourlyRate,
+            PayPerTaskRate: PayPerTaskRate,
+          },
+          Languages,
+          EstimateWorkLocation,
+          WorkTitle,
+          Speciality,
+        }));
+=======
     const freeLancer = await freelancer.create({
       Name,
       Surname,
@@ -41,6 +103,7 @@ export const create = async (req: express.Request, res: express.Response) => {
       Email,
       VerificationCode: VerificationCode,
     });
+>>>>>>> 0183fd5521e01346027ec1f79f31708a2f9ab76b
     await SendFreelancerAccountConfirmationMail(
       freeLancer.Name,
       freeLancer.Email,
@@ -124,7 +187,7 @@ export const getProfile = async (
 ) => {
   try {
     const Freelancer = await freeLancerRouteProtection(req, res);
-    return res.json({ freelancer: Freelancer, success: "Login Successfull" });
+    return res.json({ freelancer: Freelancer });
   } catch (err) {
     console.log(err);
   }
@@ -138,5 +201,26 @@ export const logout = async (req: express.Request, res: express.Response) => {
   } catch (err) {
     console.log(err);
     return res.json({ error: "Server Error !" });
+  }
+};
+
+export const passwordReset = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  const { newPassword } = req.body;
+  const freelancerId = req.params.freelancerId;
+  try {
+    let freeLancer = await freelancer.findById(freelancerId);
+    if (!freeLancer) {
+      return res.json({ error: "Error !" });
+    }
+    const hashedPassword = bcrypt.hashSync(newPassword);
+    freeLancer.Password = hashedPassword;
+    await freeLancer.save();
+    return res.json({ success: "Password Changed !" });
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error!" });
   }
 };
