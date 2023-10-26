@@ -307,3 +307,22 @@ export const disableAccount = async (
     console.log("Server Error !");
   }
 };
+
+export const activateFreelancer = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { freelancerId } = req.body;
+    let freeLancer = await freelancer.findById(freelancerId);
+    if (!freeLancer) {
+      return res.json({ error: "Account dosent exist !" });
+    }
+    freeLancer.AccountActivationStatus = true;
+    await freeLancer.save();
+    return res.json({ success: "Account Activated !" });
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error !" });
+  }
+};

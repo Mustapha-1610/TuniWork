@@ -30,4 +30,6 @@ freelancerRouter.put("/update", freelancerController.updateInfo);
 
 freelancerRouter.put("/disable", freelancerController.disableAccount);
 
+freelancerRouter.put("/activate", freelancerController.activateFreelancer);
+
 export default freelancerRouter;

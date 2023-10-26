@@ -14,7 +14,9 @@ body = {
     "PayPerTaskRate" : 105,
     "Languages" : ["english" , "arabic"],
     "EstimateWorkLocation" : "manzel bourguiba",
+    // here put the workTitle id until further improvements
     "WorkTitle" : "653ab7656c695f411be32074",
+    // here put the Speciality id further improvements
     "Speciality" : "653ab7656c695f411be32075"
 }
 
@@ -74,3 +76,26 @@ body = {
 
 // LOGOUT (POST) (Must Be Logged In)
 http://localhost:5000/api/freelancer/logout
+
+
+-----------------------------------------------------------------------------------------
+
+
+// ResetPassword (Put) 
+http://localhost:5000/api/freelancer/resetPassword/"FREELANCERID"
+
+body = {
+    "newPassword" : "123",
+    "oldPassword" : "test"
+}
+
+
+-----------------------------------------------------------------------------------------
+
+
+// Activate (Put) 
+http://localhost:5000/api/freelancer/activate
+
+body = {
+    "freelancerId" : "653adc26a14164a3e7cc5427"
+}
