@@ -7,7 +7,7 @@ import { Server } from "socket.io";
 import mongoose from "mongoose";
 import freelancerRouter from "./Freelancer/Router";
 
-import companyRouter from"./Company/Router";
+import companyRouter from "./Company/Router";
 
 import adminRouter from "./Admin/Router";
 
@@ -30,9 +30,9 @@ app.use("/api/freelancer", freelancerRouter);
 
 app.use("/api/company", companyRouter);
 
-app.use("/api/admin",adminRouter);
+app.use("/api/admin", adminRouter);
 
-
+//"nouri"
 
 app.use("/api/admin", adminRouter);
 app.use("/api/work", workRouter);
