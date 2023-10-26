@@ -1,13 +1,13 @@
 import admin from "./modal";
-import express from "express";
+import express, {request} from "express";
 import bcrypt from "bcryptjs";
+import freelancer from "../Freelancer/modal";
 
 
 
 //function to create new admin account
 
 export const create = async (req: express.Request, res: express.Response) => {
-    console.log();
     const { Name, Surname, Username, AdminCode, PhoneNumber, Email, Password } = req.body;
     try {
         if (!Name || !Surname || !Username || !PhoneNumber || !Email || !Password || !AdminCode) {
@@ -55,42 +55,101 @@ export const create = async (req: express.Request, res: express.Response) => {
 };
 
 
-// function to delete Admin Account
-
-export const DeleteAdmin = async (req: express.Request, res: express.Response) => {
-    try {
-        const {id} = req.params;
-        const Admin = await admin.findById(id);
-
-        if (!admin) {
-            return res.status(404).json({ error: "Admin not found" });
-        }
-
-        await admin.deleteOne();
-
-        return res.json({ success: "Admin deleted successfully" });
-    } catch (err) {
-        console.error(err);
-        return res.status(500).json({ error: "Server error" });
-    }
-};
-
 
 
 
 //function to get informations about admin account
 
-export const get =async (req: express.Request, res: express.Response) =>{
+export const getAdminProfile = async (req: express.Request, res: express.Response) => {
+    try {
+
+        let id = req.body.id;
+
+        const adminProfile = await admin.find({_id : id});
+
+        if (!adminProfile) {
+
+            return res.status(404).json({ error: 'No admin profiles found' });
+        }
+
+        return res.json(adminProfile);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ error: 'Server Error' });
+    }
+};
+
+// function to update admin account
+
+export const updateAdmin = async (req:express.Request,res:express.Response)=>{
 
 
+       let id =req.params.id;
+       const {Name , Surname , Username , PhoneNumber ,Email ,Password ,ProfilePicture } =req.body;
+
+       try{
+           if (!Name || !Surname || !Username || !PhoneNumber || !Email || !Password || !ProfilePicture){
+               return res.json({error: " you missed one or some inputs"})
+
+           }
+           let existingAdmin = await admin.findOne({
+
+               $or: [{ Email }, { PhoneNumber }],
+           });
+
+           if(existingAdmin){
+
+               return res.json({error: " there is an admin account with this Email or phoneNumber"})
+           }
+           const securePassword = bcrypt.hashSync(Password);
+           const updatedAdmin = await admin.findByIdAndUpdate(id, {
+               Name,
+               Surname,
+               Username,
+               PhoneNumber,
+               Email,
+               Password : securePassword,
+               ProfilePicture,
+           });
+
+           if (!updatedAdmin) {
+               return res.json({ error: "Admin account not found" });
+           }
+
+           return res.json({ success: "Admin account updated successfully!" });
 
 
+       }catch (error){
+           console.log(error);
+           return res.status(500).json({error: "Server error"});
 
-
+       }
 
 }
 
 
+//function to disable admin account
 
+export const deleteAdminAccount = async (req : express.Request , res :express.Response)=>{
 
+    let id = req.params.id;
 
+    try{
+
+        let deletedAdmin = await admin.findOneAndDelete({_id:id}) ;
+
+        if (!deletedAdmin){
+
+            return res.status(404).json({error : "Admin not found"});
+        }
+
+        return res.json({success : "Admin deleted successfully "});
+
+    }
+    catch (error){
+        console.log(error);
+        return res.status(500).json({error: "Server error"});
+
+    }
+
+}
