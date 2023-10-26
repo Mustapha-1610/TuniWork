@@ -9,10 +9,6 @@ const freelancerSchema = new Schema({
     type: String,
     required: true,
   },
-  Username: {
-    type: String,
-    required: true,
-  },
   PhoneNumber: {
     type: Number,
     required: true,
@@ -42,5 +38,87 @@ const freelancerSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  Earnings: {
+    type: Number,
+    default: 0,
+  },
+  PayRate: {
+    HourlyRate: {
+      type: Number,
+      required: true,
+    },
+    PayPerTaskRate: {
+      type: Number,
+      required: true,
+    },
+  },
+  WorkHistory: [
+    {
+      Ongoing: [
+        {
+          TaskTitle: {
+            type: String,
+          },
+          TaskHolder: {
+            type: Schema.Types.ObjectId,
+          },
+          DueDate: {
+            type: Date,
+          },
+        },
+      ],
+      Finiched: [
+        {
+          TaskTitle: {
+            type: String,
+          },
+          TaskHolder: {
+            type: Schema.Types.ObjectId,
+          },
+          EarningsMade: {
+            type: Number,
+          },
+          Review: {
+            type: String,
+          },
+        },
+      ],
+    },
+  ],
+  Schedule: {
+    Weekly: {
+      type: Date,
+    },
+    Monthly: {
+      type: Date,
+    },
+  },
+  Messages: [
+    {
+      type: String,
+    },
+  ],
+  Languages: [
+    {
+      type: String,
+      required: true,
+    },
+  ],
+  EstimateWorkLocation: {
+    type: String,
+    required: true,
+  },
+  WorkTitle: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: "Work",
+  },
+  Speciality: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Work",
+      required: true,
+    },
+  ],
 });
 export default mongoose.model("freelancer", freelancerSchema);
