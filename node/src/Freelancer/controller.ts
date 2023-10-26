@@ -1,4 +1,4 @@
-import freelancer from "./modal"
+import freelancer from "./modal";
 import jwt from "jsonwebtoken";
 import express from "express";
 import bcrypt from "bcryptjs";
@@ -29,6 +29,7 @@ export const create = async (req: express.Request, res: express.Response) => {
       !PhoneNumber ||
       !Email ||
       !Password ||
+      !ProfilePicture ||
       !HourlyRate ||
       !PayPerTaskRate ||
       !Languages ||
@@ -56,7 +57,7 @@ export const create = async (req: express.Request, res: express.Response) => {
       VerificationCode +=
         characters[Math.floor(Math.random() * characters.length)];
     }
-    let freelancer: any;
+    let freeLancer: any;
     ProfilePicture
       ? (freeLancer = await freelancer.create({
           Name,
@@ -91,17 +92,6 @@ export const create = async (req: express.Request, res: express.Response) => {
           WorkTitle,
           Speciality,
         }));
-
-    const freeLancer = await freelancer.create({
-      Name,
-      Surname,
-      Username,
-      PhoneNumber,
-      Password: securePassword,
-      Email,
-      VerificationCode: VerificationCode,
-    });
-
     await SendFreelancerAccountConfirmationMail(
       freeLancer.Name,
       freeLancer.Email,
