@@ -29,7 +29,6 @@ export const create = async (req: express.Request, res: express.Response) => {
       !PhoneNumber ||
       !Email ||
       !Password ||
-      !ProfilePicture ||
       !HourlyRate ||
       !PayPerTaskRate ||
       !Languages ||
@@ -174,17 +173,25 @@ export const getProfile = async (
   res: express.Response
 ) => {
   try {
-    const Freelancer = await freeLancerRouteProtection(req, res);
-    return res.json({ freelancer: Freelancer });
+    const freelancerId = await freeLancerRouteProtection(req, res);
+    if ("_id" in freelancerId) {
+      const Freelancer = await freelancer.findById(freelancerId);
+      if (Freelancer.AccountActivationStatus === false) {
+        return res.json({ error: "This account is disabled !" });
+      }
+      return res.json({ freelancer: Freelancer });
+    }
+    return freelancerId;
   } catch (err) {
     console.log(err);
+    return res.json({ error: "Server Error" });
   }
 };
 
 // function to clear the stored jwt and successfuly logs out the freelancer (Mustapha)
 export const logout = async (req: express.Request, res: express.Response) => {
   try {
-    res.clearCookie("jwt");
+    await res.clearCookie("jwt");
     return res.json({ success: "Logout Successfull !" });
   } catch (err) {
     console.log(err);
@@ -229,13 +236,13 @@ export const getAllFreelancers = async (
   return res.json({ allfreelancers });
 };
 
-//
+// function to update freelancer informations
 export const updateInfo = async (
   req: express.Request,
   res: express.Response
 ) => {
   try {
-    const freelancerId = req.params;
+    const freelancerId = await freeLancerRouteProtection(req, res);
     const {
       Name,
       Surname,
@@ -247,30 +254,56 @@ export const updateInfo = async (
       WorkTitle,
       Speciality,
     } = req.body;
-    let freeLancer = await freelancer.findById(freelancerId);
-    if (!freeLancer) {
-      return res.json({ error: "Error" });
+    if ("_id" in freelancerId) {
+      let freeLancer = await freelancer.findById(freelancerId);
+
+      if (!freeLancer) {
+        return res.json({ error: "Error" });
+      }
+      if (freeLancer.AccountActivationStatus === false) {
+        return res.json({ error: "This account is disabled !" });
+      }
+      Name ? (freeLancer.Name = Name) : null;
+      Surname ? (freeLancer.Surname = Surname) : null;
+      PhoneNumber ? (freeLancer.PhoneNumber = PhoneNumber) : null;
+      ProfilePicture ? (freeLancer.ProfilePicture = ProfilePicture) : null;
+      HourlyRate ? (freeLancer.PayRate.HourlyRate = HourlyRate) : null;
+      PayPerTaskRate
+        ? (freeLancer.PayRate.PayPerTaskRate = PayPerTaskRate)
+        : null;
+      EstimateWorkLocation
+        ? (freeLancer.EstimateWorkLocation = EstimateWorkLocation)
+        : null;
+      WorkTitle ? (freeLancer.WorkTitle = WorkTitle) : null;
+      Speciality ? (freeLancer.Speciality = Speciality) : null;
+      await freeLancer.save();
+      return res.json({
+        success: "Informations Updated Successfully",
+        freeLancer,
+      });
     }
-    Name ? (freeLancer.Name = Name) : null;
-    Surname ? (freeLancer.Surname = Surname) : null;
-    PhoneNumber ? (freeLancer.PhoneNumber = PhoneNumber) : null;
-    ProfilePicture ? (freeLancer.ProfilePicture = ProfilePicture) : null;
-    HourlyRate ? (freeLancer.PayRate.HourlyRate = HourlyRate) : null;
-    PayPerTaskRate
-      ? (freeLancer.PayRate.PayPerTaskRate = PayPerTaskRate)
-      : null;
-    EstimateWorkLocation
-      ? (freeLancer.EstimateWorkLocation = EstimateWorkLocation)
-      : null;
-    WorkTitle ? (freeLancer.WorkTitle = WorkTitle) : null;
-    Speciality ? (freeLancer.Speciality = Speciality) : null;
-    await freeLancer.save();
-    return res.json({
-      success: "Informations Updated Successfully",
-      freeLancer,
-    });
+    return freelancerId;
   } catch (err) {
     console.log(err);
     return res.json({ error: "Server Error!" });
+  }
+};
+
+// function to disable freelancer account
+export const disableAccount = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const freelancerId = req.body.freelancerId;
+    let freeLancer = await freelancer.findById(freelancerId);
+    if (!freeLancer) {
+      return res.json({ error: "Error !" });
+    }
+    freeLancer.AccountActivationStatus = false;
+    await freeLancer.save();
+    return res.json({ success: "Account Disabled !" });
+  } catch (err) {
+    console.log("Server Error !");
   }
 };

@@ -1,5 +1,5 @@
 
-// create company account (POST)
+// create freelancer account (POST)
 
 http://localhost:5000/api/freelancer/create
 
@@ -9,7 +9,13 @@ body = {
     "Username" : "test",
     "PhoneNumber" : 666,
     "Email" : "test",
-    "Password" : "test"
+    "Password" : "test",
+    "HourlyRate" : 10,
+    "PayPerTaskRate" : 105,
+    "Languages" : ["english" , "arabic"],
+    "EstimateWorkLocation" : "manzel bourguiba",
+    "WorkTitle" : "653ab7656c695f411be32074",
+    "Speciality" : "653ab7656c695f411be32075"
 }
 
 -----------------------------------------------------------------------------------------
@@ -33,11 +39,38 @@ body = {
 -----------------------------------------------------------------------------------------
 
 
-// Profile (POST)
-
+// Profile (POST) (Must Be Logged In)
+ 
 http://localhost:5000/api/freelancer/profile
 
 body = {
     "Email" : "test",
     "Password" : "test"
 }
+
+-----------------------------------------------------------------------------------------
+
+
+// Update (PUT) (Must Be Logged In)
+http://localhost:5000/api/freelancer/update
+
+body = {
+    "Name" : "Mustapha",
+    "Phonenumber" : 52491002
+}
+
+-----------------------------------------------------------------------------------------
+
+
+// Disable (PUT) 
+http://localhost:5000/api/freelancer/disable
+
+body = {
+    "freelancerId" : "653adc26a14164a3e7cc5427"
+}
+
+-----------------------------------------------------------------------------------------
+
+
+// LOGOUT (POST) (Must Be Logged In)
+http://localhost:5000/api/freelancer/logout
