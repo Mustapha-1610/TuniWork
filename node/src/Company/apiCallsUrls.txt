@@ -1,7 +1,7 @@
 
 // create company account (POST)
 
-http://localhost:5000/api/freelancer/create
+http://localhost:5000/api/company/create
 
 body = {
     "Name" : "test",

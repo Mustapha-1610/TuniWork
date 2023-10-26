@@ -1,29 +1,33 @@
-import freelancer from "./modal"
+import Company from "./modal"
 import jwt from "jsonwebtoken";
 import express from "express";
 import bcrypt from "bcryptjs";
-import { SendFreelancerAccountConfirmationMail } from "./nodemailerConfig";
-import generateFreelancerToken from "./utils";
-import { freeLancerRouteProtection } from "./routeProtectionMiddleware";
+import { SendCompanyAccountConfirmationMail } from "./nodemailerConfig";
+import generateCompanyToken from "./utils";
+import { companyRouteProtection } from "./routeProtectionMiddleware";
 
-// function to create a freelancer account (Mustapha)
+// function to create a comapny account (aziz)
+
 export const create = async (req: express.Request, res: express.Response) => {
   console.log();
-  const { Name, Surname, Username, PhoneNumber, Email, Password } = req.body;
+  const { ChefName, ChefSurname, ChefEmail, Password, ChefCin,ChefPhone, CompanyName,CompanyWebsite,CompanyEmail, CompanyDescription, CompanyPhone} = req.body;
   try {
-    if (!Name || !Surname || !Username || !PhoneNumber || !Email || !Password) {
+    if (!ChefName || !ChefSurname || !ChefEmail || !Password || !ChefCin || !ChefPhone || !CompanyName || !CompanyWebsite || !CompanyEmail || !CompanyDescription || !CompanyPhone ) {
       return res.json({ error: "Missing Input(s)" });
     }
-    // ylawej 3la freelancer 3andou ya nafs ya nafs phone number ya nafs l mail
-    let existingFreelancer = await freelancer.findOne({
-      $or: [{ Email }, { PhoneNumber }],
+
+    // ylawej 3la company  3andou nafs l esm (maybe something else)
+    let existingCompany = await Company.findOne({
+      $or:[{ CompanyName }],
     });
 
-    if (existingFreelancer) {
-      return res.json({ error: "Account Exists Allready" });
+    if (existingCompany) {
+      return res.json({ error: "company Exists Allready" });
     }
+
     // tasna3 password securisé
     const securePassword = bcrypt.hashSync(Password);
+
     // generating secret code bech nesta3mlouh mba3d fel verficiation mail
     const characters =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -32,21 +36,29 @@ export const create = async (req: express.Request, res: express.Response) => {
       VerificationCode +=
         characters[Math.floor(Math.random() * characters.length)];
     }
-    const freeLancer = await freelancer.create({
-      Name,
-      Surname,
-      Username,
-      PhoneNumber,
+
+    const company = await Company.create({
+      ChefName,
+      ChefSurname,
+      ChefEmail,
       Password: securePassword,
-      Email,
+      ChefCin,
+      ChefPhone,
+      CompanyName,
+      CompanyWebsite,
+      CompanyEmail,
+      CompanyDescription,
+      CompanyPhone,
       VerificationCode: VerificationCode,
     });
-    await SendFreelancerAccountConfirmationMail(
-      freeLancer.Name,
-      freeLancer.Email,
-      freeLancer._id,
-      freeLancer.VerificationCode
+
+    await SendCompanyAccountConfirmationMail(
+      company.CompanyName,
+      company.CompanyEmail,
+      company._id,
+      company.VerificationCode
     );
+    
     return res.json({ success: "Account Created !" });
   } catch (err) {
     console.log(err);
@@ -54,23 +66,26 @@ export const create = async (req: express.Request, res: express.Response) => {
   }
 };
 
-// function to verify freelancer account (Mustapha)
+
+
+
+// function to verify company account (aziz)
 export const verifyAccount = async (
   req: express.Request,
   res: express.Response
 ) => {
   try {
-    const freeLancerId = req.params.freeLancerId;
+    const companyId = req.params.companyId;
     const VerificationCode = req.params.VerificationCode;
-    const unverifiedFreeLancer = await freelancer.findById(freeLancerId);
-    if (!unverifiedFreeLancer) {
+    const unverifiedCompany = await Company.findById(companyId);
+    if (!unverifiedCompany) {
       return res.json({ error: "Account dosent exist !" });
     }
-    if (VerificationCode != unverifiedFreeLancer.VerificationCode) {
+    if (VerificationCode != unverifiedCompany.VerificationCode) {
       return res.json({ error: "Try Again Later !" });
     }
-    unverifiedFreeLancer.AccountVerficiationStatus = true;
-    await unverifiedFreeLancer.save();
+    unverifiedCompany.AccountVerficiationStatus = true;
+    await unverifiedCompany.save();
     return res.json({ sucess: "Account verified you can now log in !" });
   } catch (err) {
     console.log(err);
@@ -78,45 +93,52 @@ export const verifyAccount = async (
   }
 };
 
-// function to authenticate Freelancer Using jwt's (Mustapha)
+// function to authenticate company  Using jwt's (aziz) to change fazet l phone
 export const auth = async (req: express.Request, res: express.Response) => {
   try {
-    const { Email, Password, PhoneNumber } = req.body;
-    let freeLancerAccount;
-    if ((!Email && !Password) || (!PhoneNumber && !Password)) {
+    const { ChefEmail, Password, ChefPhone } = req.body;
+    let companyAccount;
+
+
+    if ((!ChefEmail && !Password) || (!ChefPhone && !Password)) {
       return res.status(401).json({ error: "Invalid Input(s)" });
-    } else if (!Email) {
-      freeLancerAccount = await freelancer.findOne({ PhoneNumber });
+    } else if (!ChefEmail) {
+      companyAccount = await Company.findOne({ ChefPhone });
     } else {
-      freeLancerAccount = await freelancer.findOne({ Email });
+      companyAccount = await Company.findOne({ ChefEmail });
     }
-    if (!freeLancerAccount) {
+
+
+    if (!companyAccount) {
       return res.json({ error: "Account dosent exist !" });
     }
     const passwordcheck = bcrypt.compareSync(
       Password,
-      freeLancerAccount.Password
+      companyAccount.Password
     );
     if (!passwordcheck) {
       return res.status(404).json({ Message: "Invalid email or password !" });
     }
-    if (freeLancerAccount.AccountVerficiationStatus === false) {
+    if (companyAccount.AccountVerficiationStatus === false) {
       return res.json({
         emailError: "You need to verify your email first before logging in !",
       });
     }
-    if (freeLancerAccount.AccountActivationStatus === false) {
+    if (companyAccount.AccountActivationStatus === false) {
       return res.json({ error: "This account is disabled !" });
     }
 
-    await generateFreelancerToken(res, freeLancerAccount._id);
-    return res.json({ freeLancerAccount });
+
+    
+    await generateCompanyToken(res, companyAccount._id);
+    return res.json({ companyAccount });
   } catch (err) {
     console.log(err);
     return res.json({ error: "Server Error!" });
   }
 };
 
+/*
 // function to retrieve freelancer Account informations (Mustapha)
 export const getProfile = async (
   req: express.Request,
@@ -139,4 +161,4 @@ export const logout = async (req: express.Request, res: express.Response) => {
     console.log(err);
     return res.json({ error: "Server Error !" });
   }
-};
+}; */
