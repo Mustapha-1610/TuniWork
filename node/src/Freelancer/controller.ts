@@ -192,16 +192,24 @@ export const logout = async (req: express.Request, res: express.Response) => {
   }
 };
 
+// function to reset password for the freelancer account
 export const passwordReset = async (
   req: express.Request,
   res: express.Response
 ) => {
-  const { newPassword } = req.body;
+  const { newPassword, oldPassword } = req.body;
   const freelancerId = req.params.freelancerId;
   try {
     let freeLancer = await freelancer.findById(freelancerId);
     if (!freeLancer) {
       return res.json({ error: "Error !" });
+    }
+    const comparePassword = bcrypt.compareSync(
+      oldPassword,
+      freeLancer.Password
+    );
+    if (!comparePassword) {
+      return res.json({ error: "Password Mismatch !" });
     }
     const hashedPassword = bcrypt.hashSync(newPassword);
     freeLancer.Password = hashedPassword;
@@ -212,11 +220,57 @@ export const passwordReset = async (
     return res.json({ error: "Server Error!" });
   }
 };
-
+// function to get all Freelancers
 export const getAllFreelancers = async (
   req: express.Request,
   res: express.Response
 ) => {
   let allfreelancers = await freelancer.find();
   return res.json({ allfreelancers });
+};
+
+//
+export const updateInfo = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const freelancerId = req.params;
+    const {
+      Name,
+      Surname,
+      PhoneNumber,
+      ProfilePicture,
+      HourlyRate,
+      PayPerTaskRate,
+      EstimateWorkLocation,
+      WorkTitle,
+      Speciality,
+    } = req.body;
+    let freeLancer = await freelancer.findById(freelancerId);
+    if (!freeLancer) {
+      return res.json({ error: "Error" });
+    }
+    Name ? (freeLancer.Name = Name) : null;
+    Surname ? (freeLancer.Surname = Surname) : null;
+    PhoneNumber ? (freeLancer.PhoneNumber = PhoneNumber) : null;
+    ProfilePicture ? (freeLancer.ProfilePicture = ProfilePicture) : null;
+    HourlyRate ? (freeLancer.PayRate.HourlyRate = HourlyRate) : null;
+    PayPerTaskRate
+      ? (freeLancer.PayRate.PayPerTaskRate = PayPerTaskRate)
+      : null;
+    EstimateWorkLocation
+      ? (freeLancer.EstimateWorkLocation = EstimateWorkLocation)
+      : null;
+    WorkTitle ? (freeLancer.WorkTitle = WorkTitle) : null;
+    Speciality ? (freeLancer.Speciality = Speciality) : null;
+    await freeLancer.save();
+    return res.json({
+      success: "Informations Updated Successfully",
+      freeLancer,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error!" });
+  }
 };
