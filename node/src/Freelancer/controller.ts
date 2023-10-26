@@ -29,7 +29,6 @@ export const create = async (req: express.Request, res: express.Response) => {
       !PhoneNumber ||
       !Email ||
       !Password ||
-      !ProfilePicture ||
       !HourlyRate ||
       !PayPerTaskRate ||
       !Languages ||
@@ -57,8 +56,7 @@ export const create = async (req: express.Request, res: express.Response) => {
       VerificationCode +=
         characters[Math.floor(Math.random() * characters.length)];
     }
-
-    let freeLancer: any;
+    let freelancer: any;
     ProfilePicture
       ? (freeLancer = await freelancer.create({
           Name,
@@ -223,4 +221,12 @@ export const passwordReset = async (
     console.log(err);
     return res.json({ error: "Server Error!" });
   }
+};
+
+export const getAllFreelancers = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  let allfreelancers = await freelancer.find();
+  return res.json({ allfreelancers });
 };

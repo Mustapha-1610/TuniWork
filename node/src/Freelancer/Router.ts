@@ -15,13 +15,18 @@ freelancerRouter.post("/auth", freelancerController.auth);
 freelancerRouter.post("/profile", freelancerController.getProfile);
 
 freelancerRouter.post("/logout", freelancerController.logout);
-<<<<<<< HEAD
-=======
+
 
 freelancerRouter.put(
   "/resetPassword/:freelancerId",
   freelancerController.passwordReset
 );
 
->>>>>>> 3116b8e50aa7e3c656b6ab51ad607206c2c83f02
+
+freelancerRouter.get(
+  "/getAllFreelancers",
+  freelancerController.getAllFreelancers
+);
+
+
 export default freelancerRouter;

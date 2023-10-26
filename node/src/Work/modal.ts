@@ -1,17 +1,16 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 const workTypeSchema = new Schema({
-  WorkType: [
+  WorkTitle: {
+    type: String,
+  },
+  Speciality: [
     {
-      WorkTitle: {
+      WorkSpeciality: {
         type: String,
+        required: true,
+        unique: true,
       },
-      Speciality: [
-        {
-          type: String,
-          required: true,
-        },
-      ],
     },
   ],
 });
