@@ -21,4 +21,9 @@ freelancerRouter.put(
   freelancerController.passwordReset
 );
 
+freelancerRouter.get(
+  "/getAllFreelancers",
+  freelancerController.getAllFreelancers
+);
+
 export default freelancerRouter;

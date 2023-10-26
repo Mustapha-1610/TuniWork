@@ -86,12 +86,16 @@ const freelancerSchema = new Schema({
     },
   ],
   Schedule: {
-    Weekly: {
-      type: Date,
-    },
-    Monthly: {
-      type: Date,
-    },
+    Weekly: [
+      {
+        type: Date,
+      },
+    ],
+    Monthly: [
+      {
+        type: Date,
+      },
+    ],
   },
   Messages: [
     {

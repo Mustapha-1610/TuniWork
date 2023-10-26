@@ -7,7 +7,7 @@ import { Server } from "socket.io";
 import mongoose from "mongoose";
 import freelancerRouter from "./Freelancer/Router";
 import adminRouter from "./Admin/Router";
-
+import workRouter from "./Work/Router";
 dotenv.config();
 const app = express();
 
@@ -22,8 +22,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use("/api/freelancer", freelancerRouter);
-app.use("/api/admin",adminRouter);
-
+app.use("/api/admin", adminRouter);
+app.use("/api/work", workRouter);
 const server = http.createServer(app);
 
 mongoose.Promise = Promise;
