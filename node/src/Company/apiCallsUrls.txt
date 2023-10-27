@@ -16,17 +16,17 @@ body = {
 
 // verify account (PUT)
 
-http://localhost:5000/api/freelancer/verify/:freeLancerId/:VerificationCode
+http://localhost:5000/api/company/verify/:companyId/:VerificationCode
 
 
 -----------------------------------------------------------------------------------------
 
 // auth (POST)
 
-http://localhost:5000/api/freelancer/auth
+http://localhost:5000/api/company/auth
 
 body = {
-    "Email" : "test",
+    "ChefEmail" : "test",
     "Password" : "test"
 }
 
@@ -35,9 +35,38 @@ body = {
 
 // Profile (POST)
 
-http://localhost:5000/api/freelancer/profile
+http://localhost:5000/api/company/profile
 
 body = {
-    "Email" : "test",
+    "ChefEmail" : "test",
     "Password" : "test"
+}
+
+----------------------------------------------
+
+
+// LOGOUT (POST) (Must Be Logged In)
+http://localhost:5000/api/company/logout
+
+
+
+------------------------------------------
+
+
+// Update (PUT) (Must Be Logged In)
+http://localhost:5000/api/company/update
+
+body = {
+    "ChefName" : "Mustapha",
+    "Phonenumber" : 52491002
+}
+
+
+--------------------
+
+// Disable (PUT) 
+http://localhost:5000/api/company/disable
+
+body = {
+    "companyId" : "653adc26a14164a3e7cc5427"
 }

@@ -11,8 +11,18 @@ companyRouter.put(
 );
 
 companyRouter.post("/auth", companyController.auth);
-/*
-freelancerRouter.post("/profile", freelancerController.getProfile);
 
-freelancerRouter.post("/logout", freelancerController.logout); */
+companyRouter.post("/profile", companyController.getProfile);
+
+
+companyRouter.post("/logout", companyController.logout); 
 export default companyRouter; 
+
+companyRouter.get(
+  "/getAllCompanies",
+  companyController.getAllCompanies
+);
+
+companyRouter.put("/update", companyController.updateInfo);
+
+companyRouter.put("/disable", companyController.disableAccount);

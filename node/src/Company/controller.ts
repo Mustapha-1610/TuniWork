@@ -68,7 +68,6 @@ export const create = async (req: express.Request, res: express.Response) => {
 
 
 
-
 // function to verify company account (aziz)
 export const verifyAccount = async (
   req: express.Request,
@@ -92,6 +91,7 @@ export const verifyAccount = async (
     return res.json({ error: "Server Error!" });
   }
 };
+
 
 // function to authenticate company  Using jwt's (aziz) to change fazet l phone
 export const auth = async (req: express.Request, res: express.Response) => {
@@ -138,21 +138,23 @@ export const auth = async (req: express.Request, res: express.Response) => {
   }
 };
 
-/*
-// function to retrieve freelancer Account informations (Mustapha)
+
+
+// function to retrieve company Account informations (aziz)
 export const getProfile = async (
   req: express.Request,
   res: express.Response
 ) => {
   try {
-    const Freelancer = await freeLancerRouteProtection(req, res);
-    return res.json({ freelancer: Freelancer, success: "Login Successfull" });
+    const Company = await companyRouteProtection(req, res);
+    return res.json({ company: Company, success: "Login Successfull" });
   } catch (err) {
     console.log(err);
   }
 };
 
-// function to clear the stored jwt and successfuly logs out the freelancer (Mustapha)
+
+// function to clear the stored jwt and successfuly logs out the company (aziz)
 export const logout = async (req: express.Request, res: express.Response) => {
   try {
     res.clearCookie("jwt");
@@ -161,4 +163,92 @@ export const logout = async (req: express.Request, res: express.Response) => {
     console.log(err);
     return res.json({ error: "Server Error !" });
   }
-}; */
+}; 
+
+
+
+// function to get all companies on the db (aziz)
+export const getAllCompanies = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  let allcompanies = await Company.find();
+  return res.json({ allcompanies });
+};
+
+
+
+//update (aziz)
+export const updateInfo = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const companyId = await companyRouteProtection(req, res);
+    const {
+      ChefName,
+      ChefSurname,
+      //ChefEmail,
+      ChefCin,
+      ChefPhone,
+      CompanyName,
+      CompanyWebsite,
+      CompanyEmail,
+      CompanyDescription,
+      CompanyPhone,
+    } = req.body;
+    if ("_id" in companyId) {
+      let company = await Company.findById(companyId);
+
+      if (!Company) {
+        return res.json({ error: "Error" });
+      }
+      /*if (Company.AccountActivationStatus === false) {
+        return res.json({ error: "This account is disabled !" });
+      }*/
+
+      ChefName ? (company.ChefName = ChefName) : null;
+      ChefSurname ? (company.ChefSurname = ChefSurname) : null; 
+      ChefCin ? (company.ChefCin = ChefCin) : null;
+      ChefPhone ? (company.ChefPhone = ChefPhone) : null;
+      //ProfilePicture ? (Company.ProfilePicture = ProfilePicture) : null;
+      CompanyName ? (company.CompanyName = CompanyName) : null;
+      CompanyWebsite ? (company.CompanyWebsite = CompanyWebsite) : null;
+      CompanyEmail ? (company.CompanyEmail = CompanyEmail) : null;
+      CompanyDescription ? (company.CompanyDescription = CompanyDescription) : null;
+      CompanyPhone ? (company.CompanyPhone = CompanyPhone) : null;
+
+      await company.save();
+      return res.json({
+        success: "Informations Updated Successfully",
+        company,
+      });
+    }
+    return companyId;
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error!" });
+  }
+};
+
+
+//disable acc (aziz)
+export const disableAccount = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const companyId = req.body.companyId;
+    let company = await Company.findById(companyId);
+    if (!company) {
+      return res.json({ error: "Error !" });
+    }
+    company.AccountActivationStatus = false;
+    await company.save();
+    return res.json({ success: "Account Disabled !" });
+  } catch (err) {
+    console.log("Server Error !");
+  }
+};
+
+
