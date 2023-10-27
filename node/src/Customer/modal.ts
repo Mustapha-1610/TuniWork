@@ -1,3 +1,6 @@
+
+
+
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 const customerSchema = new Schema({
@@ -40,7 +43,7 @@ const customerSchema = new Schema({
   },
   AccountVerficiationStatus: {
     type: Boolean,
-    default: false,
+    default: true,
   },
 });
 export default mongoose.model("customer", customerSchema);

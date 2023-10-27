@@ -40,7 +40,7 @@ const freelancerSchema = new Schema({
   },
   AccountVerficiationStatus: {
     type: Boolean,
-    default: false,
+    default: true,
   },
 });
 export default mongoose.model("freelancer", freelancerSchema);

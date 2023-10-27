@@ -5,15 +5,26 @@ const customerRouter = express.Router();
 
 customerRouter.post("/createCustomerAccount", customerController.createCustomerAccount);
 
+
+
 customerRouter.put(
-  "/verify/:customerId/:VerificationCode",
+  "/update/:customerId/:VerificationCode",
   customerController.verifyAccount
 );
+
+
+
+
 
 customerRouter.post("/auth", customerController.auth);
 
 customerRouter.post("/profile", customerController.getProfile);
 
 customerRouter.post("/logout", customerController.logout);
+
+
+
+customerRouter.put("/update/:customerId", customerController.update);
+
 
 export default customerRouter;

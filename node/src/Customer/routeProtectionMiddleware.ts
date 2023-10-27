@@ -2,6 +2,11 @@ import jwt from "jsonwebtoken";
 import customer from "./modal"; // Assuming you have a "customer" model
 import express from "express";
 import { JwtPayload } from "jsonwebtoken";
+import { Request } from "express";
+
+
+//
+
 
 // Decode JWT and get back customer information from the database
 const customerRouteProtection = async (
