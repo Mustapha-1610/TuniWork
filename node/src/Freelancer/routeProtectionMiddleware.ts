@@ -9,7 +9,7 @@ const freeLancerRouteProtection = async (
   res: express.Response
 ) => {
   if (!req.cookies.jwt) {
-    return res.json({ error: "Session Expired Login" });
+    return res.json({ error: "Session Expired Login Again" });
   } else {
     const freeLancerToken = req.cookies.jwt;
     try {
@@ -17,8 +17,7 @@ const freeLancerRouteProtection = async (
         freeLancerToken,
         process.env.JWT_SECRET
       ) as JwtPayload;
-      let Freelancer = await freelancer.findById({ _id: decoded.freelancerId });
-      return Freelancer;
+      return { _id: decoded.freelancerId };
     } catch (error) {
       console.log(error);
       return res.status(401).json({ error: "Server Error !" });

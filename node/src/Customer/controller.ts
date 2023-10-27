@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import Customer from "./modal";
 import jwt from "jsonwebtoken";
 import express from "express";
@@ -185,3 +186,5 @@ export const update = async (req: express.Request, res: express.Response) => {
     return res.status(500).json({ error: 'Erreur du serveur', data: error.message });
   }
 };
+=======
+>>>>>>> 30dc9dc59aaaa1632e8b75db96c9ccb8b76e67d8

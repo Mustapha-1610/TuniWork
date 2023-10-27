@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import jwt from "jsonwebtoken";
 import customer from "./modal"; // Assuming you have a "customer" model
 import express from "express";
@@ -32,3 +33,5 @@ const customerRouteProtection = async (
 };
 
 export { customerRouteProtection };
+=======
+>>>>>>> 30dc9dc59aaaa1632e8b75db96c9ccb8b76e67d8

@@ -1,16 +1,24 @@
 
-// create (POST)
+// create freelancer account (POST)
 
 http://localhost:5000/api/freelancer/create
 
-    body = {
-        "Name" : "test",
-        "Surname" : "test",
-        "Username" : "test",
-        "PhoneNumber" : 666,
-        "Email" : "test",
-        "Password" : "test"
-    }
+body = {
+    "Name" : "test",
+    "Surname" : "test",
+    "Username" : "test",
+    "PhoneNumber" : 666,
+    "Email" : "test",
+    "Password" : "test",
+    "HourlyRate" : 10,
+    "PayPerTaskRate" : 105,
+    "Languages" : ["english" , "arabic"],
+    "EstimateWorkLocation" : "manzel bourguiba",
+    // here put the workTitle id until further improvements
+    "WorkTitle" : "653ab7656c695f411be32074",
+    // here put the Speciality id further improvements
+    "Speciality" : "653ab7656c695f411be32075"
+}
 
 -----------------------------------------------------------------------------------------
 
@@ -33,11 +41,61 @@ body = {
 -----------------------------------------------------------------------------------------
 
 
-// Profile (POST)
-
+// Profile (POST) (Must Be Logged In)
+ 
 http://localhost:5000/api/freelancer/profile
 
 body = {
     "Email" : "test",
     "Password" : "test"
+}
+
+-----------------------------------------------------------------------------------------
+
+
+// Update (PUT) (Must Be Logged In)
+http://localhost:5000/api/freelancer/update
+
+body = {
+    "Name" : "Mustapha",
+    "Phonenumber" : 52491002
+}
+
+-----------------------------------------------------------------------------------------
+
+
+// Disable (PUT) 
+http://localhost:5000/api/freelancer/disable
+
+body = {
+    "freelancerId" : "653adc26a14164a3e7cc5427"
+}
+
+-----------------------------------------------------------------------------------------
+
+
+// LOGOUT (POST) (Must Be Logged In)
+http://localhost:5000/api/freelancer/logout
+
+
+-----------------------------------------------------------------------------------------
+
+
+// ResetPassword (Put) 
+http://localhost:5000/api/freelancer/resetPassword/"FREELANCERID"
+
+body = {
+    "newPassword" : "123",
+    "oldPassword" : "test"
+}
+
+
+-----------------------------------------------------------------------------------------
+
+
+// Activate (Put) 
+http://localhost:5000/api/freelancer/activate
+
+body = {
+    "freelancerId" : "653adc26a14164a3e7cc5427"
 }

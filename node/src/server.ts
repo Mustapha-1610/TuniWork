@@ -7,8 +7,11 @@ import { Server } from "socket.io";
 import mongoose from "mongoose";
 import freelancerRouter from "./Freelancer/Router";
 
-//customer
-import customerRouter from "./Customer/Router";
+import companyRouter from "./Company/Router";
+
+import adminRouter from "./Admin/Router";
+
+import workRouter from "./Work/Router";
 
 dotenv.config();
 const app = express();
@@ -24,8 +27,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use("/api/freelancer", freelancerRouter);
-//
-app.use("/api/customer", customerRouter);
+
+app.use("/api/company", companyRouter);
+
+app.use("/api/admin", adminRouter);
+
+app.use("/api/admin", adminRouter);
+app.use("/api/work", workRouter);
 
 const server = http.createServer(app);
 
