@@ -14,3 +14,10 @@ body = {
 }
 
 
+*******  Get All Freelancers (GET)  *********
+
+http://localhost:5000/api/admin/getAll/freelancers
+
+*******  Get All Companys (GET)  *********
+
+http://localhost:5000/api/admin/getAll/comapnys
