@@ -1,6 +1,7 @@
 import { Component, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { FreelancerlayoutComponent } from './layout/freelancerlayout/freelancerlayout.component';
+import { HomeLayoutComponent } from './layout/home-layout/home-layout.component';
 
 const routes: Routes = [
   {
@@ -8,24 +9,23 @@ const routes: Routes = [
     component: FreelancerlayoutComponent,
     children: [
       {
-        path: 'signup',
+        path: '',
         loadChildren: () =>
-          import('./views/freelancer/signup/signup-routing.module').then(
-            (m) => m.SignupRoutingModule
+          import('./views/freelancer/freelancer-routing.module').then(
+            (m) => m.FreelancerRoutingModule
           ),
       },
+    ],
+  },
+  {
+    path: '',
+    component: HomeLayoutComponent,
+    children: [
       {
-        path: 'login',
+        path: '',
         loadChildren: () =>
-          import('./views/freelancer/login/login-routing.module').then(
-            (m) => m.LoginRoutingModule
-          ),
-      },
-      {
-        path: 'profile',
-        loadChildren: () =>
-          import('./views/freelancer/profile/profile-routing.module').then(
-            (m) => m.ProfileRoutingModule
+          import('./views/home-page/home-page-routing.module').then(
+            (m) => m.HomePageRoutingModule
           ),
       },
     ],

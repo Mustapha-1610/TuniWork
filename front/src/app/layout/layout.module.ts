@@ -2,9 +2,11 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FreelancerlayoutComponent } from './freelancerlayout/freelancerlayout.component';
 import { RouterModule } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HomeLayoutComponent } from './home-layout/home-layout.component';
+import { CompanyLayoutComponent } from './company-layout/company-layout.component';
 @NgModule({
-  declarations: [FreelancerlayoutComponent],
-  imports: [CommonModule, RouterModule, ReactiveFormsModule],
+  declarations: [FreelancerlayoutComponent, HomeLayoutComponent, CompanyLayoutComponent],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, FormsModule],
 })
 export class LayoutModule {}
