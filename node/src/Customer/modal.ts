@@ -1,6 +1,3 @@
-
-
-
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 const customerSchema = new Schema({
@@ -34,7 +31,6 @@ const customerSchema = new Schema({
     type: String,
     required: true,
   },
-<<<<<<< HEAD
   VerificationCode: {
     type: String,
   },
@@ -46,7 +42,5 @@ const customerSchema = new Schema({
     type: Boolean,
     default: true,
   },
-=======
->>>>>>> 30dc9dc59aaaa1632e8b75db96c9ccb8b76e67d8
 });
 export default mongoose.model("customer", customerSchema);

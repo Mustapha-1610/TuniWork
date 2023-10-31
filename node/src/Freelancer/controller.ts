@@ -8,46 +8,51 @@ import { freeLancerRouteProtection } from "./routeProtectionMiddleware";
 
 // function to create a freelancer account (Mustapha)
 export const create = async (req: express.Request, res: express.Response) => {
-  const {
-    Name,
-    Surname,
-    PhoneNumber,
-    Email,
-    Password,
-    ProfilePicture,
-    HourlyRate,
-    PayPerTaskRate,
-    Languages,
-    EstimateWorkLocation,
-    WorkTitle,
-    Speciality,
-  } = req.body;
+  const { freelancerPersonalInfos, freelancerAddedInfos } = req.body;
+  if (!freelancerPersonalInfos.Name) {
+    return res.json({ error: "Name is Required !" });
+  } else if (!freelancerPersonalInfos.Surname) {
+    return res.json({ error: "Surname is Required !" });
+  } else if (!freelancerPersonalInfos.PhoneNumber) {
+    return res.json({ error: "Phone Number is Required !" });
+  } else if (!freelancerPersonalInfos.Email) {
+    return res.json({ error: "Email is Required !" });
+  } else if (!freelancerPersonalInfos.Password) {
+    return res.json({ error: "Password is Required !" });
+  } else if (!freelancerPersonalInfos.HourlyRate) {
+    return res.json({ error: "Hourly Pay Rate is Required !" });
+  } else if (!freelancerPersonalInfos.PayPerTaskRate) {
+    return res.json({ error: "Pay Per Task Rate is Required !" });
+  } else if (!freelancerAddedInfos.languages) {
+    return res.json({ error: "languages are Required !" });
+  } else if (!freelancerAddedInfos.workTitle) {
+    return res.json({ error: "workTitle is Required !" });
+  } else if (!freelancerAddedInfos.speciality) {
+    return res.json({ error: "speciality is Required !" });
+  }
   try {
-    if (
-      !Name ||
-      !Surname ||
-      !PhoneNumber ||
-      !Email ||
-      !Password ||
-      !HourlyRate ||
-      !PayPerTaskRate ||
-      !Languages ||
-      !EstimateWorkLocation ||
-      !WorkTitle ||
-      !Speciality
-    ) {
-      return res.json({ error: "Missing Input(s)" });
-    }
     // ylawej 3la freelancer 3andou ya nafs ya nafs phone number ya nafs l mail
     let existingFreelancer = await freelancer.findOne({
-      $or: [{ Email }, { PhoneNumber }],
+      $or: [
+        { Email: freelancerPersonalInfos.Email },
+        { PhoneNumber: freelancerPersonalInfos.PhoneNumber },
+      ],
     });
-
+    let languagestable: String[] = [];
+    freelancerAddedInfos.languages.map((item: any) => {
+      languagestable.push(item.item_text);
+    });
+    let SpecialityArray = freelancerAddedInfos.speciality.map((item: any) => {
+      return {
+        SpecialityId: item.item_id,
+        SpecialityText: item.item_text,
+      };
+    });
     if (existingFreelancer) {
       return res.json({ error: "Account Exists Allready" });
     }
     // tasna3 password securisé
-    const securePassword = bcrypt.hashSync(Password);
+    const securePassword = bcrypt.hashSync(freelancerPersonalInfos.Password);
     // generating secret code bech nesta3mlouh mba3d fel verficiation mail
     const characters =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -57,39 +62,45 @@ export const create = async (req: express.Request, res: express.Response) => {
         characters[Math.floor(Math.random() * characters.length)];
     }
     let freeLancer: any;
-    ProfilePicture
+    freelancerPersonalInfos.ProfilePicture
       ? (freeLancer = await freelancer.create({
-          Name,
-          Surname,
-          PhoneNumber,
+          Name: freelancerPersonalInfos.Name,
+          Surname: freelancerPersonalInfos.Surname,
+          PhoneNumber: freelancerPersonalInfos.PhoneNumber,
           Password: securePassword,
-          Email,
+          Email: freelancerPersonalInfos.Email,
           VerificationCode: VerificationCode,
-          ProfilePicture: ProfilePicture,
+          ProfilePicture: freelancerPersonalInfos.ProfilePicture,
           PayRate: {
-            HourlyRate: HourlyRate,
-            PayPerTaskRate: PayPerTaskRate,
+            HourlyRate: freelancerPersonalInfos.HourlyRate,
+            PayPerTaskRate: freelancerPersonalInfos.PayPerTaskRate,
           },
-          Languages,
-          EstimateWorkLocation,
-          WorkTitle,
-          Speciality,
+          Languages: languagestable,
+          EstimateWorkLocation: freelancerPersonalInfos,
+          WorkTitle: {
+            WorkTitleId: freelancerAddedInfos.workTitle.item_id,
+            WorkTitleText: freelancerAddedInfos.workTitle.item_text,
+          },
+          Speciality: SpecialityArray,
         }))
       : (freeLancer = await freelancer.create({
-          Name,
-          Surname,
-          PhoneNumber,
+          Name: freelancerPersonalInfos.Name,
+          Surname: freelancerPersonalInfos.Surname,
+          PhoneNumber: freelancerPersonalInfos.PhoneNumber,
           Password: securePassword,
-          Email,
+          Email: freelancerPersonalInfos.Email,
           VerificationCode: VerificationCode,
           PayRate: {
-            HourlyRate: HourlyRate,
-            PayPerTaskRate: PayPerTaskRate,
+            HourlyRate: freelancerPersonalInfos.HourlyRate,
+            PayPerTaskRate: freelancerPersonalInfos.PayPerTaskRate,
           },
-          Languages,
-          EstimateWorkLocation,
-          WorkTitle,
-          Speciality,
+          Languages: languagestable,
+          EstimateWorkLocation: "hellotest",
+          WorkTitle: {
+            WorkTitleId: freelancerAddedInfos.workTitle[0].item_id,
+            WorkTitleText: freelancerAddedInfos.workTitle[0].item_text,
+          },
+          Speciality: SpecialityArray,
         }));
     await SendFreelancerAccountConfirmationMail(
       freeLancer.Name,

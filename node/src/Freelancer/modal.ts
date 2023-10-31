@@ -105,7 +105,6 @@ const freelancerSchema = new Schema({
   Languages: [
     {
       type: String,
-      required: true,
     },
   ],
   EstimateWorkLocation: {
@@ -113,15 +112,21 @@ const freelancerSchema = new Schema({
     required: true,
   },
   WorkTitle: {
-    type: Schema.Types.ObjectId,
-    required: true,
-    ref: "Work",
+    WorkTitleId: { type: Schema.Types.ObjectId, ref: "Work" },
+    WorkTitleText: {
+      type: String,
+    },
   },
   Speciality: [
     {
-      type: Schema.Types.ObjectId,
-      ref: "Work",
-      required: true,
+      SpecialityId: {
+        type: Schema.Types.ObjectId,
+        ref: "Work",
+        required: true,
+      },
+      SpecialityText: {
+        type: String,
+      },
     },
   ],
 });

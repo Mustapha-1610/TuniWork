@@ -8,7 +8,6 @@ const workTypeSchema = new Schema({
     {
       WorkSpeciality: {
         type: String,
-        required: true,
         unique: true,
       },
     },
