@@ -15,4 +15,7 @@ export class FreelancerService {
   getAllWorkData() {
     return this.http.get('http://localhost:5000/api/work/getWorkData');
   }
+  auth(data: any) {
+    return this.http.post('http://localhost:5000/api/freelancer/auth', data);
+  }
 }

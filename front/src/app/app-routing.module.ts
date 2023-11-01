@@ -2,11 +2,13 @@ import { Component, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { FreelancerlayoutComponent } from './layout/freelancerlayout/freelancerlayout.component';
 import { HomeLayoutComponent } from './layout/home-layout/home-layout.component';
+import { FreelancerGuardGuard } from './views/guards/freelancer-guard.guard';
 
 const routes: Routes = [
   {
     path: 'freelancer',
     component: FreelancerlayoutComponent,
+    canActivate: [FreelancerGuardGuard],
     children: [
       {
         path: '',

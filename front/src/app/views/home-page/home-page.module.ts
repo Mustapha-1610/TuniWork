@@ -14,6 +14,8 @@ import { RegestrationTypeSelectionComponent } from './regestration-type-selectio
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/storage';
 
 @NgModule({
   declarations: [
