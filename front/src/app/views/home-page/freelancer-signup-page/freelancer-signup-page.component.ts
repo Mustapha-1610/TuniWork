@@ -9,6 +9,13 @@ import {
 import { FreelancerService } from '../../services/freelancer.service';
 import { HttpClient } from '@angular/common/http';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Storage } from '@angular/fire/storage';
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  uploadBytesResumable,
+} from 'firebase/storage';
 @Component({
   selector: 'app-freelancer-signup-page',
   templateUrl: './freelancer-signup-page.component.html',
@@ -24,10 +31,16 @@ export class FreelancerSignupPageComponent implements OnInit {
   freelancerForm: any;
   form: any = FormGroup;
   errorMessage: any = null;
+  imageUrl: string | null = null;
+  testimg: string =
+    'https://firebasestorage.googleapis.com/v0/b/tunibids.appspot.com/o/Windows_10_Default_Profile_Picture.svg.png?alt=media&token=e7aca30d-6eea-45ff-8522-db048fcb8c38';
+  imgFile: any = null;
+  uploadProgress: number | undefined;
   constructor(
     private formBuilder: FormBuilder,
     private http: HttpClient,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private storage: Storage
   ) {}
 
   ngOnInit() {
@@ -144,20 +157,122 @@ export class FreelancerSignupPageComponent implements OnInit {
   }
 
   async test() {
-    this.spinner.show();
-    console.log(JSON.parse(JSON.stringify(this.freelancerForm.value)));
-    this.http
-      .post('http://localhost:5000/api/freelancer/create', {
-        freelancerPersonalInfos: this.freelancerForm.value,
-        freelancerAddedInfos: this.form.value,
-      })
-      .subscribe((response: any) => {
-        this.spinner.hide();
-        if (response.error) {
-          this.errorMessage = response.error;
-        } else {
-          this.errorMessage = response.success;
+    if (
+      this.freelancerForm.value.Name == null ||
+      this.freelancerForm.value.Name.trim() === ''
+    ) {
+      this.errorMessage = 'Name is required';
+    } else if (
+      this.freelancerForm.value.Surname == null ||
+      this.freelancerForm.value.Surname.trim() === ''
+    ) {
+      this.errorMessage = 'Surname is required';
+    } else if (this.freelancerForm.value.PhoneNumber == null) {
+      this.errorMessage = 'PhoneNumber is required';
+    } else if (
+      this.freelancerForm.value.Email == null ||
+      this.freelancerForm.value.Email.trim() === ''
+    ) {
+      this.errorMessage = 'Email is required';
+    } else if (
+      this.freelancerForm.value.Password == null ||
+      this.freelancerForm.value.Password.trim() === ''
+    ) {
+      this.errorMessage = 'Password is required';
+    } else if (this.freelancerForm.value.HourlyRate == null) {
+      this.errorMessage = 'Hourly Rate is required';
+    } else if (this.freelancerForm.value.PayPerTaskRate == null) {
+      this.errorMessage = 'Pay Per Task Rate is required';
+    } else if (
+      this.freelancerForm.value.EstimateWorkLocation == null ||
+      this.freelancerForm.value.EstimateWorkLocation.trim() === ''
+    ) {
+      this.errorMessage = 'Estimate Work Location is required';
+    } else if (this.form.value.workTitle == null) {
+      this.errorMessage = 'Work Title is required';
+    } else if (this.form.value.speciality == null) {
+      this.errorMessage = 'Speciality is required';
+    } else if (this.form.value.languages == null) {
+      this.errorMessage = 'Languages Are required';
+    } else if (this.imgFile) {
+      const filePath = `FreelancerImages/${Date.now()}_${this.imgFile.name}`;
+      const storageRef = ref(this.storage, filePath);
+
+      // Start the upload
+      const uploadTask = uploadBytesResumable(storageRef, this.imgFile);
+
+      // Listen for state changes, errors, and completion of the upload.
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          // Get the progress as a percentage of the total number of bytes transferred
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+          this.uploadProgress = progress;
+          // You can switch on the snapshot state if you want to show different statuses
+          switch (snapshot.state) {
+            case 'paused':
+              console.log('Upload is paused');
+              break;
+            case 'running':
+              console.log('Upload is running');
+              break;
+          }
+        },
+        (error) => {
+          console.error('Upload failed', error);
+        },
+        () => {
+          // Handle successful uploads on complete
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            this.imageUrl = downloadURL;
+            console.log('File available at', this.imageUrl);
+            this.freelancerForm.value.ProfilePicture = this.imageUrl;
+            this.uploadProgress = undefined;
+            console.log(this.freelancerForm.value);
+            this.spinner.show();
+            console.log(JSON.parse(JSON.stringify(this.freelancerForm.value)));
+            this.http
+              .post('http://localhost:5000/api/freelancer/create', {
+                freelancerPersonalInfos: this.freelancerForm.value,
+                freelancerAddedInfos: this.form.value,
+              })
+              .subscribe((response: any) => {
+                this.spinner.hide();
+                if (response.error) {
+                  this.errorMessage = response.error;
+                } else {
+                  this.errorMessage = response.success;
+                }
+              });
+          });
         }
-      });
+      );
+    } else {
+      this.spinner.show();
+      console.log(JSON.parse(JSON.stringify(this.freelancerForm.value)));
+      this.http
+        .post('http://localhost:5000/api/freelancer/create', {
+          freelancerPersonalInfos: this.freelancerForm.value,
+          freelancerAddedInfos: this.form.value,
+        })
+        .subscribe((response: any) => {
+          this.spinner.hide();
+          if (response.error) {
+            this.errorMessage = response.error;
+          } else {
+            this.errorMessage = response.success;
+          }
+        });
+    }
+  }
+  async uploadImage(event: any) {
+    const file: File = event.target.files[0];
+
+    if (file) {
+      this.testimg = URL.createObjectURL(file);
+      this.imgFile = file;
+    }
   }
 }

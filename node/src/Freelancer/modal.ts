@@ -36,7 +36,7 @@ const freelancerSchema = new Schema({
   },
   AccountVerficiationStatus: {
     type: Boolean,
-    default: true,
+    default: false,
   },
   Earnings: {
     type: Number,
@@ -117,17 +117,8 @@ const freelancerSchema = new Schema({
       type: String,
     },
   },
-  Speciality: [
-    {
-      SpecialityId: {
-        type: Schema.Types.ObjectId,
-        ref: "Work",
-        required: true,
-      },
-      SpecialityText: {
-        type: String,
-      },
-    },
-  ],
+  Speciality: [{ type: String }],
+  VerLinkExpDate: { type: Date },
+  PassChangeLinkExpDate: { type: Date },
 });
 export default mongoose.model("freelancer", freelancerSchema);

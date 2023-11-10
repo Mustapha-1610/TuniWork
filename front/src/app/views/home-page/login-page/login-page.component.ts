@@ -21,21 +21,26 @@ export class LoginPageComponent implements OnInit {
     });
   }
   submitLoginForm() {
-    console.log(this.loginForm.value);
     this.fs.auth(this.loginForm.value).subscribe((res: any) => {
-      console.log(res);
       if (res.error) {
         this.errMessage = res.error;
-        console.log('error');
-      } else if (res.freeLancerAccount) {
+      } else if (res.freelancerAccount) {
         const FreelancerAccount: any = {
-          Name: res.freeLancerAccount.Name,
-          Surname: res.freeLancerAccount.Surname,
+          Name: res.freelancerAccount.Name,
+          Surname: res.freelancerAccount.Surname,
+          ProfilePicture: res.freelancerAccount.ProfilePicture,
+          _id: res.freelancerAccount._id,
+          Email: res.freelancerAccount.Email,
+          PhoneNumber: res.freelancerAccount.PhoneNumber,
+          WorkTitle: res.freelancerAccount.WorkTitle.WorkTitleText,
+          Specialities: res.freelancerAccount.Speciality,
+          WorkHistory: res.freelancerAccount.WorkHistory,
+          EstimatedWorkLocation: res.freelancerAccount.EstimatedWorkLocation,
+          Languages: res.freelancerAccount.Languages,
+          PayRates: res.freelancerAccount.PayRate,
+          Schedule: res.freelancerAccount.Schedule,
         };
-        localStorage.setItem(
-          'freeLancerInfos',
-          JSON.stringify(FreelancerAccount)
-        ); // Convert object to string before storing in localStorage
+        this.fs.setFreelancerCredits(JSON.stringify(FreelancerAccount));
         this.route.navigate(['/freelancer']);
       }
     });

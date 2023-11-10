@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { FreelancerlayoutComponent } from './layout/freelancerlayout/freelancerlayout.component';
 import { HomeLayoutComponent } from './layout/home-layout/home-layout.component';
 import { FreelancerGuardGuard } from './views/guards/freelancer-guard.guard';
+import { homePageGuard } from './views/guards/home-page.guard';
 
 const routes: Routes = [
   {
@@ -22,6 +23,7 @@ const routes: Routes = [
   {
     path: '',
     component: HomeLayoutComponent,
+    canActivate: [homePageGuard],
     children: [
       {
         path: '',

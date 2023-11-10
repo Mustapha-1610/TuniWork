@@ -1,4 +1,4 @@
-import Company from "./modal"
+import Company from "./modal";
 import jwt from "jsonwebtoken";
 import express from "express";
 import bcrypt from "bcryptjs";
@@ -10,15 +10,39 @@ import { companyRouteProtection } from "./routeProtectionMiddleware";
 
 export const create = async (req: express.Request, res: express.Response) => {
   console.log();
-  const { ChefName, ChefSurname, ChefEmail, Password, ChefCin,ChefPhone, CompanyName,CompanyWebsite,CompanyEmail, CompanyDescription, CompanyPhone} = req.body;
+  const {
+    ChefName,
+    ChefSurname,
+    ChefEmail,
+    Password,
+    ChefCin,
+    ChefPhone,
+    CompanyName,
+    CompanyWebsite,
+    CompanyEmail,
+    CompanyDescription,
+    CompanyPhone,
+  } = req.body;
   try {
-    if (!ChefName || !ChefSurname || !ChefEmail || !Password || !ChefCin || !ChefPhone || !CompanyName || !CompanyWebsite || !CompanyEmail || !CompanyDescription || !CompanyPhone ) {
+    if (
+      !ChefName ||
+      !ChefSurname ||
+      !ChefEmail ||
+      !Password ||
+      !ChefCin ||
+      !ChefPhone ||
+      !CompanyName ||
+      !CompanyWebsite ||
+      !CompanyEmail ||
+      !CompanyDescription ||
+      !CompanyPhone
+    ) {
       return res.json({ error: "Missing Input(s)" });
     }
 
     // ylawej 3la company  3andou nafs l esm (maybe something else)
     let existingCompany = await Company.findOne({
-      $or:[{ CompanyName }],
+      $or: [{ CompanyName }],
     });
 
     if (existingCompany) {
@@ -58,15 +82,13 @@ export const create = async (req: express.Request, res: express.Response) => {
       company._id,
       company.VerificationCode
     );
-    
+
     return res.json({ success: "Account Created !" });
   } catch (err) {
     console.log(err);
     return res.json({ error: "Server Error" });
   }
 };
-
-
 
 // function to verify company account (aziz)
 export const verifyAccount = async (
@@ -92,13 +114,11 @@ export const verifyAccount = async (
   }
 };
 
-
 // function to authenticate company  Using jwt's (aziz) to change fazet l phone
 export const auth = async (req: express.Request, res: express.Response) => {
   try {
     const { ChefEmail, Password, ChefPhone } = req.body;
     let companyAccount;
-
 
     if ((!ChefEmail && !Password) || (!ChefPhone && !Password)) {
       return res.status(401).json({ error: "Invalid Input(s)" });
@@ -108,14 +128,10 @@ export const auth = async (req: express.Request, res: express.Response) => {
       companyAccount = await Company.findOne({ ChefEmail });
     }
 
-
     if (!companyAccount) {
       return res.json({ error: "Account dosent exist !" });
     }
-    const passwordcheck = bcrypt.compareSync(
-      Password,
-      companyAccount.Password
-    );
+    const passwordcheck = bcrypt.compareSync(Password, companyAccount.Password);
     if (!passwordcheck) {
       return res.status(404).json({ Message: "Invalid email or password !" });
     }
@@ -128,8 +144,6 @@ export const auth = async (req: express.Request, res: express.Response) => {
       return res.json({ error: "This account is disabled !" });
     }
 
-
-    
     await generateCompanyToken(res, companyAccount._id);
     return res.json({ companyAccount });
   } catch (err) {
@@ -137,8 +151,6 @@ export const auth = async (req: express.Request, res: express.Response) => {
     return res.json({ error: "Server Error!" });
   }
 };
-
-
 
 // function to retrieve company Account informations (aziz)
 export const getProfile = async (
@@ -153,7 +165,6 @@ export const getProfile = async (
   }
 };
 
-
 // function to clear the stored jwt and successfuly logs out the company (aziz)
 export const logout = async (req: express.Request, res: express.Response) => {
   try {
@@ -163,9 +174,7 @@ export const logout = async (req: express.Request, res: express.Response) => {
     console.log(err);
     return res.json({ error: "Server Error !" });
   }
-}; 
-
-
+};
 
 // function to get all companies on the db (aziz)
 export const getAllCompanies = async (
@@ -175,8 +184,6 @@ export const getAllCompanies = async (
   let allcompanies = await Company.find();
   return res.json({ allcompanies });
 };
-
-
 
 //update (aziz)
 export const updateInfo = async (
@@ -208,14 +215,16 @@ export const updateInfo = async (
       }*/
 
       ChefName ? (company.ChefName = ChefName) : null;
-      ChefSurname ? (company.ChefSurname = ChefSurname) : null; 
+      ChefSurname ? (company.ChefSurname = ChefSurname) : null;
       ChefCin ? (company.ChefCin = ChefCin) : null;
       ChefPhone ? (company.ChefPhone = ChefPhone) : null;
       //ProfilePicture ? (Company.ProfilePicture = ProfilePicture) : null;
       CompanyName ? (company.CompanyName = CompanyName) : null;
       CompanyWebsite ? (company.CompanyWebsite = CompanyWebsite) : null;
       CompanyEmail ? (company.CompanyEmail = CompanyEmail) : null;
-      CompanyDescription ? (company.CompanyDescription = CompanyDescription) : null;
+      CompanyDescription
+        ? (company.CompanyDescription = CompanyDescription)
+        : null;
       CompanyPhone ? (company.CompanyPhone = CompanyPhone) : null;
 
       await company.save();
@@ -230,7 +239,6 @@ export const updateInfo = async (
     return res.json({ error: "Server Error!" });
   }
 };
-
 
 //disable acc (aziz)
 export const disableAccount = async (
@@ -250,5 +258,3 @@ export const disableAccount = async (
     console.log("Server Error !");
   }
 };
-
-

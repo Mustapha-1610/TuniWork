@@ -14,8 +14,13 @@ import { RegestrationTypeSelectionComponent } from './regestration-type-selectio
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { provideFirebaseApp, getApp, initializeApp } from '@angular/fire/app';
+import { getStorage, provideStorage } from '@angular/fire/storage';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/storage';
+import { FreelancerVerificationPageComponent } from './freelancer-verification-page/freelancer-verification-page.component';
+import { environment } from 'src/environment';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [
@@ -27,6 +32,7 @@ import 'firebase/compat/storage';
     LoginPageComponent,
     SignupPageComponent,
     RegestrationTypeSelectionComponent,
+    FreelancerVerificationPageComponent,
   ],
   imports: [
     CommonModule,
@@ -36,6 +42,9 @@ import 'firebase/compat/storage';
     NgMultiSelectDropDownModule,
     BrowserAnimationsModule,
     NgxSpinnerModule,
+    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
+    provideStorage(() => getStorage(getApp())),
+    MatProgressBarModule,
   ],
 })
 export class HomePageModule {}

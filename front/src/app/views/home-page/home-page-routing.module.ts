@@ -7,6 +7,7 @@ import { CompanyLoginPageComponent } from './company-login-page/company-login-pa
 import { ComapnySignupPageComponent } from './comapny-signup-page/comapny-signup-page.component';
 import { LoginPageComponent } from './login-page/login-page.component';
 import { SignupPageComponent } from './signup-page/signup-page.component';
+import { FreelancerVerificationPageComponent } from './freelancer-verification-page/freelancer-verification-page.component';
 
 const routes: Routes = [
   { path: '', component: IndexComponent },
@@ -14,6 +15,10 @@ const routes: Routes = [
   { path: 'Csignup', component: ComapnySignupPageComponent },
   { path: 'login', component: LoginPageComponent },
   { path: 'signup', component: SignupPageComponent },
+  {
+    path: 'Fverification',
+    component: FreelancerVerificationPageComponent,
+  },
 ];
 
 @NgModule({

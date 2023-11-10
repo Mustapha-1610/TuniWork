@@ -5,7 +5,10 @@ import bcrypt from "bcryptjs";
 import { SendFreelancerAccountConfirmationMail } from "./nodemailerConfig";
 import generateFreelancerToken from "./utils";
 import { freeLancerRouteProtection } from "./routeProtectionMiddleware";
-
+import { FishOff } from "lucide-angular";
+import company from "../Company/modal";
+import generateCompanyToken from "../Company/utils";
+import { SendPasswordResetEmail } from "./nodemailerConfig";
 // function to create a freelancer account (Mustapha)
 export const create = async (req: express.Request, res: express.Response) => {
   const { freelancerPersonalInfos, freelancerAddedInfos } = req.body;
@@ -38,21 +41,20 @@ export const create = async (req: express.Request, res: express.Response) => {
         { PhoneNumber: freelancerPersonalInfos.PhoneNumber },
       ],
     });
+    if (existingFreelancer) {
+      return res.json({ error: "Account Exists Allready" });
+    }
     let languagestable: String[] = [];
     freelancerAddedInfos.languages.map((item: any) => {
       languagestable.push(item.item_text);
     });
-    let SpecialityArray = freelancerAddedInfos.speciality.map((item: any) => {
-      return {
-        SpecialityId: item.item_id,
-        SpecialityText: item.item_text,
-      };
+    let SpecialityArray: String[] = [];
+    freelancerAddedInfos.speciality.map((item: any) => {
+      SpecialityArray.push(item.item_text);
     });
-    if (existingFreelancer) {
-      return res.json({ error: "Account Exists Allready" });
-    }
     // tasna3 password securisé
     const securePassword = bcrypt.hashSync(freelancerPersonalInfos.Password);
+
     // generating secret code bech nesta3mlouh mba3d fel verficiation mail
     const characters =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -76,12 +78,13 @@ export const create = async (req: express.Request, res: express.Response) => {
             PayPerTaskRate: freelancerPersonalInfos.PayPerTaskRate,
           },
           Languages: languagestable,
-          EstimateWorkLocation: freelancerPersonalInfos,
+          EstimateWorkLocation: freelancerPersonalInfos.EstimateWorkLocation,
           WorkTitle: {
-            WorkTitleId: freelancerAddedInfos.workTitle.item_id,
-            WorkTitleText: freelancerAddedInfos.workTitle.item_text,
+            WorkTitleId: freelancerAddedInfos.workTitle[0].item_id,
+            WorkTitleText: freelancerAddedInfos.workTitle[0].item_text,
           },
           Speciality: SpecialityArray,
+          VerLinkExpDate: new Date(new Date().getTime() + 2 * 60 * 60 * 1000),
         }))
       : (freeLancer = await freelancer.create({
           Name: freelancerPersonalInfos.Name,
@@ -95,12 +98,13 @@ export const create = async (req: express.Request, res: express.Response) => {
             PayPerTaskRate: freelancerPersonalInfos.PayPerTaskRate,
           },
           Languages: languagestable,
-          EstimateWorkLocation: "hellotest",
+          EstimateWorkLocation: freelancerPersonalInfos.EstimateWorkLocation,
           WorkTitle: {
             WorkTitleId: freelancerAddedInfos.workTitle[0].item_id,
             WorkTitleText: freelancerAddedInfos.workTitle[0].item_text,
           },
           Speciality: SpecialityArray,
+          VerLinkExpDate: new Date(new Date().getTime() + 2 * 60 * 60 * 1000),
         }));
     await SendFreelancerAccountConfirmationMail(
       freeLancer.Name,
@@ -121,8 +125,7 @@ export const verifyAccount = async (
   res: express.Response
 ) => {
   try {
-    const freeLancerId = req.params.freeLancerId;
-    const VerificationCode = req.params.VerificationCode;
+    const { freeLancerId, VerificationCode } = req.body;
     const unverifiedFreeLancer = await freelancer.findById(freeLancerId);
     if (!unverifiedFreeLancer) {
       return res.json({ error: "Account dosent exist !" });
@@ -130,12 +133,102 @@ export const verifyAccount = async (
     if (VerificationCode != unverifiedFreeLancer.VerificationCode) {
       return res.json({ error: "Try Again Later !" });
     }
+    if (unverifiedFreeLancer.AccountVerficiationStatus === true) {
+      return res.json({ error: "Account Allready Verified" });
+    }
+    if (unverifiedFreeLancer.VerLinkExpDate < new Date()) {
+      return res.json({ expireError: "Link Expired" });
+    }
+
     unverifiedFreeLancer.AccountVerficiationStatus = true;
     await unverifiedFreeLancer.save();
-    return res.json({ sucess: "Account verified you can now log in !" });
+    return res.json({ success: "Account verified you can now log in !" });
   } catch (err) {
     console.log(err);
     return res.json({ error: "Server Error!" });
+  }
+};
+
+//
+export const sendVerificationLink = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { freeLancerId, freeLancerMail } = req.body;
+    let existingFreelancer = await freelancer.findOne({
+      $or: [{ Email: freeLancerMail }, { _id: freeLancerId }],
+    });
+    if (!existingFreelancer) {
+      return res.json({ error: "Error try again later" });
+    }
+    existingFreelancer.VerLinkExpDate = new Date(
+      new Date().getTime() + 2 * 60 * 60 * 1000
+    );
+    await SendFreelancerAccountConfirmationMail(
+      existingFreelancer.Name,
+      existingFreelancer.Email,
+      existingFreelancer._id,
+      existingFreelancer.VerificationCode
+    );
+    await existingFreelancer.save();
+    return res.json({ success: "Verification Link Sent" });
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error" });
+  }
+};
+
+//
+export const sendPassResetEmail = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { freelancerEmail } = req.body;
+    let existingFreelancer = await freelancer.findOne({
+      Email: freelancerEmail,
+    });
+    if (!existingFreelancer) {
+      return res.json({ error: "Account Dosent Exist !" });
+    }
+    existingFreelancer.PassChangeLinkExpDate = new Date(
+      new Date().getTime() + 2 * 60 * 60 * 1000
+    );
+    await SendPasswordResetEmail(
+      existingFreelancer.Name,
+      existingFreelancer.Email,
+      existingFreelancer._id
+    );
+    await existingFreelancer.save();
+    return res.json({ success: "Password Reset Mail Sent !" });
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error Try Again Later !" });
+  }
+};
+
+//
+export const passReset = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { freeLancerId, newPassword, confirmNewPassword } = req.body;
+    let exsistingFreelancer = await freelancer.findById(freeLancerId);
+    if (exsistingFreelancer.PassChangeLinkExpDate < new Date()) {
+      return res.json({ error: "Link Expired" });
+    }
+    if (newPassword !== confirmNewPassword) {
+      return res.json({ error: "Password Mismatch !" });
+    }
+    const newHashedPassword = bcrypt.hashSync(newPassword);
+    exsistingFreelancer.Password = newHashedPassword;
+    await exsistingFreelancer.save();
+    return res.json({ success: "Password Changed" });
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error Try Again Later !" });
   }
 };
 
@@ -332,6 +425,72 @@ export const activateFreelancer = async (
     freeLancer.AccountActivationStatus = true;
     await freeLancer.save();
     return res.json({ success: "Account Activated !" });
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error !" });
+  }
+};
+
+//
+export const multiauth = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { Email, Password, PhoneNumber } = req.body;
+
+    let existingAccount = await freelancer.findOne({
+      $or: [{ Email }, { PhoneNumber }],
+    });
+
+    if (existingAccount) {
+      const passwordcheck = bcrypt.compareSync(
+        Password,
+        existingAccount.Password
+      );
+      if (!passwordcheck) {
+        return res.status(404).json({ Message: "Invalid email or password !" });
+      }
+      if (existingAccount.AccountVerficiationStatus === false) {
+        return res.json({
+          emailError: "You need to verify your email first before logging in !",
+        });
+      }
+      if (existingAccount.AccountActivationStatus === false) {
+        return res.json({ error: "This account is disabled !" });
+      }
+
+      await generateFreelancerToken(res, existingAccount._id);
+      return res.json({ freelancerAccount: existingAccount });
+    } else if (
+      (existingAccount = await company.findOne({
+        $or: [{ ChefEmail: Email }, { ChefPhone: Password }],
+      })) !== null
+    ) {
+      console.log(existingAccount);
+      const passwordcheck = bcrypt.compareSync(
+        Password,
+        existingAccount.Password
+      );
+      if (!passwordcheck) {
+        return res
+          .status(404)
+          .json({ Message: "Invalid email or password test !" });
+      }
+      if (existingAccount.AccountVerficiationStatus === false) {
+        return res.json({
+          emailError: "You need to verify your email first before logging in !",
+        });
+      }
+      if (existingAccount.AccountActivationStatus === false) {
+        return res.json({ error: "This account is disabled !" });
+      }
+
+      await generateCompanyToken(res, existingAccount._id);
+      return res.json({ comapnyAccount: existingAccount });
+    } else {
+      return res.json({ error: "Account Dosent Exist" });
+    }
   } catch (err) {
     console.log(err);
     return res.json({ error: "Server Error !" });

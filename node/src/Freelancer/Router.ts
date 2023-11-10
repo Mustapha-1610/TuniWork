@@ -5,10 +5,7 @@ const freelancerRouter = express.Router();
 
 freelancerRouter.post("/create", freelancerController.create);
 
-freelancerRouter.put(
-  "/verify/:freeLancerId/:VerificationCode",
-  freelancerController.verifyAccount
-);
+freelancerRouter.put("/verify", freelancerController.verifyAccount);
 
 freelancerRouter.post("/auth", freelancerController.auth);
 
@@ -31,5 +28,16 @@ freelancerRouter.put("/update", freelancerController.updateInfo);
 freelancerRouter.put("/disable", freelancerController.disableAccount);
 
 freelancerRouter.put("/activate", freelancerController.activateFreelancer);
+
+freelancerRouter.post("/multiAuth", freelancerController.multiauth);
+
+freelancerRouter.post("/sendLink", freelancerController.sendVerificationLink);
+
+freelancerRouter.post(
+  "/sendPassResetMail",
+  freelancerController.sendPassResetEmail
+);
+
+freelancerRouter.put("/PassReset", freelancerController.passReset);
 
 export default freelancerRouter;

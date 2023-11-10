@@ -9,6 +9,22 @@
 <div class="text-center text-red-500 font-bold text-mm mt-8">
   {{ errorMessage }}
 </div>
+<div class="flex items-center justify-center">
+  <img
+    [src]="testimg"
+    (click)="fileInput.click()"
+    class="rounded-full cursor-pointer border-4 border-white hover:border-gray-300"
+    style="width: 270px; height: 270px"
+  />
+</div>
+
+<mat-progress-bar
+  *ngIf="uploadProgress !== undefined"
+  mode="determinate"
+  [value]="uploadProgress"
+  class="mt-4 w-1/2"
+  style="height: 10px"
+></mat-progress-bar>
 
 <form
   [formGroup]="freelancerForm"
@@ -80,12 +96,25 @@
       class="block text-gray-700 text-sm font-bold mb-2"
       for="PayPerTaskRate"
     >
-      PayPer Tas kRate
+      PayPer Task Rate
     </label>
     <input
       class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
       type="number"
       formControlName="PayPerTaskRate"
+    />
+  </div>
+  <div class="mb-4">
+    <label
+      class="block text-gray-700 text-sm font-bold mb-2"
+      for="EstimateWorkLocation"
+    >
+      Estimate Work Location
+    </label>
+    <input
+      class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+      type="text"
+      formControlName="EstimateWorkLocation"
     />
   </div>
   <form [formGroup]="form">
@@ -144,3 +173,13 @@
     </button>
   </div>
 </form>
+
+<div>
+  <!-- Hidden file input -->
+  <input
+    type="file"
+    #fileInput
+    style="display: none"
+    (change)="uploadImage($event)"
+  />
+</div>

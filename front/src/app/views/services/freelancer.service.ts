@@ -16,6 +16,27 @@ export class FreelancerService {
     return this.http.get('http://localhost:5000/api/work/getWorkData');
   }
   auth(data: any) {
-    return this.http.post('http://localhost:5000/api/freelancer/auth', data);
+    return this.http.post(
+      'http://localhost:5000/api/freelancer/multiAuth',
+      data
+    );
+  }
+  setFreelancerCredits(form: any) {
+    localStorage.setItem('freeLancerInfos', form);
+  }
+  getFreelancerCredits() {
+    return JSON.parse(localStorage.getItem('freeLancerInfos')!);
+  }
+  verifyFreelancer(_id: any, vcode: any) {
+    return this.http.put('http://localhost:5000/api/freelancer/verify', {
+      freeLancerId: _id,
+      VerificationCode: vcode,
+    });
+  }
+  sendVerLink(_id: any, email: any) {
+    return this.http.post('http://localhost:5000/api/freelancer/sendLink', {
+      freeLancerId: _id,
+      freeLancerMail: email,
+    });
   }
 }

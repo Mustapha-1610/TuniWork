@@ -11,8 +11,4 @@ export class ProfilePageComponent implements OnInit {
   ngOnInit() {
     this.freeLancerInfos = JSON.parse(localStorage.getItem('freeLancerInfos')!);
   }
-  logout() {
-    localStorage.removeItem('freeLancerInfos');
-    this.router.navigate(['/']);
-  }
 }
