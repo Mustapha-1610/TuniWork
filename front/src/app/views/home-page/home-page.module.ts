@@ -21,6 +21,14 @@ import 'firebase/compat/storage';
 import { FreelancerVerificationPageComponent } from './freelancer-verification-page/freelancer-verification-page.component';
 import { environment } from 'src/environment';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { OAuthModule } from 'angular-oauth2-oidc';
+import {
+  SocialLoginModule,
+  SocialAuthServiceConfig,
+} from '@abacritt/angularx-social-login';
+import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
+import { GoogleSigninButtonModule } from '@abacritt/angularx-social-login';
+import { FreelancerGoogleSignupComponent } from './freelancer-google-signup/freelancer-google-signup.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +41,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     SignupPageComponent,
     RegestrationTypeSelectionComponent,
     FreelancerVerificationPageComponent,
+    FreelancerGoogleSignupComponent,
   ],
   imports: [
     CommonModule,
@@ -45,6 +54,29 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideStorage(() => getStorage(getApp())),
     MatProgressBarModule,
+    OAuthModule,
+    OAuthModule.forRoot(),
+    SocialLoginModule,
+    GoogleSigninButtonModule,
+  ],
+  providers: [
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(
+              '571037053668-ds96a2gqbve5av8uh1ed7kkeml7vf0r7.apps.googleusercontent.com'
+            ),
+          },
+        ],
+        onError: (err) => {
+          console.error(err);
+        },
+      } as SocialAuthServiceConfig,
+    },
   ],
 })
 export class HomePageModule {}

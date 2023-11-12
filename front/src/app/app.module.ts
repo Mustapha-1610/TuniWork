@@ -15,6 +15,10 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/storage';
 import { environment } from 'src/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {
+  SocialLoginModule,
+  SocialAuthServiceConfig,
+} from '@abacritt/angularx-social-login';
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -28,6 +32,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideStorage(() => getStorage(getApp())),
     BrowserAnimationsModule,
+    SocialLoginModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

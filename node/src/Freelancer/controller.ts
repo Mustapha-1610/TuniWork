@@ -126,7 +126,7 @@ export const verifyAccount = async (
 ) => {
   try {
     const { freeLancerId, VerificationCode } = req.body;
-    const unverifiedFreeLancer = await freelancer.findById(freeLancerId);
+    const unverifiedFreeLancer: any = await freelancer.findById(freeLancerId);
     if (!unverifiedFreeLancer) {
       return res.json({ error: "Account dosent exist !" });
     }
@@ -156,7 +156,7 @@ export const sendVerificationLink = async (
 ) => {
   try {
     const { freeLancerId, freeLancerMail } = req.body;
-    let existingFreelancer = await freelancer.findOne({
+    let existingFreelancer: any = await freelancer.findOne({
       $or: [{ Email: freeLancerMail }, { _id: freeLancerId }],
     });
     if (!existingFreelancer) {
@@ -186,7 +186,7 @@ export const sendPassResetEmail = async (
 ) => {
   try {
     const { freelancerEmail } = req.body;
-    let existingFreelancer = await freelancer.findOne({
+    let existingFreelancer: any = await freelancer.findOne({
       Email: freelancerEmail,
     });
     if (!existingFreelancer) {
@@ -215,7 +215,7 @@ export const passReset = async (
 ) => {
   try {
     const { freeLancerId, newPassword, confirmNewPassword } = req.body;
-    let exsistingFreelancer = await freelancer.findById(freeLancerId);
+    let exsistingFreelancer: any = await freelancer.findById(freeLancerId);
     if (exsistingFreelancer.PassChangeLinkExpDate < new Date()) {
       return res.json({ error: "Link Expired" });
     }
@@ -235,8 +235,10 @@ export const passReset = async (
 // function to authenticate Freelancer Using jwt's (Mustapha)
 export const auth = async (req: express.Request, res: express.Response) => {
   try {
+    console.log(req.body);
+    console.log("hello");
     const { Email, Password, PhoneNumber } = req.body;
-    let freeLancerAccount;
+    let freeLancerAccount: any;
     if ((!Email && !Password) || (!PhoneNumber && !Password)) {
       return res.status(401).json({ error: "Invalid Input(s)" });
     } else if (!Email) {
@@ -271,6 +273,27 @@ export const auth = async (req: express.Request, res: express.Response) => {
   }
 };
 
+//
+export const googleAuth = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { freelancerEmail } = req.body;
+    let exisitingFreelancer = await freelancer.findOne({
+      Email: freelancerEmail,
+    });
+    if (!exisitingFreelancer) {
+      return res.json({ error: "Account Dont Exist Consider Logging In" });
+    } else {
+      return res.json({ freelancerAccount: exisitingFreelancer });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error" });
+  }
+};
+
 // function to retrieve freelancer Account informations (Mustapha)
 export const getProfile = async (
   req: express.Request,
@@ -279,7 +302,7 @@ export const getProfile = async (
   try {
     const freelancerId = await freeLancerRouteProtection(req, res);
     if ("_id" in freelancerId) {
-      const Freelancer = await freelancer.findById(freelancerId);
+      const Freelancer: any = await freelancer.findById(freelancerId);
       if (Freelancer.AccountActivationStatus === false) {
         return res.json({ error: "This account is disabled !" });
       }
@@ -311,7 +334,7 @@ export const passwordReset = async (
   const { newPassword, oldPassword } = req.body;
   const freelancerId = req.params.freelancerId;
   try {
-    let freeLancer = await freelancer.findById(freelancerId);
+    let freeLancer: any = await freelancer.findById(freelancerId);
     if (!freeLancer) {
       return res.json({ error: "Error !" });
     }
@@ -359,7 +382,7 @@ export const updateInfo = async (
       Speciality,
     } = req.body;
     if ("_id" in freelancerId) {
-      let freeLancer = await freelancer.findById(freelancerId);
+      let freeLancer: any = await freelancer.findById(freelancerId);
 
       if (!freeLancer) {
         return res.json({ error: "Error" });
@@ -400,7 +423,7 @@ export const disableAccount = async (
 ) => {
   try {
     const freelancerId = req.body.freelancerId;
-    let freeLancer = await freelancer.findById(freelancerId);
+    let freeLancer: any = await freelancer.findById(freelancerId);
     if (!freeLancer) {
       return res.json({ error: "Error !" });
     }
@@ -418,7 +441,7 @@ export const activateFreelancer = async (
 ) => {
   try {
     const { freelancerId } = req.body;
-    let freeLancer = await freelancer.findById(freelancerId);
+    let freeLancer: any = await freelancer.findById(freelancerId);
     if (!freeLancer) {
       return res.json({ error: "Account dosent exist !" });
     }
@@ -439,7 +462,7 @@ export const multiauth = async (
   try {
     const { Email, Password, PhoneNumber } = req.body;
 
-    let existingAccount = await freelancer.findOne({
+    let existingAccount: any = await freelancer.findOne({
       $or: [{ Email }, { PhoneNumber }],
     });
 

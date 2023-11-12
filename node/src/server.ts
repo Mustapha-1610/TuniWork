@@ -13,6 +13,7 @@ import adminRouter from "./Admin/Router";
 
 import workRouter from "./Work/Router";
 import languagesRouter from "./utils/Languages/Router";
+import CompanyWorkOfferRouter from "./WorkOffer/Company/router";
 
 dotenv.config();
 const app = express();
@@ -38,6 +39,8 @@ app.use("/api/admin", adminRouter);
 app.use("/api/work", workRouter);
 
 app.use("/api/languages", languagesRouter);
+
+app.use("/api/companyWorkOffer", CompanyWorkOfferRouter);
 
 const server = http.createServer(app);
 

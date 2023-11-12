@@ -40,4 +40,6 @@ freelancerRouter.post(
 
 freelancerRouter.put("/PassReset", freelancerController.passReset);
 
+freelancerRouter.post("/LgoogleAuth", freelancerController.googleAuth);
+
 export default freelancerRouter;

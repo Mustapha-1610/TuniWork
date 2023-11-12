@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 const companySchema = new Schema({
-
   //CHEF(CEO) INFOS
   ChefName: {
     type: String,
@@ -43,7 +42,6 @@ const companySchema = new Schema({
 
   //COMPANY INFOS
 
-
   CompanyName: {
     type: String,
     required: true,
@@ -70,7 +68,7 @@ const companySchema = new Schema({
   CompanyPhone: {
     type: Number,
     required: true,
-  }, 
+  },
 
   //na3mlou address irl?
 
@@ -84,6 +82,30 @@ const companySchema = new Schema({
   AccountVerficiationStatus: {
     type: Boolean,
     default: false,
+  },
+  MoneySpent: {
+    type: Number,
+    default: 0,
+  },
+  JoinDate: {
+    type: Date,
+    default: new Date(),
+  },
+  WorkOfferd: {
+    type: Number,
+    default: 0,
+  },
+  Reviews: {
+    type: Number,
+    default: 0,
+  },
+  PaymentMethodVerificationStatus: {
+    type: Boolean,
+    default: false,
+  },
+  Location: {
+    type: String,
+    required: true,
   },
 });
 export default mongoose.model("Company", companySchema);

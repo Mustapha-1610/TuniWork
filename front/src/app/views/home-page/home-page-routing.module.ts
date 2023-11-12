@@ -8,6 +8,7 @@ import { ComapnySignupPageComponent } from './comapny-signup-page/comapny-signup
 import { LoginPageComponent } from './login-page/login-page.component';
 import { SignupPageComponent } from './signup-page/signup-page.component';
 import { FreelancerVerificationPageComponent } from './freelancer-verification-page/freelancer-verification-page.component';
+import { FreelancerGoogleSignupComponent } from './freelancer-google-signup/freelancer-google-signup.component';
 
 const routes: Routes = [
   { path: '', component: IndexComponent },
@@ -18,6 +19,10 @@ const routes: Routes = [
   {
     path: 'Fverification',
     component: FreelancerVerificationPageComponent,
+  },
+  {
+    path: 'FGsignup',
+    component: FreelancerGoogleSignupComponent,
   },
 ];
 

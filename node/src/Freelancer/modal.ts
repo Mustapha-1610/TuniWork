@@ -1,14 +1,7 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
+import usersSchema from "../Users/modal";
 const freelancerSchema = new Schema({
-  Name: {
-    type: String,
-    required: true,
-  },
-  Surname: {
-    type: String,
-    required: true,
-  },
   PhoneNumber: {
     type: Number,
     required: true,
@@ -121,4 +114,9 @@ const freelancerSchema = new Schema({
   VerLinkExpDate: { type: Date },
   PassChangeLinkExpDate: { type: Date },
 });
-export default mongoose.model("freelancer", freelancerSchema);
+const CombinedFreelancerSchema = new Schema({
+  ...usersSchema.obj,
+  ...freelancerSchema.obj,
+});
+
+export default mongoose.model("freelancer", CombinedFreelancerSchema);
