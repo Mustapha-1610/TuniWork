@@ -1,8 +1,9 @@
+
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 const companySchema = new Schema({
   //CHEF(CEO) INFOS
-  ChefName: {
+  /*ChefName: {
     type: String,
     required: true,
   },
@@ -23,10 +24,7 @@ const companySchema = new Schema({
     unique: true,
   },
 
-  Password: {
-    type: String,
-    required: true,
-  },
+
 
   ChefCin: {
     type: Number,
@@ -36,17 +34,13 @@ const companySchema = new Schema({
   ChefPhone: {
     type: Number,
     required: true,
-  },
+  },*/
 
-  //CV w tasri7 document
+  
 
   //COMPANY INFOS
 
   CompanyName: {
-    type: String,
-    required: true,
-  },
-  CompanyWebsite: {
     type: String,
     required: true,
   },
@@ -55,11 +49,24 @@ const companySchema = new Schema({
     type: String,
     required: true,
   },
+
+  
+  Password: {
+    type: String,
+    required: true,
+  },
+
+  CompanyWebsite: {
+    type: String,
+    required: true,
+  },
+
   CompanyLogo: {
     type: String,
     default:
       "https://firebasestorage.googleapis.com/v0/b/tunibids.appspot.com/o/Windows_10_Default_Profile_Picture.svg.png?alt=media&token=e7aca30d-6eea-45ff-8522-db048fcb8c38",
   },
+
   CompanyDescription: {
     type: String,
     required: true,
@@ -70,11 +77,17 @@ const companySchema = new Schema({
     required: true,
   },
 
-  //na3mlou address irl?
+  Location: {
+    type: String,
+    required: true,
+  },
+
 
   VerificationCode: {
     type: String,
   },
+
+
   AccountActivationStatus: {
     type: Boolean,
     default: true,
@@ -83,29 +96,52 @@ const companySchema = new Schema({
     type: Boolean,
     default: false,
   },
-  MoneySpent: {
-    type: Number,
-    default: 0,
-  },
+
+
   JoinDate: {
     type: Date,
     default: new Date(),
   },
-  WorkOfferd: {
-    type: Number,
-    default: 0,
-  },
+
+
+
+
+
+
+
+
+  // ****************further dev **********************
+
   Reviews: {
     type: Number,
     default: 0,
   },
+
   PaymentMethodVerificationStatus: {
     type: Boolean,
     default: false,
   },
-  Location: {
-    type: String,
-    required: true,
+
+
+    // what does this do
+    WorkOfferd: {
+      type: Number,
+      default: 0,
+    },
+  
+    
+  MoneySpent: {
+    type: Number,
+    default: 0,
   },
+
+
+
+
+
+
+
+
+  //CV w tasri7 document
 });
 export default mongoose.model("Company", companySchema);
