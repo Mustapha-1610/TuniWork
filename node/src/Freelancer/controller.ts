@@ -9,6 +9,12 @@ import { FishOff } from "lucide-angular";
 import company from "../Company/modal";
 import generateCompanyToken from "../Company/utils";
 import { SendPasswordResetEmail } from "./nodemailerConfig";
+import PrivateJobOffer from "../WorkOffer/Company/CompanyPrivateWorkOfferModal";
+
+
+
+
+
 // function to create a freelancer account (Mustapha)
 export const create = async (req: express.Request, res: express.Response) => {
   const { freelancerPersonalInfos, freelancerAddedInfos } = req.body;
@@ -519,3 +525,72 @@ export const multiauth = async (
     return res.json({ error: "Server Error !" });
   }
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+//accept private job (aziz)
+export const acceptPrivateJob = async (req: express.Request, res: express.Response) => {
+  try {
+    const { freeLancerId , jobId } = req.params; 
+
+    // Find the private job offer by ID
+    const privateJobOffer = await PrivateJobOffer.findById(jobId);
+
+    // Check if the private job offer exists
+    if (!privateJobOffer) {
+      return res.status(404).json({ error: "Private job offer not found" });
+    }
+
+    // Update the status to "accepted"
+    privateJobOffer.status = "accepted";
+
+    // Save the changes
+    await privateJobOffer.save();
+
+    return res.json({ success: "Private job offer accepted" });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Server Error" });
+  }
+};
+
+
+  //decline private job (aziz)
+  export const declinePrivateJob = async (req: express.Request, res: express.Response) => {
+    try {
+      // Extract the necessary information from the request
+      const { freeLancerId , jobId } = req.params; // Assuming you send the jobId as a parameter in the URL
+      
+  
+      // Find the private job offer by ID
+      const privateJobOffer = await PrivateJobOffer.findById(jobId);
+  
+      // Check if the private job offer exists
+      if (!privateJobOffer) {
+        return res.status(404).json({ error: "Private job offer not found" });
+      }
+  
+  
+      // Update the status to "accepted"
+      privateJobOffer.status = "declined";
+  
+      // Save the changes
+      await privateJobOffer.save();
+    
+      return res.json({ success: "Private job offer declined" });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Server Error" });
+    }
+
+  }

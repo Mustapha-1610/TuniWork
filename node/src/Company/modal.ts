@@ -2,7 +2,8 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 const companySchema = new Schema({
-  //CHEF(CEO) INFOS
+
+   //CHEF(CEO) INFOS
   /*ChefName: {
     type: String,
     required: true,
@@ -36,10 +37,9 @@ const companySchema = new Schema({
     required: true,
   },*/
 
+
+
   
-
-  //COMPANY INFOS
-
   CompanyName: {
     type: String,
     required: true,
@@ -134,12 +134,6 @@ const companySchema = new Schema({
     type: Number,
     default: 0,
   },
-
-
-
-
-
-
 
 
   //CV w tasri7 document

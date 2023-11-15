@@ -113,6 +113,32 @@ const freelancerSchema = new Schema({
   Speciality: [{ type: String }],
   VerLinkExpDate: { type: Date },
   PassChangeLinkExpDate: { type: Date },
+
+
+
+
+  //zyedet l array ta3 private job offer
+  ProposedPrivateWorks: [
+    {
+      PrivateJobOfferId: {
+        type: Schema.Types.ObjectId,
+        ref: 'PrivateJobOffer',
+      },
+      Status: {
+        type: String,
+        enum: [
+          'awaiting response',
+          'accepted',
+          'declined',
+          'in progress',
+          'done',
+        ],
+        default: 'awaiting response',
+      },
+    },
+  ],
+
+  
 });
 const CombinedFreelancerSchema = new Schema({
   ...usersSchema.obj,

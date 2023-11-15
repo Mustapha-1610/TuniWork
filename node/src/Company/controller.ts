@@ -16,7 +16,7 @@ export const create = async (req: express.Request, res: express.Response) => {
     CompanyName,
     Password,
     CompanyWebsite,
-    //CompanyLogo,
+    CompanyLogo,
     CompanyDescription,
     CompanyPhone,
     Location,
@@ -180,10 +180,7 @@ export const getAllCompanies = async (
 };
 
 //update (aziz)
-export const updateInfo = async (
-  req: express.Request,
-  res: express.Response
-) => {
+export const updateInfo = async (  req: express.Request,  res: express.Response) => {
   try {
     const companyId = await companyRouteProtection(req, res);
     const {
@@ -206,14 +203,11 @@ export const updateInfo = async (
         return res.json({ error: "This account is disabled !" });
       }*/
 
-
       //ProfilePicture ? (Company.ProfilePicture = ProfilePicture) : null;
       CompanyName ? (company.CompanyName = CompanyName) : null;
       CompanyWebsite ? (company.CompanyWebsite = CompanyWebsite) : null;
       CompanyEmail ? (company.CompanyEmail = CompanyEmail) : null;
-      CompanyDescription
-        ? (company.CompanyDescription = CompanyDescription)
-        : null;
+      CompanyDescription  ? (company.CompanyDescription = CompanyDescription) : null;
       CompanyPhone ? (company.CompanyPhone = CompanyPhone) : null;
       Location ? (company.Location = Location) : null;
 
