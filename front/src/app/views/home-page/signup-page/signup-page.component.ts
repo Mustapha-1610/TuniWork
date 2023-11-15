@@ -7,9 +7,6 @@ import { FreelancerSignupPageComponent } from '../freelancer-signup-page/freelan
 @Component({
   selector: 'app-signup-page',
   templateUrl: './signup-page.component.html',
-  template: `
-    <app-signup-page (signalToParent)="onSignalReceived()"></app-signup-page>
-  `,
   styleUrls: ['./signup-page.component.css'],
 })
 export class SignupPageComponent {
@@ -23,9 +20,5 @@ export class SignupPageComponent {
   }
   setCompanyLoginComponent() {
     this.displayedComponent = ComapnySignupPageComponent;
-  }
-  onSignalReceived() {
-    // Handle the signal and run your function here
-    console.log('Signal received from child component');
   }
 }

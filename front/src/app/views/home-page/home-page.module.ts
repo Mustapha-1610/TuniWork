@@ -29,6 +29,8 @@ import {
 import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
 import { GoogleSigninButtonModule } from '@abacritt/angularx-social-login';
 import { FreelancerGoogleSignupComponent } from './freelancer-google-signup/freelancer-google-signup.component';
+import { ForgetPasswordPageComponent } from './forget-password-page/forget-password-page.component';
+import { PasswordResetPageComponent } from './password-reset-page/password-reset-page.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +44,8 @@ import { FreelancerGoogleSignupComponent } from './freelancer-google-signup/free
     RegestrationTypeSelectionComponent,
     FreelancerVerificationPageComponent,
     FreelancerGoogleSignupComponent,
+    ForgetPasswordPageComponent,
+    PasswordResetPageComponent,
   ],
   imports: [
     CommonModule,

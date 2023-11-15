@@ -112,7 +112,7 @@ const freelancerSchema = new Schema({
   },
   Speciality: [{ type: String }],
   VerLinkExpDate: { type: Date },
-  PassChangeLinkExpDate: { type: Date },
+  PassChangeJWT: { type: String },
 });
 const CombinedFreelancerSchema = new Schema({
   ...usersSchema.obj,

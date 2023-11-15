@@ -22,31 +22,54 @@ export class LoginPageComponent implements OnInit {
       Email: new FormControl(null),
       Password: new FormControl(null),
     });
+
     this.authService.authState.subscribe((user) => {
-      this.user = user;
-      this.fs.googleLogin(user.email).subscribe((res: any) => {
-        if (res.freelancerAccount) {
-          this.fs.setFreelancerCredits(JSON.stringify(res.freelancerAccount));
-          this.route.navigate(['/freelancer']);
-        } else {
-          this.fs.sendData(this.user);
-          this.route.navigate(['/signup']);
-        }
-      });
+      if (user) {
+        this.user = user;
+        this.fs.googleLogin(user.email).subscribe((res: any) => {
+          if (res.freelancerAccount) {
+            this.fs.setFreelancerCredits(JSON.stringify(res.freelancerAccount));
+            this.route.navigate(['/freelancer']);
+          } else {
+            this.fs.sendData(this.user);
+            this.route.navigate(['/signup']);
+          }
+        });
+      }
     });
   }
   loginForm: any;
   errMessage: any;
+  mailError: any = null;
   user: any;
 
   submitLoginForm() {
+    this.errMessage = '';
+    this.mailError = null;
     this.fs.auth(this.loginForm.value).subscribe((res: any) => {
       if (res.error) {
         this.errMessage = res.error;
       } else if (res.freelancerAccount) {
-        this.fs.setFreelancerCredits(JSON.stringify(res.freeLancerAccount));
+        this.fs.setFreelancerCredits(JSON.stringify(res.freelancerAccount));
         this.route.navigate(['/freelancer']);
+      } else if (res.emailError) {
+        this.mailError = res.emailError;
       }
     });
+  }
+  sendEmail() {
+    this.fs
+      .sendVerLink(null, this.loginForm.value.Email)
+      .subscribe((res: any) => {
+        if (res.error) {
+          this.errMessage = res.error;
+        } else if (res.success) {
+          this.mailError = null;
+          this.errMessage = res.success;
+        }
+      });
+  }
+  routeFP() {
+    this.route.navigate(['/ForgetPassword']);
   }
 }

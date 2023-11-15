@@ -7,6 +7,7 @@ import { BehaviorSubject } from 'rxjs';
 export class FreelancerService {
   constructor(private http: HttpClient) {}
   private dataSource = new BehaviorSubject<any>(null);
+  Load: boolean = true;
   data$ = this.dataSource.asObservable();
   sendData(data: any) {
     this.dataSource.next(data);
@@ -23,7 +24,10 @@ export class FreelancerService {
   auth(data: any) {
     return this.http.post(
       'http://localhost:5000/api/freelancer/multiAuth',
-      data
+      data,
+      {
+        withCredentials: true, // <-- Make sure this is set
+      }
     );
   }
   setFreelancerCredits(freelancerForm: any) {
@@ -63,6 +67,28 @@ export class FreelancerService {
   googleLogin(email: any) {
     return this.http.post('http://localhost:5000/api/freelancer/LgoogleAuth', {
       freelancerEmail: email,
+    });
+  }
+  sendVerificationLink(email: any, _id: any) {
+    return this.http.post('http://localhost:5000/api/freelancer/sendLink', {
+      freeLancerId: _id,
+      freeLancerMail: email,
+    });
+  }
+  testCookie() {
+    return this.http.post('http://localhost:5000/api/freelancer/profile', null);
+  }
+  sendPassResetMail(Email: any) {
+    return this.http.post(
+      'http://localhost:5000/api/freelancer/sendPassResetMail',
+      { freelancerEmail: Email }
+    );
+  }
+  ResetPass(Token: any, Password: any, ConfirmPassword: any) {
+    return this.http.put('http://localhost:5000/api/freelancer/PassReset', {
+      jwToken: Token,
+      newPassword: Password,
+      confirmNewPassword: ConfirmPassword,
     });
   }
 }

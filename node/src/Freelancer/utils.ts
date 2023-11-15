@@ -11,7 +11,10 @@ const generateFreelancerToken = async (
   });
   res.cookie("jwt", token, {
     maxAge: 120 * 24 * 60 * 60 * 1000, // 30 days
+    httpOnly: true,
+    sameSite: "strict", // Prevent CSRF attacks
   });
+  return res;
 };
 
 export default generateFreelancerToken;

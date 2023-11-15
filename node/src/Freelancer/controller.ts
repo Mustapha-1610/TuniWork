@@ -214,18 +214,31 @@ export const passReset = async (
   res: express.Response
 ) => {
   try {
-    const { freeLancerId, newPassword, confirmNewPassword } = req.body;
-    let exsistingFreelancer: any = await freelancer.findById(freeLancerId);
-    if (exsistingFreelancer.PassChangeLinkExpDate < new Date()) {
-      return res.json({ error: "Link Expired" });
+    const { jwToken, newPassword, confirmNewPassword } = req.body;
+    if (jwToken === null) {
+      return res.json({ error: "Error Try Again Later !" });
+    } else if (newPassword === null) {
+      return res.json({ error: "Missing New Password" });
+    } else if (confirmNewPassword === null) {
+      return res.json({ error: "Missing Confirm Password" });
+    } else if (confirmNewPassword !== newPassword) {
+      return res.json({ error: "Password Mismatch" });
     }
-    if (newPassword !== confirmNewPassword) {
-      return res.json({ error: "Password Mismatch !" });
-    }
-    const newHashedPassword = bcrypt.hashSync(newPassword);
-    exsistingFreelancer.Password = newHashedPassword;
-    await exsistingFreelancer.save();
-    return res.json({ success: "Password Changed" });
+    jwt.verify(
+      jwToken,
+      process.env.JWT_SECRET,
+      async (err: any, decoded: any) => {
+        if (err) {
+          return res.json({ error: "Link Expired" });
+        }
+        let freeLancerId = decoded._id;
+        let exsistingFreelancer: any = await freelancer.findById(freeLancerId);
+        const newHashedPassword = bcrypt.hashSync(newPassword);
+        exsistingFreelancer.Password = newHashedPassword;
+        await exsistingFreelancer.save();
+        return res.json({ success: "Password Changed" });
+      }
+    );
   } catch (err) {
     console.log(err);
     return res.json({ error: "Server Error Try Again Later !" });
@@ -284,7 +297,7 @@ export const googleAuth = async (
       Email: freelancerEmail,
     });
     if (!exisitingFreelancer) {
-      return res.json({ error: "Account Dont Exist Consider Logging In" });
+      return res.json({ error: "Account Dont Exist Consider Signing Up" });
     } else {
       return res.json({ freelancerAccount: exisitingFreelancer });
     }
@@ -318,7 +331,7 @@ export const getProfile = async (
 // function to clear the stored jwt and successfuly logs out the freelancer (Mustapha)
 export const logout = async (req: express.Request, res: express.Response) => {
   try {
-    await res.clearCookie("jwt");
+    res.clearCookie("jwt");
     return res.json({ success: "Logout Successfull !" });
   } catch (err) {
     console.log(err);
@@ -472,7 +485,7 @@ export const multiauth = async (
         existingAccount.Password
       );
       if (!passwordcheck) {
-        return res.status(404).json({ Message: "Invalid email or password !" });
+        return res.json({ error: "Invalid email or password !" });
       }
       if (existingAccount.AccountVerficiationStatus === false) {
         return res.json({
@@ -498,7 +511,7 @@ export const multiauth = async (
       if (!passwordcheck) {
         return res
           .status(404)
-          .json({ Message: "Invalid email or password test !" });
+          .json({ error: "Invalid email or password test !" });
       }
       if (existingAccount.AccountVerficiationStatus === false) {
         return res.json({

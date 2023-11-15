@@ -17,8 +17,8 @@ export class FreelancerlayoutComponent {
         this.router.navigate(['/']);
       })
       .catch((error) => {
-        // Handle errors here
-        console.error('Logout error:', error);
+        localStorage.removeItem('freeLancerInfos');
+        this.router.navigate(['/']);
       });
   }
 }

@@ -9,6 +9,8 @@ import { LoginPageComponent } from './login-page/login-page.component';
 import { SignupPageComponent } from './signup-page/signup-page.component';
 import { FreelancerVerificationPageComponent } from './freelancer-verification-page/freelancer-verification-page.component';
 import { FreelancerGoogleSignupComponent } from './freelancer-google-signup/freelancer-google-signup.component';
+import { PasswordResetPageComponent } from './password-reset-page/password-reset-page.component';
+import { ForgetPasswordPageComponent } from './forget-password-page/forget-password-page.component';
 
 const routes: Routes = [
   { path: '', component: IndexComponent },
@@ -23,6 +25,14 @@ const routes: Routes = [
   {
     path: 'FGsignup',
     component: FreelancerGoogleSignupComponent,
+  },
+  {
+    path: 'PassReset',
+    component: PasswordResetPageComponent,
+  },
+  {
+    path: 'ForgetPassword',
+    component: ForgetPasswordPageComponent,
   },
 ];
 

@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LayoutModule } from './layout/layout.module';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { FreelancerModule } from './views/freelancer/freelancer.module';
 import { HomePageModule } from './views/home-page/home-page.module';
 import 'firebase/compat/storage';
@@ -19,6 +19,7 @@ import {
   SocialLoginModule,
   SocialAuthServiceConfig,
 } from '@abacritt/angularx-social-login';
+import { WithCredentialsInterceptor } from 'src/with-credentials.interceptor';
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -34,7 +35,13 @@ import {
     BrowserAnimationsModule,
     SocialLoginModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: WithCredentialsInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

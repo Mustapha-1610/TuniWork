@@ -1,3 +1,8 @@
+{{ errMessage }}
+<h5 *ngIf="mailError">
+  You Need to Verifiy Your Mail First Before Logging In
+  <button (click)="sendEmail()" type="button">Send Verification Email</button>
+</h5>
 <form
   [formGroup]="loginForm"
   (ngSubmit)="submitLoginForm()"
@@ -19,6 +24,13 @@
     type="password"
     formControlName="Password"
   />
+  <label
+    class="block text-gray-700 text-sm font-bold mb-2 cursor-pointer"
+    for="Password"
+    (click)="routeFP()"
+  >
+    Forgot Password ?
+  </label>
   <button type="submit">Login</button>
 </form>
 <asl-google-signin-button

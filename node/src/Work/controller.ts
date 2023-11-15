@@ -16,6 +16,7 @@ export const create = async (req: express.Request, res: express.Response) => {
 //
 export const addSpeciality = async (
   req: express.Request,
+
   res: express.Response
 ) => {
   const { speciality, workId } = req.body;
