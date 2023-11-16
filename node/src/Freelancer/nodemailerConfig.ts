@@ -26,14 +26,14 @@ export const SendFreelancerAccountConfirmationMail = async (
 
   // Sign the token with your secret key
   const token = jwt.sign(tokenPayload, process.env.JWT_SECRET, {
-    expiresIn: "2h",
+    expiresIn: "1h",
   }); // Token expires in 24 hours
   // transport houwa jesr from chkoun to amal  html body message chnouwa f wostou
   await transport
     .sendMail({
       from: user,
       to: email,
-      subject: "Freelancer Account Activation",
+      subject: "Password Resett",
       html: `
       <div style="font-family: Arial, sans-serif; font-size: 16px;">
   <h1>TuniWork Freelance Account Activation</h1>
@@ -58,14 +58,14 @@ export const SendPasswordResetEmail = async (
 
   // Sign the token with your secret key
   const token = jwt.sign(tokenPayload, process.env.JWT_SECRET, {
-    expiresIn: "1s",
+    expiresIn: "1h",
   }); // Token expires in 24 hours
   // transport houwa jesr from chkoun to amal html body message chnouwa f wostou
   await transport
     .sendMail({
       from: user,
       to: email,
-      subject: "Password Reset",
+      subject: "Account Activation",
       html: `
       <div style="font-family: Arial, sans-serif; font-size: 16px;">
   <h1>TuniWork Freelance Account Activation</h1>

@@ -4,6 +4,8 @@ import { FreelancerlayoutComponent } from './layout/freelancerlayout/freelancerl
 import { HomeLayoutComponent } from './layout/home-layout/home-layout.component';
 import { FreelancerGuardGuard } from './views/guards/freelancer-guard.guard';
 import { homePageGuard } from './views/guards/home-page.guard';
+import { CompanyLayoutComponent } from './layout/company-layout/company-layout.component';
+import { companyLayoutGuard } from './views/guards/company-layout.guard';
 
 const routes: Routes = [
   {
@@ -30,6 +32,20 @@ const routes: Routes = [
         loadChildren: () =>
           import('./views/home-page/home-page-routing.module').then(
             (m) => m.HomePageRoutingModule
+          ),
+      },
+    ],
+  },
+  {
+    path: 'company',
+    component: CompanyLayoutComponent,
+    canActivate: [companyLayoutGuard],
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import('./views/comapny/comapny-routing.module').then(
+            (m) => m.ComapnyRoutingModule
           ),
       },
     ],

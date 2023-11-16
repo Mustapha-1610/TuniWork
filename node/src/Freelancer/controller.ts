@@ -9,6 +9,8 @@ import { FishOff } from "lucide-angular";
 import company from "../Company/modal";
 import generateCompanyToken from "../Company/utils";
 import { SendPasswordResetEmail } from "./nodemailerConfig";
+import PrivateJobOffer from "../WorkOffer/Company/CompanyPrivateWorkOfferModal";
+
 // function to create a freelancer account (Mustapha)
 export const create = async (req: express.Request, res: express.Response) => {
   const { freelancerPersonalInfos, freelancerAddedInfos } = req.body;
@@ -231,12 +233,23 @@ export const passReset = async (
         if (err) {
           return res.json({ error: "Link Expired" });
         }
-        let freeLancerId = decoded._id;
+        let freeLancerId = decoded.id;
         let exsistingFreelancer: any = await freelancer.findById(freeLancerId);
-        const newHashedPassword = bcrypt.hashSync(newPassword);
-        exsistingFreelancer.Password = newHashedPassword;
-        await exsistingFreelancer.save();
-        return res.json({ success: "Password Changed" });
+        if (exsistingFreelancer) {
+          const passSimilarityTest = bcrypt.compareSync(
+            newPassword,
+            exsistingFreelancer.Password
+          );
+          if (passSimilarityTest) {
+            return res.json({ error: "Cant Change To Old Password !" });
+          }
+          const newHashedPassword = bcrypt.hashSync(newPassword);
+          exsistingFreelancer.Password = newHashedPassword;
+          await exsistingFreelancer.save();
+          return res.json({ success: "Password Changed" });
+        } else {
+          return res.json({ error: "freelancer dont exist" });
+        }
       }
     );
   } catch (err) {
@@ -500,7 +513,7 @@ export const multiauth = async (
       return res.json({ freelancerAccount: existingAccount });
     } else if (
       (existingAccount = await company.findOne({
-        $or: [{ ChefEmail: Email }, { ChefPhone: Password }],
+        $or: [{ CompanyEmail: Email }, { CompanyPhone: PhoneNumber }],
       })) !== null
     ) {
       console.log(existingAccount);
@@ -509,9 +522,7 @@ export const multiauth = async (
         existingAccount.Password
       );
       if (!passwordcheck) {
-        return res
-          .status(404)
-          .json({ error: "Invalid email or password test !" });
+        return res.json({ error: "Invalid email or password !" });
       }
       if (existingAccount.AccountVerficiationStatus === false) {
         return res.json({
@@ -530,5 +541,64 @@ export const multiauth = async (
   } catch (err) {
     console.log(err);
     return res.json({ error: "Server Error !" });
+  }
+};
+
+//accept private job (aziz)
+export const acceptPrivateJob = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { freeLancerId, jobId } = req.params;
+
+    // Find the private job offer by ID
+    const privateJobOffer = await PrivateJobOffer.findById(jobId);
+
+    // Check if the private job offer exists
+    if (!privateJobOffer) {
+      return res.json({ error: "Private job offer not found" });
+    }
+
+    // Update the status to "accepted"
+    privateJobOffer.status = "accepted";
+
+    // Save the changes
+    await privateJobOffer.save();
+
+    return res.json({ success: "Private job offer accepted" });
+  } catch (err) {
+    console.error(err);
+    return res.json({ error: "Server Error" });
+  }
+};
+
+//decline private job (aziz)
+export const declinePrivateJob = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    // Extract the necessary information from the request
+    const { freeLancerId, jobId } = req.params; // Assuming you send the jobId as a parameter in the URL
+
+    // Find the private job offer by ID
+    const privateJobOffer = await PrivateJobOffer.findById(jobId);
+
+    // Check if the private job offer exists
+    if (!privateJobOffer) {
+      return res.status(404).json({ error: "Private job offer not found" });
+    }
+
+    // Update the status to "accepted"
+    privateJobOffer.status = "declined";
+
+    // Save the changes
+    await privateJobOffer.save();
+
+    return res.json({ success: "Private job offer declined" });
+  } catch (err) {
+    console.error(err);
+    return res.json({ error: "Server Error" });
   }
 };

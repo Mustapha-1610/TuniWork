@@ -14,7 +14,7 @@ import adminRouter from "./Admin/Router";
 import workRouter from "./Work/Router";
 import languagesRouter from "./utils/Languages/Router";
 import CompanyWorkOfferRouter from "./WorkOffer/Company/router";
-
+import freelancerNameSpaceLogic from "./Freelancer/freelancerSocketLogic";
 dotenv.config();
 const app = express();
 
@@ -22,8 +22,16 @@ app.use(
   cors({
     origin: "http://localhost:4200",
     credentials: true,
+    methods: ["GET", "POST", "DELETE", "PUT"],
   })
 );
+const serverApp = http.createServer(app);
+const io = new Server(serverApp, {
+  cors: {
+    origin: ["http://localhost:4200"],
+    methods: ["GET", "POST", "DELETE", "PUT"],
+  },
+});
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -50,6 +58,9 @@ mongoose.connection.on("error", (error: Error) => console.log(error));
 mongoose.connection.on("open", () => {
   console.log("MongoDB connected!");
 });
-server.listen(5000, () => {
+serverApp.listen(5000, () => {
   console.log("Server Running !");
 });
+
+const freelancerNameSpace = io.of("/freelancer");
+freelancerNameSpaceLogic(freelancerNameSpace);

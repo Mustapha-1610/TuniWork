@@ -42,4 +42,13 @@ freelancerRouter.put("/PassReset", freelancerController.passReset);
 
 freelancerRouter.post("/LgoogleAuth", freelancerController.googleAuth);
 
+
+//accept private joboffer (aziz)
+freelancerRouter.post("/acceptPrivateJob/:jobId", freelancerController.acceptPrivateJob);
+
+//decline private joboffer (aziz)
+freelancerRouter.post("/declinePrivateJob/:jobId", freelancerController.declinePrivateJob);
+
+
+
 export default freelancerRouter;

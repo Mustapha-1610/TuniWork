@@ -11,31 +11,28 @@ import { companyRouteProtection } from "./routeProtectionMiddleware";
 export const create = async (req: express.Request, res: express.Response) => {
   console.log();
   const {
-    ChefName,
-    ChefSurname,
-    ChefEmail,
-    Password,
-    ChefCin,
-    ChefPhone,
-    CompanyName,
-    CompanyWebsite,
+  
     CompanyEmail,
+    CompanyName,
+    Password,
+    CompanyWebsite,
+    CompanyLogo,
     CompanyDescription,
     CompanyPhone,
+    Location,
+    
+
+
   } = req.body;
   try {
     if (
-      !ChefName ||
-      !ChefSurname ||
-      !ChefEmail ||
       !Password ||
-      !ChefCin ||
-      !ChefPhone ||
       !CompanyName ||
       !CompanyWebsite ||
       !CompanyEmail ||
       !CompanyDescription ||
-      !CompanyPhone
+      !CompanyPhone ||
+      !Location
     ) {
       return res.json({ error: "Missing Input(s)" });
     }
@@ -46,7 +43,7 @@ export const create = async (req: express.Request, res: express.Response) => {
     });
 
     if (existingCompany) {
-      return res.json({ error: "company Exists Allready" });
+      return res.json({ error: "A company by this name already exists." });
     }
 
     // tasna3 password securisé
@@ -62,17 +59,13 @@ export const create = async (req: express.Request, res: express.Response) => {
     }
 
     const company = await Company.create({
-      ChefName,
-      ChefSurname,
-      ChefEmail,
       Password: securePassword,
-      ChefCin,
-      ChefPhone,
       CompanyName,
       CompanyWebsite,
       CompanyEmail,
       CompanyDescription,
       CompanyPhone,
+      Location,
       VerificationCode: VerificationCode,
     });
 
@@ -117,15 +110,15 @@ export const verifyAccount = async (
 // function to authenticate company  Using jwt's (aziz) to change fazet l phone
 export const auth = async (req: express.Request, res: express.Response) => {
   try {
-    const { ChefEmail, Password, ChefPhone } = req.body;
+    const { CompanyEmail, Password, CompanyPhone } = req.body;
     let companyAccount;
 
-    if ((!ChefEmail && !Password) || (!ChefPhone && !Password)) {
+    if ((!CompanyEmail && !Password) || (!CompanyPhone && !Password)) {
       return res.status(401).json({ error: "Invalid Input(s)" });
-    } else if (!ChefEmail) {
-      companyAccount = await Company.findOne({ ChefPhone });
+    } else if (!CompanyEmail) {
+      companyAccount = await Company.findOne({ CompanyPhone });
     } else {
-      companyAccount = await Company.findOne({ ChefEmail });
+      companyAccount = await Company.findOne({ CompanyEmail });
     }
 
     if (!companyAccount) {
@@ -151,6 +144,7 @@ export const auth = async (req: express.Request, res: express.Response) => {
     return res.json({ error: "Server Error!" });
   }
 };
+
 
 // function to retrieve company Account informations (aziz)
 export const getProfile = async (
@@ -186,23 +180,18 @@ export const getAllCompanies = async (
 };
 
 //update (aziz)
-export const updateInfo = async (
-  req: express.Request,
-  res: express.Response
-) => {
+export const updateInfo = async (  req: express.Request,  res: express.Response) => {
   try {
     const companyId = await companyRouteProtection(req, res);
     const {
-      ChefName,
-      ChefSurname,
-      //ChefEmail,
-      ChefCin,
-      ChefPhone,
       CompanyName,
       CompanyWebsite,
       CompanyEmail,
       CompanyDescription,
       CompanyPhone,
+      Location,
+
+
     } = req.body;
     if ("_id" in companyId) {
       let company = await Company.findById(companyId);
@@ -214,18 +203,13 @@ export const updateInfo = async (
         return res.json({ error: "This account is disabled !" });
       }*/
 
-      ChefName ? (company.ChefName = ChefName) : null;
-      ChefSurname ? (company.ChefSurname = ChefSurname) : null;
-      ChefCin ? (company.ChefCin = ChefCin) : null;
-      ChefPhone ? (company.ChefPhone = ChefPhone) : null;
       //ProfilePicture ? (Company.ProfilePicture = ProfilePicture) : null;
       CompanyName ? (company.CompanyName = CompanyName) : null;
       CompanyWebsite ? (company.CompanyWebsite = CompanyWebsite) : null;
       CompanyEmail ? (company.CompanyEmail = CompanyEmail) : null;
-      CompanyDescription
-        ? (company.CompanyDescription = CompanyDescription)
-        : null;
+      CompanyDescription  ? (company.CompanyDescription = CompanyDescription) : null;
       CompanyPhone ? (company.CompanyPhone = CompanyPhone) : null;
+      Location ? (company.Location = Location) : null;
 
       await company.save();
       return res.json({
