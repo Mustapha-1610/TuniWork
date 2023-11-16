@@ -11,6 +11,9 @@ CompanyWorkOfferRouter.post("/createPublicJob", CompanyWorkOfferController.creat
 // partie l private job
 CompanyWorkOfferRouter.post("/createPrivateJob", CompanyWorkOfferController.createPrivateJob)
 CompanyWorkOfferRouter.put('/editPrivateJob/:PrivateJobOfferId', CompanyWorkOfferController.editPrivateJob);
+CompanyWorkOfferRouter.post("/cancelJobOffer/:PrivateJobOfferId/:freelancerId", CompanyWorkOfferController.cancelJobOffer);
+CompanyWorkOfferRouter.get("/allJobOffers", CompanyWorkOfferController.getAllJobOffers);
+
 CompanyWorkOfferRouter.get("/getAllPrivateJobOffers", CompanyWorkOfferController.getAllPrivateJobOffers);
 
 

@@ -22,4 +22,8 @@ companyRouter.put("/update", companyController.updateInfo);
 
 companyRouter.put("/disable", companyController.disableAccount);
 
+companyRouter.post("/saveFreelancer", companyController.saveFreelancer);
+
+companyRouter.get("/getAllFreelancers",companyController.getAllFreelancers);
+
 export default companyRouter;
