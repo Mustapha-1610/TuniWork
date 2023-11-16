@@ -1,4 +1,5 @@
 import Company from "./modal";
+import Freelancer from "../Freelancer/modal"
 import jwt from "jsonwebtoken";
 import express from "express";
 import bcrypt from "bcryptjs";
@@ -241,4 +242,67 @@ export const disableAccount = async (
   } catch (err) {
     console.log("Server Error !");
   }
+};
+
+
+
+//save freelancer (aziz)
+export const saveFreelancer = async (req: express.Request, res: express.Response) => {
+  try {
+    const { companyId, freelancerId } = req.body;
+
+
+    // Check if the company and freelancer exist
+    const company = await Company.findById(companyId);
+    const freelancer = await Freelancer.findById(freelancerId);
+    const freelancerName = freelancer ? freelancer.Name : null;
+    
+
+    if (!company || !freelancer) {
+      return res.json({ error: 'Invalid company or freelancer ID' });
+    }
+
+    // Check if the freelancer is already saved by the company
+    const existingSavedFreelancer = company.savedFreelancers.find(
+      (saved) => saved.freelancerId.toString() === freelancerId
+    );
+
+    if (existingSavedFreelancer) {
+      return res.json({ error: 'Freelancer already saved by the company' });
+    }
+
+    await Company.findByIdAndUpdate(
+      companyId,
+      {
+        $push: {
+          savedFreelancers: {
+            freelancerId: freelancerId,
+            freelancerName: freelancerName,
+          },
+        },
+      },
+      { new: true }
+    );
+
+
+    // Save the updated company document
+    await company.save();
+
+    return res.json({ success: 'Freelancer saved successfully' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Server Error' });
+  }
+};
+
+
+
+
+//get all freelancers
+export const getAllFreelancers = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  let allfreelancers = await Freelancer.find();
+  return res.json({ allfreelancers });
 };

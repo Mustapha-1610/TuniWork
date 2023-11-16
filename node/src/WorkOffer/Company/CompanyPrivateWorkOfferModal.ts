@@ -112,6 +112,14 @@ const privateWorkOfferSchema = new Schema({
     ],
     default: "awaiting freelancer response",
   },
+
+  DeadLine: {
+    type: Date,
+    required: true,
+  },
+
+
+
 });
 
 const PrivateJobOffer = mongoose.model(

@@ -135,6 +135,17 @@ const companySchema = new Schema({
     default: 0,
   },
 
+  savedFreelancers: [
+    {
+      freelancerId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Freelancer',
+      },
+      freelancerName: {
+        type: String,
+      },
+    },
+  ],
 
   //CV w tasri7 document
 });

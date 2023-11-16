@@ -1,5 +1,5 @@
 import express from "express";
-import comapany from "../../Company/modal";
+import company from "../../Company/modal";
 import companyPublicWorkOffer from "./CompanyPublicWorkOfferModal";
 import PrivateJobOffer from "./CompanyPrivateWorkOfferModal"
 import Freelancer from "../../Freelancer/modal"
@@ -20,7 +20,7 @@ export const createPublicJob = async (req: express.Request, res: express.Respons
       WorkSpeciality,
       CompanyId,
     } = req.body;
-    const offeringCompany = await comapany.findById(CompanyId);
+    const offeringCompany = await company.findById(CompanyId);
     if (!offeringCompany) {
       return res.json({ error: "Server Error" });
     }
@@ -92,17 +92,21 @@ export const createPrivateJob = async (req: express.Request, res: express.Respon
       CompanyLocation,
       TotalWorkOfferd,
       TotalMoneyPayed,
-      FreelancerId, // bch yjih fel array
+      FreelancerId,
+      DeadLine,
     } = req.body;
 
-    const offeringCompany = await comapany.findById(CompanyId);
+    const offeringCompany = await company.findById(CompanyId);
 
     if (!offeringCompany) {
       return res.json({ error: "Server Error" });
     }
 
+    // Fetch the freelancer's name based on FreelancerId
+    const freelancer = await Freelancer.findById(FreelancerId);
+    const freelancerName = freelancer ? freelancer.Name : null;
 
-    let workOffer = await PrivateJobOffer.create({
+    let workOffer = await PrivateJobOffer.create({ 
       Title,
       Description,
       Note,
@@ -116,14 +120,15 @@ export const createPrivateJob = async (req: express.Request, res: express.Respon
       CompanyLocation,
       TotalMoneyPayed,
       TotalWorkOfferd,
+      DeadLine,
 
       WorkingFreelancer: {
-        // FreelancerName, // Set the freelancer's name if available
-        FreelancerId, // Assign the FreelancerId from the request body
+        FreelancerName: freelancerName, // Use the fetched freelancer name
+        FreelancerId,
       },
     });
 
-    // lenna bch thot l job fel array ta3 l freelancer
+    // Update freelancer's ProposedPrivateWorks array
     await Freelancer.findByIdAndUpdate(
       FreelancerId,
       {
@@ -136,13 +141,13 @@ export const createPrivateJob = async (req: express.Request, res: express.Respon
       { new: true }
     );
 
-
     return res.json({ success: "private work offer created" });
   } catch (err) {
     console.log(err);
-    return res.json({ error: "Server Error !" });
+    return res.json({ error: "Server Error!" });
   }
 };
+
 
 
 
@@ -152,11 +157,7 @@ export const createPrivateJob = async (req: express.Request, res: express.Respon
 // edit private job offer ( aziz )
 
 export const editPrivateJob = async (req: express.Request, res: express.Response) => {
-  
- /* This code block is responsible for editing a private job offer. It receives the updated job offer
- details from the request body, including the job offer ID, title, description, note, payment per
- task, payment per hour, company name, company location, total work offered, and total money paid. */
-  try {
+    try {
     const {
       Title,
       Description,
@@ -196,6 +197,71 @@ export const editPrivateJob = async (req: express.Request, res: express.Response
 };
 
 
+
+
+export const cancelJobOffer = async (req: express.Request, res: express.Response) => {
+  try {
+    const { freelancerId, PrivateJobOfferId } = req.params; // Change from req.body to req.params
+
+    // Find the private job offer by ID
+    const jobOffer = await PrivateJobOffer.findById(PrivateJobOfferId);
+
+    if (!jobOffer) {
+      return res.json({ error: "Job offer not found" });
+    }
+
+    //matejemech tcaancelleha ela ki tebda fi pending status 
+    if (jobOffer.status !== "awaiting freelancer response") {
+      return res.json({ error: "Cannot cancel the job offer at its current status" });
+    }
+
+    // ne7i l job mn tableau freelancer ProposedPrivateWorks
+    await Freelancer.findByIdAndUpdate(
+      freelancerId,
+      {
+        $pull: {
+          ProposedPrivateWorks: {
+            PrivateJobOfferId: PrivateJobOfferId,
+          },
+        },
+      },
+      { new: true }
+    );
+
+    // fase5 mel bdd
+    await PrivateJobOffer.findByIdAndDelete(PrivateJobOfferId);
+
+    return res.json({ success: "Job offer canceled successfully" });
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error!" });
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+// get both private and publicj ob offers from the databse 
+export const getAllJobOffers = async (req: express.Request, res: express.Response) => {
+  try {
+    const privateJobs = await PrivateJobOffer.find();
+    const publicJobs = await companyPublicWorkOffer.find();
+
+    const allJobs = [...privateJobs, ...publicJobs];
+
+    res.json(allJobs);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server Error' });
+  }
+};
 
 
 
