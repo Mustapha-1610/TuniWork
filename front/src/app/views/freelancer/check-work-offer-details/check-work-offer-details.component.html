@@ -32,6 +32,19 @@ About the Company : <br />
 <div>
   Total Work Offerd : {{ publicWorkOfferInfos?.TotalWorkOfferd }}<br />
   Total Money Spent : {{ publicWorkOfferInfos?.TotalMoneyPayed }}<br />
-  <button type="button">Apply</button>
-  <button type="button">Save</button>
+  <button type="button" (click)="PWOApply(publicWorkOfferInfos._id)">
+    Apply
+  </button>
+  <button
+    type="button"
+    (click)="
+      SavePWO(
+        publicWorkOfferInfos._id,
+        publicWorkOfferInfos.Title,
+        publicWorkOfferInfos.Description
+      )
+    "
+  >
+    Save
+  </button>
 </div>

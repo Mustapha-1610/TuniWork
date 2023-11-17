@@ -13,6 +13,7 @@ export class BestMatchesComponentComponent implements OnInit {
   }
   freeLancerInfos: any = this.fs.getFreelancerCredits();
   MatchingJobs: any;
+  errMessage: any;
   getMatchingWorkOffers() {
     this.fs
       .getBestMatchingWO(this.freeLancerInfos._id)
@@ -27,5 +28,12 @@ export class BestMatchesComponentComponent implements OnInit {
   }
   SaveJobOffer(id: any) {
     console.log(id);
+  }
+  SavePWO(PWOId: any, PWOTitle: any, PWODescription: any) {
+    this.fs
+      .savePWO(this.freeLancerInfos._id, PWOId, PWOTitle, PWODescription)
+      .subscribe((res: any) => {
+        this.errMessage = res.success || res.error;
+      });
   }
 }

@@ -46,6 +46,7 @@ export class FreelancerService {
       Languages: form.Languages,
       PayRates: form.PayRate,
       Schedule: form.Schedule,
+      SavedWorkOffers: form.SavedWorkOffers,
     };
     localStorage.setItem('freeLancerInfos', JSON.stringify(FreelancerAccount));
   }
@@ -104,5 +105,19 @@ export class FreelancerService {
       'http://localhost:5000/api/companyWorkOffer/getPublicWorkOffer',
       { publicWorkOfferId: id }
     );
+  }
+  applyPWO(Fid: any, Jid: any) {
+    return this.http.post(
+      'http://localhost:5000/api/freelancer/applyForPublicJob',
+      { freelancerId: Fid, jobOfferId: Jid }
+    );
+  }
+  savePWO(freelancerId: any, PWOId: any, PWOTitle: any, PWODescription: any) {
+    return this.http.put('http://localhost:5000/api/freelancer/savePWO', {
+      freelancerId,
+      PWOId,
+      PWOTitle,
+      PWODescription,
+    });
   }
 }

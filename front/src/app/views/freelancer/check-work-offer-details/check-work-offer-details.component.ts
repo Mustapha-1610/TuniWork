@@ -22,4 +22,17 @@ export class CheckWorkOfferDetailsComponent implements OnInit {
   }
   publicWorkOfferInfos: any;
   errMessage: any = false;
+  FreelancerInfos: any = this.fs.getFreelancerCredits();
+  PWOApply(id: any) {
+    this.fs.applyPWO(this.FreelancerInfos._id, id).subscribe((res: any) => {
+      this.errMessage = res.success || res.error;
+    });
+  }
+  SavePWO(PWOId: any, PWOTitle: any, PWODescription: any) {
+    this.fs
+      .savePWO(this.FreelancerInfos._id, PWOId, PWOTitle, PWODescription)
+      .subscribe((res: any) => {
+        this.errMessage = res.success || res.error;
+      });
+  }
 }
