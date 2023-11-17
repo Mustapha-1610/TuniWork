@@ -112,13 +112,20 @@ const freelancerSchema = new Schema({
   },
   SavedWorkOffers: [
     {
-      type: Schema.Types.ObjectId,
-      ref: "PublicWorkOffer",
+      WorkId: {
+        type: Schema.Types.ObjectId,
+        ref: "PublicWorkOffer",
+      },
+      WorkTitle: {
+        type: String,
+      },
+      WorkDescription: {
+        type: String,
+      },
     },
   ],
   Speciality: [{ type: String }],
   VerLinkExpDate: { type: Date },
-  PassChangeJWT: { type: String },
   PassChangeLinkExpDate: { type: Date },
 
   //zyedet l array ta3 private job offer
@@ -138,6 +145,27 @@ const freelancerSchema = new Schema({
           "done",
         ],
         default: "awaiting response",
+      },
+    },
+  ],
+
+  //wa9teli freelancer yapply for a public job tetsajel lenna
+  pendingWorkOffers: [
+    {
+      PublicJobOfferId: {
+        type: Schema.Types.ObjectId,
+        ref: "PrivateJobOffer",
+      },
+      Status: {
+        type: String,
+        enum: [
+          "awaiting company response",
+          "accepted",
+          "declined",
+          "in progress",
+          "done",
+        ],
+        default: "awaiting company response",
       },
     },
   ],

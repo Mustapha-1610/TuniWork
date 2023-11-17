@@ -69,18 +69,7 @@ const CompanyPublicWorkOfferSchema = new Schema({
     },
   ],
 
-  // hethiya bech nkhaliw feha info 3al freelancers li applied for work offer bech l company tchoufehom
-  AppliedFreelancers: [
-    {
-      FreelancerName: {
-        type: String,
-      },
-      FreelancerId: {
-        type: Schema.Types.ObjectId,
-        ref: "freelancer",
-      },
-    },
-  ],
+
 
   // lehne bech nkhaliw info l freelancer li actually ktheha l khedma
   WorkingFreelancer: {
@@ -107,11 +96,16 @@ const CompanyPublicWorkOfferSchema = new Schema({
     ref: "Company",
   },
 
+
+  
   // hethiya tekhou true wala false depending ken l company 3tatna d17 mte3ha w na7na 3malnenou verification
   PaymentMethodVerificationStatus: {
     type: Boolean,
     default: false,
   },
+
+
+
 
   // general informations 3al company to display fel work offer like we mentioned before
   TotalWorkOfferd: {
@@ -121,13 +115,37 @@ const CompanyPublicWorkOfferSchema = new Schema({
     type: Number,
   },
 
+
+
   status: {
     type: String,
     enum: ["awaiting application requests", "in progress", "done"],
     default: "awaiting application requests",
   },
-});
 
+
+
+
+
+
+    // hethiya bech nkhaliw feha info 3al freelancers li applied for work offer bech l company tchoufehom
+    AppliedFreelancers: [{
+      FreelancerName: {
+        type: String,
+      },
+      FreelancerId: {
+        type: Schema.Types.ObjectId,
+        ref: "freelancer",
+      },
+      Status: {
+        type: String,
+        enum: ['pending', 'accepted', 'rejected'],
+        default: 'pending',
+      },
+    },
+  ],
+
+});
 
 
 const PublicJobOffer = mongoose.model("PublicJobOffer", CompanyPublicWorkOfferSchema);
