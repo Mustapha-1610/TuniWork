@@ -31,7 +31,7 @@ export class LoginPageComponent implements OnInit {
         this.fs.googleLogin(user.email).subscribe((res: any) => {
           if (res.freelancerAccount) {
             this.fs.setFreelancerCredits(JSON.stringify(res.freelancerAccount));
-            this.route.navigate(['/freelancer']);
+            this.route.navigate(['/freelancer/profile']);
           } else {
             this.fs.sendData(this.user);
             this.route.navigate(['/signup']);
@@ -53,7 +53,7 @@ export class LoginPageComponent implements OnInit {
         this.errMessage = res.error;
       } else if (res.freelancerAccount) {
         this.fs.setFreelancerCredits(JSON.stringify(res.freelancerAccount));
-        this.route.navigate(['/freelancer']);
+        this.route.navigate(['/freelancer/profile']);
       } else if (res.comapnyAccount) {
         console.log(res.comapnyAccount);
         this.cs.setCompanyInfos(JSON.stringify(res.comapnyAccount));

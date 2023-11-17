@@ -1,3 +1,10 @@
-<h1>Freelancer Layout Works</h1>
-<button (click)="logout()">Logout</button>
+<nav class="flex items-center justify-between bg-gray-800 p-4">
+  <div class="flex items-center">
+    <a class="text-white text-xl font-bold" routerLink="/freelancer">Home</a>
+  </div>
+  <div class="flex items-center space-x-4">
+    <a class="text-white" routerLink="/freelancer/profile">Profile</a>
+    <a class="text-white cursor-pointer" (click)="logout()">Logout</a>
+  </div>
+</nav>
 <router-outlet></router-outlet>

@@ -91,4 +91,18 @@ export class FreelancerService {
       confirmNewPassword: ConfirmPassword,
     });
   }
+  getBestMatchingWO(id: any) {
+    return this.http.post(
+      'http://localhost:5000/api/companyWorkOffer/getMatchingPublicWorkOffers',
+      {
+        freelancerId: id,
+      }
+    );
+  }
+  getPublicWorkOfferInfos(id: any) {
+    return this.http.post(
+      'http://localhost:5000/api/companyWorkOffer/getPublicWorkOffer',
+      { publicWorkOfferId: id }
+    );
+  }
 }

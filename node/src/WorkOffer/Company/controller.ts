@@ -1,14 +1,14 @@
 import express from "express";
 import company from "../../Company/modal";
 import companyPublicWorkOffer from "./CompanyPublicWorkOfferModal";
-import PrivateJobOffer from "./CompanyPrivateWorkOfferModal"
-import Freelancer from "../../Freelancer/modal"
-
-
-
+import PrivateJobOffer from "./CompanyPrivateWorkOfferModal";
+import Freelancer from "../../Freelancer/modal";
 
 // create public job offer ( mostfa)
-export const createPublicJob = async (req: express.Request, res: express.Response) => {
+export const createPublicJob = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     const {
       Title,
@@ -24,7 +24,8 @@ export const createPublicJob = async (req: express.Request, res: express.Respons
     if (!offeringCompany) {
       return res.json({ error: "Server Error" });
     }
-    const PaymentMethodVerificationStatus = offeringCompany.PaymentMethodVerificationStatus;
+    const PaymentMethodVerificationStatus =
+      offeringCompany.PaymentMethodVerificationStatus;
     const CompanyName = offeringCompany.CompanyName;
     const CompanyLocation = offeringCompany.Location;
     const TotalWorkOfferd = offeringCompany.WorkOfferd;
@@ -52,33 +53,36 @@ export const createPublicJob = async (req: express.Request, res: express.Respons
     return res.json({ error: "Server Error !" });
   }
 };
-
-
 //mostfa kamel l functions teb3in l pub job offer BEFORE my private job work
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+export const FindBestMatchesPublicWorkOffers = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { freelancerId } = req.body;
+    const freeLancer = await Freelancer.findById(freelancerId);
+    const returnedFields =
+      "PaymentMethod _id Title CreationDate CompanyName PaymentMethodVerificationStatus Location TotalWorkOfferd TotalMoneyPayed Description WorkSpeciality";
+    const matchingJobOffers: any = await companyPublicWorkOffer
+      .find({
+        WorkSpeciality: {
+          $in: freeLancer.Speciality,
+        },
+      })
+      .select(returnedFields);
+    return res.json({ matchingJobOffers });
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error" });
+  }
+};
 
 // create private job offer ( aziz )
-export const createPrivateJob = async (req: express.Request, res: express.Response) => {
+export const createPrivateJob = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     const {
       Title,
@@ -106,7 +110,7 @@ export const createPrivateJob = async (req: express.Request, res: express.Respon
     const freelancer = await Freelancer.findById(FreelancerId);
     const freelancerName = freelancer ? freelancer.Name : null;
 
-    let workOffer = await PrivateJobOffer.create({ 
+    let workOffer = await PrivateJobOffer.create({
       Title,
       Description,
       Note,
@@ -148,16 +152,13 @@ export const createPrivateJob = async (req: express.Request, res: express.Respon
   }
 };
 
-
-
-
-
-
-
 // edit private job offer ( aziz )
 
-export const editPrivateJob = async (req: express.Request, res: express.Response) => {
-    try {
+export const editPrivateJob = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
     const {
       Title,
       Description,
@@ -175,8 +176,8 @@ export const editPrivateJob = async (req: express.Request, res: express.Response
         Title,
         Description,
         Note,
-        'PaymentMethod.PayPerTask': PayPerTask,
-        'PaymentMethod.PayPerHour': PayPerHour,
+        "PaymentMethod.PayPerTask": PayPerTask,
+        "PaymentMethod.PayPerHour": PayPerHour,
         CompanyName,
         CompanyLocation,
         TotalWorkOfferd,
@@ -196,10 +197,10 @@ export const editPrivateJob = async (req: express.Request, res: express.Response
   }
 };
 
-
-
-
-export const cancelJobOffer = async (req: express.Request, res: express.Response) => {
+export const cancelJobOffer = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     const { freelancerId, PrivateJobOfferId } = req.params; // Change from req.body to req.params
 
@@ -210,9 +211,11 @@ export const cancelJobOffer = async (req: express.Request, res: express.Response
       return res.json({ error: "Job offer not found" });
     }
 
-    //matejemech tcaancelleha ela ki tebda fi pending status 
+    //matejemech tcaancelleha ela ki tebda fi pending status
     if (jobOffer.status !== "awaiting freelancer response") {
-      return res.json({ error: "Cannot cancel the job offer at its current status" });
+      return res.json({
+        error: "Cannot cancel the job offer at its current status",
+      });
     }
 
     // ne7i l job mn tableau freelancer ProposedPrivateWorks
@@ -238,18 +241,11 @@ export const cancelJobOffer = async (req: express.Request, res: express.Response
   }
 };
 
-
-
-
-
-
-
-
-
-
-
-// get both private and publicj ob offers from the databse 
-export const getAllJobOffers = async (req: express.Request, res: express.Response) => {
+// get both private and publicj ob offers from the databse
+export const getAllJobOffers = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     const privateJobs = await PrivateJobOffer.find();
     const publicJobs = await companyPublicWorkOffer.find();
@@ -259,16 +255,9 @@ export const getAllJobOffers = async (req: express.Request, res: express.Respons
     res.json(allJobs);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Server Error' });
+    res.status(500).json({ error: "Server Error" });
   }
 };
-
-
-
-
-
-
-
 
 // function to get all companies on the db (aziz)
 export const getAllPrivateJobOffers = async (
@@ -279,7 +268,26 @@ export const getAllPrivateJobOffers = async (
   return res.json({ allprvjobs });
 };
 
-
-
-
 //
+export const getPublicWorkOffer = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { publicWorkOfferId } = req.body;
+    const PWO = await companyPublicWorkOffer.findById(publicWorkOfferId);
+    if (!PWO) {
+      return res.json({ error: "Work Offer Dont Exist Anymore" });
+    }
+    const offeringCompany = await company.findById(PWO.CompanyId.toString());
+    PWO.PaymentMethodVerificationStatus =
+      offeringCompany.PaymentMethodVerificationStatus;
+    PWO.TotalWorkOfferd = offeringCompany.WorkOfferd;
+    PWO.TotalMoneyPayed = offeringCompany.MoneySpent;
+    await PWO.save();
+    return res.json({ PWO });
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error" });
+  }
+};

@@ -110,6 +110,12 @@ const freelancerSchema = new Schema({
       type: String,
     },
   },
+  SavedWorkOffers: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "PublicWorkOffer",
+    },
+  ],
   Speciality: [{ type: String }],
   VerLinkExpDate: { type: Date },
   PassChangeJWT: { type: String },

@@ -1,0 +1,37 @@
+<div *ngIf="errMessage">{{ errMessage }}</div>
+<br />
+Title : {{ publicWorkOfferInfos?.Title }} <br />
+Offering Company : {{ publicWorkOfferInfos?.CompanyName }} <br />
+Description : {{ publicWorkOfferInfos?.Description }} <br />
+Note : {{ publicWorkOfferInfos?.Note }}<br />
+Required Specialities :
+<div *ngFor="let speciality of publicWorkOfferInfos?.WorkSpeciality">
+  {{ speciality }}<br />
+</div>
+<div *ngIf="publicWorkOfferInfos?.PaymentMethod.PayPerTask">
+  Experiece Level :
+  {{ publicWorkOfferInfos?.PaymentMethod.PayPerTask.ExperienceLevel }}
+  <br />
+  Fixed Price : {{ publicWorkOfferInfos?.PaymentMethod.PayPerTask.FixedPrice }}
+</div>
+<div *ngIf="publicWorkOfferInfos?.PaymentMethod.PayPerHours">
+  Experience Level :
+  {{ publicWorkOfferInfos?.PaymentMethod.PayPerHours.ExperienceLevel }}<br />
+  Hours Per Week :
+  {{ publicWorkOfferInfos?.PaymentMethod.PayPerHours.HoursPerWeek }}<br />
+  Estimated Duration :
+  {{ publicWorkOfferInfos?.PaymentMethod.PayPerHours.Duration }}<br />
+  Pay Per Hour : {{ publicWorkOfferInfos?.PaymentMethod.PayPerHours.PayPerHour
+  }}<br />
+</div>
+<div *ngIf="publicWorkOfferInfos?.PaymentMethodVerificationStatus">
+  Payment Method Trusted
+</div>
+<br />
+About the Company : <br />
+<div>
+  Total Work Offerd : {{ publicWorkOfferInfos?.TotalWorkOfferd }}<br />
+  Total Money Spent : {{ publicWorkOfferInfos?.TotalMoneyPayed }}<br />
+  <button type="button">Apply</button>
+  <button type="button">Save</button>
+</div>
