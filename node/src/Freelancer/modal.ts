@@ -112,29 +112,58 @@ const freelancerSchema = new Schema({
   },
   Speciality: [{ type: String }],
   VerLinkExpDate: { type: Date },
-  PassChangeJWT: { type: String },
   PassChangeLinkExpDate: { type: Date },
+
+
+
 
   //zyedet l array ta3 private job offer
   ProposedPrivateWorks: [
     {
       PrivateJobOfferId: {
         type: Schema.Types.ObjectId,
-        ref: "PrivateJobOffer",
+        ref: 'PrivateJobOffer',
       },
       Status: {
         type: String,
         enum: [
-          "awaiting response",
-          "accepted",
-          "declined",
-          "in progress",
-          "done",
+          'awaiting response',
+          'accepted',
+          'declined',
+          'in progress',
+          'done',
         ],
-        default: "awaiting response",
+        default: 'awaiting response',
       },
     },
   ],
+
+
+  //wa9teli freelancer yapply for a public job tetsajel lenna
+  pendingWorkOffers :[
+    {
+      PublicJobOfferId: {
+        type: Schema.Types.ObjectId,
+        ref: 'PrivateJobOffer',
+      },
+      Status: {
+        type: String,
+        enum: [
+          'awaiting company response',
+          'accepted',
+          'declined',
+          'in progress',
+          'done',
+        ],
+        default: 'awaiting company response',
+      },
+    },
+  ]
+
+
+
+
+  
 });
 const CombinedFreelancerSchema = new Schema({
   ...usersSchema.obj,

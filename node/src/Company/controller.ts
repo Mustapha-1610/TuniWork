@@ -6,6 +6,7 @@ import bcrypt from "bcryptjs";
 import { SendCompanyAccountConfirmationMail } from "./nodemailerConfig";
 import generateCompanyToken from "./utils";
 import { companyRouteProtection } from "./routeProtectionMiddleware";
+import PublicJobOffer from "WorkOffer/Company/CompanyPublicWorkOfferModal";
 
 // function to create a comapny account (aziz)
 
@@ -180,7 +181,7 @@ export const getAllCompanies = async (
   return res.json({ allcompanies });
 };
 
-//update (aziz)
+//update company details (aziz)
 export const updateInfo = async (  req: express.Request,  res: express.Response) => {
   try {
     const companyId = await companyRouteProtection(req, res);
@@ -244,6 +245,12 @@ export const disableAccount = async (
   }
 };
 
+//get all freelancers
+export const getAllFreelancers = async (  req: express.Request,  res: express.Response) => {
+  let allfreelancers = await Freelancer.find();
+  return res.json({ allfreelancers });
+};
+
 
 
 //save freelancer (aziz)
@@ -298,11 +305,4 @@ export const saveFreelancer = async (req: express.Request, res: express.Response
 
 
 
-//get all freelancers
-export const getAllFreelancers = async (
-  req: express.Request,
-  res: express.Response
-) => {
-  let allfreelancers = await Freelancer.find();
-  return res.json({ allfreelancers });
-};
+

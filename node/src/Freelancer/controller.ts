@@ -7,9 +7,11 @@ import generateFreelancerToken from "./utils";
 import { freeLancerRouteProtection } from "./routeProtectionMiddleware";
 import { FishOff } from "lucide-angular";
 import company from "../Company/modal";
+import Freelancer from "../Freelancer/modal";
 import generateCompanyToken from "../Company/utils";
 import { SendPasswordResetEmail } from "./nodemailerConfig";
 import PrivateJobOffer from "../WorkOffer/Company/CompanyPrivateWorkOfferModal";
+import PublicJobOffer from "../WorkOffer/Company/CompanyPublicWorkOfferModal";
 
 // function to create a freelancer account (Mustapha)
 export const create = async (req: express.Request, res: express.Response) => {
@@ -580,7 +582,7 @@ export const declinePrivateJob = async (
 ) => {
   try {
     // Extract the necessary information from the request
-    const { freeLancerId, jobId } = req.params; // Assuming you send the jobId as a parameter in the URL
+    const { freeLancerId, jobId } = req.params;
 
     // Find the private job offer by ID
     const privateJobOffer = await PrivateJobOffer.findById(jobId);
@@ -590,15 +592,84 @@ export const declinePrivateJob = async (
       return res.status(404).json({ error: "Private job offer not found" });
     }
 
-    // Update the status to "accepted"
+    // Update the status to "declined"
     privateJobOffer.status = "declined";
 
-    // Save the changes
     await privateJobOffer.save();
 
     return res.json({ success: "Private job offer declined" });
   } catch (err) {
     console.error(err);
     return res.json({ error: "Server Error" });
+  }
+};
+
+
+
+//apply l public job (aziz)
+export const applyForPublicJob = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { freelancerId, jobOfferId } = req.params;
+
+    const freelancer = await Freelancer.findById(freelancerId);
+    const freelancerName = freelancer ? freelancer.Name : null;
+
+    const jobOffer = await PublicJobOffer.findById(jobOfferId);
+
+    if (!jobOffer) {
+      return res.json({ error: "Job offer not found" });
+    }
+
+    // Check if the freelancer has already applied for this job offer
+    const existingApplication =
+      jobOffer.AppliedFreelancers &&
+      jobOffer.AppliedFreelancers.find(
+        (application) => String(application.FreelancerId) === freelancerId
+      );
+
+    if (existingApplication) {
+      return res.json({ error: "You have already applied for this job offer" });
+    }
+
+    // Add the job application to the job offer's AppliedFreelancers array
+    await PublicJobOffer.findByIdAndUpdate(
+      jobOfferId,
+      {
+        $push: {
+          AppliedFreelancers: {
+            FreelancerId: freelancerId,
+            FreelancerName: freelancerName,
+          },
+        },
+      },
+      { new: true }
+    );
+
+    //add l application lel tableau pendingPublicJobOffers
+    await Freelancer.findByIdAndUpdate(
+      freelancerId,
+      {
+        $push: {
+          pendingWorkOffers: {
+            PublicJobOfferId : jobOfferId,
+            status : jobOffer.status,
+          },
+        },
+      },
+      { new: true }
+    );
+
+
+
+    // Save the updated job offer
+    await jobOffer.save();
+
+    return res.json({ success: "Application submitted successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Server Error" });
   }
 };

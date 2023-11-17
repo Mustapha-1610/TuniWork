@@ -49,6 +49,8 @@ freelancerRouter.post("/acceptPrivateJob/:jobId", freelancerController.acceptPri
 //decline private joboffer (aziz)
 freelancerRouter.post("/declinePrivateJob/:jobId", freelancerController.declinePrivateJob);
 
+//apply for a public job (aziz) 
+freelancerRouter.post("/applyForPublicJob/:freelancerId/:jobOfferId", freelancerController.applyForPublicJob);
 
 
 export default freelancerRouter;
