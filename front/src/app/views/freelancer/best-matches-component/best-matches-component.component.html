@@ -1,4 +1,5 @@
 <div *ngFor="let items of MatchingJobs">
+  {{ errMessage }}
   <div class="cursor-pointer" (click)="CheckOffre(items._id)">
     Title : {{ items.Title }} <br />
     Offering Company : {{ items.CompanyName }} <br />
@@ -30,10 +31,32 @@
       Total Money Spent : {{ items.TotalMoneyPayed }}<br />
     </div>
   </div>
-  <button type="button" (click)="CheckOffre(items._id)">
-    Check Work Offre
+  <button
+    *ngIf="!isWorkOfferSaved(items?._id)"
+    type="button"
+    (click)="SavePWO(items?._id, items?.Title, items?.Description)"
+  >
+    Save
   </button>
-  <button type="button" (click)="SaveJobOffer(items._id)">
-    Save Work Offer
+  <button
+    *ngIf="isWorkOfferSaved(items?._id)"
+    type="button"
+    (click)="unsavePwo(items?._id)"
+  >
+    Unsave
+  </button>
+  <button
+    type="button"
+    *ngIf="!isWorkOfferApplyed(items?._id)"
+    (click)="PWOApply(items?._id)"
+  >
+    Apply
+  </button>
+  <button
+    type="button"
+    *ngIf="isWorkOfferApplyed(items?._id)"
+    (click)="PWOUnapply(items?._id)"
+  >
+    Unapply
   </button>
 </div>

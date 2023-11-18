@@ -32,19 +32,39 @@ About the Company : <br />
 <div>
   Total Work Offerd : {{ publicWorkOfferInfos?.TotalWorkOfferd }}<br />
   Total Money Spent : {{ publicWorkOfferInfos?.TotalMoneyPayed }}<br />
-  <button type="button" (click)="PWOApply(publicWorkOfferInfos._id)">
-    Apply
-  </button>
+
   <button
+    *ngIf="!isWorkOfferSaved(publicWorkOfferInfos?._id)"
     type="button"
     (click)="
       SavePWO(
-        publicWorkOfferInfos._id,
-        publicWorkOfferInfos.Title,
-        publicWorkOfferInfos.Description
+        publicWorkOfferInfos?._id,
+        publicWorkOfferInfos?.Title,
+        publicWorkOfferInfos?.Description
       )
     "
   >
     Save
+  </button>
+  <button
+    *ngIf="isWorkOfferSaved(publicWorkOfferInfos?._id)"
+    type="button"
+    (click)="unsavePwo(publicWorkOfferInfos?._id)"
+  >
+    Unsave
+  </button>
+  <button
+    type="button"
+    *ngIf="!isWorkOfferApplyed(publicWorkOfferInfos?._id)"
+    (click)="PWOApply(publicWorkOfferInfos?._id)"
+  >
+    Apply
+  </button>
+  <button
+    type="button"
+    *ngIf="isWorkOfferApplyed(publicWorkOfferInfos?._id)"
+    (click)="PWOUnapply(publicWorkOfferInfos?._id)"
+  >
+    Unapply
   </button>
 </div>

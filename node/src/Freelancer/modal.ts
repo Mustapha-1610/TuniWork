@@ -167,6 +167,17 @@ const freelancerSchema = new Schema({
         ],
         default: "awaiting company response",
       },
+      PWOInfos: {
+        CName: {
+          type: String,
+        },
+        TitlePWO: {
+          type: String,
+        },
+        DescriptionPWO: {
+          type: String,
+        },
+      },
     },
   ],
 });

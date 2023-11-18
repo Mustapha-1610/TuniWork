@@ -647,13 +647,18 @@ export const applyForPublicJob = async (
     );
 
     //add l application lel tableau pendingPublicJobOffers
-    await Freelancer.findByIdAndUpdate(
+    const freeLancerAccount = await Freelancer.findByIdAndUpdate(
       freelancerId,
       {
         $push: {
           pendingWorkOffers: {
             PublicJobOfferId: jobOfferId,
             status: jobOffer.status,
+            PWOInfos: {
+              CName: jobOffer.CompanyName,
+              TitlePWO: jobOffer.Title,
+              DescriptionPWO: jobOffer.Description,
+            },
           },
         },
       },
@@ -663,13 +668,53 @@ export const applyForPublicJob = async (
     // Save the updated job offer
     await jobOffer.save();
 
-    return res.json({ success: "Application submitted successfully" });
+    return res.json({
+      success: "Application submitted successfully",
+      freeLancerAccount,
+    });
   } catch (error) {
     console.error(error);
     return res.json({ error: "Server Error" });
   }
 };
 
+//
+export const unapplyForPWO = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { freelancerId, PWOId } = req.body;
+    const PWO = await PublicJobOffer.findByIdAndUpdate(
+      PWOId,
+      {
+        $pull: {
+          AppliedFreelancers: {
+            FreelancerId: freelancerId,
+          },
+        },
+      },
+      { new: true }
+    );
+    const freeLancerAccount = await freelancer.findByIdAndUpdate(
+      freelancerId,
+      {
+        $pull: {
+          pendingWorkOffers: {
+            PublicJobOfferId: PWOId,
+          },
+        },
+      },
+      { new: true }
+    );
+    return res.json({ success: "Unapplied Successfully", freeLancerAccount });
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error" });
+  }
+};
+
+//
 export const savePublicJobOffer = async (
   req: express.Request,
   res: express.Response
@@ -700,10 +745,41 @@ export const savePublicJobOffer = async (
       { new: true }
     );
     if (updatedFreelancer) {
-      return res.json({ success: "Offer Saved" });
+      return res.json({
+        success: "Offer Saved",
+        freeLancerAccount: updatedFreelancer,
+      });
     }
   } catch (err) {
     console.log(err);
     return res.json({ error: " Server Error" });
+  }
+};
+
+//
+export const unsavePWO = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { freelancerId, PWOId } = req.body;
+    const freeLancer = await freelancer.findByIdAndUpdate(
+      freelancerId,
+      {
+        $pull: {
+          SavedWorkOffers: {
+            WorkId: PWOId,
+          },
+        },
+      },
+      { new: true }
+    );
+    return res.json({
+      success: "Offre Unsaved",
+      freeLancerAccount: freeLancer,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error" });
   }
 };
