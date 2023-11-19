@@ -187,68 +187,125 @@ export const editPublicJob = async (req: express.Request, res: express.Response)
 
 
 // accept freelancer (not working)
-export const acceptFreelancer = async (req: express.Request, res: express.Response) => {
-    try {
-      const { publicJobOfferId, freelancerId } = req.params;
-  
-      // Find the public job offer by ID
-      const publicJobOffer = await PublicJobOffer.findById(publicJobOfferId);
-  
-      if (!publicJobOffer) {
-        return res.status(404).json({ error: "Public job offer not found." });
-      }
-  
-      // Check if the freelancer has applied
-      const appliedFreelancer = publicJobOffer.AppliedFreelancers.find(
-        (freelancer) => freelancer.FreelancerId.toString() === freelancerId);
-  
-      if (!appliedFreelancer) {
-        return res.status(404).json({ error: "Freelancer not found among the applicants." });
-      }
-  
+/*export const acceptFreelancer = async (req: express.Request, res: express.Response) => {
+  try {
+    const { publicJobOfferId, freelancerId } = req.params;
 
-      
-      // If the freelancer is accepted, mark them as accepted
-      if (appliedFreelancer.Status === 'accepted') {
-        // Remove other freelancers' applications
-        publicJobOffer.AppliedFreelancers = [appliedFreelancer];
-  
-        // Update the public job offer in the database
-        await publicJobOffer.save();
-  
-        return res.json({ success: "Freelancer accepted successfully.", acceptedFreelancer: appliedFreelancer });
-      }
-  
-      // If the freelancer is not accepted, remove the job offer from their pendingWorkOffers
-      const freelancer = await Freelancer.findById(freelancerId);
-  
-      if (!freelancer) {
-        return res.status(404).json({ error: "Freelancer not found." });
-      }
-  
-      await Freelancer.findByIdAndUpdate(
-        freelancerId,
-        {
-          $pull: {
-            pendingWorkOffers: {
-              PublicJobOfferId: publicJobOfferId,
-            },
-          },
+    // Find the public job offer by ID
+    const publicJobOffer = await PublicJobOffer.findById(publicJobOfferId);
+
+    if (!publicJobOffer) {
+      return res.status(404).json({ error: 'Public job offer not found.' });
+    }
+
+    // Check if the freelancer has applied
+    const appliedFreelancer = publicJobOffer.AppliedFreelancers.find(
+      (freelancer) => freelancer.FreelancerId.toString() === freelancerId
+    );
+
+    if (!appliedFreelancer) {
+      return res.status(404).json({ error: 'Freelancer not found among the applicants.' });
+    }
+
+    // If the freelancer is not accepted, remove the job offer from their pendingWorkOffers
+    const freelancer = await Freelancer.findById(freelancerId);
+
+    if (!freelancer) {
+      return res.status(404).json({ error: 'Freelancer not found.' });
+    }
+
+    // Update the status of the accepted freelancer in the public job offer
+    appliedFreelancer.Status = 'accepted';
+
+    // Update the status of the job offer in the freelancer's pendingWorkOffers
+    await Freelancer.findByIdAndUpdate(
+      freelancerId,
+      {
+        $set: {
+          'pendingWorkOffers.$[elem].Status': 'accepted',
         },
-        { new: true }
+      },
+      {
+        arrayFilters: [{ 'elem.PublicJobOfferId': publicJobOfferId }],
+        new: true,
+      }
+    );
+
+    // Save the updated freelancer and public job offer
+    await publicJobOffer.save();
+    await freelancer.save();
+
+    return res.json({ success: 'Freelancer accepted successfully.', acceptedFreelancer: appliedFreelancer });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: 'Server Error!' });
+  }
+};*/
+
+export const acceptFreelancer = async (req: express.Request, res: express.Response) => {
+  try {
+    const { publicJobOfferId, freelancerId } = req.params;
+
+    // Find the public job offer by ID
+    const publicJobOffer = await PublicJobOffer.findById(publicJobOfferId);
+
+    if (!publicJobOffer) {
+      return res.status(404).json({ error: 'Public job offer not found.' });
+    }
+
+    // Check if the freelancer has applied
+    const appliedFreelancer = publicJobOffer.AppliedFreelancers.find(
+      (freelancer) => freelancer.FreelancerId.toString() === freelancerId
+    );
+
+    if (!appliedFreelancer) {
+      return res.status(404).json({ error: 'Freelancer not found among the applicants.' });
+    }
+
+    // If the freelancer is accepted, mark them as accepted
+    if (appliedFreelancer.Status === 'pending') {
+      // Update the status of the accepted freelancer in AppliedFreelancers
+      appliedFreelancer.Status = 'accepted';
+
+      // Update the public job offer in the database
+      await publicJobOffer.save();
+
+      // Update the status of the accepted freelancer to "accepted" in pendingWorkOffers
+      await Freelancer.updateOne(
+        { '_id': freelancerId, 'pendingWorkOffers.PublicJobOfferId': publicJobOfferId },
+        { $set: { 'pendingWorkOffers.$.Status': 'accepted' } }
       );
 
+      // Update the status of other freelancers to "rejected" in pendingWorkOffers
+      await Freelancer.updateMany(
+        { '_id': { $ne: freelancerId }, 'pendingWorkOffers.PublicJobOfferId': publicJobOfferId },
+        { $set: { 'pendingWorkOffers.$.Status': 'rejected' } }
+      );
 
-  
-      // Save the updated freelancer
-      await freelancer.save();
-  
-      return res.json({ success: "freelancer accepted. job offer removed from the other's pendingWorkOffers array." });
-    } catch (err) {
-      console.log(err);
-      return res.status(500).json({ error: "Server Error!" });
+      // Update the status of other freelancers to "rejected" in AppliedFreelancers
+      await PublicJobOffer.updateMany(
+        { '_id': publicJobOfferId, 'AppliedFreelancers.Status': 'pending' },
+        { $set: { 'AppliedFreelancers.$.Status': 'rejected' } }
+      );
+
+      return res.json({ success: 'Freelancer accepted successfully.', acceptedFreelancer: appliedFreelancer });
+    } else {
+      return res.json({ error: 'Freelancer has already been accepted or rejected.' });
     }
-  };
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: 'Server Error!' });
+  }
+};
+
+
+
+
+
+
+
+
+
 
 
 

@@ -140,25 +140,25 @@ const freelancerSchema = new Schema({
 
 
   //wa9teli freelancer yapply for a public job tetsajel lenna
-  pendingWorkOffers :[
+  pendingWorkOffers: [
     {
       PublicJobOfferId: {
         type: Schema.Types.ObjectId,
-        ref: 'PrivateJobOffer',
+        ref: 'PublicJobOffer',
       },
       Status: {
         type: String,
         enum: [
           'awaiting company response',
           'accepted',
-          'declined',
+          'rejected',
           'in progress',
           'done',
         ],
         default: 'awaiting company response',
       },
     },
-  ]
+  ],
 
 
 
