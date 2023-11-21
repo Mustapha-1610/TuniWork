@@ -69,4 +69,10 @@ freelancerRouter.put("/unsavePWO", freelancerController.unsavePWO);
 //
 freelancerRouter.put("/unapplyPWO", freelancerController.unapplyForPWO);
 
+//
+freelancerRouter.post(
+  "/sendFreelancerContract",
+  freelancerController.sendFreelancerContract
+);
+
 export default freelancerRouter;

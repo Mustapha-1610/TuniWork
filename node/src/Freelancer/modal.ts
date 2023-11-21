@@ -180,6 +180,12 @@ const freelancerSchema = new Schema({
       },
     },
   ],
+  CompanyRecievedContracts: [
+    {
+      type: String,
+      default: null,
+    },
+  ],
 });
 const CombinedFreelancerSchema = new Schema({
   ...usersSchema.obj,
