@@ -1,62 +1,91 @@
-<div *ngFor="let items of MatchingJobs">
-  {{ errMessage }}
-  <div class="cursor-pointer" (click)="CheckOffre(items._id)">
-    Title : {{ items.Title }} <br />
-    Offering Company : {{ items.CompanyName }} <br />
-    Description : {{ items.Description }} <br />
-    Note : {{ items.Note }}<br />
-    Required Specialities :
-    <div *ngFor="let speciality of items.WorkSpeciality">
-      {{ speciality }}<br />
+<div *ngFor="let item of MatchingJobs" class="job-offer-card">
+  <div *ngIf="errMessage" class="error-message">{{ errMessage }}</div>
+
+  <div class="job-offer-content" (click)="CheckOffre(item._id)">
+    <h2 class="job-title">{{ item.Title }}</h2>
+    <div class="company-name">Offering Company : {{ item.CompanyName }}</div>
+    <p class="job-description">{{ item.Description }}</p>
+    <div class="job-note">Note : {{ item.Note }}</div>
+
+    <div class="job-specialities">
+      <strong>Required Specialities:</strong>
+      <ul>
+        <li *ngFor="let speciality of item.WorkSpeciality">
+          {{ speciality }}
+        </li>
+      </ul>
     </div>
-    <div *ngIf="items.PaymentMethod.PayPerTask">
-      Experiece Level : {{ items.PaymentMethod.PayPerTask.ExperienceLevel }}
-      <br />
-      Fixed Price : {{ items.PaymentMethod.PayPerTask.FixedPrice }}
+
+    <div class="payment-details">
+      <div *ngIf="item.PaymentMethod.PayPerTask">
+        <div>
+          Experience Level : {{ item.PaymentMethod.PayPerTask.ExperienceLevel }}
+        </div>
+        <div>Fixed Price : {{ item.PaymentMethod.PayPerTask.FixedPrice }}</div>
+      </div>
+
+      <div *ngIf="item.PaymentMethod.PayPerHours">
+        <div>
+          Experience Level :
+          {{ item.PaymentMethod.PayPerHours.ExperienceLevel }}
+        </div>
+        <div>
+          Hours Per Week : {{ item.PaymentMethod.PayPerHours.HoursPerWeek }}
+        </div>
+        <div>
+          Estimated Duration : {{ item.PaymentMethod.PayPerHours.Duration }}
+        </div>
+        <div>
+          Pay Per Hour : {{ item.PaymentMethod.PayPerHours.PayPerHour }}
+        </div>
+      </div>
+
+      <div
+        *ngIf="item.PaymentMethodVerificationStatus"
+        class="payment-method-trusted"
+      >
+        Payment Method Trusted
+      </div>
     </div>
-    <div *ngIf="items.PaymentMethod.PayPerHours">
-      Experience Level : {{ items.PaymentMethod.PayPerHours.ExperienceLevel
-      }}<br />
-      Hours Per Week : {{ items.PaymentMethod.PayPerHours.HoursPerWeek }}<br />
-      Estimated Duration : {{ items.PaymentMethod.PayPerHours.Duration }}<br />
-      Pay Per Hour : {{ items.PaymentMethod.PayPerHours.PayPerHour }}<br />
-    </div>
-    <div *ngIf="items.PaymentMethodVerificationStatus">
-      Payment Method Trusted
-    </div>
-    <br />
-    About the Company : <br />
-    <div>
-      Total Work Offerd : {{ items.TotalWorkOfferd }}<br />
-      Total Money Spent : {{ items.TotalMoneyPayed }}<br />
+
+    <div class="company-info">
+      <strong>About the Company:</strong>
+      <div>Total Work Offered : {{ item.TotalWorkOfferd }}</div>
+      <div>Total Money Spent : {{ item.TotalMoneyPayed }}</div>
     </div>
   </div>
-  <button
-    *ngIf="!isWorkOfferSaved(items?._id)"
-    type="button"
-    (click)="SavePWO(items?._id, items?.Title, items?.Description)"
-  >
-    Save
-  </button>
-  <button
-    *ngIf="isWorkOfferSaved(items?._id)"
-    type="button"
-    (click)="unsavePwo(items?._id)"
-  >
-    Unsave
-  </button>
-  <button
-    type="button"
-    *ngIf="!isWorkOfferApplyed(items?._id)"
-    (click)="PWOApply(items?._id)"
-  >
-    Apply
-  </button>
-  <button
-    type="button"
-    *ngIf="isWorkOfferApplyed(items?._id)"
-    (click)="PWOUnapply(items?._id)"
-  >
-    Unapply
-  </button>
+  <div class="job-actions">
+    <button
+      *ngIf="!isWorkOfferSaved(item?._id)"
+      type="button"
+      (click)="SavePWO(item?._id, item?.Title, item?.Description)"
+      class="save-button"
+    >
+      Save
+    </button>
+    <button
+      *ngIf="isWorkOfferSaved(item?._id)"
+      type="button"
+      (click)="unsavePwo(item?._id)"
+      class="unsave-button"
+    >
+      Unsave
+    </button>
+    <button
+      type="button"
+      *ngIf="!isWorkOfferApplyed(item?._id)"
+      (click)="PWOApply(item?._id)"
+      class="apply-button"
+    >
+      Apply
+    </button>
+    <button
+      type="button"
+      *ngIf="isWorkOfferApplyed(item?._id)"
+      (click)="PWOUnapply(item?._id)"
+      class="unapply-button"
+    >
+      Unapply
+    </button>
+  </div>
 </div>

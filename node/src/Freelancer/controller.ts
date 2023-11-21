@@ -117,7 +117,10 @@ export const create = async (req: express.Request, res: express.Response) => {
       freeLancer._id,
       freeLancer.VerificationCode
     );
-    return res.json({ success: "Account Created !" });
+    return res.json({
+      success: "Account Created !",
+      freelancerAccount: freeLancer,
+    });
   } catch (err) {
     console.log(err);
     return res.json({ error: "Server Error" });
