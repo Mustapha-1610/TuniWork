@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Gestion des Produits</title>
+  </head>
+
+
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+      <!-- Brand -->
+      <a class="navbar-brand" href="#">company icon</a>
+      <!-- Links -->
+
+      <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+
+      <ul class="navbar-nav">
+
+
+        <!-- Dropdown -->
+
+
+
+
+
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="jobsDropdown"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Jobs
+          </a>
+
+
+          <ul class="dropdown-menu" aria-labelledby="jobsDropdown">
+            <li><a class="dropdown-item" href="#">Create Jobs</a></li>
+            <li><a class="dropdown-item" href="#">My Jobs</a></li>
+            <li><a class="dropdown-item" href="#">Job History</a></li>
+          </ul>
+        </li>
+
+
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            ngbDropdown
+            href="#"
+            id="talentDropdown"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Talent
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="talentDropdown">
+            <li><a class="dropdown-item" href="#">Freelancers</a></li>
+            <li><a class="dropdown-item" href="#">Hired Freelancers</a></li>
+            <li><a class="dropdown-item" href="#">Saved Freelancers</a></li>
+          </ul>
+        </li>
+
+
+        <li class="nav-item dropdown" ngbDropdown>
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="reportsDropdown"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Reports
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="reportsDropdown">
+            <li class="dropdown-submenu">
+              <a class="dropdown-item dropdown-toggle" href="#"
+                >Freelancer Activity</a
+              >
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" href="#">Track Progress</a>
+                </li>
+                <li><a class="dropdown-item" href="#">Report</a></li>
+              </ul>
+            </li>
+            <li class="dropdown-submenu">
+              <a class="dropdown-item dropdown-toggle" href="#"
+                >Financials</a
+              >
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" href="#">Money Accumulated</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#">Transaction History</a>
+                </li>
+                <li><a class="dropdown-item" href="#">Debt</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+
+
+
+
+
+
+
+
+
+        <li class="nav-item">
+          <a class="nav-link" href="#">Messages</a>
+        </li>
+
+
+
+
+
+
+
+
+
+      </ul>
+
+
+
+
+
+
+      <ul class="navbar-nav ml-auto" ngbDropdown>
+        <li class="nav-item dropdown" >
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="navbardrop2"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            ngbDropdownToggle
+          >
+            [username]
+          </a>
+          <div
+            class="dropdown-menu"
+            ngbDropdownMenu
+            aria-labelledby="navbarScrollingDropdown"
+          >
+            <a class="dropdown-item" href="#">login</a>
+            <a class="dropdown-item cursor-pointer" (click)="logout()">Logout</a>
+            <a class="dropdown-item" href="#">Profile</a>
+          </div>
+        </li>
+      </ul>
+
+
+
+
+
+
+
+    </nav>
+  </body>
+</html>
+
+
+<router-outlet></router-outlet>
