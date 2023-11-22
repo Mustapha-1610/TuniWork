@@ -85,4 +85,7 @@ export class BestMatchesComponentComponent implements OnInit {
       (pendingOffer: any) => pendingOffer.PublicJobOfferId === workOfferId
     );
   }
+  getOptionValue(data: any) {
+    console.log(data);
+  }
 }
