@@ -2,8 +2,16 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { FreelancerlayoutComponent } from 'src/app/layout/freelancerlayout/freelancerlayout.component';
 import { ProfilePageComponent } from './profile-page/profile-page.component';
+import { HomePageComponent } from './home-page/home-page.component';
+import { FindWorkPageComponent } from './find-work-page/find-work-page.component';
+import { CheckWorkOfferDetailsComponent } from './check-work-offer-details/check-work-offer-details.component';
 
-const routes: Routes = [{ path: '', component: ProfilePageComponent }];
+const routes: Routes = [
+  { path: '', component: HomePageComponent },
+  { path: 'browse', component: FindWorkPageComponent },
+  { path: 'profile', component: ProfilePageComponent },
+  { path: 'WorkOffer/:id', component: CheckWorkOfferDetailsComponent },
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

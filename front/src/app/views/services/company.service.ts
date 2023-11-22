@@ -1,12 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { catchError } from 'rxjs/operators';
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class CompanyService {
   constructor(private http: HttpClient, private route: Router) {}
+
   setCompanyInfos(CompanyForm: any) {
     const form = JSON.parse(CompanyForm);
     const Company: any = {
@@ -26,11 +29,32 @@ export class CompanyService {
     };
     localStorage.setItem('companyInfos', JSON.stringify(Company));
   }
+
+
+
+
+
   getCompanyInfos() {
     return JSON.parse(localStorage.getItem('companyInfos')!);
   }
+
+
   logout() {
     localStorage.removeItem('companyInfos');
     this.route.navigate(['/']);
   }
+
+  createPublicJob(publicJobData: any) {
+    return this.http.post(
+      'http://localhost:5000/api/companyWorkOffer/createPublicJob',
+      publicJobData
+    ).pipe(
+      catchError((error) => {
+        console.error('Error in createPublicJob:', error);
+        throw error;
+      })
+    );
+  }
+
+
 }

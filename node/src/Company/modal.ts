@@ -92,7 +92,7 @@ const companySchema = new Schema({
     type: Boolean,
     default: true,
   },
-  AccountVerficiationStatus: {
+  AccountVerificationStatus: {
     type: Boolean,
     default: false,
   },

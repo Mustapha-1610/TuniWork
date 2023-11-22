@@ -1,0 +1,62 @@
+<div *ngFor="let items of MatchingJobs">
+  {{ errMessage }}
+  <div class="cursor-pointer" (click)="CheckOffre(items._id)">
+    Title : {{ items.Title }} <br />
+    Offering Company : {{ items.CompanyName }} <br />
+    Description : {{ items.Description }} <br />
+    Note : {{ items.Note }}<br />
+    Required Specialities :
+    <div *ngFor="let speciality of items.WorkSpeciality">
+      {{ speciality }}<br />
+    </div>
+    <div *ngIf="items.PaymentMethod.PayPerTask">
+      Experiece Level : {{ items.PaymentMethod.PayPerTask.ExperienceLevel }}
+      <br />
+      Fixed Price : {{ items.PaymentMethod.PayPerTask.FixedPrice }}
+    </div>
+    <div *ngIf="items.PaymentMethod.PayPerHours">
+      Experience Level : {{ items.PaymentMethod.PayPerHours.ExperienceLevel
+      }}<br />
+      Hours Per Week : {{ items.PaymentMethod.PayPerHours.HoursPerWeek }}<br />
+      Estimated Duration : {{ items.PaymentMethod.PayPerHours.Duration }}<br />
+      Pay Per Hour : {{ items.PaymentMethod.PayPerHours.PayPerHour }}<br />
+    </div>
+    <div *ngIf="items.PaymentMethodVerificationStatus">
+      Payment Method Trusted
+    </div>
+    <br />
+    About the Company : <br />
+    <div>
+      Total Work Offerd : {{ items.TotalWorkOfferd }}<br />
+      Total Money Spent : {{ items.TotalMoneyPayed }}<br />
+    </div>
+  </div>
+  <button
+    *ngIf="!isWorkOfferSaved(items?._id)"
+    type="button"
+    (click)="SavePWO(items?._id, items?.Title, items?.Description)"
+  >
+    Save
+  </button>
+  <button
+    *ngIf="isWorkOfferSaved(items?._id)"
+    type="button"
+    (click)="unsavePwo(items?._id)"
+  >
+    Unsave
+  </button>
+  <button
+    type="button"
+    *ngIf="!isWorkOfferApplyed(items?._id)"
+    (click)="PWOApply(items?._id)"
+  >
+    Apply
+  </button>
+  <button
+    type="button"
+    *ngIf="isWorkOfferApplyed(items?._id)"
+    (click)="PWOUnapply(items?._id)"
+  >
+    Unapply
+  </button>
+</div>

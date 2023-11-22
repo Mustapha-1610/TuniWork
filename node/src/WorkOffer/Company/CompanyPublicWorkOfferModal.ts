@@ -35,10 +35,10 @@ const CompanyPublicWorkOfferSchema = new Schema({
   PaymentMethod: {
     PayPerTask: {
       ExperienceLevel: {
-        type: "String",
+        type: String,
       },
       FixedPrice: {
-        type: "String",
+        type: String,
       },
     },
     PayPerHours: {
@@ -139,7 +139,11 @@ const CompanyPublicWorkOfferSchema = new Schema({
       },
       Status: {
         type: String,
-        enum: ['pending', 'accepted', 'rejected'],
+        enum: [
+        'pending', 
+        'accepted',
+        'rejected'
+      ],
         default: 'pending',
       },
     },
