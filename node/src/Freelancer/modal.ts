@@ -154,20 +154,20 @@ const freelancerSchema = new Schema({
     {
       PublicJobOfferId: {
         type: Schema.Types.ObjectId,
-        ref: 'PublicJobOffer',
+        ref: "PublicJobOffer",
       },
       Status: {
         type: String,
         enum: [
-          'awaiting company response',
-          'accepted',
-          'rejected',
-          'in progress',
-          'done',
+          "awaiting company response",
+          "accepted",
+          "rejected",
+          "in progress",
+          "done",
         ],
         default: "awaiting company response",
       },
-      /*PWOInfos: {
+      PWOInfos: {
         CName: {
           type: String,
         },
@@ -177,19 +177,15 @@ const freelancerSchema = new Schema({
         DescriptionPWO: {
           type: String,
         },
-      },*/
+      },
     },
   ],
-<<<<<<< HEAD
-
-=======
   CompanyRecievedContracts: [
     {
       type: String,
       default: null,
     },
   ],
->>>>>>> 7f33349eb440ae8bb444da7de979682c41d90fd7
 });
 const CombinedFreelancerSchema = new Schema({
   ...usersSchema.obj,

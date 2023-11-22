@@ -551,10 +551,6 @@ export const multiauth = async (
   }
 };
 
-
-
-
-
 /******** aziz ******/
 //accept private job (aziz)
 export const acceptPrivateJob = async (
@@ -724,7 +720,6 @@ export const unapplyForPWO = async (
   }
 };
 
-
 // save public job offer (mostfa)
 export const savePublicJobOffer = async (
   req: express.Request,
@@ -766,7 +761,6 @@ export const savePublicJobOffer = async (
     return res.json({ error: " Server Error" });
   }
 };
-
 
 //unsane private work offer (mostfa)
 export const unsavePWO = async (
@@ -832,6 +826,27 @@ export const sendFreelancerContract = async (
     await contractedFreelancer.save();
     await contractingCompany.save();
     return res.json({ success: "Contract Created", Link: url });
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error" });
+  }
+};
+
+//
+export const filterPWOSearch = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { workSpeciality } = req.body;
+    const returnedFields =
+      "PaymentMethod _id Title CreationDate CompanyName PaymentMethodVerificationStatus Location TotalWorkOfferd TotalMoneyPayed Description WorkSpeciality";
+    const matchingJobOffers: any = await PublicJobOffer.find({
+      WorkSpeciality: {
+        $in: workSpeciality,
+      },
+    }).select(returnedFields);
+    return res.json({ matchingJobOffers });
   } catch (err) {
     console.log(err);
     return res.json({ error: "Server Error" });
