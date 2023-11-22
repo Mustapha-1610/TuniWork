@@ -1,16 +1,16 @@
 <div>
-  <select>
+  Filter Search :
+  <select (change)="getOptionValue($event)">
+    <option disabled selected>-</option>
     <option
-      *ngFor="let options of freeLancerInfos.Specialities"
-      (click)="getOptionValue($event)"
+      *ngFor="let option of freeLancerInfos.Specialities"
+      [value]="option"
     >
-      {{ options }}
+      {{ option }}
     </option>
   </select>
 </div>
 <div *ngFor="let item of MatchingJobs" class="job-offer-card">
-  <div *ngIf="errMessage" class="error-message">{{ errMessage }}</div>
-
   <div class="job-offer-content" (click)="CheckOffre(item._id)">
     <h2 class="job-title">{{ item.Title }}</h2>
     <div class="company-name">Offering Company : {{ item.CompanyName }}</div>

@@ -133,4 +133,12 @@ export class FreelancerService {
       PWOId,
     });
   }
+  filterPWOSearch(workSpeciality: any) {
+    return this.http.post(
+      'http://localhost:5000/api/freelancer/filterPWOSearch',
+      {
+        workSpeciality,
+      }
+    );
+  }
 }
