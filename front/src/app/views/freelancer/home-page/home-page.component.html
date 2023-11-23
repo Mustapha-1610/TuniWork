@@ -11,7 +11,6 @@
     <label for="bestMatches" class="text-gray-700 cursor-pointer select-none"
       >Best Matches</label
     >
-
     <input
       type="radio"
       id="savedJobs"
@@ -21,6 +20,16 @@
     />
     <label for="savedJobs" class="text-gray-700 cursor-pointer select-none"
       >Saved Jobs</label
+    >
+    <input
+      type="radio"
+      id="savedJobs"
+      (click)="setApplyedJobsComponent()"
+      name="component"
+      class="form-radio h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+    />
+    <label for="savedJobs" class="text-gray-700 cursor-pointer select-none"
+      >Applyed Jobs</label
     >
   </div>
 

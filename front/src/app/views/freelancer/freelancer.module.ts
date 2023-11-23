@@ -16,6 +16,11 @@ import { CheckWorkOfferDetailsComponent } from './check-work-offer-details/check
 import { OngoingWorkComponent } from './my-work-page/ongoing-work/ongoing-work.component';
 import { FinichedWorkComponent } from './my-work-page/finiched-work/finiched-work.component';
 import { PassResetPageComponent } from './pass-reset-page/pass-reset-page.component';
+import { ApplyedJobsComponentComponent } from './applyed-jobs-component/applyed-jobs-component.component';
+import { getStorage, provideStorage } from '@angular/fire/storage';
+import firebase from 'firebase/compat/app';
+import { environment } from 'src/environment';
+import { provideFirebaseApp, getApp, initializeApp } from '@angular/fire/app';
 
 @NgModule({
   declarations: [
@@ -30,13 +35,15 @@ import { PassResetPageComponent } from './pass-reset-page/pass-reset-page.compon
     OngoingWorkComponent,
     FinichedWorkComponent,
     PassResetPageComponent,
+    ApplyedJobsComponentComponent,
   ],
   imports: [
     FormsModule,
     CommonModule,
     RouterModule,
     FreelancerRoutingModule,
-
+    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
+    provideStorage(() => getStorage(getApp())),
     ReactiveFormsModule,
   ],
 })

@@ -396,6 +396,28 @@ export const getAllFreelancers = async (
   return res.json({ allfreelancers });
 };
 
+//
+export const updatePP = async (req: express.Request, res: express.Response) => {
+  try {
+    const { imageUrl } = req.body;
+    const freelancerId = await freeLancerRouteProtection(req, res);
+    if ("_id" in freelancerId) {
+      const freelancerAccount = await freelancer.findByIdAndUpdate(
+        freelancerId,
+        {
+          ProfilePicture: imageUrl,
+        },
+        { new: true }
+      );
+      return res.json({ success: "Image Updated", freelancerAccount });
+    }
+    return freelancerId;
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error" });
+  }
+};
+
 // function to update freelancer informations
 export const updateInfo = async (
   req: express.Request,

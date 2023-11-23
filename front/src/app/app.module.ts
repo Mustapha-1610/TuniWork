@@ -22,23 +22,12 @@ import {
 } from '@abacritt/angularx-social-login';
 import { WithCredentialsInterceptor } from 'src/with-credentials.interceptor';
 
-
-
-
 //aziz
 
 import { PublicJobCreateComponent } from './views/comapny/public-job-create/public-job-create.component';
 
-
-
-
-
 @NgModule({
-  declarations: [
-    AppComponent,
-    PublicJobCreateComponent,
-
-  ],
+  declarations: [AppComponent, PublicJobCreateComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

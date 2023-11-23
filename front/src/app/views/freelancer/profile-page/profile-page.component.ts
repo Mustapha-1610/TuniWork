@@ -1,7 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { FreelancerService } from '../../services/freelancer.service';
-import { io, Socket } from 'socket.io-client';
+import { Storage } from '@angular/fire/storage';
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  uploadBytesResumable,
+} from 'firebase/storage';
 @Component({
   selector: 'app-profile-page',
   templateUrl: './profile-page.component.html',
@@ -9,29 +15,75 @@ import { io, Socket } from 'socket.io-client';
 })
 export class ProfilePageComponent implements OnInit, OnDestroy {
   freeLancerInfos: any = JSON.parse(localStorage.getItem('freeLancerInfos')!);
-  private socket: any = Socket;
+  imageUrl: string | null = null;
+  imgFile: any = null;
+  uploadProgress: number | undefined;
+  testimg: any;
+  show: any = false;
   ngOnInit() {}
-  constructor(private router: Router, private fs: FreelancerService) {
-    this.socket = io('http://localhost:5000/freelancer');
-    this.socket.connect();
-    this.socket.emit('newUserConnected', {
-      Name: this.freeLancerInfos?.Name,
-      _id: this.freeLancerInfos?._id,
-    });
-    this.socket.on('userConnected', (data: any) => {
-      console.log('Connected Users ');
-      data.map((item: any, index: any) => {
-        console.log('Name = ' + item.Name + '  Id = ' + item._id);
-      });
-    });
-    this.socket.on('userDisconnected', (data: any) => {
-      console.log('user Disconnected , Remaining Users : ');
-      data.map((item: any, index: any) => {
-        console.log('Name = ' + item.Name, ' Id = ' + item._id);
-      });
-    });
+  constructor(
+    private router: Router,
+    private fs: FreelancerService,
+    private storage: Storage
+  ) {}
+  ngOnDestroy() {}
+
+  changeProfilePicture() {
+    if (this.imgFile) {
+      const filePath = `FreelancerImages/${Date.now()}_${this.imgFile.name}`;
+      const storageRef = ref(this.storage, filePath);
+
+      const uploadTask = uploadBytesResumable(storageRef, this.imgFile);
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+          this.uploadProgress = progress;
+          switch (snapshot.state) {
+            case 'paused':
+              console.log('Upload is paused');
+              break;
+            case 'running':
+              console.log('Upload is running');
+              break;
+          }
+        },
+        (error) => {
+          console.error('Upload failed', error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            this.imageUrl = downloadURL;
+            console.log('File available at', this.imageUrl);
+            this.fs.updatePP(this.imageUrl).subscribe((res: any) => {
+              if (res.freelancerAccount) {
+                this.fs.setFreelancerCredits(
+                  JSON.stringify(res.freelancerAccount)
+                );
+                this.freeLancerInfos = this.fs.getFreelancerCredits();
+                this.show = false;
+              }
+            });
+            this.uploadProgress = undefined;
+          });
+        }
+      );
+    }
   }
-  ngOnDestroy() {
-    this.socket.emit('userDisconnected', this.freeLancerInfos._id);
+  cancel() {
+    this.freeLancerInfos = this.fs.getFreelancerCredits();
+    this.show = false;
+  }
+  uploadImage(event: any) {
+    const file: File = event.target.files[0];
+
+    if (file) {
+      console.log('hello');
+      this.freeLancerInfos.ProfilePicture = URL.createObjectURL(file);
+      this.imgFile = file;
+      this.show = true;
+    }
   }
 }

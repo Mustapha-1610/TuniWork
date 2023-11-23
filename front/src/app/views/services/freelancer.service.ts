@@ -141,4 +141,9 @@ export class FreelancerService {
       }
     );
   }
+  updatePP(imageUrl: any) {
+    return this.http.put('http://localhost:5000/api/freelancer/updatePP', {
+      imageUrl,
+    });
+  }
 }
