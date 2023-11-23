@@ -38,4 +38,12 @@ CompanyWorkOfferRouter.post(
   CompanyWorkOfferController.getPublicWorkOffer
 );
 
+CompanyWorkOfferRouter.post(
+  "/acceptFreelancer/:publicJobOfferId/:freelancerId",
+  CompanyWorkOfferController.acceptFreelancer
+);
+
+
+
+
 export default CompanyWorkOfferRouter;

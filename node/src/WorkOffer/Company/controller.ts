@@ -4,6 +4,8 @@ import companyPublicWorkOffer from "./CompanyPublicWorkOfferModal";
 import PrivateJobOffer from "./CompanyPrivateWorkOfferModal";
 import Freelancer from "../../Freelancer/modal";
 import PublicJobOffer from "./CompanyPublicWorkOfferModal";
+
+
 // create public job offer ( mostfa)
 export const createPublicJob = async (
   req: express.Request,
@@ -57,8 +59,8 @@ export const createPublicJob = async (
     return res.json({ error: "Server Error !" });
   }
 };
-//mostfa kamel l functions teb3in l pub job offer BEFORE my private job work
 
+//
 export const FindBestMatchesPublicWorkOffers = async (
   req: express.Request,
   res: express.Response
@@ -107,7 +109,7 @@ export const getAppliedFreelancers = async (
   }
 };
 
-// view details of public job
+// view details of public job (aziz)
 export const getPublicJobOffer = async (
   req: express.Request,
   res: express.Response
@@ -130,7 +132,7 @@ export const getPublicJobOffer = async (
   }
 };
 
-//cancel public job offer
+//cancel public job offer (aziz)
 export const cancelPublicJobOffer = async (
   req: express.Request,
   res: express.Response
@@ -175,7 +177,7 @@ export const cancelPublicJobOffer = async (
   }
 };
 
-//edit public job offer
+//edit public job offer (aziz)
 export const editPublicJob = async (
   req: express.Request,
   res: express.Response
@@ -216,11 +218,9 @@ export const editPublicJob = async (
   }
 };
 
-// accept freelancer (not working)
-export const acceptFreelancer = async (
-  req: express.Request,
-  res: express.Response
-) => {
+
+//accept freelancer and reject the rest freelancers (aziz)
+export const acceptFreelancer = async (req: express.Request, res: express.Response) => {
   try {
     const { publicJobOfferId, freelancerId } = req.params;
 
@@ -228,7 +228,7 @@ export const acceptFreelancer = async (
     const publicJobOffer = await PublicJobOffer.findById(publicJobOfferId);
 
     if (!publicJobOffer) {
-      return res.status(404).json({ error: "Public job offer not found." });
+      return res.status(404).json({ error: 'Public job offer not found.' });
     }
 
     // Check if the freelancer has applied
@@ -237,56 +237,52 @@ export const acceptFreelancer = async (
     );
 
     if (!appliedFreelancer) {
-      return res
-        .status(404)
-        .json({ error: "Freelancer not found among the applicants." });
+      return res.status(404).json({ error: 'Freelancer not found among the applicants.' });
     }
 
     // If the freelancer is accepted, mark them as accepted
-    if (appliedFreelancer.Status === "accepted") {
-      // Remove other freelancers' applications
-      publicJobOffer.AppliedFreelancers = [appliedFreelancer];
+    if (appliedFreelancer.Status === 'pending') {
+      // Update the status of the accepted freelancer in AppliedFreelancers
+      appliedFreelancer.Status = 'accepted';
 
       // Update the public job offer in the database
       await publicJobOffer.save();
 
-      return res.json({
-        success: "Freelancer accepted successfully.",
-        acceptedFreelancer: appliedFreelancer,
-      });
+      // Update the status of the accepted freelancer to "accepted" in pendingWorkOffers
+      await Freelancer.updateOne(
+        { '_id': freelancerId, 'pendingWorkOffers.PublicJobOfferId': publicJobOfferId },
+        { $set: { 'pendingWorkOffers.$.Status': 'accepted' } }
+      );
+
+      // Update the status of other freelancers to "rejected" in pendingWorkOffers
+      await Freelancer.updateMany(
+        { '_id': { $ne: freelancerId }, 'pendingWorkOffers.PublicJobOfferId': publicJobOfferId },
+        { $set: { 'pendingWorkOffers.$.Status': 'rejected' } }
+      );
+
+      // Update the status of other freelancers to "rejected" in AppliedFreelancers
+      await PublicJobOffer.updateMany(
+        { '_id': publicJobOfferId, 'AppliedFreelancers.Status': 'pending' },
+        { $set: { 'AppliedFreelancers.$[elem].Status': 'rejected' } },
+        { arrayFilters: [{ 'elem.Status': 'pending' }] }
+      );
+
+      return res.json({ success: 'Freelancer accepted successfully.', acceptedFreelancer: appliedFreelancer });
+    } else {
+      return res.json({ error: 'Freelancer has already been accepted or rejected.' });
     }
-
-    // If the freelancer is not accepted, remove the job offer from their pendingWorkOffers
-    const freelancer = await Freelancer.findById(freelancerId);
-
-    if (!freelancer) {
-      return res.status(404).json({ error: "Freelancer not found." });
-    }
-
-    await Freelancer.findByIdAndUpdate(
-      freelancerId,
-      {
-        $pull: {
-          pendingWorkOffers: {
-            PublicJobOfferId: publicJobOfferId,
-          },
-        },
-      },
-      { new: true }
-    );
-
-    // Save the updated freelancer
-    await freelancer.save();
-
-    return res.json({
-      success:
-        "freelancer accepted. job offer removed from the other's pendingWorkOffers array.",
-    });
   } catch (err) {
     console.log(err);
-    return res.status(500).json({ error: "Server Error!" });
+    return res.status(500).json({ error: 'Server Error!' });
   }
 };
+
+
+
+
+
+
+
 
 /*************************PRIVATE JOB OFFERS ******************/
 
@@ -363,8 +359,8 @@ export const createPrivateJob = async (
   }
 };
 
-// edit private job offer ( aziz )
 
+// edit private job offer ( aziz )
 export const editPrivateJob = async (
   req: express.Request,
   res: express.Response
@@ -452,7 +448,7 @@ export const cancelJobOffer = async (
   }
 };
 
-// get both private and publicj ob offers from the databse
+// get both private and public job offers from the databse(aziz)
 export const getAllJobOffers = async (
   req: express.Request,
   res: express.Response
@@ -479,7 +475,8 @@ export const getAllPrivateJobOffers = async (
   return res.json({ allprvjobs });
 };
 
-//
+
+// get all public work offer (aziz)
 export const getPublicWorkOffer = async (
   req: express.Request,
   res: express.Response

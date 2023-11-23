@@ -15,6 +15,7 @@ import workRouter from "./Work/Router";
 import languagesRouter from "./utils/Languages/Router";
 import CompanyWorkOfferRouter from "./WorkOffer/Company/router";
 import freelancerNameSpaceLogic from "./Freelancer/freelancerSocketLogic";
+import {Eureka} from "eureka-js-client";
 dotenv.config();
 const app = express();
 
@@ -64,3 +65,31 @@ serverApp.listen(5000, () => {
 
 const freelancerNameSpace = io.of("/freelancer");
 freelancerNameSpaceLogic(freelancerNameSpace);
+
+
+// Eureka client configuration
+const eurekaClient = new Eureka({
+    instance: {
+        app: "NODE-SERVICE",
+        hostName: "localhost",
+        ipAddr: "127.0.0.1",
+        port: {
+            "$": 5000,
+            "@enabled": true,
+        },
+        vipAddress: "your-application-name",
+        dataCenterInfo: {
+            "@class": "com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo",
+            name: "MyOwn",
+        },
+        statusPageUrl: "http://localhost:5000",
+    },
+    eureka: {
+        host: "localhost",
+        port: 8761,
+        servicePath: "/eureka/apps/",
+    },
+});
+
+// Register with Eureka
+eurekaClient.start();

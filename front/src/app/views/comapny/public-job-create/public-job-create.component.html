@@ -1,0 +1,60 @@
+<!-- public-job-create-form.component.html -->
+
+<form [formGroup]="publicJobOfferForm" (ngSubmit)="onSubmit()">
+  <!-- Title -->
+  <div class="form-group">
+    <label for="Title">Title:</label>
+    <input type="text" id="Title" formControlName="Title" class="form-control" required>
+  </div>
+
+  <!-- Work Title -->
+  <div class="form-group">
+    <label for="WorkTitle">Work Title:</label>
+    <input type="text" id="WorkTitle" formControlName="WorkTitle" class="form-control">
+  </div>
+
+  <!-- Description -->
+  <div class="form-group">
+    <label for="Description">Description:</label>
+    <textarea id="Description" formControlName="Description" class="form-control" rows="3" required></textarea>
+  </div>
+
+  <!-- Note -->
+  <div class="form-group">
+    <label for="Note">Note:</label>
+    <textarea id="Note" formControlName="Note" class="form-control" rows="2"></textarea>
+  </div>
+
+  <!-- PayPerTask -->
+  <div formGroupName="PayPerTask"> <!-- Nesting FormGroup for PayPerTask -->
+    <div class="form-group">
+      <label for="ExperienceLevel">Experience Level:</label>
+      <input type="text" id="ExperienceLevel" formControlName="ExperienceLevel" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="FixedPrice">Fixed Price:</label>
+      <input type="text" id="FixedPrice" formControlName="FixedPrice" class="form-control">
+    </div>
+  </div>
+
+  <!-- WorkSpeciality -->
+  <div class="form-group">
+    <label for="WorkSpeciality">Work Speciality:</label>
+    <input type="text" id="WorkSpeciality" formControlName="WorkSpeciality" class="form-control" required>
+  </div>
+
+  <!-- CompanyName -->
+  <div class="form-group">
+    <label for="CompanyName">Company Name:</label>
+    <input type="text" id="CompanyName" formControlName="CompanyName" class="form-control" required>
+  </div>
+
+  <!-- CompanyId -->
+  <div class="form-group">
+    <label for="CompanyId">Company ID:</label>
+    <input type="text" id="CompanyId" formControlName="CompanyId" class="form-control" required>
+  </div>
+
+  <!-- Submit Button -->
+  <button type="submit" class="btn btn-primary">Create Public Job Offer</button>
+</form>

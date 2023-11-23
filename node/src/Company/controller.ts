@@ -100,7 +100,7 @@ export const verifyAccount = async (
     if (VerificationCode != unverifiedCompany.VerificationCode) {
       return res.json({ error: "Try Again Later !" });
     }
-    unverifiedCompany.AccountVerficiationStatus = true;
+    unverifiedCompany.AccountVerificationStatus = true;
     await unverifiedCompany.save();
     return res.json({ sucess: "Account verified you can now log in !" });
   } catch (err) {
@@ -130,7 +130,7 @@ export const auth = async (req: express.Request, res: express.Response) => {
     if (!passwordcheck) {
       return res.status(404).json({ Message: "Invalid email or password !" });
     }
-    if (companyAccount.AccountVerficiationStatus === false) {
+    if (companyAccount.AccountVerificationStatus === false) {
       return res.json({
         emailError: "You need to verify your email first before logging in !",
       });

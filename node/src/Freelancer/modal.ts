@@ -154,14 +154,14 @@ const freelancerSchema = new Schema({
     {
       PublicJobOfferId: {
         type: Schema.Types.ObjectId,
-        ref: "PrivateJobOffer",
+        ref: "PublicJobOffer",
       },
       Status: {
         type: String,
         enum: [
           "awaiting company response",
           "accepted",
-          "declined",
+          "rejected",
           "in progress",
           "done",
         ],
@@ -178,6 +178,12 @@ const freelancerSchema = new Schema({
           type: String,
         },
       },
+    },
+  ],
+  CompanyRecievedContracts: [
+    {
+      type: String,
+      default: null,
     },
   ],
 });

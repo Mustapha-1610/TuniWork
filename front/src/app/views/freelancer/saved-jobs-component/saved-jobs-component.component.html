@@ -1,1 +1,35 @@
-<p>saved-jobs-component works!</p>
+<div
+  *ngFor="let item of freeLancerInfos.SavedWorkOffers"
+  class="job-offer-card"
+>
+  <div class="job-offer-content" (click)="CheckOffre(item?.WorkId)">
+    <div *ngIf="errMessage" class="error-message">{{ errMessage }}</div>
+    <h2 class="job-title">{{ item.WorkTitle }}</h2>
+    <p class="job-description">{{ item.WorkDescription }}</p>
+  </div>
+  <div class="job-actions">
+    <button
+      type="button"
+      (click)="unsavePwo(item?.WorkId)"
+      class="unsave-button"
+    >
+      Unsave
+    </button>
+    <button
+      type="button"
+      *ngIf="!isWorkOfferApplyed(item?.WorkId)"
+      (click)="PWOApply(item?.WorkId)"
+      class="apply-button"
+    >
+      Apply
+    </button>
+    <button
+      type="button"
+      *ngIf="isWorkOfferApplyed(item?.WorkId)"
+      (click)="PWOUnapply(item?.WorkId)"
+      class="unapply-button"
+    >
+      Unapply
+    </button>
+  </div>
+</div>

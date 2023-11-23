@@ -61,12 +61,21 @@ freelancerRouter.post(
 );
 
 //
+freelancerRouter.put("/unapplyPWO", freelancerController.unapplyForPWO);
+
+//
 freelancerRouter.put("/savePWO", freelancerController.savePublicJobOffer);
 
 //
 freelancerRouter.put("/unsavePWO", freelancerController.unsavePWO);
 
 //
-freelancerRouter.put("/unapplyPWO", freelancerController.unapplyForPWO);
+freelancerRouter.post(
+  "/sendFreelancerContract",
+  freelancerController.sendFreelancerContract
+);
+
+//
+freelancerRouter.post("/filterPWOSearch", freelancerController.filterPWOSearch);
 
 export default freelancerRouter;

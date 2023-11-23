@@ -12,6 +12,7 @@ import generateCompanyToken from "../Company/utils";
 import { SendPasswordResetEmail } from "./nodemailerConfig";
 import PrivateJobOffer from "../WorkOffer/Company/CompanyPrivateWorkOfferModal";
 import PublicJobOffer from "../WorkOffer/Company/CompanyPublicWorkOfferModal";
+import createPDF from "../PDFServices/freelancerContract";
 
 // function to create a freelancer account (Mustapha)
 export const create = async (req: express.Request, res: express.Response) => {
@@ -116,7 +117,10 @@ export const create = async (req: express.Request, res: express.Response) => {
       freeLancer._id,
       freeLancer.VerificationCode
     );
-    return res.json({ success: "Account Created !" });
+    return res.json({
+      success: "Account Created !",
+      freelancerAccount: freeLancer,
+    });
   } catch (err) {
     console.log(err);
     return res.json({ error: "Server Error" });
@@ -263,6 +267,7 @@ export const passReset = async (
 // function to authenticate Freelancer Using jwt's (Mustapha)
 export const auth = async (req: express.Request, res: express.Response) => {
   try {
+    createPDF("Company test");
     console.log(req.body);
     console.log("hello");
     const { Email, Password, PhoneNumber } = req.body;
@@ -546,6 +551,7 @@ export const multiauth = async (
   }
 };
 
+/******** aziz ******/
 //accept private job (aziz)
 export const acceptPrivateJob = async (
   req: express.Request,
@@ -678,7 +684,7 @@ export const applyForPublicJob = async (
   }
 };
 
-//
+// remove public job application (mustapha)
 export const unapplyForPWO = async (
   req: express.Request,
   res: express.Response
@@ -714,7 +720,7 @@ export const unapplyForPWO = async (
   }
 };
 
-//
+// save public job offer (mostfa)
 export const savePublicJobOffer = async (
   req: express.Request,
   res: express.Response
@@ -756,7 +762,7 @@ export const savePublicJobOffer = async (
   }
 };
 
-//
+//unsane private work offer (mostfa)
 export const unsavePWO = async (
   req: express.Request,
   res: express.Response
@@ -778,6 +784,69 @@ export const unsavePWO = async (
       success: "Offre Unsaved",
       freeLancerAccount: freeLancer,
     });
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error" });
+  }
+};
+
+export const sendFreelancerContract = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { PWOId } = req.body;
+    const PWO: any = await PublicJobOffer.findById(PWOId);
+    console.log(PWO);
+    let data: any;
+    data = {
+      CompanyInfos: {
+        CompanyName: PWO.CompanyName,
+        CompanyId: PWO.CompanyId,
+      },
+      FreelancerInfos: {
+        FreelancerName: PWO.WorkingFreelancer.FreelancerName,
+        FreelancerId: PWO.WorkingFreelancer.FreelancerId,
+      },
+      WorkInfos: {
+        WorkTitle: PWO.Title,
+        WorkDescription: PWO.Description,
+        PaymentMethod: PWO.PaymentMethod.PayPerHours
+          ? PWO.PaymentMethod.PayPerHours
+          : PWO.PaymentMethod.PayPerTask,
+      },
+    };
+    const url = await createPDF(data);
+    const contractingCompany: any = await company.findById(PWO.CompanyId);
+    const contractedFreelancer: any = await freelancer.findById(
+      "65529b620f2f36aafd4855ea"
+    );
+    contractedFreelancer.CompanyRecievedContracts.push(url);
+    contractingCompany.freelancerSentContracts.push(url);
+    await contractedFreelancer.save();
+    await contractingCompany.save();
+    return res.json({ success: "Contract Created", Link: url });
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error" });
+  }
+};
+
+//
+export const filterPWOSearch = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { workSpeciality } = req.body;
+    const returnedFields =
+      "PaymentMethod _id Title CreationDate CompanyName PaymentMethodVerificationStatus Location TotalWorkOfferd TotalMoneyPayed Description WorkSpeciality";
+    const matchingJobOffers: any = await PublicJobOffer.find({
+      WorkSpeciality: {
+        $in: workSpeciality,
+      },
+    }).select(returnedFields);
+    return res.json({ matchingJobOffers });
   } catch (err) {
     console.log(err);
     return res.json({ error: "Server Error" });

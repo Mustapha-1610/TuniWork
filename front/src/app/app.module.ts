@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
+
 import { AppComponent } from './app.component';
 import { LayoutModule } from './layout/layout.module';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -20,8 +21,24 @@ import {
   SocialAuthServiceConfig,
 } from '@abacritt/angularx-social-login';
 import { WithCredentialsInterceptor } from 'src/with-credentials.interceptor';
+
+
+
+
+//aziz
+
+import { PublicJobCreateComponent } from './views/comapny/public-job-create/public-job-create.component';
+
+
+
+
+
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent,
+    PublicJobCreateComponent,
+
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
