@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { CompanyService } from 'src/app/views/services/company.service';
 
 @Component({
@@ -7,8 +8,12 @@ import { CompanyService } from 'src/app/views/services/company.service';
   styleUrls: ['./company-layout.component.css'],
 })
 export class CompanyLayoutComponent {
-  constructor(private cs: CompanyService) {}
+  constructor(private cs: CompanyService, private router: Router) {}
   logout() {
     this.cs.logout();
   }
+
+
+
+
 }

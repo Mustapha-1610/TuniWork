@@ -256,7 +256,7 @@ export const getAllFreelancers = async (  req: express.Request,  res: express.Re
 //save freelancer (aziz)
 export const saveFreelancer = async (req: express.Request, res: express.Response) => {
   try {
-    const { companyId, freelancerId } = req.body;
+    const { companyId, freelancerId } = req.params;
 
 
     // Check if the company and freelancer exist
@@ -303,6 +303,48 @@ export const saveFreelancer = async (req: express.Request, res: express.Response
 };
 
 
+export const getSavedFreelancers = async (req: express.Request, res: express.Response) => {
+  try {
+    const { companyId } = req.params;
+
+    // Find the company by ID
+    const company = await Company.findById(companyId);
+
+    if (!company) {
+      return res.status(404).json({ error: 'Company not found' });
+    }
+
+    // Extract saved freelancers from the company document
+    const savedFreelancers = company.savedFreelancers;
+
+    return res.json({ savedFreelancers });
+  } catch (error) {
+    console.error('Error in getSavedFreelancers:', error);
+    return res.status(500).json({ error: 'Server Error' });
+  }
+};
+
+//view details of a freelancer
+export const viewFreelancerDetails = async (req: express.Request, res: express.Response) => {
+try {
+    const { freelancerId } = req.params;
+
+    // Find the freelancer by ID
+    const freelancer = await Freelancer.findById(freelancerId);
+
+    if (!freelancer) {
+      return res.status(404).json({ error: 'Freelancer not found' });
+    }
+
+    // Send the freelancer details in the response
+    return res.json({ freelancer });
+  } catch (error) {
+    console.error('Error in getFreelancerDetails:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  };
+
+  
+}
 
 
 

@@ -573,6 +573,10 @@ export const multiauth = async (
   }
 };
 
+
+
+
+
 /******** aziz ******/
 //accept private job (aziz)
 export const acceptPrivateJob = async (

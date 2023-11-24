@@ -1,0 +1,65 @@
+<form [formGroup]="privateJobCreateForm" (ngSubmit)="onSubmit()">
+  
+  <!-- Title Input -->
+  <div class="mb-3">
+    <label for="title" class="form-label">Title</label>
+    <input type="text" class="form-control" id="title" formControlName="Title" required>
+  </div>
+
+  <!-- Description Input -->
+  <div class="mb-3">
+    <label for="description" class="form-label">Description</label>
+    <textarea class="form-control" id="description" formControlName="Description" required></textarea>
+  </div>
+
+  <!-- Note Input -->
+  <div class="mb-3">
+    <label for="note" class="form-label">Note</label>
+    <input type="text" class="form-control" id="note" formControlName="Note">
+  </div>
+
+  <!-- Experience Level Input -->
+  <div class="mb-3">
+    <label for="experienceLevel" class="form-label">Experience Level</label>
+    <input type="text" class="form-control" id="experienceLevel" formControlName="ExperienceLevel" required>
+  </div>
+
+  <!-- Fixed Price Input -->
+  <div class="mb-3">
+    <label for="fixedPrice" class="form-label">Fixed Price</label>
+    <input type="text" class="form-control" id="fixedPrice" formControlName="FixedPrice" required>
+  </div>
+
+  <!-- Company Name Input -->
+  <div class="mb-3">
+    <label for="companyName" class="form-label">Company Name</label>
+    <input type="text" class="form-control" id="companyName" formControlName="CompanyName">
+  </div>
+
+  <!-- Deadline Input -->
+  <div class="mb-3">
+    <label for="deadline" class="form-label">Deadline</label>
+    <input type="datetime-local" class="form-control" id="deadline" formControlName="DeadLine" required>
+  </div>
+
+  <!-- Work Title Input -->
+  <div class="mb-3">
+    <label for="workTitle" class="form-label">Work Title</label>
+    <input type="text" class="form-control" id="workTitle" formControlName="WorkTitle">
+  </div>
+
+  <!-- Company ID Input -->
+  <div class="mb-3">
+    <label for="companyId" class="form-label">Company ID</label>
+    <input type="text" class="form-control" id="companyId" formControlName="CompanyId">
+  </div>
+
+  <!-- Freelancer ID Input -->
+  <div class="mb-3">
+    <label for="freelancerId" class="form-label">Freelancer ID</label>
+    <input type="text" class="form-control" id="freelancerId" formControlName="FreelancerId" [value]="freelancerId" readonly>
+  </div>
+
+  <!-- Submit Button -->
+  <button type="submit" class="btn btn-primary">Create Private Job Offer</button>
+</form>

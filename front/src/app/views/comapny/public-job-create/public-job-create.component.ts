@@ -27,33 +27,27 @@ export class PublicJobCreateComponent {
         FixedPrice: [''],
       }),
       WorkSpeciality: [''],
-      CompanyName: [''], // Assuming this is also a FormControl
-      CompanyId: [''], // Assuming this is also a FormControl
+      CompanyName: [''],
+      CompanyId: [''],
     });
   }
 
-
-  // public-job-create.component.ts
 
 onSubmit(): void {
   if (this.publicJobOfferForm.valid) {
     const formData = this.publicJobOfferForm.value;
     console.log('Form Data:', formData);
 
-    // Call the service function here
     this.cs.createPublicJob(formData).subscribe(
       (response) => {
         console.log('Work offer created successfully:', response);
-        // Optionally, you can reset the form or navigate to another page
+        // gedi l route
         this.publicJobOfferForm.reset();
       },
       (error) => {
         console.error('Error creating work offer:', error);
-        // Handle error as needed
       }
     );
-  } else {
-    // Form is invalid, show error messages or handle accordingly
   }
 }
 

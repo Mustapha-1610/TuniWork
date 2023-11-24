@@ -1,5 +1,3 @@
-<!-- public-job-create-form.component.html -->
-
 <form [formGroup]="publicJobOfferForm" (ngSubmit)="onSubmit()">
   <!-- Title -->
   <div class="form-group">
@@ -25,8 +23,8 @@
     <textarea id="Note" formControlName="Note" class="form-control" rows="2"></textarea>
   </div>
 
-  <!-- PayPerTask -->
-  <div formGroupName="PayPerTask"> <!-- Nesting FormGroup for PayPerTask -->
+  <!-- PayPerTask bch narja3 LEL PART HEDHI 5aterha table w dra chnawa -->
+  <div formGroupName="PayPerTask">
     <div class="form-group">
       <label for="ExperienceLevel">Experience Level:</label>
       <input type="text" id="ExperienceLevel" formControlName="ExperienceLevel" class="form-control">
@@ -49,7 +47,7 @@
     <input type="text" id="CompanyName" formControlName="CompanyName" class="form-control" required>
   </div>
 
-  <!-- CompanyId -->
+  <!-- CompanyId bch nrodou invis w bch njibou mel local host-->
   <div class="form-group">
     <label for="CompanyId">Company ID:</label>
     <input type="text" id="CompanyId" formControlName="CompanyId" class="form-control" required>

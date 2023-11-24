@@ -24,8 +24,12 @@ companyRouter.put("/disable", companyController.disableAccount);
 
 companyRouter.get("/getAllFreelancers",companyController.getAllFreelancers);
 
-companyRouter.post("/saveFreelancer", companyController.saveFreelancer);
+companyRouter.post("/saveFreelancer/:companyId/:freelancerId", companyController.saveFreelancer);
 
+
+companyRouter.get("/viewFreelancerDetails/:freelancerId", companyController.viewFreelancerDetails);
+
+companyRouter.get('/getSavedFreelancers/:companyId', companyController.getSavedFreelancers);
 
 
 
