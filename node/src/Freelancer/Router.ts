@@ -42,15 +42,33 @@ freelancerRouter.put("/PassReset", freelancerController.passReset);
 
 freelancerRouter.post("/LgoogleAuth", freelancerController.googleAuth);
 
-
 //accept private joboffer (aziz)
-freelancerRouter.post("/acceptPrivateJob/:jobId", freelancerController.acceptPrivateJob);
+freelancerRouter.post(
+  "/acceptPrivateJob/:jobId",
+  freelancerController.acceptPrivateJob
+);
 
 //decline private joboffer (aziz)
-freelancerRouter.post("/declinePrivateJob/:jobId", freelancerController.declinePrivateJob);
+freelancerRouter.post(
+  "/declinePrivateJob/:jobId",
+  freelancerController.declinePrivateJob
+);
 
-//apply for a public job (aziz) 
-freelancerRouter.post("/applyForPublicJob/:freelancerId/:jobOfferId", freelancerController.applyForPublicJob);
+//apply for a public job (aziz)
+freelancerRouter.post(
+  "/applyForPublicJob",
+  freelancerController.applyForPublicJob
+);
+
+//
+freelancerRouter.put("/unapplyPWO", freelancerController.unapplyForPWO);
+
+
+//
+freelancerRouter.put("/savePWO", freelancerController.savePublicJobOffer);
+
+//
+freelancerRouter.put("/unsavePWO", freelancerController.unsavePWO);
 
 
 export default freelancerRouter;

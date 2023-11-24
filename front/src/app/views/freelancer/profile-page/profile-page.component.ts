@@ -31,12 +31,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       });
     });
   }
-
-  testCookie() {
-    this.fs.testCookie().subscribe((res: any) => {
-      console.log(res);
-    });
-  }
   ngOnDestroy() {
     this.socket.emit('userDisconnected', this.freeLancerInfos._id);
   }

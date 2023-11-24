@@ -2,27 +2,96 @@ import express from "express";
 import * as CompanyWorkOfferController from "./controller";
 const CompanyWorkOfferRouter = express.Router();
 
+CompanyWorkOfferRouter.post(
+  "/createPublicJob",
+  CompanyWorkOfferController.createPublicJob
+);
 
-//partie l public job 
-CompanyWorkOfferRouter.post("/createPublicJob", CompanyWorkOfferController.createPublicJob);
-CompanyWorkOfferRouter.get("/:publicJobOfferId/applied-freelancers",CompanyWorkOfferController.getAppliedFreelancers);
-CompanyWorkOfferRouter.get("/:publicJobOfferId",CompanyWorkOfferController.getPublicJobOffer);
-CompanyWorkOfferRouter.post("/cancelPublicJobOffer/:PublicJobOfferId/:freelancerId", CompanyWorkOfferController.cancelPublicJobOffer);
-CompanyWorkOfferRouter.put('/editPublicJob/:PublicJobOfferId', CompanyWorkOfferController.editPublicJob);
-CompanyWorkOfferRouter.post('/acceptFreelancer/:publicJobOfferId/:freelancerId', CompanyWorkOfferController.acceptFreelancer);
+CompanyWorkOfferRouter.get(
+  "/getPublicJobOffer/:publicJobOfferId", CompanyWorkOfferController.getPublicJobOffer
+)
 
-
-
-
-
-// partie l private job
-CompanyWorkOfferRouter.post("/createPrivateJob", CompanyWorkOfferController.createPrivateJob)
-CompanyWorkOfferRouter.put('/editPrivateJob/:PrivateJobOfferId', CompanyWorkOfferController.editPrivateJob);
-CompanyWorkOfferRouter.post("/cancelJobOffer/:PrivateJobOfferId/:freelancerId", CompanyWorkOfferController.cancelJobOffer);
-CompanyWorkOfferRouter.get("/allJobOffers", CompanyWorkOfferController.getAllJobOffers);
+CompanyWorkOfferRouter.get(
+  "/getPublicJobDetails/:publicJobOfferId", CompanyWorkOfferController.getPublicJobDetails
+)
 
 
+CompanyWorkOfferRouter.put(
+  "/editPublicJob/:PublicJobOfferId", CompanyWorkOfferController.editPublicJob
+)
 
+CompanyWorkOfferRouter.delete(
+  //"/cancelPublicJobOffer/:freelancerId/:PublicJobOfferId", CompanyWorkOfferController.cancelPublicJobOffer
+  "/cancelPublicJobOffer/:PublicJobOfferId", CompanyWorkOfferController.cancelPublicJobOffer
+
+)
+
+//get all public job offers of a company
+CompanyWorkOfferRouter.get(
+  "/getAllPublicJobOffers/:companyId",
+  CompanyWorkOfferController.getAllPublicJobOffers
+);
+
+
+
+
+
+
+
+
+/************************* partie l private job ***********************/
+CompanyWorkOfferRouter.post(
+  "/createPrivateJob",
+  CompanyWorkOfferController.createPrivateJob
+);
+
+
+CompanyWorkOfferRouter.put(
+  "/editPrivateJob/:PrivateJobOfferId",  CompanyWorkOfferController.editPrivateJob
+);
+
+
+CompanyWorkOfferRouter.delete(
+  //"/cancelJobOffer/:PrivateJobOfferId/:freelancerId",
+  "/cancelJobOffer/:PrivateJobOfferId",
+  CompanyWorkOfferController.cancelJobOffer
+);
+
+
+CompanyWorkOfferRouter.get(
+  "/allJobOffers/:companyId",
+  CompanyWorkOfferController.getAllJobOffers
+);
+
+
+//get all private job offers of a company
+CompanyWorkOfferRouter.get(
+  "/getAllPrivateJobOffers/:companyId",
+  CompanyWorkOfferController.getAllPrivateJobOffers
+);
+
+
+CompanyWorkOfferRouter.post(
+  "/getMatchingPublicWorkOffers",
+  CompanyWorkOfferController.FindBestMatchesPublicWorkOffers
+);
+
+
+CompanyWorkOfferRouter.post(
+  "/getPublicWorkOffer",
+  CompanyWorkOfferController.getPublicWorkOffer
+);
+
+
+CompanyWorkOfferRouter.get(
+  "/getPrivateJobOfferDetails/:privateJobOfferId",
+  CompanyWorkOfferController.getPrivateJobOfferDetails
+);
+
+CompanyWorkOfferRouter.post(
+  "/acceptFreelancer/:publicJobOfferId/:freelancerId",
+  CompanyWorkOfferController.acceptFreelancer
+);
 
 
 

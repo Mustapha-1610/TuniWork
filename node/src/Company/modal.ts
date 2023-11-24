@@ -3,43 +3,7 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 const companySchema = new Schema({
 
-   //CHEF(CEO) INFOS
-  /*ChefName: {
-    type: String,
-    required: true,
-  },
-  ChefSurname: {
-    type: String,
-    required: true,
-  },
-
-  ChefProfilePicture: {
-    type: String,
-    default:
-      "https://firebasestorage.googleapis.com/v0/b/tunibids.appspot.com/o/Windows_10_Default_Profile_Picture.svg.png?alt=media&token=e7aca30d-6eea-45ff-8522-db048fcb8c38",
-  },
-
-  ChefEmail: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-
-
-
-  ChefCin: {
-    type: Number,
-    required: true,
-  },
-
-  ChefPhone: {
-    type: Number,
-    required: true,
-  },*/
-
-
-
-  
+   
   CompanyName: {
     type: String,
     required: true,
@@ -92,7 +56,7 @@ const companySchema = new Schema({
     type: Boolean,
     default: true,
   },
-  AccountVerficiationStatus: {
+  AccountVerificationStatus: {
     type: Boolean,
     default: false,
   },
@@ -102,9 +66,6 @@ const companySchema = new Schema({
     type: Date,
     default: new Date(),
   },
-
-
-
 
 
 

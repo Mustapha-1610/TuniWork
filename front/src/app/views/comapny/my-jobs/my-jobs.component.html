@@ -1,0 +1,60 @@
+<div class="container">
+  <div class="card shadow mb-4">
+    <div class="card-body">
+      <h3>Private Work Offers</h3>
+      <table class="table table-striped">
+        <tr>
+          <th>Title</th>
+          <th>Work Title</th>
+          <th>Description</th>
+          <th>Date Création</th>
+          <th>Actions</th>
+        </tr>
+        <tbody *ngFor="let privateJobOffer of privateJobOffers">
+          <tr>
+            <td>{{ privateJobOffer.Title }}</td>
+            <td>{{ privateJobOffer.WorkTitle }}</td>
+            <td>{{ privateJobOffer.Description }}</td>
+            <td>{{ privateJobOffer.CreationDate | date : "dd/MM/yyyy" }}</td>
+            <td>
+              <a class="btn btn-success" [routerLink]="['/private-job-edit', privateJobOffer._id]">Modifier</a>
+              <a class="btn btn-danger" (click)="onDeletePrivateJobOffer(privateJobOffer._id)">Supprimer</a>
+              <a class="btn btn-info" [routerLink]="['/private-job-details', privateJobOffer._id]">Details</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+
+  <div class="card shadow mb-4">
+    <div class="card-body">
+      <h3>Public Work Offers</h3>
+      <table class="table table-striped">
+        <tr>
+          <th>Title</th>
+          <th>Work Title</th>
+          <th>Description</th>
+          <th>Date Création</th>
+          <th>Actions</th>
+        </tr>
+        <tbody *ngFor="let publicJobOffer of publicJobOffers">
+          <tr>
+            <td>{{ publicJobOffer.Title }}</td>
+            <td>{{ publicJobOffer.WorkTitle }}</td>
+            <td>{{ publicJobOffer.Description }}</td>
+            <td>{{ publicJobOffer.CreationDate | date : "dd/MM/yyyy" }}</td>
+            <td>
+
+              <a class="btn btn-success" [routerLink]="['/edit-job', publicJobOffer._id]">Modifier</a>
+               <a class="btn btn-danger" (click)="onDelete(publicJobOffer._id)">Supprimer</a>
+               <a class="btn btn-info" [routerLink]="['/public-job-details', publicJobOffer._id]">Details</a>
+              </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
