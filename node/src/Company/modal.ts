@@ -1,4 +1,3 @@
-
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 const companySchema = new Schema({
@@ -14,7 +13,6 @@ const companySchema = new Schema({
     required: true,
   },
 
-  
   Password: {
     type: String,
     required: true,
@@ -46,11 +44,9 @@ const companySchema = new Schema({
     required: true,
   },
 
-
   VerificationCode: {
     type: String,
   },
-
 
   AccountActivationStatus: {
     type: Boolean,
@@ -60,7 +56,6 @@ const companySchema = new Schema({
     type: Boolean,
     default: false,
   },
-
 
   JoinDate: {
     type: Date,
@@ -83,14 +78,12 @@ const companySchema = new Schema({
     default: false,
   },
 
+  // what does this do
+  WorkOfferd: {
+    type: Number,
+    default: 0,
+  },
 
-    // what does this do
-    WorkOfferd: {
-      type: Number,
-      default: 0,
-    },
-  
-    
   MoneySpent: {
     type: Number,
     default: 0,
@@ -100,7 +93,7 @@ const companySchema = new Schema({
     {
       freelancerId: {
         type: Schema.Types.ObjectId,
-        ref: 'Freelancer',
+        ref: "Freelancer",
       },
       freelancerName: {
         type: String,

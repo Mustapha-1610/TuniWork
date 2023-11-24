@@ -30,6 +30,7 @@
     "jquery": "^3.7.1",
     "jwt-decode": "^4.0.0",
     "lucide-angular": "^0.291.0",
+    "ng-angular-popup": "^0.5.2",
     "ng-multiselect-dropdown": "^1.0.0",
     "ngx-spinner": "^16.0.2",
     "popper.js": "^1.16.1",

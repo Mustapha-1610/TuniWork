@@ -6,7 +6,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomeLayoutComponent } from './home-layout/home-layout.component';
 import { CompanyLayoutComponent } from './company-layout/company-layout.component';
 @NgModule({
-  declarations: [FreelancerlayoutComponent, HomeLayoutComponent, CompanyLayoutComponent],
+  declarations: [
+    FreelancerlayoutComponent,
+    HomeLayoutComponent,
+    CompanyLayoutComponent,
+  ],
   imports: [CommonModule, RouterModule, ReactiveFormsModule, FormsModule],
 })
 export class LayoutModule {}

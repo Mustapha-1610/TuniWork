@@ -13,15 +13,13 @@ freelancerRouter.post("/profile", freelancerController.getProfile);
 
 freelancerRouter.post("/logout", freelancerController.logout);
 
-freelancerRouter.put(
-  "/resetPassword/:freelancerId",
-  freelancerController.passwordReset
-);
-
 freelancerRouter.get(
   "/getAllFreelancers",
   freelancerController.getAllFreelancers
 );
+
+//
+freelancerRouter.put("/updatePP", freelancerController.updatePP);
 
 freelancerRouter.put("/update", freelancerController.updateInfo);
 
@@ -62,7 +60,6 @@ freelancerRouter.post(
 
 //
 freelancerRouter.put("/unapplyPWO", freelancerController.unapplyForPWO);
-
 
 //
 freelancerRouter.put("/savePWO", freelancerController.savePublicJobOffer);

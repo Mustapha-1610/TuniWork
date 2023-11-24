@@ -16,7 +16,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { provideFirebaseApp, getApp, initializeApp } from '@angular/fire/app';
 import { getStorage, provideStorage } from '@angular/fire/storage';
-import firebase from 'firebase/compat/app';
 import 'firebase/compat/storage';
 import { FreelancerVerificationPageComponent } from './freelancer-verification-page/freelancer-verification-page.component';
 import { environment } from 'src/environment';

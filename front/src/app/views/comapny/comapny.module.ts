@@ -16,6 +16,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { PrivateJobDetailsComponent } from './private-job-details/private-job-details.component';
 import { PrivateJobEditComponent } from './private-job-edit/private-job-edit.component';
 
+
 @NgModule({
   declarations: [
     ProfilePageComponent,

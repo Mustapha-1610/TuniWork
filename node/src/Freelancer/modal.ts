@@ -180,7 +180,6 @@ const freelancerSchema = new Schema({
       },*/
     },
   ],
-
 });
 const CombinedFreelancerSchema = new Schema({
   ...usersSchema.obj,

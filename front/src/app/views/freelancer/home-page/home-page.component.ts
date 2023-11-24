@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { BestMatchesComponentComponent } from '../best-matches-component/best-matches-component.component';
 import { SavedJobsComponentComponent } from '../saved-jobs-component/saved-jobs-component.component';
+import { ApplyedJobsComponentComponent } from '../applyed-jobs-component/applyed-jobs-component.component';
 
 @Component({
   selector: 'app-home-page',
@@ -18,5 +19,8 @@ export class HomePageComponent {
   }
   setSavedJobsComponent() {
     this.displayedComponent = SavedJobsComponentComponent;
+  }
+  setApplyedJobsComponent() {
+    this.displayedComponent = ApplyedJobsComponentComponent;
   }
 }
