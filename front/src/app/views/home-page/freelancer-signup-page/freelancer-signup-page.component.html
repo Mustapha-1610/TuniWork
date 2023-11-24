@@ -153,59 +153,66 @@
     </div>
 
     <!-- Work Title Dropdown -->
-    <div class="mb-4">
-      <label class="block text-gray-700 text-sm font-bold mb-2" for="workTitle">
-        Work Title
-      </label>
-      <ng-multiselect-dropdown
-        id="workTitle"
-        formControlName="workTitle"
-        [placeholder]="'Select Work Title'"
-        [settings]="dropdownSettings"
-        [data]="dropdownList"
-        (onSelect)="onItemSelect($event)"
-        (onDeSelect)="onItemDeselect($event)"
-        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-      ></ng-multiselect-dropdown>
-    </div>
+    <form [formGroup]="form">
+      <div class="mb-4">
+        <label
+          class="block text-gray-700 text-sm font-bold mb-2"
+          for="workTitle"
+        >
+          Work Title
+        </label>
+        <ng-multiselect-dropdown
+          id="workTitle"
+          formControlName="workTitle"
+          [placeholder]="'Select Work Title'"
+          [settings]="dropdownSettings"
+          [data]="dropdownList"
+          (onSelect)="onItemSelect($event)"
+          (onDeSelect)="onItemDeselect($event)"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        ></ng-multiselect-dropdown>
+      </div>
 
-    <!-- Work Speciality Dropdown -->
-    <div class="mb-4">
-      <label
-        class="block text-gray-700 text-sm font-bold mb-2"
-        for="speciality"
-      >
-        Work Speciality
-      </label>
-      <ng-multiselect-dropdown
-        id="speciality"
-        formControlName="speciality"
-        [placeholder]="'Select Work Speciality'"
-        [settings]="dropdownSettings2"
-        [data]="specialityList"
-        (onSelect)="onSpecialitySelect($event)"
-        (onDeSelect)="onSpecialityDeselect($event)"
-        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-      ></ng-multiselect-dropdown>
-    </div>
+      <!-- Work Speciality Dropdown -->
+      <div class="mb-4">
+        <label
+          class="block text-gray-700 text-sm font-bold mb-2"
+          for="speciality"
+        >
+          Work Speciality
+        </label>
+        <ng-multiselect-dropdown
+          id="speciality"
+          formControlName="speciality"
+          [placeholder]="'Select Work Speciality'"
+          [settings]="dropdownSettings2"
+          [data]="specialityList"
+          (onSelect)="onSpecialitySelect($event)"
+          (onDeSelect)="onSpecialityDeselect($event)"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        ></ng-multiselect-dropdown>
+      </div>
 
-    <!-- Languages Dropdown -->
-    <div class="mb-4">
-      <label class="block text-gray-700 text-sm font-bold mb-2" for="languages">
-        Languages
-      </label>
-      <ng-multiselect-dropdown
-        id="languages"
-        formControlName="languages"
-        [placeholder]="'Languages You Work With'"
-        [settings]="dropdownSettings3"
-        [data]="languagesList"
-        (onSelect)="onSpecialitySelect($event)"
-        (onDeSelect)="onSpecialityDeselect($event)"
-        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-      ></ng-multiselect-dropdown>
-    </div>
-
+      <!-- Languages Dropdown -->
+      <div class="mb-4">
+        <label
+          class="block text-gray-700 text-sm font-bold mb-2"
+          for="languages"
+        >
+          Languages
+        </label>
+        <ng-multiselect-dropdown
+          id="languages"
+          formControlName="languages"
+          [placeholder]="'Languages You Work With'"
+          [settings]="dropdownSettings3"
+          [data]="languagesList"
+          (onSelect)="onSpecialitySelect($event)"
+          (onDeSelect)="onSpecialityDeselect($event)"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        ></ng-multiselect-dropdown>
+      </div>
+    </form>
     <!-- Submit Button -->
     <div class="flex justify-center mt-6">
       <button

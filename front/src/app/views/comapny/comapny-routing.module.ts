@@ -24,55 +24,52 @@ const routes: Routes = [
     component: ProfilePageComponent,
   },
   {
-    path:'my-jobs',
+    path: 'my-jobs',
     component: MyJobsComponent,
-    },
+  },
 
   {
     path: 'public-job-create',
     component: PublicJobCreateComponent,
   },
 
-{
-  path: 'edit-job/:jobOfferId',
-  component: PublicJobEditFormComponent,
-},
-{
-  path: 'public-job-details/:publicJobOfferId',
-  component: PublicJobDetailsComponent,
-},
-{
-  path:'freelancers',
-  component: TalentFreelancersComponent,
-},
-{
-  path: 'talent-freelancer-profile/:freelancerId',
-  component: TalentFreelancerProfileComponent,
-},
-{
-  path: 'saved-freelancers',
-  component: TalentSavedFreelancersComponent,
-},
-{
-  path: 'private-job-create/:freelancerId',
-  component: PrivateJobCreateComponent,
-},
-{
-  path: 'private-job-details/:privateJobOfferId',
-  component: PrivateJobDetailsComponent,
-},
-{
-  path: 'private-job-edit/:privateJobOfferId',
-  component: PrivateJobEditComponent,
-},
+  {
+    path: 'edit-job/:jobOfferId',
+    component: PublicJobEditFormComponent,
+  },
+  {
+    path: 'public-job-details/:publicJobOfferId',
+    component: PublicJobDetailsComponent,
+  },
+  {
+    path: 'freelancers',
+    component: TalentFreelancersComponent,
+  },
+  {
+    path: 'talent-freelancer-profile/:freelancerId',
+    component: TalentFreelancerProfileComponent,
+  },
+  {
+    path: 'saved-freelancers',
+    component: TalentSavedFreelancersComponent,
+  },
+  {
+    path: 'private-job-create/:freelancerId',
 
+    component: PrivateJobCreateComponent,
+  },
+  {
+    path: 'private-job-details/:privateJobOfferId',
+    component: PrivateJobDetailsComponent,
+  },
+  {
+    path: 'private-job-edit/:privateJobOfferId',
+    component: PrivateJobEditComponent,
+  },
 ];
 
 @NgModule({
-  imports: [
-    RouterModule.forChild(routes),
-    FormsModule,
-  ],
+  imports: [RouterModule.forChild(routes), FormsModule],
 
   exports: [RouterModule],
 })

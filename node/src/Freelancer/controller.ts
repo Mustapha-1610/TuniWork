@@ -573,10 +573,6 @@ export const multiauth = async (
   }
 };
 
-
-
-
-
 /******** aziz ******/
 //accept private job (aziz)
 export const acceptPrivateJob = async (
@@ -865,6 +861,7 @@ export const filterPWOSearch = async (
 ) => {
   try {
     const { workSpeciality } = req.body;
+    console.log(workSpeciality);
     const returnedFields =
       "PaymentMethod _id Title CreationDate CompanyName PaymentMethodVerificationStatus Location TotalWorkOfferd TotalMoneyPayed Description WorkSpeciality";
     const matchingJobOffers: any = await PublicJobOffer.find({
