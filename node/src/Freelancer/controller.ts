@@ -841,7 +841,7 @@ export const sendFreelancerContract = async (
     const url = await createPDF(data);
     const contractingCompany: any = await company.findById(PWO.CompanyId);
     const contractedFreelancer: any = await freelancer.findById(
-      "65529b620f2f36aafd4855ea"
+      "65607dbaddfb56f2bbf2bdd1"
     );
     contractedFreelancer.CompanyRecievedContracts.push(url);
     contractingCompany.freelancerSentContracts.push(url);
@@ -861,7 +861,6 @@ export const filterPWOSearch = async (
 ) => {
   try {
     const { workSpeciality } = req.body;
-    console.log(workSpeciality);
     const returnedFields =
       "PaymentMethod _id Title CreationDate CompanyName PaymentMethodVerificationStatus Location TotalWorkOfferd TotalMoneyPayed Description WorkSpeciality";
     const matchingJobOffers: any = await PublicJobOffer.find({

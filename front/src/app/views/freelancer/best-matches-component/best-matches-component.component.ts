@@ -15,6 +15,7 @@ export class BestMatchesComponentComponent implements OnInit {
   MatchingJobs: any;
   errMessage: any;
   publicWorkOfferInfos: any;
+  showCancel: boolean = false;
   getMatchingWorkOffers() {
     this.fs
       .getBestMatchingWO(this.freeLancerInfos._id)
@@ -86,13 +87,14 @@ export class BestMatchesComponentComponent implements OnInit {
     );
   }
   getOptionValue(event: any) {
-    console.log(event.target.value);
+    this.showCancel = true;
     this.errMessage = null;
     this.fs.filterPWOSearch(event.target.value).subscribe((res: any) => {
       this.MatchingJobs = res.matchingJobOffers;
     });
   }
   reset() {
+    this.showCancel = false;
     this.getMatchingWorkOffers();
   }
 }

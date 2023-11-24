@@ -9,6 +9,7 @@
       {{ option }}
     </option>
   </select>
+  <mat-icon *ngIf="showCancel" (click)="reset()">cancel</mat-icon>
 </div>
 <div *ngIf="errMessage" class="error-message">{{ errMessage }}</div>
 <div *ngFor="let item of MatchingJobs" class="job-offer-card">

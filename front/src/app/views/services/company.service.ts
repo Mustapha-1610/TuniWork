@@ -114,6 +114,16 @@ getPrivateJobOfferDetails(privateJobOfferId: any) {
   return this.http.get(`http://localhost:5000/api/companyWorkOffer/getPrivateJobOfferDetails/${privateJobOfferId}`);
 }
 
+acceptFreelancer(publicJobOfferId: string, freelancerId: string) {
+  const url = `http://localhost:5000/api/companyWorkOffer/acceptFreelancer/${publicJobOfferId}/${freelancerId}`;
+  return this.http.post(url, {}).pipe(
+    catchError((error) => {
+      console.error('Error accepting freelancer:', error);
+      throw error;
+    })
+  );
+}
+
 //cancel prv JO
 deletePrivateJobOffer(privateJobOfferId: string) {
   return this.http.delete(
