@@ -5,15 +5,15 @@
       <table class="table table-striped">
         <tr>
           <th>Title</th>
-          <th>Work Title</th>
+          <th>Status</th>
           <th>Description</th>
-          <th>Date Création</th>
+          <th>Creation Date</th>
           <th>Actions</th>
         </tr>
         <tbody *ngFor="let privateJobOffer of privateJobOffers">
           <tr>
             <td>{{ privateJobOffer.Title }}</td>
-            <td>{{ privateJobOffer.WorkTitle }}</td>
+            <td>{{ privateJobOffer.status }}</td>
             <td>{{ privateJobOffer.Description }}</td>
             <td>{{ privateJobOffer.CreationDate | date : "dd/MM/yyyy" }}</td>
             <td>
@@ -35,15 +35,15 @@
       <table class="table table-striped">
         <tr>
           <th>Title</th>
-          <th>Work Title</th>
+          <th>Status</th>
           <th>Description</th>
-          <th>Date Création</th>
+          <th>Creation Date</th>
           <th>Actions</th>
         </tr>
         <tbody *ngFor="let publicJobOffer of publicJobOffers">
           <tr>
             <td>{{ publicJobOffer.Title }}</td>
-            <td>{{ publicJobOffer.WorkTitle }}</td>
+            <td>{{ publicJobOffer.status }}</td>
             <td>{{ publicJobOffer.Description }}</td>
             <td>{{ publicJobOffer.CreationDate | date : "dd/MM/yyyy" }}</td>
             <td>

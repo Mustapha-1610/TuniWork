@@ -82,15 +82,12 @@ CompanyWorkOfferRouter.post(
   CompanyWorkOfferController.getPublicWorkOffer
 );
 
-<<<<<<< HEAD
 
 CompanyWorkOfferRouter.get(
   "/getPrivateJobOfferDetails/:privateJobOfferId",
   CompanyWorkOfferController.getPrivateJobOfferDetails
 );
 
-=======
->>>>>>> 9b28c0f9850eb9db384d434215ef19643ff80e4e
 CompanyWorkOfferRouter.post(
   "/acceptFreelancer/:publicJobOfferId/:freelancerId",
   CompanyWorkOfferController.acceptFreelancer
