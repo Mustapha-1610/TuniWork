@@ -65,15 +65,14 @@ export const SendPasswordResetEmail = async (
     .sendMail({
       from: user,
       to: email,
-      subject: "Account Activation",
+      subject: "TuniWork Account Password Reset",
       html: `
       <div style="font-family: Arial, sans-serif; font-size: 16px;">
-  <h1>TuniWork Freelance Account Activation</h1>
+  <h1>Password Reset</h1>
   <img src="https://img.freepik.com/premium-vector/password-reset-security-icon-line-vector_116137-1332.jpg?w=826" style="max-width: 600px; max-height: 320px;">
   <h3>Click The Button Below To Reset Your Password</h3>
   <p>This Link Will Expire In 1 Hour !</p>
   <a href="http://localhost:4200/PassReset?token=${token}" style="background-color: #E14F76; border: 1px solid #007bff; color: white; padding: 10px 20px; text-decoration: none;">Click Here</a>
-  <p>Thank you for choosing TuniWork!</p>
 </div>`,
     })
     .catch((err) => console.log(err));

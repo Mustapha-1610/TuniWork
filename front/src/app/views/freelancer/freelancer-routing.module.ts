@@ -6,7 +6,6 @@ import { HomePageComponent } from './home-page/home-page.component';
 import { FindWorkPageComponent } from './find-work-page/find-work-page.component';
 import { CheckWorkOfferDetailsComponent } from './check-work-offer-details/check-work-offer-details.component';
 import { EditInfosPageComponent } from './edit-infos-page/edit-infos-page.component';
-import { PassResetPageComponent } from './pass-reset-page/pass-reset-page.component';
 
 const routes: Routes = [
   { path: '', component: HomePageComponent },
@@ -15,7 +14,6 @@ const routes: Routes = [
   { path: 'WorkOffer/:id', component: CheckWorkOfferDetailsComponent },
   { path: 'browse', component: FindWorkPageComponent },
   { path: 'editInfos', component: EditInfosPageComponent },
-  { path: 'editPassword', component: PassResetPageComponent },
 ];
 
 @NgModule({

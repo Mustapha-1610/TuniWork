@@ -2,9 +2,29 @@
   <div
     class="flex flex-col items-center mt-10 shadow-lg rounded-lg bg-white p-6 lg:p-8"
   >
-    <button (click)="fileInput.click()">Change Picture</button>
+    <button
+      class="bg-black hover:bg-black-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+      (click)="fileInput.click()"
+    >
+      Change Picture
+    </button>
+    <div *ngIf="show" class="flex mt-3 space-x-3 mb-2 mt-2">
+      <button
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        (click)="changeProfilePicture()"
+      >
+        Upload
+      </button>
+      <button
+        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        (click)="cancel()"
+      >
+        Cancel
+      </button>
+    </div>
+
     <div
-      class="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-gray-300 shadow"
+      class="w-32 h-32 md:w-40 mt-2 md:h-40 rounded-full overflow-hidden border-4 border-gray-300 shadow"
     >
       <img
         [src]="freeLancerInfos.ProfilePicture"
@@ -12,6 +32,29 @@
         alt="Profile Picture"
       />
     </div>
+    <mat-progress-bar
+      *ngIf="uploadProgress !== undefined"
+      mode="determinate"
+      [value]="uploadProgress"
+      class="mt-4 w-1/2"
+      style="height: 10px"
+    ></mat-progress-bar>
+
+    <h1
+      class="text-3xl md:text-4xl font-semibold text-gray-800 mt-4 cursor-pointer"
+      *ngIf="!isEditing"
+      (click)="isEditing = true"
+    >
+      {{ freeLancerInfos.Name }}
+    </h1>
+    <input
+      class="text-1xl md:text-1xl font-semibold text-gray-800 mt-4"
+      *ngIf="isEditing"
+      [(ngModel)]="editableName"
+      (blur)="isEditing = false"
+      (keyup.enter)="isEditing = false; saveName()"
+    />
+
     <h1 class="text-3xl md:text-4xl font-semibold text-gray-800 mt-4">
       {{ freeLancerInfos.Name + " " + freeLancerInfos.Surname }}
     </h1>
@@ -20,11 +63,13 @@
       <p>Phone: {{ freeLancerInfos.PhoneNumber }}</p>
       <p>Email: {{ freeLancerInfos.Email }}</p>
     </div>
-    <a class="text-black" routerLink="/freelancer/editInfos"
-      ><button>Edit Informations</button></a
-    >
-    <button *ngIf="show" (click)="changeProfilePicture()">Upload</button>
-    <button *ngIf="show" (click)="cancel()">Cancel</button>
+    <a class="text-black" routerLink="/freelancer/editInfos">
+      <button
+        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+      >
+        Edit Informations
+      </button>
+    </a>
     <hr class="my-4 border-t border-gray-300 w-full" />
     <div class="mt-6 w-full">
       <h3 class="text-xl font-semibold text-gray-800 mb-4">Specialities</h3>

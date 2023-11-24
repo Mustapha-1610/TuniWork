@@ -86,4 +86,12 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       this.show = true;
     }
   }
+  isEditing = false;
+  editableName = `${this.freeLancerInfos.Name}`;
+
+  saveName() {
+    const names = this.editableName.split(' ');
+    this.freeLancerInfos.Name = names[0];
+    // Here you would typically send the updated name to the server
+  }
 }

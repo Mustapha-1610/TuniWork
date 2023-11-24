@@ -5,8 +5,6 @@ import { Injectable } from '@angular/core';
 })
 export class JwtServiceService {
   constructor() {}
-
-  // Decode the payload of the JWT token
   public decodePayload(token: string): any {
     try {
       const base64Url = token.split('.')[1];
@@ -27,7 +25,6 @@ export class JwtServiceService {
     }
   }
 
-  // Check if the token has expired
   public isTokenExpired(token: string): boolean {
     const payload = this.decodePayload(token);
     if (!payload) {
@@ -35,7 +32,6 @@ export class JwtServiceService {
     }
 
     const expiry = payload.exp;
-    // Convert the expiry time from seconds to milliseconds
     return expiry * 1000 < Date.now();
   }
 }

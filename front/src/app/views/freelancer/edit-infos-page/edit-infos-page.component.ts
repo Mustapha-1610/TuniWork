@@ -16,4 +16,5 @@ export class EditInfosPageComponent implements OnInit {
       PhoneNumber: new FormControl(null),
     });
   }
+  editInfos() {}
 }
