@@ -1,8 +1,6 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 const companySchema = new Schema({
-
-   
   CompanyName: {
     type: String,
     required: true,
@@ -62,10 +60,6 @@ const companySchema = new Schema({
     default: new Date(),
   },
 
-
-
-
-
   // ****************further dev **********************
 
   Reviews: {
@@ -100,7 +94,12 @@ const companySchema = new Schema({
       },
     },
   ],
-
+  freelancerSentContracts: [
+    {
+      type: String,
+      default: null,
+    },
+  ],
   //CV w tasri7 document
 });
 export default mongoose.model("Company", companySchema);

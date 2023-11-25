@@ -146,4 +146,12 @@ export class FreelancerService {
       imageUrl,
     });
   }
+  getTunisianCitiesAndTowns() {
+    const url =
+      'https://nominatim.openstreetmap.org/search?q=Tunisia&type=city&type=town';
+    return this.http.get<any[]>(url);
+  }
+  getCities() {
+    return this.http.get('http://localhost:5000/api/city/getAll');
+  }
 }

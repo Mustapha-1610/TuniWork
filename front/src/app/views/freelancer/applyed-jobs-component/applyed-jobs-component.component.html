@@ -1,11 +1,11 @@
 <div
-  *ngFor="let item of freeLancerInfos.PendingWorkOffers"
+  *ngFor="let item of freeLancerInfos?.PendingWorkOffers"
   class="job-offer-card"
 >
   <div class="job-offer-content" (click)="CheckOffre(item?.WorkId)">
     <div *ngIf="errMessage" class="error-message">{{ errMessage }}</div>
-    <h2 class="job-title">{{ item.PWOInfos.TitlePWO }}</h2>
-    <p class="job-description">{{ item.PWOInfos.DescriptionPWO }}</p>
+    <h2 class="job-title">{{ item.PWOInfos?.TitlePWO }}</h2>
+    <p class="job-description">{{ item.PWOInfos?.DescriptionPWO }}</p>
   </div>
   <div class="job-actions">
     <button

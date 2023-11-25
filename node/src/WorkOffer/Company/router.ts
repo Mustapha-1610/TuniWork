@@ -8,23 +8,25 @@ CompanyWorkOfferRouter.post(
 );
 
 CompanyWorkOfferRouter.get(
-  "/getPublicJobOffer/:publicJobOfferId", CompanyWorkOfferController.getPublicJobOffer
-)
+  "/getPublicJobOffer/:publicJobOfferId",
+  CompanyWorkOfferController.getPublicJobOffer
+);
 
 CompanyWorkOfferRouter.get(
-  "/getPublicJobDetails/:publicJobOfferId", CompanyWorkOfferController.getPublicJobDetails
-)
-
+  "/getPublicJobDetails/:publicJobOfferId",
+  CompanyWorkOfferController.getPublicJobDetails
+);
 
 CompanyWorkOfferRouter.put(
-  "/editPublicJob/:PublicJobOfferId", CompanyWorkOfferController.editPublicJob
-)
+  "/editPublicJob/:PublicJobOfferId",
+  CompanyWorkOfferController.editPublicJob
+);
 
 CompanyWorkOfferRouter.delete(
   //"/cancelPublicJobOffer/:freelancerId/:PublicJobOfferId", CompanyWorkOfferController.cancelPublicJobOffer
-  "/cancelPublicJobOffer/:PublicJobOfferId", CompanyWorkOfferController.cancelPublicJobOffer
-
-)
+  "/cancelPublicJobOffer/:PublicJobOfferId",
+  CompanyWorkOfferController.cancelPublicJobOffer
+);
 
 //get all public job offers of a company
 CompanyWorkOfferRouter.get(
@@ -32,24 +34,16 @@ CompanyWorkOfferRouter.get(
   CompanyWorkOfferController.getAllPublicJobOffers
 );
 
-
-
-
-
-
-
-
 /************************* partie l private job ***********************/
 CompanyWorkOfferRouter.post(
   "/createPrivateJob",
   CompanyWorkOfferController.createPrivateJob
 );
 
-
 CompanyWorkOfferRouter.put(
-  "/editPrivateJob/:PrivateJobOfferId",  CompanyWorkOfferController.editPrivateJob
+  "/editPrivateJob/:PrivateJobOfferId",
+  CompanyWorkOfferController.editPrivateJob
 );
-
 
 CompanyWorkOfferRouter.delete(
   //"/cancelJobOffer/:PrivateJobOfferId/:freelancerId",
@@ -57,12 +51,10 @@ CompanyWorkOfferRouter.delete(
   CompanyWorkOfferController.cancelJobOffer
 );
 
-
 CompanyWorkOfferRouter.get(
   "/allJobOffers/:companyId",
   CompanyWorkOfferController.getAllJobOffers
 );
-
 
 //get all private job offers of a company
 CompanyWorkOfferRouter.get(
@@ -70,18 +62,15 @@ CompanyWorkOfferRouter.get(
   CompanyWorkOfferController.getAllPrivateJobOffers
 );
 
-
 CompanyWorkOfferRouter.post(
   "/getMatchingPublicWorkOffers",
   CompanyWorkOfferController.FindBestMatchesPublicWorkOffers
 );
 
-
 CompanyWorkOfferRouter.post(
   "/getPublicWorkOffer",
   CompanyWorkOfferController.getPublicWorkOffer
 );
-
 
 CompanyWorkOfferRouter.get(
   "/getPrivateJobOfferDetails/:privateJobOfferId",
@@ -92,8 +81,5 @@ CompanyWorkOfferRouter.post(
   "/acceptFreelancer/:publicJobOfferId/:freelancerId",
   CompanyWorkOfferController.acceptFreelancer
 );
-
-
-
 
 export default CompanyWorkOfferRouter;

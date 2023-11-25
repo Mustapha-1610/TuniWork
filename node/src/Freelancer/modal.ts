@@ -101,8 +101,12 @@ const freelancerSchema = new Schema({
     },
   ],
   EstimateWorkLocation: {
-    type: String,
-    required: true,
+    City: {
+      type: String,
+    },
+    Municipality: {
+      type: String,
+    },
   },
   WorkTitle: {
     WorkTitleId: { type: Schema.Types.ObjectId, ref: "Work" },
@@ -154,20 +158,20 @@ const freelancerSchema = new Schema({
     {
       PublicJobOfferId: {
         type: Schema.Types.ObjectId,
-        ref: 'PublicJobOffer',
+        ref: "PublicJobOffer",
       },
       Status: {
         type: String,
         enum: [
-          'awaiting company response',
-          'accepted',
-          'rejected',
-          'in progress',
-          'done',
+          "awaiting company response",
+          "accepted",
+          "rejected",
+          "in progress",
+          "done",
         ],
         default: "awaiting company response",
       },
-      /*PWOInfos: {
+      PWOInfos: {
         CName: {
           type: String,
         },
@@ -177,7 +181,13 @@ const freelancerSchema = new Schema({
         DescriptionPWO: {
           type: String,
         },
-      },*/
+      },
+    },
+  ],
+  CompanyRecievedContracts: [
+    {
+      type: String,
+      default: null,
     },
   ],
 });

@@ -25,9 +25,9 @@ const routes: Routes = [
     component: ProfilePageComponent,
   },
   {
-    path:'my-jobs',
+    path: 'my-jobs',
     component: MyJobsComponent,
-    },
+  },
 
   {
     path: 'public-job-create',
@@ -74,10 +74,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [
-    RouterModule.forChild(routes),
-    FormsModule,
-  ],
+  imports: [RouterModule.forChild(routes), FormsModule],
 
   exports: [RouterModule],
 })

@@ -20,7 +20,11 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   uploadProgress: number | undefined;
   testimg: any;
   show: any = false;
-  ngOnInit() {}
+  ngOnInit() {
+    this.fs.getTunisianCitiesAndTowns().subscribe((cities: any) => {
+      console.log(cities);
+    });
+  }
   constructor(
     private router: Router,
     private fs: FreelancerService,
@@ -85,5 +89,13 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       this.imgFile = file;
       this.show = true;
     }
+  }
+  isEditing = false;
+  editableName = `${this.freeLancerInfos.Name}`;
+
+  saveName() {
+    const names = this.editableName.split(' ');
+    this.freeLancerInfos.Name = names[0];
+    // Here you would typically send the updated name to the server
   }
 }

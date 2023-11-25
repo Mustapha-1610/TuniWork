@@ -57,6 +57,7 @@ export const create = async (req: express.Request, res: express.Response) => {
     freelancerAddedInfos.speciality.map((item: any) => {
       SpecialityArray.push(item.item_text);
     });
+
     // tasna3 password securisé
     const securePassword = bcrypt.hashSync(freelancerPersonalInfos.Password);
 
@@ -83,7 +84,10 @@ export const create = async (req: express.Request, res: express.Response) => {
             PayPerTaskRate: freelancerPersonalInfos.PayPerTaskRate,
           },
           Languages: languagestable,
-          EstimateWorkLocation: freelancerPersonalInfos.EstimateWorkLocation,
+          EstimateWorkLocation: {
+            City: freelancerAddedInfos.cities[0].item_text,
+            Municipality: freelancerAddedInfos.municipality[0].item_text,
+          },
           WorkTitle: {
             WorkTitleId: freelancerAddedInfos.workTitle[0].item_id,
             WorkTitleText: freelancerAddedInfos.workTitle[0].item_text,
@@ -103,7 +107,10 @@ export const create = async (req: express.Request, res: express.Response) => {
             PayPerTaskRate: freelancerPersonalInfos.PayPerTaskRate,
           },
           Languages: languagestable,
-          EstimateWorkLocation: freelancerPersonalInfos.EstimateWorkLocation,
+          EstimateWorkLocation: {
+            City: freelancerAddedInfos.cities[0].item_text,
+            Municipality: freelancerAddedInfos.municipality[0].item_text,
+          },
           WorkTitle: {
             WorkTitleId: freelancerAddedInfos.workTitle[0].item_id,
             WorkTitleText: freelancerAddedInfos.workTitle[0].item_text,
@@ -266,10 +273,9 @@ export const passReset = async (
 
 // function to authenticate Freelancer Using jwt's (Mustapha)
 export const auth = async (req: express.Request, res: express.Response) => {
+  console.log("working");
   try {
-    createPDF("Company test");
     console.log(req.body);
-    console.log("hello");
     const { Email, Password, PhoneNumber } = req.body;
     let freeLancerAccount: any;
     if ((!Email && !Password) || (!PhoneNumber && !Password)) {
@@ -299,7 +305,8 @@ export const auth = async (req: express.Request, res: express.Response) => {
     }
 
     await generateFreelancerToken(res, freeLancerAccount._id);
-    return res.json({ freeLancerAccount });
+    console.log(freeLancerAccount);
+    return res.json("working");
   } catch (err) {
     console.log(err);
     return res.json({ error: "Server Error!" });
@@ -573,10 +580,6 @@ export const multiauth = async (
   }
 };
 
-
-
-
-
 /******** aziz ******/
 //accept private job (aziz)
 export const acceptPrivateJob = async (
@@ -845,7 +848,7 @@ export const sendFreelancerContract = async (
     const url = await createPDF(data);
     const contractingCompany: any = await company.findById(PWO.CompanyId);
     const contractedFreelancer: any = await freelancer.findById(
-      "65529b620f2f36aafd4855ea"
+      "65607dbaddfb56f2bbf2bdd1"
     );
     contractedFreelancer.CompanyRecievedContracts.push(url);
     contractingCompany.freelancerSentContracts.push(url);

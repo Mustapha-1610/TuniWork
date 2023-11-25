@@ -15,6 +15,7 @@ export class BestMatchesComponentComponent implements OnInit {
   MatchingJobs: any;
   errMessage: any;
   publicWorkOfferInfos: any;
+  showCancel: boolean = false;
   getMatchingWorkOffers() {
     this.fs
       .getBestMatchingWO(this.freeLancerInfos._id)
@@ -86,14 +87,14 @@ export class BestMatchesComponentComponent implements OnInit {
     );
   }
   getOptionValue(event: any) {
+    this.showCancel = true;
     this.errMessage = null;
     this.fs.filterPWOSearch(event.target.value).subscribe((res: any) => {
       this.MatchingJobs = res.matchingJobOffers;
-      console.log(this.MatchingJobs);
-      if (this.MatchingJobs.length() == 0) {
-        this.errMessage =
-          'There Are No Current Work Offers For This Speciality';
-      }
     });
+  }
+  reset() {
+    this.showCancel = false;
+    this.getMatchingWorkOffers();
   }
 }
