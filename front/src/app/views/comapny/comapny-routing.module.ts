@@ -66,10 +66,6 @@ const routes: Routes = [
   path: 'private-job-edit/:privateJobOfferId',
   component: PrivateJobEditComponent,
 },
-{
-  path: 'profile-page-edit',
-  component: ProfilePageEditComponent,
-},
 
 ];
 

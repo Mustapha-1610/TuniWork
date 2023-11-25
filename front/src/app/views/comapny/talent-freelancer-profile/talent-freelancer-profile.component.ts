@@ -1,7 +1,8 @@
-// Import necessary modules
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CompanyService } from '../../services/company.service';
+import { tap } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-talent-freelancer-profile',
@@ -10,9 +11,12 @@ import { CompanyService } from '../../services/company.service';
 })
 export class TalentFreelancerProfileComponent implements OnInit {
   freelancerDetails: any;
+  isFreelancerSaved: boolean = false;
 
   constructor(
-    private route: ActivatedRoute, private companyService: CompanyService, private router: Router
+    private route: ActivatedRoute,
+    private companyService: CompanyService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -29,12 +33,18 @@ export class TalentFreelancerProfileComponent implements OnInit {
     });
   }
 
+
+
   saveFreelancer(freelancerId: string): void {
-    // jib l  company ID from local storage
     const companyInfos = this.companyService.getCompanyInfos();
     const companyId = companyInfos._id;
 
-    this.companyService.saveFreelancer(companyId, freelancerId).subscribe(
+    this.companyService.saveFreelancer(companyId, freelancerId).pipe(
+      tap(() => {
+        this.isFreelancerSaved = true;
+        this.checkIfFreelancerSaved();
+      })
+    ).subscribe(
       (response: any) => {
         console.log(response.success);
         // Handle success (e.g., show a success message to the user)
@@ -45,8 +55,16 @@ export class TalentFreelancerProfileComponent implements OnInit {
     );
   }
 
+  checkIfFreelancerSaved(): void {
+    const companyInfos = this.companyService.getCompanyInfos();
+    if (companyInfos && companyInfos.SavedFreelancers) {
+      this.isFreelancerSaved = companyInfos.SavedFreelancers.includes(this.freelancerDetails._id);
+    }
+  }
+
+
+
   navigateToPrivateJobCreate(freelancerId: string): void {
     this.router.navigate(['/private-job-create', freelancerId]);
   }
-
 }

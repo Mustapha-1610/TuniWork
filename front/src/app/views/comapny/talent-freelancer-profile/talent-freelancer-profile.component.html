@@ -1,10 +1,10 @@
-<div class="container">
+<div class="container" *ngIf="freelancerDetails">
   <div class="card">
     <div class="card-body">
-      <h5 class="card-title">{{ freelancerDetails.Name }}</h5>
-      <p class="card-text">{{ freelancerDetails.Surname }}</p>
+      <h5 class="card-title" *ngIf="freelancerDetails.Name">{{ freelancerDetails.Name }}</h5>
+      <p class="card-text" *ngIf="freelancerDetails.Surname">{{ freelancerDetails.Surname }}</p>
 
-      <button class="btn btn-primary" (click)="saveFreelancer(freelancerDetails._id)">Save Freelancer</button>
+      <button class="btn btn-primary" (click)="saveFreelancer(freelancerDetails._id)" *ngIf="isFreelancerSaved">Save Freelancer</button>
 
       <button class="btn btn-success" (click)="navigateToPrivateJobCreate(freelancerDetails._id)">Create Private Job Offer</button>
     </div>

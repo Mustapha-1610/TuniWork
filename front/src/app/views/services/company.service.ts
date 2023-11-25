@@ -41,8 +41,12 @@ export class CompanyService {
   }
 
 
-//profile:
 
+
+
+//partie profile:
+
+//disable acc
 disableAccount() {
   const companyId = this.getCompanyInfos()?._id;
   const url = `http://localhost:5000/api/company/disable/${companyId}`;
@@ -57,6 +61,19 @@ disableAccount() {
 
 
 //edit profile :
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
