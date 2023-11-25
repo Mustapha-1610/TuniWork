@@ -1,9 +1,6 @@
 <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-gray-300">
-  <img
-    [src]="companyData.Clogo"
-    class="w-full h-full object-cover"
-    alt="Profile Picture"
-  />
+  <img [src]="companyData.Clogo" class="w-full h-full object-cover" alt="Profile Picture" />
 </div>
-<h2>Wlecome {{ companyData.Name }}</h2>
-<h3>Email : {{ companyData.Email }}</h3>
+<h2>Welcome {{ companyData.Name }}</h2>
+<h3>Email: {{ companyData.Email }}</h3>
+<button (click)="disableAccount()">Disable Account</button>

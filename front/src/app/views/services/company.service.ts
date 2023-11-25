@@ -41,6 +41,23 @@ export class CompanyService {
   }
 
 
+//profile:
+
+disableAccount() {
+  const companyId = this.getCompanyInfos()?._id;
+  const url = `http://localhost:5000/api/company/disable/${companyId}`;
+
+  return this.http.put(url, {}).pipe(
+    catchError((error) => {
+      console.error('Error disabling account:', error);
+      throw error;
+    })
+  );
+}
+
+
+//edit profile :
+
 
 
 

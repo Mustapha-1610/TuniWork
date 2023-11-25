@@ -227,12 +227,9 @@ export const updateInfo = async (  req: express.Request,  res: express.Response)
 };
 
 //disable acc (aziz)
-export const disableAccount = async (
-  req: express.Request,
-  res: express.Response
-) => {
+export const disableAccount = async (  req: express.Request,  res: express.Response) => {
   try {
-    const companyId = req.body.companyId;
+    const {companyId} = req.params;
     let company = await Company.findById(companyId);
     if (!company) {
       return res.json({ error: "Error !" });
@@ -244,6 +241,28 @@ export const disableAccount = async (
     console.log("Server Error !");
   }
 };
+
+
+//re enable acc (aziz)
+export const activateCompany = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { companyId } = req.params;
+    let company: any = await Company.findById(companyId);
+    if (!company) {
+      return res.json({ error: "Account dosent exist !" });
+    }
+    company.AccountActivationStatus = true;
+    await company.save();
+    return res.json({ success: "Account Activated !" });
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error !" });
+  }
+};
+
 
 //get all freelancers
 export const getAllFreelancers = async (  req: express.Request,  res: express.Response) => {
