@@ -48,10 +48,9 @@ export const getMunicipality = async (
   res: express.Response
 ) => {
   try {
-    console.log(req.body);
     const { CityId } = req.body;
-    const cityInfos = await city.findById("6560d2439382a73e53a71db2");
-    return res.status(200).json("Working");
+    const cityInfos = await city.findById(CityId);
+    return res.status(200).json({ Municipality: cityInfos.Municipality });
   } catch (err) {
     console.log(err);
     return res.json({ error: "Server Error" });
