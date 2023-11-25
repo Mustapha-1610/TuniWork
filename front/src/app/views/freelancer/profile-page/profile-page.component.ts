@@ -20,7 +20,11 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   uploadProgress: number | undefined;
   testimg: any;
   show: any = false;
-  ngOnInit() {}
+  ngOnInit() {
+    this.fs.getTunisianCitiesAndTowns().subscribe((cities: any) => {
+      console.log(cities);
+    });
+  }
   constructor(
     private router: Router,
     private fs: FreelancerService,

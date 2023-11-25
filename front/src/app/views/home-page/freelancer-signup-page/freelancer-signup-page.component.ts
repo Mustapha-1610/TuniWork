@@ -26,8 +26,12 @@ export class FreelancerSignupPageComponent implements OnInit {
   dropdownSettings: any;
   dropdownSettings2: any;
   dropdownSettings3: any;
+  citiesDrowdownSettings: any;
+  MunicipalityList: any;
+  MunicipalityDropdownSettings: any;
   specialityList: any;
   languagesList: any;
+  CitiesList: any;
   freelancerForm: any;
   form: any = FormGroup;
   errorMessage: any = null;
@@ -52,12 +56,12 @@ export class FreelancerSignupPageComponent implements OnInit {
       Password: new FormControl(null),
       HourlyRate: new FormControl(null),
       PayPerTaskRate: new FormControl(null),
-      EstimateWorkLocation: new FormControl(null),
       ProfilePicture: new FormControl(null),
     });
     this.initForm();
     this.dropdownList = this.getData();
     this.languagesList = this.getLanguages();
+    this.CitiesList = this.getCities();
     this.dropdownSettings = {
       singleSelection: true,
       idField: 'item_id',
@@ -79,6 +83,20 @@ export class FreelancerSignupPageComponent implements OnInit {
       selectAllText: 'Select All',
       unSelectAllText: 'UnSelect All',
     };
+    this.citiesDrowdownSettings = {
+      singleSelection: true,
+      idField: 'item_id',
+      textField: 'item_text',
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+    };
+    this.MunicipalityDropdownSettings = {
+      singleSelection: true,
+      idField: 'item_id',
+      textField: 'item_text',
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+    };
   }
 
   initForm() {
@@ -86,6 +104,8 @@ export class FreelancerSignupPageComponent implements OnInit {
       workTitle: [null, [Validators.required]],
       speciality: [null, [Validators.required]], // add this line
       languages: [null, [Validators.required]], // add this line
+      cities: [null, [Validators.required]],
+      municipality: [null, [Validators.required]],
     });
   }
   onSpecialitySelect($event: any) {
@@ -120,12 +140,28 @@ export class FreelancerSignupPageComponent implements OnInit {
     const workId: any = $event.item_id;
     this.http
       .post('http://localhost:5000/api/work/getSpecialities', { workId })
-      .subscribe((response: any) => {
-        const res: any = response;
+      .subscribe((res: any) => {
         this.specialityList = res.Specialities.map((item: any) => ({
           item_id: item._id,
           item_text: item.WorkSpeciality,
         }));
+      });
+  }
+
+  async onCitySelect($event: any) {
+    this.MunicipalityList = null;
+    this.form.controls['municipality'].reset();
+    const CityId = $event.item_id;
+    this.http
+      .post('http://localhost:5000/api/city/getMunicipality', { CityId })
+      .subscribe((res: any) => {
+        this.MunicipalityList = res.Municipality.map(
+          (Municipality: string, index: number) => ({
+            item_id: index,
+            item_text: Municipality,
+          })
+        );
+        // Set default selection after data is fetched
       });
   }
 
@@ -183,11 +219,6 @@ export class FreelancerSignupPageComponent implements OnInit {
       this.errorMessage = 'Hourly Rate is required';
     } else if (this.freelancerForm.value.PayPerTaskRate == null) {
       this.errorMessage = 'Pay Per Task Rate is required';
-    } else if (
-      this.freelancerForm.value.EstimateWorkLocation == null ||
-      this.freelancerForm.value.EstimateWorkLocation.trim() === ''
-    ) {
-      this.errorMessage = 'Estimate Work Location is required';
     } else if (this.form.value.workTitle == null) {
       this.errorMessage = 'Work Title is required';
     } else if (this.form.value.speciality == null) {
@@ -267,12 +298,23 @@ export class FreelancerSignupPageComponent implements OnInit {
         });
     }
   }
-  async uploadImage(event: any) {
+  uploadImage(event: any) {
     const file: File = event.target.files[0];
 
     if (file) {
       this.testimg = URL.createObjectURL(file);
       this.imgFile = file;
     }
+  }
+  getCities() {
+    this.http
+      .get('http://localhost:5000/api/city/getAll')
+      .subscribe((response: any) => {
+        this.CitiesList = response.Cities.map((item: any) => ({
+          item_id: item._id,
+          item_text: item.City,
+        }));
+        // Set default selection after data is fetched
+      });
   }
 }

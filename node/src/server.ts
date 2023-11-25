@@ -15,6 +15,7 @@ import workRouter from "./Work/Router";
 import languagesRouter from "./utils/Languages/Router";
 import CompanyWorkOfferRouter from "./WorkOffer/Company/router";
 import freelancerNameSpaceLogic from "./Freelancer/freelancerSocketLogic";
+import cityRouter from "./utils/City/Router";
 dotenv.config();
 const app = express();
 
@@ -50,7 +51,7 @@ app.use("/api/languages", languagesRouter);
 
 app.use("/api/companyWorkOffer", CompanyWorkOfferRouter);
 
-const server = http.createServer(app);
+app.use("/api/city", cityRouter);
 
 mongoose.Promise = Promise;
 mongoose.connect(process.env.Mongo_Pass);
@@ -58,6 +59,7 @@ mongoose.connection.on("error", (error: Error) => console.log(error));
 mongoose.connection.on("open", () => {
   console.log("MongoDB connected!");
 });
+
 serverApp.listen(5000, () => {
   console.log("Server Running !");
 });

@@ -101,8 +101,12 @@ const freelancerSchema = new Schema({
     },
   ],
   EstimateWorkLocation: {
-    type: String,
-    required: true,
+    City: {
+      type: String,
+    },
+    Municipality: {
+      type: String,
+    },
   },
   WorkTitle: {
     WorkTitleId: { type: Schema.Types.ObjectId, ref: "Work" },
