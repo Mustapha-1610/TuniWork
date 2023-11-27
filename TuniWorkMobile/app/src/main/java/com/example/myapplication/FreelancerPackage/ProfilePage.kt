@@ -7,10 +7,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import com.example.myapplication.R
 import com.example.myapplication.dataClasses.Freelancer
 import com.google.gson.Gson
+import com.squareup.picasso.Picasso
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -42,23 +44,21 @@ class ProfilePage : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // Initialize your TextView here
         val nameTextView: TextView = view.findViewById(R.id.Name)
-
-        // Retrieve the freelancer data from SharedPreferences
         val sharedPref = activity?.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
         val freelancerAccountJson = sharedPref?.getString("freelancer_account", null)
         Log.i("Success", "Response: ${freelancerAccountJson}")
-
-
-        // Convert JSON back to Freelancer object
         val gson = Gson()
         val freelancer = freelancerAccountJson?.let {
             gson.fromJson(it, Freelancer::class.java)
         }
-
-        // Set the name of the freelancer to the TextView
+        
         nameTextView.text = freelancer?.Name ?: "Name not available"
+
+        val imageUrl = freelancer?.profilePicture.toString()
+        val imageView: ImageView = view.findViewById(R.id.imageView)
+
+        Picasso.get().load(imageUrl).into(imageView)
     }
     companion object {
         /**

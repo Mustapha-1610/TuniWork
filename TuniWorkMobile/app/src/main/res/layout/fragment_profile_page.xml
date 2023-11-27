@@ -5,11 +5,18 @@
     android:layout_height="match_parent"
     tools:context=".FreelancerPackage.ProfilePage">
 
-
     <TextView
         android:id="@+id/Name"
         android:layout_width="433dp"
         android:layout_height="52dp"
         android:hint="Name" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imageView"
+        android:layout_width="159dp"
+        android:layout_height="156dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:scaleType="centerCrop" />
 
 </FrameLayout>

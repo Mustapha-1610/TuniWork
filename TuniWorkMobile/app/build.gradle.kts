@@ -60,5 +60,10 @@ dependencies {
     implementation ("com.google.code.gson:gson:2.8.6")
 
     implementation ("io.github.muddz:styleabletoast:2.4.0")
+    implementation ("com.squareup.picasso:picasso:2.71828")
+
+    implementation ("de.hdodenhof:circleimageview:3.1.0")
+
+
 
 }
