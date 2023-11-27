@@ -6,4 +6,30 @@
     </style>
 
     <style name="Theme.MyApplication" parent="Base.Theme.MyApplication" />
+    <style name="ErrorToast">
+        <item name="stTextBold">true</item>
+        <item name="stTextColor">#000000</item>
+        <item name="stTextSize">14sp</item>
+        <item name="stColorBackground">#E2A499</item>
+        <item name="stSolidBackground">true</item>
+        <item name="stStrokeWidth">7dp</item>
+        <item name="stStrokeColor">#E2A499</item>
+        <item name="stIconStart">@drawable/erroricon</item>
+        <item name="stLength">LONG</item> LONG or SHORT
+        <item name="stGravity">top</item> top or center
+        <item name="stRadius">25dp</item>
+    </style>
+    <style name="SuccessToast">
+        <item name="stTextBold">true</item>
+        <item name="stTextColor">#000000</item>
+        <item name="stTextSize">14sp</item>
+        <item name="stColorBackground">#7aeb7a</item>
+        <item name="stSolidBackground">true</item>
+        <item name="stStrokeWidth">7dp</item>
+        <item name="stStrokeColor">#7aeb7a</item>
+        <item name="stIconStart">@drawable/icons8_success</item>
+        <item name="stLength">LONG</item> LONG or SHORT
+        <item name="stGravity">top</item> top or center
+        <item name="stRadius">25dp</item>
+    </style>
 </resources>

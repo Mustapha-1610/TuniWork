@@ -273,7 +273,7 @@ export const passReset = async (
 
 // function to authenticate Freelancer Using jwt's (Mustapha)
 export const auth = async (req: express.Request, res: express.Response) => {
-  console.log("working");
+  console.log("AAAAAAAAAAAAA");
   try {
     console.log(req.body);
     const { Email, Password, PhoneNumber } = req.body;
@@ -544,7 +544,6 @@ export const multiauth = async (
       if (existingAccount.AccountActivationStatus === false) {
         return res.json({ error: "This account is disabled !" });
       }
-
       await generateFreelancerToken(res, existingAccount._id);
       return res.json({ freelancerAccount: existingAccount });
     } else if (

@@ -32,10 +32,10 @@ interface ApiService {
         val Password: String
     )
     data class FreelancerResponse(
-        @SerializedName("freeLancerAccount") val freeLancerAccount: Freelancer,
+        @SerializedName("freelancerAccount") val freelancerAccount: Freelancer,
         @SerializedName("error") val error : String = "",
         @SerializedName("emailError") val emailError : String = ""
     )
-    @POST("/api/freelancer/auth")
+    @POST("/api/freelancer/multiAuth")
     suspend fun freelancerAuth(@Body authRequest: AuthRequest): Response<FreelancerResponse>
 }

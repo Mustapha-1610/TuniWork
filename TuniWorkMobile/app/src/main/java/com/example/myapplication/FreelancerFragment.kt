@@ -16,6 +16,7 @@ import com.example.myapplication.FreelancerPackage.ProfilePage
 import com.example.myapplication.dataClasses.Freelancer
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
+import io.github.muddz.styleabletoast.StyleableToast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -59,19 +60,20 @@ class FreelancerFragment : Fragment() {
 
                     // Make the API call with the AuthRequest instance
                     val response: Response<ApiService.FreelancerResponse> = ApiClient.apiService.freelancerAuth(authRequest)
-                    val freelancer: Freelancer? = response.body()?.freeLancerAccount
+                    val freelancer: Freelancer? = response.body()?.freelancerAccount
 
                         if (response.isSuccessful && response.body() != null) {
                         val freelancerAccount = response.body()
 
                             if (freelancerAccount?.error.equals(null) && freelancerAccount?.emailError.equals(null)){
+
                                 Log.i("Success", "Response: ${response.body()}")
-                                Log.i("Success", "Name: ${(freelancerAccount?.freeLancerAccount?.Name)}")
+                                Log.i("Success", "Name: ${(freelancerAccount?.freelancerAccount?.Name)}")
 
                                 // Convert freelancerAccount to JSON
                                 val gson = Gson()
-                                val freelancerAccountJson = gson.toJson(freelancerAccount?.freeLancerAccount)
-
+                                val freelancerAccountJson = gson.toJson(freelancerAccount?.freelancerAccount)
+                                StyleableToast.makeText(requireContext(),  "Welcome ${(freelancerAccount?.freelancerAccount?.Name)}", Toast.LENGTH_LONG, R.style.SuccessToast).show();
                                 // Get SharedPreferences
                                 val sharedPref = context?.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
                                 if (sharedPref != null) {
@@ -81,21 +83,20 @@ class FreelancerFragment : Fragment() {
                                         apply()
                                     }
                                 }
+
                                 val intent = Intent(requireContext(), HomePage::class.java)
                                 startActivity(intent)
 
                             }
                             else if (!freelancerAccount?.emailError.equals(null)){
                                 val errorMessage = response.body()
-                                Log.i("AAAAAAAAA" , errorMessage?.emailError.toString())
-
-                                Toast.makeText(context, errorMessage?.emailError.toString(), Toast.LENGTH_SHORT).show()
+                                StyleableToast.makeText(requireContext(),  errorMessage?.emailError.toString(), Toast.LENGTH_LONG, R.style.ErrorToast).show();
 
                             }
                             else {
                                 val errorMessage = response.body()
                                 Log.i("AAAAAAAAA" , "ERROR ERROR")
-                                Toast.makeText(context, errorMessage!!.error.toString(), Toast.LENGTH_SHORT).show()
+                                StyleableToast.makeText(requireContext(),  errorMessage!!.error.toString(), Toast.LENGTH_LONG, R.style.ErrorToast).show();
                             }
 
                     } else {

@@ -46,6 +46,7 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     // Retrofit
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
 
     // Coroutine
@@ -57,5 +58,7 @@ dependencies {
     implementation ("com.squareup.okhttp3:logging-interceptor:4.9.1")
 
     implementation ("com.google.code.gson:gson:2.8.6")
+
+    implementation ("io.github.muddz:styleabletoast:2.4.0")
 
 }

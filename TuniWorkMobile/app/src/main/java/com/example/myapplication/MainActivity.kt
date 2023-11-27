@@ -1,11 +1,14 @@
 package com.example.myapplication
 
+import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import com.example.myapplication.FreelancerPackage.HomePage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,7 +19,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        val sharedPref = this?.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
+        if (sharedPref != null) {
+            if (sharedPref.contains("freelancer_account")){
+                val intent = Intent(this, HomePage::class.java)
+                startActivity(intent)
+            }
+        }
         // Check that the activity is using the layout version with the container
         if (savedInstanceState == null) {
             // Create a new fragment to be placed in the activity layout

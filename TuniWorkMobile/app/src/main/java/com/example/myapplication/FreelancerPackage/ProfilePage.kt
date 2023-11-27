@@ -50,6 +50,7 @@ class ProfilePage : Fragment() {
         val freelancerAccountJson = sharedPref?.getString("freelancer_account", null)
         Log.i("Success", "Response: ${freelancerAccountJson}")
 
+
         // Convert JSON back to Freelancer object
         val gson = Gson()
         val freelancer = freelancerAccountJson?.let {
