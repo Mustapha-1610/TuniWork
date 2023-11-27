@@ -279,7 +279,7 @@ export const auth = async (req: express.Request, res: express.Response) => {
     const { Email, Password, PhoneNumber } = req.body;
     let freeLancerAccount: any;
     if ((!Email && !Password) || (!PhoneNumber && !Password)) {
-      return res.status(401).json({ error: "Invalid Input(s)" });
+      return res.json({ error: "Invalid Input(s)" });
     } else if (!Email) {
       freeLancerAccount = await freelancer.findOne({ PhoneNumber });
     } else {
@@ -293,7 +293,7 @@ export const auth = async (req: express.Request, res: express.Response) => {
       freeLancerAccount.Password
     );
     if (!passwordcheck) {
-      return res.status(404).json({ Message: "Invalid email or password !" });
+      return res.json({ error: "Invalid email or password !" });
     }
     if (freeLancerAccount.AccountVerficiationStatus === false) {
       return res.json({
@@ -306,10 +306,10 @@ export const auth = async (req: express.Request, res: express.Response) => {
 
     await generateFreelancerToken(res, freeLancerAccount._id);
     console.log(freeLancerAccount);
-    return res.json("working");
+    return res.json({ freeLancerAccount });
   } catch (err) {
     console.log(err);
-    return res.json({ error: "Server Error!" });
+    return res.status(401).json({ error: "Server Error!" });
   }
 };
 
