@@ -5,6 +5,12 @@ const freelancerRouter = express.Router();
 
 freelancerRouter.post("/create", freelancerController.create);
 
+//
+freelancerRouter.post(
+  "/createMobile",
+  freelancerController.createMobileAccount
+);
+
 freelancerRouter.put("/verify", freelancerController.verifyAccount);
 
 freelancerRouter.post("/auth", freelancerController.auth);

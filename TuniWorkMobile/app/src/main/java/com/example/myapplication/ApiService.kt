@@ -34,8 +34,25 @@ interface ApiService {
     data class FreelancerResponse(
         @SerializedName("freelancerAccount") val freelancerAccount: Freelancer,
         @SerializedName("error") val error : String = "",
-        @SerializedName("emailError") val emailError : String = ""
+        @SerializedName("emailError") val emailError : String = "",
+        @SerializedName("success") val success : String = "",
     )
     @POST("/api/freelancer/multiAuth")
     suspend fun freelancerAuth(@Body authRequest: AuthRequest): Response<FreelancerResponse>
+
+    data class signupRequest(
+        val Name : String,
+        val Surname : String,
+        val PhoneNumber : Int,
+        val Email : String,
+        val Password: String,
+        val HourlyPayRate : Int,
+        val PayPerTaskRate : Int,
+        val WorkTitle : String,
+        val Speciality : String,
+        val City : String,
+        val Municipality : String
+    )
+    @POST("/api/freelancer/createMobile")
+    suspend fun create(@Body signupRequest: signupRequest): Response<FreelancerResponse>
 }

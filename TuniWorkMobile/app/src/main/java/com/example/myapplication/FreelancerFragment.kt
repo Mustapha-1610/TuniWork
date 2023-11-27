@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -10,9 +11,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
+import com.example.myapplication.FreelancerPackage.Home
 import com.example.myapplication.FreelancerPackage.HomePage
 import com.example.myapplication.FreelancerPackage.ProfilePage
+import com.example.myapplication.FreelancerPackage.SignupPage
 import com.example.myapplication.dataClasses.Freelancer
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
@@ -38,32 +42,51 @@ class FreelancerFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
     }
+    @SuppressLint("SuspiciousIndentation")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_freelancer, container, false)
+
+        return view
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         val loginButton : Button = view.findViewById(R.id.LoginButton)
         val Email : EditText = view.findViewById(R.id.Email)
         val Password : EditText = view.findViewById(R.id.Password)
         val scope = CoroutineScope(Dispatchers.Main)
+        val SignUpText : TextView = view.findViewById(R.id.SignUpText)
+        SignUpText.setOnClickListener {
+            val signUpFragment = SignupPage()
+
+            // Get the activity and use its supportFragmentManager
+            val activity = requireActivity()
+            val fragmentManager = activity.supportFragmentManager
+
+            // Start a fragment transaction
+            fragmentManager.beginTransaction()
+                .replace(R.id.main_container, signUpFragment)  // Use replace to switch fragments
+                .addToBackStack(null)  // This allows the user to navigate back to the previous fragment
+                .commit()
+        }
+
         loginButton.setOnClickListener {
             scope.launch {
                 try {
                     // Retrieve the text from the EditText views and trim any whitespace
                     val email = Email.text.toString().trim()
                     val password = Password.text.toString().trim()
-
-                    // Create an AuthRequest instance with the retrieved email and password
-                    val authRequest = ApiService.AuthRequest(email, password)
-
-
-                    // Make the API call with the AuthRequest instance
-                    val response: Response<ApiService.FreelancerResponse> = ApiClient.apiService.freelancerAuth(authRequest)
-                    val freelancer: Freelancer? = response.body()?.freelancerAccount
+                    if (email.isEmpty() || password.isEmpty()){
+                        StyleableToast.makeText(requireContext(),  "Missing Input(s)", Toast.LENGTH_LONG, R.style.ErrorToast).show();
+                    }else {
+                        val authRequest = ApiService.AuthRequest(email, password)
+                        val response: Response<ApiService.FreelancerResponse> = ApiClient.apiService.freelancerAuth(authRequest)
 
                         if (response.isSuccessful && response.body() != null) {
-                        val freelancerAccount = response.body()
+                            val freelancerAccount = response.body()
 
                             if (freelancerAccount?.error.equals(null) && freelancerAccount?.emailError.equals(null)){
 
@@ -99,10 +122,17 @@ class FreelancerFragment : Fragment() {
                                 StyleableToast.makeText(requireContext(),  errorMessage!!.error.toString(), Toast.LENGTH_LONG, R.style.ErrorToast).show();
                             }
 
-                    } else {
+                        } else {
 
-                        Log.e("Error", "Response Code: ${response.code()} - Message: ${response.errorBody()}")
+                            Log.e("Error", "Response Code: ${response.code()} - Message: ${response.errorBody()}")
+                        }
                     }
+                    // Create an AuthRequest instance with the retrieved email and password
+
+
+
+                    // Make the API call with the AuthRequest instance
+
                 } catch (err: Exception) {
 
                     // Log exception and print the error message
@@ -110,8 +140,6 @@ class FreelancerFragment : Fragment() {
                 }
             }
         }
-
-        return view
     }
     companion object {
         @JvmStatic

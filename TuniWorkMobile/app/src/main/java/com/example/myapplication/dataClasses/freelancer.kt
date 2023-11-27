@@ -20,7 +20,7 @@ data class Freelancer(
     @SerializedName("Schedule") val schedule: Schedule,
     @SerializedName("Messages") val messages: List<String>,
     @SerializedName("Languages") val languages: List<String>,
-    @SerializedName("EstimateWorkLocation") val estimateWorkLocation: String,
+    @SerializedName("EstimateWorkLocation") val estimateWorkLocation: EstimateWorkLocation,
     @SerializedName("WorkTitle") val workTitle: WorkTitle,
     @SerializedName("SavedWorkOffers") val savedWorkOffers: List<SavedWorkOffer>,
     @SerializedName("Speciality") val speciality: List<String>,

@@ -2,6 +2,7 @@ package com.example.myapplication.FreelancerPackage
 
 import android.content.Context
 import android.os.Bundle
+import android.provider.ContactsContract.CommonDataKinds.Email
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -19,6 +20,10 @@ import com.squareup.picasso.Picasso
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
+lateinit var Name : TextView;
+lateinit var Surname : TextView;
+lateinit var Email : TextView
+lateinit var PhoneNumber : TextView
 class ProfilePage : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -44,7 +49,6 @@ class ProfilePage : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val nameTextView: TextView = view.findViewById(R.id.Name)
         val sharedPref = activity?.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
         val freelancerAccountJson = sharedPref?.getString("freelancer_account", null)
         Log.i("Success", "Response: ${freelancerAccountJson}")
@@ -52,13 +56,18 @@ class ProfilePage : Fragment() {
         val freelancer = freelancerAccountJson?.let {
             gson.fromJson(it, Freelancer::class.java)
         }
-        
-        nameTextView.text = freelancer?.Name ?: "Name not available"
 
         val imageUrl = freelancer?.profilePicture.toString()
         val imageView: ImageView = view.findViewById(R.id.imageView)
-
         Picasso.get().load(imageUrl).into(imageView)
+        Name = view.findViewById(R.id.Name)
+        Name.setText( "Name = " + freelancer?.Name.toString())
+        Surname = view.findViewById(R.id.Surname)
+        Surname.setText("Surname = " + freelancer?.Surname.toString())
+        Email = view.findViewById(R.id.Email)
+        Email.setText("Email = " + freelancer?.email.toString())
+        PhoneNumber = view.findViewById(R.id.PhoneNumber)
+        PhoneNumber.setText("PhoneNumber = " + freelancer?.phoneNumber.toString())
     }
     companion object {
         /**

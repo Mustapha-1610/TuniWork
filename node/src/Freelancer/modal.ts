@@ -190,6 +190,10 @@ const freelancerSchema = new Schema({
       default: null,
     },
   ],
+  AccountCreationDate: {
+    type: Date,
+    default: new Date(),
+  },
 });
 const CombinedFreelancerSchema = new Schema({
   ...usersSchema.obj,

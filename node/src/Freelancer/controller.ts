@@ -134,6 +134,75 @@ export const create = async (req: express.Request, res: express.Response) => {
   }
 };
 
+export const createMobileAccount = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const {
+      City,
+      Name,
+      Surname,
+      Email,
+      Password,
+      HourlyPayRate,
+      PayPerTaskRate,
+      WorkTitle,
+      Speciality,
+      PhoneNumber,
+      Municipality,
+    } = req.body;
+    // ylawej 3la freelancer 3andou ya nafs ya nafs phone number ya nafs l mail
+    let existingFreelancer = await freelancer.findOne({
+      $or: [{ Email: Email }, { PhoneNumber: PhoneNumber }],
+    });
+    if (existingFreelancer) {
+      return res.json({ error: "Account Exists Allready" });
+    }
+    const characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let VerificationCode = "";
+    for (let i = 0; i < 25; i++) {
+      VerificationCode +=
+        characters[Math.floor(Math.random() * characters.length)];
+    }
+    const securePassword = bcrypt.hashSync(Password);
+    const freelancerAccount: any = await freelancer.create({
+      Name,
+      Surname,
+      Email,
+      Password: securePassword,
+      PayRate: {
+        HourlyRate: HourlyPayRate,
+        PayPerTaskRate: PayPerTaskRate,
+      },
+      PhoneNumber,
+      VerificationCode: VerificationCode,
+      Languages: ["Arabic", "English"],
+      EstimateWorkLocation: {
+        City,
+        Municipality,
+      },
+      WorkTitle: {
+        WorkTitleId: null,
+        WorkTitleText: WorkTitle,
+      },
+      Speciality: [Speciality],
+      VerLinkExpDate: new Date(new Date().getTime() + 2 * 60 * 60 * 1000),
+    });
+    await SendFreelancerAccountConfirmationMail(
+      freelancerAccount.Name,
+      freelancerAccount.Email,
+      freelancerAccount._id,
+      freelancerAccount.VerificationCode
+    );
+    return res.json({ success: "Account Created" });
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error" });
+  }
+};
+
 // function to verify freelancer account (Muèstapha)
 export const verifyAccount = async (
   req: express.Request,
@@ -527,7 +596,6 @@ export const multiauth = async (
     let existingAccount: any = await freelancer.findOne({
       $or: [{ Email }, { PhoneNumber }],
     });
-
     if (existingAccount) {
       const passwordcheck = bcrypt.compareSync(
         Password,
