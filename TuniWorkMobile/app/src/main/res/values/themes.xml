@@ -28,7 +28,7 @@
         <item name="stStrokeWidth">7dp</item>
         <item name="stStrokeColor">#7aeb7a</item>
         <item name="stIconStart">@drawable/icons8_success</item>
-        <item name="stLength">LONG</item> LONG or SHORT
+        <item name="stLength">SHORT</item> LONG or SHORT
         <item name="stGravity">top</item> top or center
         <item name="stRadius">25dp</item>
     </style>

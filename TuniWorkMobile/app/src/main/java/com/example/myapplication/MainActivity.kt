@@ -8,7 +8,11 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import com.example.myapplication.FreelancerPackage.HomePage
+import com.example.myapplication.dataClasses.Freelancer
+import com.google.gson.Gson
+import io.github.muddz.styleabletoast.StyleableToast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,6 +26,15 @@ class MainActivity : AppCompatActivity() {
         val sharedPref = this?.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
         if (sharedPref != null) {
             if (sharedPref.contains("freelancer_account")){
+                val freelancerAccountJson = sharedPref?.getString("freelancer_account", null)
+                Log.i("Success", "Response: ${freelancerAccountJson}")
+
+                // Convert JSON back to Freelancer object
+                val gson = Gson()
+                val freelancer = freelancerAccountJson?.let {
+                    gson.fromJson(it, Freelancer::class.java)
+                }
+                StyleableToast.makeText(this,  "Welcome ${(freelancer?.Name)}", Toast.LENGTH_LONG, R.style.SuccessToast).show();
                 val intent = Intent(this, HomePage::class.java)
                 startActivity(intent)
             }
