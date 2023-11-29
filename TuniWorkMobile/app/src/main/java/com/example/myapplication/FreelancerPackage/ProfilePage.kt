@@ -13,6 +13,7 @@ import android.widget.TextView
 import com.example.myapplication.R
 import com.example.myapplication.dataClasses.Freelancer
 import com.google.gson.Gson
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 
 // TODO: Rename parameter arguments, choose names that match
@@ -56,10 +57,21 @@ class ProfilePage : Fragment() {
         val freelancer = freelancerAccountJson?.let {
             gson.fromJson(it, Freelancer::class.java)
         }
-
+        Log.i("SUCCESS",freelancer?.profilePicture.toString())
         val imageUrl = freelancer?.profilePicture.toString()
         val imageView: ImageView = view.findViewById(R.id.imageView)
-        Picasso.get().load(imageUrl).into(imageView)
+        Picasso.get()
+            .load(imageUrl) // add an error placeholder to see if there's an error loading the image
+            .into(imageView, object : Callback {
+                override fun onSuccess() {
+                    // Image successfully loaded
+                }
+
+                override fun onError(e: Exception?) {
+                    // Image loading failed
+                    e?.printStackTrace()
+                }
+            })
         Name = view.findViewById(R.id.Name)
         Name.setText( "Name = " + freelancer?.Name.toString())
         Surname = view.findViewById(R.id.Surname)
