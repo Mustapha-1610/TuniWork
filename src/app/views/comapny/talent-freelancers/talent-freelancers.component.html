@@ -1,0 +1,18 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-4" *ngFor="let freelancer of freelancers">
+      <div class="card mb-4 shadow-sm">
+        <img src="{{ freelancer.ProfilePicture }}" class="card-img-top" alt="Freelancer Image">
+        <div class="card-body">
+          <h5 class="card-title">name : {{ freelancer.Name }}</h5>
+          <p class="card-text">surename: {{ freelancer.Surname }}</p>
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="btn-group">
+              <a class="btn btn-info" [routerLink]="['/talent-freelancer-profile', freelancer._id]">View Details</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
