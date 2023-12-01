@@ -1,0 +1,10 @@
+// create a new work category (POST)
+
+http://localhost:5000/api/work/create
+
+body = {
+    "WorkTitle" : "SoftwareEngineer",
+    "Speciality" : "Code Testing"
+}
+
+-----------------------------------------------------------------------------------------

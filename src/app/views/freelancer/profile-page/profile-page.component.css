@@ -1,0 +1,9 @@
+/* Include this in your main CSS file */
+.shadow-lg {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+
+.border-gray-300 {
+  border-color: #d2d6dc; /* This is a light gray border color */
+}

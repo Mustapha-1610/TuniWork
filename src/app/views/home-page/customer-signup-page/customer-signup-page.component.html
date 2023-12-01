@@ -1,0 +1,131 @@
+<section style="background-image: url('/assets/img.jpg'); background-size: cover; background-position: center;">
+  <div class="form-box">
+    <div class="form-value">
+      <form [formGroup]="customerForm"
+       (ngSubmit)="onSubmit()">
+
+        <h2>Sign Up</h2>
+
+        <!-- Name Field -->
+        <!-- Name Field -->
+        <div class="inputbox mb-4">
+          <label for="Name" class="block text-gray-700 text-sm font-bold mb-2">Name</label>
+          <input id="Name" type="text" formControlName="Name"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+          <div class="error-message" *ngIf="customerForm.get('Name').touched && customerForm.get('Name').invalid">
+            Name is required
+          </div>
+        </div>
+
+        <!-- Surname Field -->
+        <div class="inputbox">
+          <label for="Surname">LastName:</label>
+          <input type="text" id="Surname" formControlName="LastName" />
+          <div class="error-message" *ngIf="customerForm.get('LastName').touched && customerForm.get('LastName').invalid">
+            Last NAME is required
+          </div>
+        </div>
+        <div class="inputbox">
+          <label for="Location">Location </label>
+          <input type="text" id="Surname" formControlName="Location" />
+          <div class="error-message" *ngIf="customerForm.get('Location').touched && customerForm.get('Location').invalid">
+            Location is required
+          </div>
+        </div>
+
+        <!-- Phone Number Field -->
+        <div class="inputbox">
+          <label for="PhoneNumber" class="block text-gray-700 text-sm font-bold mb-2">Phone Number</label>
+          <input id="PhoneNumber" type="number" formControlName="PhoneNumber"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+          <div class="error-message"
+            *ngIf="customerForm.get('PhoneNumber').touched && customerForm.get('PhoneNumber').invalid">
+            Phone Number is required
+          </div>
+        </div>
+
+
+        <!-- Email Field -->
+        <div class="inputbox">
+          <label for="Email" class="block text-gray-700 text-sm font-bold mb-2">Email</label>
+          <input id="Email" type="email" formControlName="Email"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+          <div class="error-message" *ngIf="customerForm.get('Email').touched && customerForm.get('Email').invalid">
+            Email is required and must be a valid email address
+          </div>
+        </div>
+
+        <!-- Password Field -->
+        <div class="inputbox">
+          <label for="Password" class="block text-gray-700 text-sm font-bold mb-2">Password</label>
+          <input id="Password" type="password" formControlName="Password"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+          <div class="error-message"
+            *ngIf="customerForm.get('Password').touched && customerForm.get('Password').invalid">
+            Password is required
+          </div>
+          
+          
+          <!-- ... previous code ... -->
+
+         
+            <!-- ... existing form fields ... -->
+          
+            <!-- City Dropdown -->
+            <form [formGroup]="form">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="mb-4 flex-item">
+                  <label class="block text-gray-700 text-sm font-bold mb-2" for="city">
+                    City
+                  </label>
+                  <ng-multiselect-dropdown
+                    id="cities"
+                    formControlName="cities"
+                    [placeholder]="'Select City'"
+                    [settings]="citiesDrowdownSettings"
+                    [data]="CitiesList"
+                    (onSelect)="onCitySelect($event)"
+                    (onDeSelect)="onSpecialityDeselect($event)"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  ></ng-multiselect-dropdown>
+                </div>
+                <div class="mb-4 flex-item">
+                  <label
+                    class="block text-gray-700 text-sm font-bold mb-2"
+                    for="speciality"
+                  >
+                    Municipality
+                  </label>
+                  <ng-multiselect-dropdown
+                    id="municipality"
+                    formControlName="municipality"
+                    [placeholder]="'Select Municipality'"
+                    [settings]="MunicipalityDropdownSettings"
+                    [data]="MunicipalityList"
+                    (onSelect)="onSpecialitySelect($event)"
+                    (onDeSelect)="onSpecialityDeselect($event)"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  ></ng-multiselect-dropdown>
+                </div>
+              </div>
+              
+            </form>
+           
+
+          <!-- Sign Up Button -->
+          <div class="flex justify-center mt-6">
+            <button type="submit">Sign up</button>
+          </div>
+      
+
+          <div class="register">
+            <p>No Lorem ipsum dolor sit amet consectetur <a routerLink="/login">login</a></p>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>

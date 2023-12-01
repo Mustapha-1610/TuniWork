@@ -1,0 +1,23 @@
+
+
+*******  create (post)  *********
+
+http://localhost:5000/api/admin/create
+
+body = {
+    "Name" : "test",
+    "Surname" : "test",
+    "Username" : "test",
+    "PhoneNumber" : 5465,
+    "Email" : "test",
+    "Password" : "test"
+}
+
+
+*******  Get All Freelancers (GET)  *********
+
+http://localhost:5000/api/admin/getAll/freelancers
+
+*******  Get All Companys (GET)  *********
+
+http://localhost:5000/api/admin/getAll/comapnys

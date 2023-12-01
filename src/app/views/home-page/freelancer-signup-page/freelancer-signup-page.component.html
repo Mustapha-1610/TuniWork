@@ -1,0 +1,256 @@
+<div class="container mx-auto px-4 py-8">
+  <ngx-spinner
+    bdColor="rgba(51,51,51,0.8)"
+    size="medium"
+    color="#fff"
+    type="ball-scale-multiple"
+  >
+    <p class="text-2xl text-white">Loading...</p>
+  </ngx-spinner>
+  <div class="text-center text-red-500 font-bold mt-2">
+    {{ errorMessage }}
+  </div>
+  <div class="flex items-center justify-center mt-1">
+    <img
+      [src]="testimg"
+      (click)="fileInput.click()"
+      class="rounded-full cursor-pointer border-4 mb-5 border-white hover:border-gray-300"
+      style="width: 270px; height: 270px"
+    />
+  </div>
+
+  <mat-progress-bar
+    *ngIf="uploadProgress !== undefined"
+    mode="determinate"
+    [value]="uploadProgress"
+    class="mt-4 w-1/2"
+    style="height: 10px"
+  ></mat-progress-bar>
+
+  <form
+    [formGroup]="freelancerForm"
+    (ngSubmit)="test()"
+    class="max-w-4xl mx-auto bg-white shadow-lg rounded px-8 pt-6 pb-8 mb-4"
+  >
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Name Field -->
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="Name">
+          Name
+        </label>
+        <input
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="Name"
+          type="text"
+          formControlName="Name"
+        />
+      </div>
+
+      <!-- Surname Field -->
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="LastName">
+          Surname
+        </label>
+        <input
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="Surname"
+          type="text"
+          formControlName="Surname"
+        />
+      </div>
+
+      <!-- Phone Number Field -->
+      <div class="mb-4">
+        <label
+          class="block text-gray-700 text-sm font-bold mb-2"
+          for="PhoneNumber"
+        >
+          Phone Number
+        </label>
+        <input
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="PhoneNumber"
+          type="number"
+          formControlName="PhoneNumber"
+        />
+      </div>
+
+      <!-- Email Field -->
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="Email">
+          Email
+        </label>
+        <input
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="Email"
+          type="email"
+          formControlName="Email"
+        />
+      </div>
+
+      <!-- Password Field -->
+      <div class="mb-4">
+        <label
+          class="block text-gray-700 text-sm font-bold mb-2"
+          for="Password"
+        >
+          Password
+        </label>
+        <input
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="Password"
+          type="password"
+          formControlName="Password"
+        />
+      </div>
+
+      <!-- Hourly Rate Field -->
+      <div class="mb-4">
+        <label
+          class="block text-gray-700 text-sm font-bold mb-2"
+          for="HourlyRate"
+        >
+          Hourly Pay Rate
+        </label>
+        <input
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="HourlyRate"
+          type="number"
+          formControlName="HourlyRate"
+        />
+      </div>
+      <!-- Pay Per Task Rate Field -->
+      <div class="mb-4">
+        <label
+          class="block text-gray-700 text-sm font-bold mb-2"
+          for="PayPerTaskRate"
+        >
+          Pay Per Task Rate
+        </label>
+        <input
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="PayPerTaskRate"
+          type="number"
+          formControlName="PayPerTaskRate"
+        />
+      </div>
+    </div>
+
+    <!-- Work Title Dropdown -->
+    <form [formGroup]="form">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="mb-4 flex-item">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="city">
+            City
+          </label>
+          <ng-multiselect-dropdown
+            id="cities"
+            formControlName="cities"
+            [placeholder]="'Select City'"
+            [settings]="citiesDrowdownSettings"
+            [data]="CitiesList"
+            (onSelect)="onCitySelect($event)"
+            (onDeSelect)="onSpecialityDeselect($event)"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          ></ng-multiselect-dropdown>
+        </div>
+        <div class="mb-4 flex-item">
+          <label
+            class="block text-gray-700 text-sm font-bold mb-2"
+            for="speciality"
+          >
+            Municipality
+          </label>
+          <ng-multiselect-dropdown
+            id="municipality"
+            formControlName="municipality"
+            [placeholder]="'Select Municipality'"
+            [settings]="MunicipalityDropdownSettings"
+            [data]="MunicipalityList"
+            (onSelect)="onSpecialitySelect($event)"
+            (onDeSelect)="onSpecialityDeselect($event)"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          ></ng-multiselect-dropdown>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="mb-4 flex-item">
+          <label
+            class="block text-gray-700 text-sm font-bold mb-2"
+            for="workTitle"
+          >
+            Work Title
+          </label>
+          <ng-multiselect-dropdown
+            id="workTitle"
+            formControlName="workTitle"
+            [placeholder]="'Select Work Title'"
+            [settings]="dropdownSettings"
+            [data]="dropdownList"
+            (onSelect)="onItemSelect($event)"
+            (onDeSelect)="onItemDeselect($event)"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          ></ng-multiselect-dropdown>
+        </div>
+
+        <!-- Work Speciality Dropdown -->
+        <div class="mb-4 flex-item">
+          <label
+            class="block text-gray-700 text-sm font-bold mb-2"
+            for="speciality"
+          >
+            Work Speciality
+          </label>
+          <ng-multiselect-dropdown
+            id="speciality"
+            formControlName="speciality"
+            [placeholder]="'Select Work Speciality'"
+            [settings]="dropdownSettings2"
+            [data]="specialityList"
+            (onSelect)="onSpecialitySelect($event)"
+            (onDeSelect)="onSpecialityDeselect($event)"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          ></ng-multiselect-dropdown>
+        </div>
+      </div>
+      <!-- Languages Dropdown -->
+      <div class="mb-4">
+        <label
+          class="block text-gray-700 text-sm font-bold mb-2"
+          for="languages"
+        >
+          Languages
+        </label>
+        <ng-multiselect-dropdown
+          id="languages"
+          formControlName="languages"
+          [placeholder]="'Languages You Work With'"
+          [settings]="dropdownSettings3"
+          [data]="languagesList"
+          (onSelect)="onSpecialitySelect($event)"
+          (onDeSelect)="onSpecialityDeselect($event)"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        ></ng-multiselect-dropdown>
+      </div>
+    </form>
+    <!-- Submit Button -->
+    <div class="flex justify-center mt-6">
+      <button
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        type="submit"
+      >
+        Submit
+      </button>
+    </div>
+  </form>
+
+  <div>
+    <!-- Hidden file input -->
+    <input
+      type="file"
+      #fileInput
+      class="hidden"
+      (change)="uploadImage($event)"
+    />
+  </div>
+</div>

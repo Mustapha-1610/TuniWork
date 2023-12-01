@@ -1,0 +1,47 @@
+
+<section>
+
+{{ errMessage }}
+<h5 *ngIf="mailError">
+  You Need to Verifiy Your Mail First Before Logging In
+  <button (click)="sendEmail()" type="button">Send Verification Email</button>
+</h5>
+<form
+  [formGroup]="loginForm"
+  (ngSubmit)="submitLoginForm()"
+  class="space-y-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+>
+  <label class="block text-gray-700 text-sm font-bold mb-2" for="Email">
+    Email
+  </label>
+  <input
+    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+    type="email"
+    formControlName="Email"
+  />
+  <label class="block text-gray-700 text-sm font-bold mb-2" for="Password">
+    Password
+  </label>
+  <input
+    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+    type="password"
+    formControlName="Password"
+  />
+  <label
+    class="block text-gray-700 text-sm font-bold mb-2 cursor-pointer"
+    for="Password"
+    (click)="routeFP()"
+  >
+    Forgot Password ?
+  </label>
+  <button type="submit">Login</button>
+
+<asl-google-signin-button
+  shape="circle"
+  type="standard"
+  size="medium"
+  text="signin_with"
+  width="200-400"
+  theme="filled_black"
+  logo_alignment="center"
+></asl-google-signin-button></form></section>

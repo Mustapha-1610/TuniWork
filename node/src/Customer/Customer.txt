@@ -1,0 +1,69 @@
+Informations personnelles :
+
+Nom
+Prénom
+Adresse
+Adresse e-mail
+Numéro de téléphone
+Photo de profil
+Compte utilisateur :
+
+Nom d'utilisateur
+Mot de passe
+Date de création du compte
+Dernière connexion
+Historique des projets :
+
+Liste des projets précédents
+Évaluations et commentaires des freelancers
+Statut des projets en cours
+Méthode de paiement :
+
+Informations sur la carte de crédit ou d'autres méthodes de paiement enregistrées
+Préférences :
+
+Langue préférée
+Fuseau horaire préféré
+Paramètres de notification
+Projets actifs :
+
+Liste des projets actuellement en cours
+Détails sur les freelancers impliqués
+Échéances et état d'avancement
+Compétences requises :
+
+Compétences spécifiques recherchées pour les projets
+Localisation :
+
+Pays
+Fuseau horaire
+Budget et paiements :
+
+Budget alloué pour les projets
+Historique des paiements et factures
+Préférences de communication :
+
+Préférences de contact (e-mail, téléphone, messagerie interne)
+Fréquence des mises à jour et notifications
+Évaluations et retours d'expérience :
+
+Évaluations laissées par les freelancers avec commentaires associés
+Expérience globale de travail avec la plateforme
+Type de projets :
+
+Catégories de projets préférées (par exemple, développement web, design graphique, rédaction, etc.)
+Historique des projets dans différentes catégories
+Statistiques d'utilisation :
+
+Temps passé sur la plateforme
+Nombre de projets postés et complétés
+Préférences de recherche :
+
+Critères de recherche fréquemment utilisés pour trouver des freelancers ou des projets
+Support client :
+
+Historique des interactions avec le support client
+Problèmes signalés et leur résolution
+
+
+

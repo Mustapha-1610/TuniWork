@@ -1,0 +1,10 @@
+.form-radio {
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+.form-radio:checked {
+  background-color: #3182ce; /* This is a Tailwind color, you can use your own */
+  border-color: #3182ce;
+}
+
+/* You can add more custom styles if needed */
