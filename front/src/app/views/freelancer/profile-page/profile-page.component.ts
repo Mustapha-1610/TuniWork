@@ -2,12 +2,14 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { FreelancerService } from '../../services/freelancer.service';
 import { Storage } from '@angular/fire/storage';
+import { CalendarEvent } from 'angular-calendar';
 import {
   ref,
   uploadBytes,
   getDownloadURL,
   uploadBytesResumable,
 } from 'firebase/storage';
+import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-profile-page',
   templateUrl: './profile-page.component.html',
@@ -20,15 +22,34 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   uploadProgress: number | undefined;
   testimg: any;
   show: any = false;
+  viewDate: Date = new Date();
+  events: CalendarEvent[] = [];
   ngOnInit() {
-    this.fs.getTunisianCitiesAndTowns().subscribe((cities: any) => {
-      console.log(cities);
-    });
+    this.http
+      .get('http://localhost:5000/api/freelancer/getDate')
+      .subscribe((res: any) => {
+        console.log(res);
+        this.events = res.schedule.map((date: any) => {
+          return {
+            start: new Date(date),
+            title: 'Booked',
+            color: {
+              primary: '#ad2121', // Event color (example)
+              secondary: '#FAE3E3', // Event background color (example)
+            },
+          };
+        });
+      });
+  }
+
+  handleEventClick({ event }: { event: CalendarEvent }): void {
+    console.log(event.meta.tpl);
   }
   constructor(
     private router: Router,
     private fs: FreelancerService,
-    private storage: Storage
+    private storage: Storage,
+    private http: HttpClient
   ) {}
   ngOnDestroy() {}
 

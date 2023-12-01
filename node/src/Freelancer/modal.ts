@@ -78,18 +78,12 @@ const freelancerSchema = new Schema({
       ],
     },
   ],
-  Schedule: {
-    Weekly: [
-      {
-        type: Date,
-      },
-    ],
-    Monthly: [
-      {
-        type: Date,
-      },
-    ],
-  },
+  Schedule: [
+    {
+      type: Date,
+      default: null,
+    },
+  ],
   Messages: [
     {
       type: String,
@@ -187,7 +181,7 @@ const freelancerSchema = new Schema({
   CompanyRecievedContracts: [
     {
       type: String,
-      default: null,
+      default: [],
     },
   ],
   AccountCreationDate: {

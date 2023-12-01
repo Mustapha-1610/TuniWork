@@ -77,10 +77,14 @@ freelancerRouter.put("/unsavePWO", freelancerController.unsavePWO);
 freelancerRouter.post("/filterPWOSearch", freelancerController.filterPWOSearch);
 
 //
-//
 freelancerRouter.post(
   "/sendFreelancerContract",
   freelancerController.sendFreelancerContract
 );
 
+//
+freelancerRouter.put("/addDate", freelancerController.addDate);
+
+//
+freelancerRouter.get("/getDate", freelancerController.getDate);
 export default freelancerRouter;

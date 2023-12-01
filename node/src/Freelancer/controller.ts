@@ -915,7 +915,7 @@ export const sendFreelancerContract = async (
     const url = await createPDF(data);
     const contractingCompany: any = await company.findById(PWO.CompanyId);
     const contractedFreelancer: any = await freelancer.findById(
-      "65607dbaddfb56f2bbf2bdd1"
+      "65689e842d87b7ace137a1ea"
     );
     contractedFreelancer.CompanyRecievedContracts.push(url);
     contractingCompany.freelancerSentContracts.push(url);
@@ -943,6 +943,42 @@ export const filterPWOSearch = async (
       },
     }).select(returnedFields);
     return res.json({ matchingJobOffers });
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error" });
+  }
+};
+
+//
+export const addDate = async (req: express.Request, res: express.Response) => {
+  try {
+    const freelancerId = await freeLancerRouteProtection(req, res);
+    const { date } = req.body;
+
+    if ("_id" in freelancerId) {
+      const frelancerAccount: any = await freelancer.findById(freelancerId);
+      if (frelancerAccount) {
+        frelancerAccount.Schedule.push(date);
+        await frelancerAccount.save();
+        return res.json({ success: "Date Added" });
+      }
+      return res.json({ success: "error" });
+    }
+    return freelancerId;
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error" });
+  }
+};
+
+export const getDate = async (req: express.Request, res: express.Response) => {
+  try {
+    const freelancerId = await freeLancerRouteProtection(req, res);
+    if ("_id" in freelancerId) {
+      const freelancerAccount = await freelancer.findById(freelancerId);
+      return res.json({ schedule: freelancerAccount.Schedule });
+    }
+    return freelancerId;
   } catch (err) {
     console.log(err);
     return res.json({ error: "Server Error" });
