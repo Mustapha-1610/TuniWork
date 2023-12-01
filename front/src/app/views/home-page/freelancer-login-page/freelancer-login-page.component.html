@@ -1,0 +1,16 @@
+<form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+  <label>
+    Email:
+    <input type="text" formControlName="Email" />
+  </label>
+
+  <label>
+    Password:
+    <input type="password" formControlName="Password" />
+  </label>
+
+  <button type="submit">Submit</button>
+</form>
+test 1<input type="radio" (click)="changeComponent()" name="componet" /><br />
+test 2<input type="radio" (click)="changeComponent()" name="componet" />
+<div *ngComponentOutlet="freelancerSignupComponent"></div>

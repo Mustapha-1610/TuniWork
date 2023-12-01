@@ -1,0 +1,73 @@
+
+// create company account (POST)
+
+http://localhost:5000/api/company/create
+
+body = {
+    "CompanyName" : "test",
+    "CompanyEmail" : "test",
+    "Password" : "test",
+    "CompanyWebsite" : "test",
+    "CompanyDescription" : "666",
+    "CompanyPhone" : 666,
+    "Location" : "test"
+}
+
+-----------------------------------------------------------------------------------------
+
+// verify account (PUT)
+
+http://localhost:5000/api/company/verify/:companyId/:VerificationCode
+
+
+-----------------------------------------------------------------------------------------
+
+// auth (POST)
+
+http://localhost:5000/api/company/auth
+
+body = {
+    "CompanyEmail" : "test",
+    "Password" : "test"
+}
+
+-----------------------------------------------------------------------------------------
+
+
+// Profile (POST)
+
+http://localhost:5000/api/company/profile
+
+body = {
+    "CompanyEmail" : "test",
+    "Password" : "test"
+}
+
+----------------------------------------------
+
+
+// LOGOUT (POST) (Must Be Logged In)
+http://localhost:5000/api/company/logout
+
+
+
+------------------------------------------
+
+
+// Update (PUT) (Must Be Logged In)
+http://localhost:5000/api/company/update
+
+body = {
+    "ChefName" : "Mustapha",
+    "Phonenumber" : 52491002
+}
+
+
+--------------------
+
+// Disable (PUT) 
+http://localhost:5000/api/company/disable
+
+body = {
+    "companyId" : "653adc26a14164a3e7cc5427"
+}
