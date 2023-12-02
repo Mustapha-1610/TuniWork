@@ -126,12 +126,8 @@ const CompanyPublicWorkOfferSchema = new Schema({
       },
       Status: {
         type: String,
-        enum: [
-        'pending', 
-        'accepted',
-        'rejected'
-      ],
-        default: 'pending',
+        enum: ["pending", "accepted", "rejected"],
+        default: "pending",
       },
     },
   ],
