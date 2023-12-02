@@ -984,3 +984,45 @@ export const getDate = async (req: express.Request, res: express.Response) => {
     return res.json({ error: "Server Error" });
   }
 };
+
+//
+export const refreshProfile = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const freelancerId = await freeLancerRouteProtection(req, res);
+    if ("_id" in freelancerId) {
+      const freelancerAccount: any = await freelancer.findById(freelancerId);
+      return res.json({ freelancerAccount });
+    }
+    return freelancerId;
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error" });
+  }
+};
+
+export const cleanNotification = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const freelancerId = await freeLancerRouteProtection(req, res);
+    if ("_id" in freelancerId) {
+      const freelancerAccount: any = await freelancer.findById(freelancerId);
+      freelancerAccount.Notifications.forEach((notification: any) => {
+        if (!notification.readStatus) {
+          notification.readStatus = true;
+        }
+      });
+      await freelancerAccount.save();
+      return res.json({ success: "Notifications Updated" });
+    }
+
+    return freelancerId;
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error" });
+  }
+};

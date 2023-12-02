@@ -188,6 +188,28 @@ const freelancerSchema = new Schema({
     type: Date,
     default: new Date(),
   },
+  Notifications: [
+    {
+      NotificationMessage: {
+        type: String,
+        required: true,
+      },
+      readStatus: {
+        type: Boolean,
+        default: false,
+      },
+      senderInformations: {
+        senderId: {
+          type: Schema.Types.ObjectId,
+          required: true,
+        },
+        senderUserType: {
+          type: String,
+          required: true,
+        },
+      },
+    },
+  ],
 });
 const freelancer = User.discriminator("freelancer", freelancerSchema);
 export default freelancer;

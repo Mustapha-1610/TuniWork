@@ -87,4 +87,14 @@ freelancerRouter.put("/addDate", freelancerController.addDate);
 
 //
 freelancerRouter.get("/getDate", freelancerController.getDate);
+
+//
+freelancerRouter.get("/refreshProfile", freelancerController.refreshProfile);
+
+//
+freelancerRouter.get(
+  "/cleanNotifications",
+  freelancerController.cleanNotification
+);
+
 export default freelancerRouter;

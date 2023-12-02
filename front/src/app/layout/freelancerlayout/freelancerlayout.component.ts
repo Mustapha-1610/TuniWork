@@ -1,4 +1,10 @@
-import { Component, OnDestroy, ChangeDetectorRef, NgZone } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  ChangeDetectorRef,
+  NgZone,
+  OnInit,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { SocialAuthService } from '@abacritt/angularx-social-login';
 import { io, Socket } from 'socket.io-client';
@@ -9,13 +15,10 @@ import { FreelancerService } from 'src/app/views/services/freelancer.service';
   templateUrl: './freelancerlayout.component.html',
   styleUrls: ['./freelancerlayout.component.css'],
 })
-export class FreelancerlayoutComponent implements OnDestroy {
+export class FreelancerlayoutComponent implements OnDestroy, OnInit {
   private socket: any = Socket;
-  freeLancerInfos = this.fs.getFreelancerCredits();
+  freeLancerInfos: any;
   connectedUsers: any;
-  notifications: any[] = [];
-  unreadNotificationCount: number = 0;
-  showNotifications = false;
 
   constructor(
     private router: Router,
@@ -47,22 +50,9 @@ export class FreelancerlayoutComponent implements OnDestroy {
     //receiving w body l notif
     this.socket.on('privateJobOfferNotification', (data: any) => {
       if (data.freelancerId === this.freeLancerInfos._id) {
-        this.notifications.push({
-          message: `You received a private job offer: ${data.jobOfferName} , id is: ${data.jobOfferId} from the company ${data.jobOfferCompany}`,
-        });
-
-        this.unreadNotificationCount++;
-
-
+        this.refreshProfile();
       }
     });
-  }
-
-  toggleNotifications() {
-    this.showNotifications = !this.showNotifications;
-    if (this.showNotifications) {
-      this.unreadNotificationCount = 0;
-    }
   }
 
   ngOnDestroy() {
@@ -80,5 +70,38 @@ export class FreelancerlayoutComponent implements OnDestroy {
         localStorage.removeItem('freeLancerInfos');
         this.router.navigate(['/']);
       });
+  }
+  unreadCount: number = 0;
+  dropdownOpen: boolean = false;
+  toggleDropdown() {
+    this.dropdownOpen = !this.dropdownOpen;
+    this.unreadCount = 0;
+    this.fs.cleanNotifications().subscribe((res: any) => {
+      if (res.success) {
+        this.refreshProfile();
+      }
+    });
+  }
+  ngOnInit() {
+    this.refreshProfile();
+  }
+
+  calculateUnreadCount() {
+    this.unreadCount = this.freeLancerInfos.Notifications.filter(
+      (Notifications: any) => !Notifications.readStatus
+    ).length;
+  }
+  refreshProfile() {
+    this.fs.refreshProfile().subscribe((res: any) => {
+      if (res.freelancerAccount) {
+        this.fs.setFreelancerCredits(JSON.stringify(res.freelancerAccount));
+        this.freeLancerInfos = this.fs.getFreelancerCredits();
+        this.calculateUnreadCount();
+        console.log(this.unreadCount);
+      } else if (res.jwtError) {
+        localStorage.removeItem('freeLancerInfos');
+        this.router.navigate(['/']);
+      }
+    });
   }
 }

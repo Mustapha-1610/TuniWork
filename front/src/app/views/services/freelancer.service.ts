@@ -9,6 +9,9 @@ export class FreelancerService {
   private dataSource = new BehaviorSubject<any>(null);
   Load: boolean = true;
   data$ = this.dataSource.asObservable();
+  refreshProfile() {
+    return this.http.get('http://localhost:5000/api/freelancer/refreshProfile');
+  }
   sendData(data: any) {
     this.dataSource.next(data);
   }
@@ -48,6 +51,7 @@ export class FreelancerService {
       Schedule: form.Schedule,
       SavedWorkOffers: form.SavedWorkOffers,
       PendingWorkOffers: form.pendingWorkOffers,
+      Notifications: form.Notifications,
     };
     localStorage.setItem('freeLancerInfos', JSON.stringify(FreelancerAccount));
   }
@@ -153,5 +157,10 @@ export class FreelancerService {
   }
   getCities() {
     return this.http.get('http://localhost:5000/api/city/getAll');
+  }
+  cleanNotifications() {
+    return this.http.get(
+      'http://localhost:5000/api/freelancer/cleanNotifications'
+    );
   }
 }

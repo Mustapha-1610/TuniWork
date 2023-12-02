@@ -257,8 +257,10 @@ export const acceptFreelancer = async (
     }
 
     // Check if the public job offer is in the correct status to accept a freelancer
-    if (publicJobOffer.status !== 'awaiting application requests') {
-      return res.status(400).json({ error: 'This job offer is not open for applications.' });
+    if (publicJobOffer.status !== "awaiting application requests") {
+      return res
+        .status(400)
+        .json({ error: "This job offer is not open for applications." });
     }
 
     // Check if the freelancer has applied
@@ -278,8 +280,8 @@ export const acceptFreelancer = async (
       appliedFreelancer.Status = "accepted";
 
       // Update the public job offer status
-      publicJobOffer.status = 'freelancer accepted, awaiting contract';
-      
+      publicJobOffer.status = "freelancer accepted, awaiting contract";
+
       // Save changes to the database
       await publicJobOffer.save();
 
@@ -309,9 +311,9 @@ export const acceptFreelancer = async (
       );
 
       return res.json({
-        success: 'Freelancer accepted successfully.',
+        success: "Freelancer accepted successfully.",
         acceptedFreelancer: appliedFreelancer,
-        updatedJobOfferStatus: publicJobOffer.status
+        updatedJobOfferStatus: publicJobOffer.status,
       });
     } else {
       return res.json({
@@ -323,8 +325,6 @@ export const acceptFreelancer = async (
     return res.status(500).json({ error: "Server Error!" });
   }
 };
-
-
 
 // function to get all private job offers of a company (aziz)
 export const getAllPublicJobOffers = async (
@@ -424,19 +424,32 @@ export const createPrivateJob = async (
     });
 
     // Update freelancer's ProposedPrivateWorks array
-   await Freelancer.findByIdAndUpdate(
+    await Freelancer.findByIdAndUpdate(
       FreelancerId,
       {
         $push: {
           ProposedPrivateWorks: {
             PrivateJobOfferId: workOffer._id,
           },
+          Notifications: {
+            NotificationMessage:
+              "New Work Offer Recieved from " +
+              offeringCompany.CompanyName +
+              " Company",
+            senderInformations: {
+              senderId: offeringCompany._id,
+              senderUserType: "Company",
+            },
+          },
         },
       },
       { new: true }
     );
 
-    return res.json({ success: "private work offer created", jobOfferId: workOffer._id });
+    return res.json({
+      success: "private work offer created",
+      jobOfferId: workOffer._id,
+    });
   } catch (err) {
     console.log(err);
     return res.json({ error: "Server Error!" });
