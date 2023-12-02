@@ -110,7 +110,7 @@ const CompanyPublicWorkOfferSchema = new Schema({
 
   status: {
     type: String,
-    enum: ["awaiting application requests", "in progress", "done"],
+    enum: ["awaiting application requests", "freelancer accepted, awaiting contract" , "in progress", "done"],
     default: "awaiting application requests",
   },
 

@@ -3,8 +3,10 @@ import { PassThrough } from "stream";
 import admin from "../Firebase/firebaseAdmin";
 import { isEmpty } from "lodash";
 
+
 async function createPDF(PDFData: any) {
   return new Promise(async (resolve, reject) => {
+
     const doc = new PDFDocument();
     const fileName = `Contract_${Date.now()}.pdf`;
     const passThrough = new PassThrough();
@@ -17,7 +19,8 @@ async function createPDF(PDFData: any) {
       },
     });
 
-    doc.pipe(passThrough);
+    doc.
+    pipe(passThrough);
     passThrough
       .pipe(writeStream)
       .on("error", (error: any) => reject(error))
@@ -36,6 +39,8 @@ async function createPDF(PDFData: any) {
     const topMargin = 50;
     const leftMargin = 50;
 
+
+    
     doc
       .fontSize(16)
       .font("Helvetica-Bold")
@@ -49,6 +54,8 @@ async function createPDF(PDFData: any) {
       .stroke();
 
     doc.moveDown(2);
+
+
     doc
       .fontSize(12)
       .font("Helvetica")
@@ -57,14 +64,18 @@ async function createPDF(PDFData: any) {
         indent: 20,
         height: 300,
       });
+
+
     doc
       .fontSize(12)
       .font("Helvetica")
-      .text("Freelancer Name = " + PDFData.FreelancerInfos.FreelancerName, {
+      .text("Greetings ,  " + PDFData.FreelancerInfos.FreelancerName, {
         align: "left",
         indent: 20,
         height: 300,
       });
+
+      
     doc
       .fontSize(12)
       .font("Helvetica")
@@ -73,6 +84,9 @@ async function createPDF(PDFData: any) {
         indent: 20,
         height: 300,
       });
+
+
+
     if (PDFData.WorkInfos.PaymentMethod.FixedPrice) {
       doc
         .fontSize(12)
@@ -91,6 +105,8 @@ async function createPDF(PDFData: any) {
           indent: 20,
           height: 300,
         });
+
+
       doc
         .fontSize(12)
         .font("Helvetica")
@@ -102,6 +118,7 @@ async function createPDF(PDFData: any) {
             height: 300,
           }
         );
+
       doc
         .fontSize(12)
         .font("Helvetica")

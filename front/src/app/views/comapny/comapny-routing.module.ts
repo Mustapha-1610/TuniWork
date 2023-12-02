@@ -13,6 +13,7 @@ import { TalentSavedFreelancersComponent } from './talent-saved-freelancers/tale
 import { PrivateJobCreateComponent } from './private-job-create/private-job-create.component';
 import { PrivateJobDetailsComponent } from './private-job-details/private-job-details.component';
 import { PrivateJobEditComponent } from './private-job-edit/private-job-edit.component';
+import { ProfilePageEditComponent } from './profile-page-edit/profile-page-edit.component';
 
 const routes: Routes = [
   {
@@ -33,39 +34,39 @@ const routes: Routes = [
     component: PublicJobCreateComponent,
   },
 
-  {
-    path: 'edit-job/:jobOfferId',
-    component: PublicJobEditFormComponent,
-  },
-  {
-    path: 'public-job-details/:publicJobOfferId',
-    component: PublicJobDetailsComponent,
-  },
-  {
-    path: 'freelancers',
-    component: TalentFreelancersComponent,
-  },
-  {
-    path: 'talent-freelancer-profile/:freelancerId',
-    component: TalentFreelancerProfileComponent,
-  },
-  {
-    path: 'saved-freelancers',
-    component: TalentSavedFreelancersComponent,
-  },
-  {
-    path: 'private-job-create/:freelancerId',
+{
+  path: 'edit-job/:jobOfferId',
+  component: PublicJobEditFormComponent,
+},
+{
+  path: 'public-job-details/:publicJobOfferId',
+  component: PublicJobDetailsComponent,
+},
+{
+  path:'freelancers',
+  component: TalentFreelancersComponent,
+},
+{
+  path: 'talent-freelancer-profile/:freelancerId',
+  component: TalentFreelancerProfileComponent,
+},
+{
+  path: 'saved-freelancers',
+  component: TalentSavedFreelancersComponent,
+},
+{
+  path: 'private-job-create/:freelancerId',
+  component: PrivateJobCreateComponent,
+},
+{
+  path: 'private-job-details/:privateJobOfferId',
+  component: PrivateJobDetailsComponent,
+},
+{
+  path: 'private-job-edit/:privateJobOfferId',
+  component: PrivateJobEditComponent,
+},
 
-    component: PrivateJobCreateComponent,
-  },
-  {
-    path: 'private-job-details/:privateJobOfferId',
-    component: PrivateJobDetailsComponent,
-  },
-  {
-    path: 'private-job-edit/:privateJobOfferId',
-    component: PrivateJobEditComponent,
-  },
 ];
 
 @NgModule({

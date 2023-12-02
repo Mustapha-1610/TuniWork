@@ -1,5 +1,5 @@
 <form [formGroup]="privateJobCreateForm" (ngSubmit)="onSubmit()">
-  
+
   <!-- Title Input -->
   <div class="mb-3">
     <label for="title" class="form-label">Title</label>
@@ -31,7 +31,7 @@
   </div>
 
   <!-- Company Name Input -->
-  <div class="mb-3">
+  <div class="mb-3" style="display:none">
     <label for="companyName" class="form-label">Company Name</label>
     <input type="text" class="form-control" id="companyName" formControlName="CompanyName">
   </div>
@@ -49,13 +49,13 @@
   </div>
 
   <!-- Company ID Input -->
-  <div class="mb-3">
+  <div class="mb-3"style="display:none">
     <label for="companyId" class="form-label">Company ID</label>
     <input type="text" class="form-control" id="companyId" formControlName="CompanyId">
   </div>
 
   <!-- Freelancer ID Input -->
-  <div class="mb-3">
+  <div class="mb-3" style="display:none">
     <label for="freelancerId" class="form-label">Freelancer ID</label>
     <input type="text" class="form-control" id="freelancerId" formControlName="FreelancerId" [value]="freelancerId" readonly>
   </div>

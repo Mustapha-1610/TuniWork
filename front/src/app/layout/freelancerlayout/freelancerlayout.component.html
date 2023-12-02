@@ -6,6 +6,21 @@
     <a class="text-white" routerLink="/freelancer/profile">Profile</a>
     <a class="text-white cursor-pointer" (click)="logout()">Logout</a>
   </div>
-  <h3 class="text-white">Connected Freelancers : {{ connectedUsers }}</h3>
+  <h3 class="text-white">Connected Freelancers: {{ connectedUsers }}</h3>
 </nav>
+
+
+
+<button (click)="toggleNotifications()">
+  <img src="../../../assets/images/notif.png" alt="Notification Bell">
+  <span>{{ unreadNotificationCount }}</span>
+</button>
+
+<div *ngIf="showNotifications">
+  <div *ngFor="let notification of notifications" class="notification">
+    <p>{{ notification.message }}</p>
+  </div>
+</div>
+
+
 <router-outlet></router-outlet>

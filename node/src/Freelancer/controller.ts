@@ -915,7 +915,7 @@ export const sendFreelancerContract = async (
     const url = await createPDF(data);
     const contractingCompany: any = await company.findById(PWO.CompanyId);
     const contractedFreelancer: any = await freelancer.findById(
-      "65689e842d87b7ace137a1ea"
+      "65678cbe3f07f216e060158a"
     );
     contractedFreelancer.CompanyRecievedContracts.push(url);
     contractingCompany.freelancerSentContracts.push(url);

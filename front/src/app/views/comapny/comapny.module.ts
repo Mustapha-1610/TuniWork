@@ -15,6 +15,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { PrivateJobDetailsComponent } from './private-job-details/private-job-details.component';
 import { PrivateJobEditComponent } from './private-job-edit/private-job-edit.component';
+import { ProfilePageEditComponent } from './profile-page-edit/profile-page-edit.component';
 
 
 @NgModule({
@@ -29,9 +30,10 @@ import { PrivateJobEditComponent } from './private-job-edit/private-job-edit.com
     PrivateJobCreateComponent,
     PrivateJobDetailsComponent,
     PrivateJobEditComponent,
+    ProfilePageEditComponent,
   ],
   imports: [
-    CommonModule, // Add this line to import CommonModule
+    CommonModule, 
     ComapnyRoutingModule,
     FormsModule,
     ReactiveFormsModule,

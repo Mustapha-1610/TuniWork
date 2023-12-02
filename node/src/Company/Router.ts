@@ -20,11 +20,15 @@ companyRouter.get("/getAllCompanies", companyController.getAllCompanies);
 
 companyRouter.put("/update", companyController.updateInfo);
 
-companyRouter.put("/disable", companyController.disableAccount);
+companyRouter.put("/disable/:companyId", companyController.disableAccount);
+companyRouter.put("/activate/:companyId", companyController.activateCompany);
+
 
 companyRouter.get("/getAllFreelancers",companyController.getAllFreelancers);
 
 companyRouter.post("/saveFreelancer/:companyId/:freelancerId", companyController.saveFreelancer);
+companyRouter.post("/unsaveFreelancer/:companyId/:freelancerId", companyController.unsaveFreelancer);
+
 
 
 companyRouter.get("/viewFreelancerDetails/:freelancerId", companyController.viewFreelancerDetails);

@@ -63,6 +63,10 @@ export class PrivateJobEditComponent implements OnInit {
     );
   }
 
+
+
+  
+
   onSubmit(): void {
     const privateJobOfferId = this.privateJobOffer?._id;
 

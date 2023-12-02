@@ -7,6 +7,24 @@ import { CompanyService } from '../../services/company.service';
   styleUrls: ['./profile-page.component.css'],
 })
 export class ProfilePageComponent {
-  constructor(private cs: CompanyService) {}
   companyData: any = this.cs.getCompanyInfos();
+
+  constructor(private cs: CompanyService) {}
+
+  disableAccount() {
+    this.cs.disableAccount().subscribe(
+      (response: any) => {
+        if (response.success) {
+          console.log(response.success);
+          this.cs.logout();
+        } else {
+          // Handle error response
+          console.error(response.error);
+        }
+      },
+      (error) => {
+        console.error('Error disabling account:', error);
+      }
+    );
+  }
 }

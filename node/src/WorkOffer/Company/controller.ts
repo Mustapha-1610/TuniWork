@@ -256,6 +256,11 @@ export const acceptFreelancer = async (
       return res.status(404).json({ error: "Public job offer not found." });
     }
 
+    // Check if the public job offer is in the correct status to accept a freelancer
+    if (publicJobOffer.status !== 'awaiting application requests') {
+      return res.status(400).json({ error: 'This job offer is not open for applications.' });
+    }
+
     // Check if the freelancer has applied
     const appliedFreelancer = publicJobOffer.AppliedFreelancers.find(
       (freelancer) => freelancer.FreelancerId.toString() === freelancerId
@@ -272,7 +277,10 @@ export const acceptFreelancer = async (
       // Update the status of the accepted freelancer in AppliedFreelancers
       appliedFreelancer.Status = "accepted";
 
-      // Update the public job offer in the database
+      // Update the public job offer status
+      publicJobOffer.status = 'freelancer accepted, awaiting contract';
+      
+      // Save changes to the database
       await publicJobOffer.save();
 
       // Update the status of the accepted freelancer to "accepted" in pendingWorkOffers
@@ -301,8 +309,9 @@ export const acceptFreelancer = async (
       );
 
       return res.json({
-        success: "Freelancer accepted successfully.",
+        success: 'Freelancer accepted successfully.',
         acceptedFreelancer: appliedFreelancer,
+        updatedJobOfferStatus: publicJobOffer.status
       });
     } else {
       return res.json({
@@ -314,6 +323,8 @@ export const acceptFreelancer = async (
     return res.status(500).json({ error: "Server Error!" });
   }
 };
+
+
 
 // function to get all private job offers of a company (aziz)
 export const getAllPublicJobOffers = async (
@@ -413,7 +424,7 @@ export const createPrivateJob = async (
     });
 
     // Update freelancer's ProposedPrivateWorks array
-    await Freelancer.findByIdAndUpdate(
+   await Freelancer.findByIdAndUpdate(
       FreelancerId,
       {
         $push: {
@@ -425,7 +436,7 @@ export const createPrivateJob = async (
       { new: true }
     );
 
-    return res.json({ success: "private work offer created" });
+    return res.json({ success: "private work offer created", jobOfferId: workOffer._id });
   } catch (err) {
     console.log(err);
     return res.json({ error: "Server Error!" });
