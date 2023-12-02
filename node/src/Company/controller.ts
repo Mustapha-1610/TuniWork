@@ -321,6 +321,40 @@ export const saveFreelancer = async (req: express.Request, res: express.Response
   }
 };
 
+//unsave freelancer (aziz)
+export const unsaveFreelancer = async (req: express.Request, res: express.Response) => {
+  try {
+    const { companyId, freelancerId } = req.params;
+
+    // Check if the company exists
+    const company = await Company.findById(companyId);
+
+    if (!company) {
+      return res.json({ error: 'Invalid company ID' });
+    }
+
+    // Check if the freelancer is saved by the company
+    const existingSavedFreelancerIndex = company.savedFreelancers.findIndex(
+      (saved) => saved.freelancerId.toString() === freelancerId
+    );
+
+    if (existingSavedFreelancerIndex === -1) {
+      return res.json({ error: 'Freelancer not saved by the company' });
+    }
+
+    // Remove the freelancer from the savedFreelancers array
+    company.savedFreelancers.splice(existingSavedFreelancerIndex, 1);
+
+    // Save the updated company document
+    await company.save();
+
+    return res.json({ success: 'Freelancer removed successfully' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Server Error' });
+  }
+};
+
 
 export const getSavedFreelancers = async (req: express.Request, res: express.Response) => {
   try {

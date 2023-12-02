@@ -3,7 +3,10 @@ import axios from "axios";
 let connectedUsers: any[] = [];
 
 const freelancerNameSpaceLogic = (bidderNameSpace: any) => {
+
   bidderNameSpace.on("connection", (socket: any) => {
+
+    
     socket.on("newUserConnected", (data: any) => {
       const userExists = connectedUsers.some((user) => user._id === data._id);
       if (!userExists) {
@@ -13,6 +16,8 @@ const freelancerNameSpaceLogic = (bidderNameSpace: any) => {
         bidderNameSpace.emit("userConnected", connectedUsers);
       }
     });
+
+
     socket.on("userDisconnected", (connectedUserId: any) => {
       console.log("disconnected");
       connectedUsers = connectedUsers.filter(
@@ -20,9 +25,12 @@ const freelancerNameSpaceLogic = (bidderNameSpace: any) => {
       );
       bidderNameSpace.emit("userDisconnected", connectedUsers);
     });
+
   });
 
+
   bidderNameSpace.on("disconnect", (socket: any) => {});
+
 };
 
 export default freelancerNameSpaceLogic;

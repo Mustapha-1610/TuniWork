@@ -15,6 +15,7 @@ import workRouter from "./Work/Router";
 import languagesRouter from "./utils/Languages/Router";
 import CompanyWorkOfferRouter from "./WorkOffer/Company/router";
 import freelancerNameSpaceLogic from "./Freelancer/freelancerSocketLogic";
+import companyNameSpaceLogic from "./Company/companySocketLogic";
 import cityRouter from "./utils/City/Router";
 dotenv.config();
 const app = express();
@@ -66,3 +67,8 @@ serverApp.listen(5000, () => {
 
 const freelancerNameSpace = io.of("/freelancer");
 freelancerNameSpaceLogic(freelancerNameSpace);
+export {freelancerNameSpace}
+
+const companyNameSpace = io.of("/company");
+companyNameSpaceLogic(companyNameSpace);
+
