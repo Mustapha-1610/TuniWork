@@ -30,11 +30,6 @@ export class FreelancerlayoutComponent implements OnDestroy, OnInit {
     this.socket = io('http://localhost:5000/freelancer');
     this.socket.connect();
 
-    this.socket.emit('newUserConnected', {
-      Name: this.freeLancerInfos?.Name,
-      _id: this.freeLancerInfos?._id,
-    });
-
     this.socket.on('userConnected', (data: any) => {
       this.zone.run(() => {
         this.connectedUsers = data.length;
@@ -84,6 +79,11 @@ export class FreelancerlayoutComponent implements OnDestroy, OnInit {
   }
   ngOnInit() {
     this.refreshProfile();
+    this.freeLancerInfos = this.fs.getFreelancerCredits();
+    this.socket.emit('newUserConnected', {
+      Name: this.freeLancerInfos?.Name,
+      _id: this.freeLancerInfos?._id,
+    });
   }
 
   calculateUnreadCount() {
