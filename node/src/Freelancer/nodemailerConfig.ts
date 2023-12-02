@@ -33,7 +33,7 @@ export const SendFreelancerAccountConfirmationMail = async (
     .sendMail({
       from: user,
       to: email,
-      subject: "Password Resett",
+      subject: "Freelancer Account Activation",
       html: `
       <div style="font-family: Arial, sans-serif; font-size: 16px;">
   <h1>TuniWork Freelance Account Activation</h1>

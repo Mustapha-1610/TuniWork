@@ -1,5 +1,5 @@
 import Company from "./modal";
-import Freelancer from "../Freelancer/modal"
+import Freelancer from "../Freelancer/modal";
 import jwt from "jsonwebtoken";
 import express from "express";
 import bcrypt from "bcryptjs";
@@ -13,7 +13,6 @@ import PublicJobOffer from "WorkOffer/Company/CompanyPublicWorkOfferModal";
 export const create = async (req: express.Request, res: express.Response) => {
   console.log();
   const {
-  
     CompanyEmail,
     CompanyName,
     Password,
@@ -22,9 +21,6 @@ export const create = async (req: express.Request, res: express.Response) => {
     CompanyDescription,
     CompanyPhone,
     Location,
-    
-
-
   } = req.body;
   try {
     if (
@@ -147,7 +143,6 @@ export const auth = async (req: express.Request, res: express.Response) => {
   }
 };
 
-
 // function to retrieve company Account informations (aziz)
 export const getProfile = async (
   req: express.Request,
@@ -182,7 +177,10 @@ export const getAllCompanies = async (
 };
 
 //update company details (aziz)
-export const updateInfo = async (  req: express.Request,  res: express.Response) => {
+export const updateInfo = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     const companyId = await companyRouteProtection(req, res);
     const {
@@ -192,8 +190,6 @@ export const updateInfo = async (  req: express.Request,  res: express.Response)
       CompanyDescription,
       CompanyPhone,
       Location,
-
-
     } = req.body;
     if ("_id" in companyId) {
       let company = await Company.findById(companyId);
@@ -209,7 +205,9 @@ export const updateInfo = async (  req: express.Request,  res: express.Response)
       CompanyName ? (company.CompanyName = CompanyName) : null;
       CompanyWebsite ? (company.CompanyWebsite = CompanyWebsite) : null;
       CompanyEmail ? (company.CompanyEmail = CompanyEmail) : null;
-      CompanyDescription  ? (company.CompanyDescription = CompanyDescription) : null;
+      CompanyDescription
+        ? (company.CompanyDescription = CompanyDescription)
+        : null;
       CompanyPhone ? (company.CompanyPhone = CompanyPhone) : null;
       Location ? (company.Location = Location) : null;
 
@@ -265,27 +263,29 @@ export const activateCompany = async (
 
 
 //get all freelancers
-export const getAllFreelancers = async (  req: express.Request,  res: express.Response) => {
+export const getAllFreelancers = async (
+  req: express.Request,
+  res: express.Response
+) => {
   let allfreelancers = await Freelancer.find();
   return res.json({ allfreelancers });
 };
 
-
-
 //save freelancer (aziz)
-export const saveFreelancer = async (req: express.Request, res: express.Response) => {
+export const saveFreelancer = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     const { companyId, freelancerId } = req.params;
 
-
     // Check if the company and freelancer exist
     const company = await Company.findById(companyId);
-    const freelancer = await Freelancer.findById(freelancerId);
+    const freelancer: any = await Freelancer.findById(freelancerId);
     const freelancerName = freelancer ? freelancer.Name : null;
-    
 
     if (!company || !freelancer) {
-      return res.json({ error: 'Invalid company or freelancer ID' });
+      return res.json({ error: "Invalid company or freelancer ID" });
     }
 
     // Check if the freelancer is already saved by the company
@@ -294,7 +294,7 @@ export const saveFreelancer = async (req: express.Request, res: express.Response
     );
 
     if (existingSavedFreelancer) {
-      return res.json({ error: 'Freelancer already saved by the company' });
+      return res.json({ error: "Freelancer already saved by the company" });
     }
 
     await Company.findByIdAndUpdate(
@@ -310,14 +310,13 @@ export const saveFreelancer = async (req: express.Request, res: express.Response
       { new: true }
     );
 
-
     // Save the updated company document
     await company.save();
 
-    return res.json({ success: 'Freelancer saved successfully' });
+    return res.json({ success: "Freelancer saved successfully" });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: 'Server Error' });
+    return res.status(500).json({ error: "Server Error" });
   }
 };
 
@@ -364,7 +363,7 @@ export const getSavedFreelancers = async (req: express.Request, res: express.Res
     const company = await Company.findById(companyId);
 
     if (!company) {
-      return res.status(404).json({ error: 'Company not found' });
+      return res.status(404).json({ error: "Company not found" });
     }
 
     // Extract saved freelancers from the company document
@@ -372,32 +371,30 @@ export const getSavedFreelancers = async (req: express.Request, res: express.Res
 
     return res.json({ savedFreelancers });
   } catch (error) {
-    console.error('Error in getSavedFreelancers:', error);
-    return res.status(500).json({ error: 'Server Error' });
+    console.error("Error in getSavedFreelancers:", error);
+    return res.status(500).json({ error: "Server Error" });
   }
 };
 
 //view details of a freelancer
-export const viewFreelancerDetails = async (req: express.Request, res: express.Response) => {
-try {
+export const viewFreelancerDetails = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
     const { freelancerId } = req.params;
 
     // Find the freelancer by ID
     const freelancer = await Freelancer.findById(freelancerId);
 
     if (!freelancer) {
-      return res.status(404).json({ error: 'Freelancer not found' });
+      return res.status(404).json({ error: "Freelancer not found" });
     }
 
     // Send the freelancer details in the response
     return res.json({ freelancer });
   } catch (error) {
-    console.error('Error in getFreelancerDetails:', error);
-    return res.status(500).json({ error: 'Internal Server Error' });
-  };
-
-  
-}
-
-
-
+    console.error("Error in getFreelancerDetails:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};

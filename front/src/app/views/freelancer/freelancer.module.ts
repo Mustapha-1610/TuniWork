@@ -22,6 +22,9 @@ import { environment } from 'src/environment';
 import { provideFirebaseApp, getApp, initializeApp } from '@angular/fire/app';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatIconModule } from '@angular/material/icon';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 @NgModule({
   declarations: [
@@ -46,7 +49,12 @@ import { MatIconModule } from '@angular/material/icon';
     provideStorage(() => getStorage(getApp())),
     ReactiveFormsModule,
     MatProgressBarModule,
+    NgMultiSelectDropDownModule,
     MatIconModule,
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory,
+    }),
   ],
 })
 export class FreelancerModule {}

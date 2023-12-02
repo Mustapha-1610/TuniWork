@@ -5,10 +5,12 @@ import PrivateJobOffer from "./CompanyPrivateWorkOfferModal";
 import Freelancer from "../../Freelancer/modal";
 import PublicJobOffer from "./CompanyPublicWorkOfferModal";
 
-
 /********************PUBLIC JOBS PART ******************/
 // create public job offer ( mostfa)
-export const createPublicJob = async (  req: express.Request,  res: express.Response) => {
+export const createPublicJob = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     const {
       Title,
@@ -26,7 +28,8 @@ export const createPublicJob = async (  req: express.Request,  res: express.Resp
       return res.json({ error: "Server Error" });
     }
 
-    const PaymentMethodVerificationStatus = offeringCompany.PaymentMethodVerificationStatus;
+    const PaymentMethodVerificationStatus =
+      offeringCompany.PaymentMethodVerificationStatus;
     const CompanyName = offeringCompany.CompanyName;
     const CompanyLocation = offeringCompany.Location;
     const TotalWorkOfferd = offeringCompany.WorkOfferd;
@@ -64,7 +67,7 @@ export const FindBestMatchesPublicWorkOffers = async (
 ) => {
   try {
     const { freelancerId } = req.body;
-    const freeLancer = await Freelancer.findById(freelancerId);
+    const freeLancer: any = await Freelancer.findById(freelancerId);
     const returnedFields =
       "PaymentMethod _id Title CreationDate CompanyName PaymentMethodVerificationStatus Location TotalWorkOfferd TotalMoneyPayed Description WorkSpeciality";
     const matchingJobOffers: any = await companyPublicWorkOffer
@@ -129,7 +132,6 @@ export const getPublicJobOffer = async (
   }
 };
 
-
 //idk ver 2
 export const getPublicJobDetails = async (
   req: express.Request,
@@ -142,14 +144,14 @@ export const getPublicJobDetails = async (
     const publicJobOffer = await PublicJobOffer.findById(publicJobOfferId);
 
     if (!publicJobOffer) {
-      return res.json({ error: 'Public job offer not found' });
+      return res.json({ error: "Public job offer not found" });
     }
 
     // Return the details of the public job offer
     return res.json({ publicJobOffer });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Server Error' });
+    res.status(500).json({ error: "Server Error" });
   }
 };
 
@@ -239,9 +241,11 @@ export const editPublicJob = async (
   }
 };
 
-
 //accept freelancer and reject the rest freelancers (aziz)
-export const acceptFreelancer = async (req: express.Request, res: express.Response) => {
+export const acceptFreelancer = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     const { publicJobOfferId, freelancerId } = req.params;
 
@@ -249,7 +253,7 @@ export const acceptFreelancer = async (req: express.Request, res: express.Respon
     const publicJobOffer = await PublicJobOffer.findById(publicJobOfferId);
 
     if (!publicJobOffer) {
-      return res.status(404).json({ error: 'Public job offer not found.' });
+      return res.status(404).json({ error: "Public job offer not found." });
     }
 
     // Check if the public job offer is in the correct status to accept a freelancer
@@ -263,13 +267,15 @@ export const acceptFreelancer = async (req: express.Request, res: express.Respon
     );
 
     if (!appliedFreelancer) {
-      return res.status(404).json({ error: 'Freelancer not found among the applicants.' });
+      return res
+        .status(404)
+        .json({ error: "Freelancer not found among the applicants." });
     }
 
     // If the freelancer is accepted, mark them as accepted
-    if (appliedFreelancer.Status === 'pending') {
+    if (appliedFreelancer.Status === "pending") {
       // Update the status of the accepted freelancer in AppliedFreelancers
-      appliedFreelancer.Status = 'accepted';
+      appliedFreelancer.Status = "accepted";
 
       // Update the public job offer status
       publicJobOffer.status = 'freelancer accepted, awaiting contract';
@@ -279,21 +285,27 @@ export const acceptFreelancer = async (req: express.Request, res: express.Respon
 
       // Update the status of the accepted freelancer to "accepted" in pendingWorkOffers
       await Freelancer.updateOne(
-        { '_id': freelancerId, 'pendingWorkOffers.PublicJobOfferId': publicJobOfferId },
-        { $set: { 'pendingWorkOffers.$.Status': 'accepted' } }
+        {
+          _id: freelancerId,
+          "pendingWorkOffers.PublicJobOfferId": publicJobOfferId,
+        },
+        { $set: { "pendingWorkOffers.$.Status": "accepted" } }
       );
 
       // Update the status of other freelancers to "rejected" in pendingWorkOffers
       await Freelancer.updateMany(
-        { '_id': { $ne: freelancerId }, 'pendingWorkOffers.PublicJobOfferId': publicJobOfferId },
-        { $set: { 'pendingWorkOffers.$.Status': 'rejected' } }
+        {
+          _id: { $ne: freelancerId },
+          "pendingWorkOffers.PublicJobOfferId": publicJobOfferId,
+        },
+        { $set: { "pendingWorkOffers.$.Status": "rejected" } }
       );
 
       // Update the status of other freelancers to "rejected" in AppliedFreelancers
       await PublicJobOffer.updateMany(
-        { '_id': publicJobOfferId, 'AppliedFreelancers.Status': 'pending' },
-        { $set: { 'AppliedFreelancers.$[elem].Status': 'rejected' } },
-        { arrayFilters: [{ 'elem.Status': 'pending' }] }
+        { _id: publicJobOfferId, "AppliedFreelancers.Status": "pending" },
+        { $set: { "AppliedFreelancers.$[elem].Status": "rejected" } },
+        { arrayFilters: [{ "elem.Status": "pending" }] }
       );
 
       return res.json({
@@ -302,18 +314,23 @@ export const acceptFreelancer = async (req: express.Request, res: express.Respon
         updatedJobOfferStatus: publicJobOffer.status
       });
     } else {
-      return res.json({ error: 'Freelancer has already been accepted or rejected.' });
+      return res.json({
+        error: "Freelancer has already been accepted or rejected.",
+      });
     }
   } catch (err) {
     console.log(err);
-    return res.status(500).json({ error: 'Server Error!' });
+    return res.status(500).json({ error: "Server Error!" });
   }
 };
 
 
 
 // function to get all private job offers of a company (aziz)
-export const getAllPublicJobOffers = async (  req: express.Request,  res: express.Response) => {
+export const getAllPublicJobOffers = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     const { companyId } = req.params;
 
@@ -323,10 +340,9 @@ export const getAllPublicJobOffers = async (  req: express.Request,  res: expres
     res.json(publicJobOffers);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Server Error' });
+    res.status(500).json({ error: "Server Error" });
   }
 };
-
 
 // get all public work offer (aziz)
 export const getPublicWorkOffer = async (
@@ -352,16 +368,13 @@ export const getPublicWorkOffer = async (
   }
 };
 
-
-
-
-
-
-
 /*************************PRIVATE JOB OFFERS ******************/
 
 // create private job offer ( aziz )
-export const createPrivateJob = async (  req: express.Request,  res: express.Response) => {
+export const createPrivateJob = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     const {
       Title,
@@ -379,15 +392,13 @@ export const createPrivateJob = async (  req: express.Request,  res: express.Res
       DeadLine,
     } = req.body;
 
-    
-
     const offeringCompany = await company.findById(CompanyId);
     if (!offeringCompany) {
       return res.json({ error: "Server Error" });
     }
 
     // Fetch the freelancer's name based on FreelancerId
-    const freelancer = await Freelancer.findById(FreelancerId);
+    const freelancer: any = await Freelancer.findById(FreelancerId);
     const freelancerName = freelancer ? freelancer.Name : null;
 
     let workOffer = await PrivateJobOffer.create({
@@ -481,7 +492,7 @@ export const cancelJobOffer = async (
   res: express.Response
 ) => {
   try {
-    // const { freelancerId, PrivateJobOfferId } = req.params; 
+    // const { freelancerId, PrivateJobOfferId } = req.params;
 
     const { PrivateJobOfferId } = req.params; // Change from req.body to req.params
 
@@ -500,7 +511,7 @@ export const cancelJobOffer = async (
     }
 
     // ne7i l job mn tableau freelancer ProposedPrivateWorks
- /*    await Freelancer.findByIdAndUpdate(
+    /*    await Freelancer.findByIdAndUpdate(
       freelancerId,
       {
         $pull: {
@@ -523,13 +534,18 @@ export const cancelJobOffer = async (
 };
 
 // get both private and public job offers from the databse(aziz)
-export const getAllJobOffers = async (  req: express.Request,  res: express.Response) => {
+export const getAllJobOffers = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     const companyId = req.params.companyId;
 
     // Assuming that your job offer models have a CompanyId field
     const privateJobs = await PrivateJobOffer.find({ CompanyId: companyId });
-    const publicJobs = await companyPublicWorkOffer.find({ CompanyId: companyId });
+    const publicJobs = await companyPublicWorkOffer.find({
+      CompanyId: companyId,
+    });
 
     const allJobs = [...privateJobs, ...publicJobs];
 
@@ -540,36 +556,42 @@ export const getAllJobOffers = async (  req: express.Request,  res: express.Resp
   }
 };
 
-
 // function to get all private job offers of a company (aziz)
-export const getAllPrivateJobOffers = async (  req: express.Request,  res: express.Response) => {
+export const getAllPrivateJobOffers = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     const { companyId } = req.params;
 
     // Fetch private job offers based on the company ID
-    const privateJobOffers = await PrivateJobOffer.find({ CompanyId: companyId });
+    const privateJobOffers = await PrivateJobOffer.find({
+      CompanyId: companyId,
+    });
 
     res.json(privateJobOffers);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Server Error' });
+    res.status(500).json({ error: "Server Error" });
   }
 };
 
-
 //get details of a prv job offer (aziz)
-export const getPrivateJobOfferDetails = async (req: express.Request, res: express.Response) => {
+export const getPrivateJobOfferDetails = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     const { privateJobOfferId } = req.params;
 
     // Fetch private job offer details based on the privateJobOfferId
-    const privateJobOfferDetails = await PrivateJobOffer.findById(privateJobOfferId);
+    const privateJobOfferDetails = await PrivateJobOffer.findById(
+      privateJobOfferId
+    );
 
     res.json(privateJobOfferDetails);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Server Error' });
+    res.status(500).json({ error: "Server Error" });
   }
 };
-
-

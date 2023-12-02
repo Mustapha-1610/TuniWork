@@ -86,7 +86,8 @@
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
               "@angular/material/prebuilt-themes/pink-bluegrey.css",
-              "src/styles.css"
+              "src/styles.css",
+              "node_modules/angular-calendar/css/angular-calendar.css"
             ],
             "scripts": []
           }

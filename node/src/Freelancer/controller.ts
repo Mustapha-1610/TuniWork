@@ -134,6 +134,75 @@ export const create = async (req: express.Request, res: express.Response) => {
   }
 };
 
+export const createMobileAccount = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const {
+      City,
+      Name,
+      Surname,
+      Email,
+      Password,
+      HourlyPayRate,
+      PayPerTaskRate,
+      WorkTitle,
+      Speciality,
+      PhoneNumber,
+      Municipality,
+    } = req.body;
+    // ylawej 3la freelancer 3andou ya nafs ya nafs phone number ya nafs l mail
+    let existingFreelancer = await freelancer.findOne({
+      $or: [{ Email: Email }, { PhoneNumber: PhoneNumber }],
+    });
+    if (existingFreelancer) {
+      return res.json({ error: "Account Exists Allready" });
+    }
+    const characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let VerificationCode = "";
+    for (let i = 0; i < 25; i++) {
+      VerificationCode +=
+        characters[Math.floor(Math.random() * characters.length)];
+    }
+    const securePassword = bcrypt.hashSync(Password);
+    const freelancerAccount: any = await freelancer.create({
+      Name,
+      Surname,
+      Email,
+      Password: securePassword,
+      PayRate: {
+        HourlyRate: HourlyPayRate,
+        PayPerTaskRate: PayPerTaskRate,
+      },
+      PhoneNumber,
+      VerificationCode: VerificationCode,
+      Languages: ["Arabic", "English"],
+      EstimateWorkLocation: {
+        City,
+        Municipality,
+      },
+      WorkTitle: {
+        WorkTitleId: null,
+        WorkTitleText: WorkTitle,
+      },
+      Speciality: [Speciality],
+      VerLinkExpDate: new Date(new Date().getTime() + 2 * 60 * 60 * 1000),
+    });
+    await SendFreelancerAccountConfirmationMail(
+      freelancerAccount.Name,
+      freelancerAccount.Email,
+      freelancerAccount._id,
+      freelancerAccount.VerificationCode
+    );
+    return res.json({ success: "Account Created" });
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error" });
+  }
+};
+
 // function to verify freelancer account (Muèstapha)
 export const verifyAccount = async (
   req: express.Request,
@@ -273,13 +342,13 @@ export const passReset = async (
 
 // function to authenticate Freelancer Using jwt's (Mustapha)
 export const auth = async (req: express.Request, res: express.Response) => {
-  console.log("working");
+  console.log("AAAAAAAAAAAAA");
   try {
     console.log(req.body);
     const { Email, Password, PhoneNumber } = req.body;
     let freeLancerAccount: any;
     if ((!Email && !Password) || (!PhoneNumber && !Password)) {
-      return res.status(401).json({ error: "Invalid Input(s)" });
+      return res.json({ error: "Invalid Input(s)" });
     } else if (!Email) {
       freeLancerAccount = await freelancer.findOne({ PhoneNumber });
     } else {
@@ -293,7 +362,7 @@ export const auth = async (req: express.Request, res: express.Response) => {
       freeLancerAccount.Password
     );
     if (!passwordcheck) {
-      return res.status(404).json({ Message: "Invalid email or password !" });
+      return res.json({ error: "Invalid email or password !" });
     }
     if (freeLancerAccount.AccountVerficiationStatus === false) {
       return res.json({
@@ -306,10 +375,10 @@ export const auth = async (req: express.Request, res: express.Response) => {
 
     await generateFreelancerToken(res, freeLancerAccount._id);
     console.log(freeLancerAccount);
-    return res.json("working");
+    return res.json({ freeLancerAccount });
   } catch (err) {
     console.log(err);
-    return res.json({ error: "Server Error!" });
+    return res.status(401).json({ error: "Server Error!" });
   }
 };
 
@@ -527,7 +596,6 @@ export const multiauth = async (
     let existingAccount: any = await freelancer.findOne({
       $or: [{ Email }, { PhoneNumber }],
     });
-
     if (existingAccount) {
       const passwordcheck = bcrypt.compareSync(
         Password,
@@ -544,7 +612,6 @@ export const multiauth = async (
       if (existingAccount.AccountActivationStatus === false) {
         return res.json({ error: "This account is disabled !" });
       }
-
       await generateFreelancerToken(res, existingAccount._id);
       return res.json({ freelancerAccount: existingAccount });
     } else if (
@@ -647,7 +714,7 @@ export const applyForPublicJob = async (
   try {
     const { freelancerId, jobOfferId } = req.body;
 
-    const freelancer = await Freelancer.findById(freelancerId);
+    const freelancer: any = await Freelancer.findById(freelancerId);
     const freelancerName = freelancer.Name;
 
     const jobOffer = await PublicJobOffer.findById(jobOfferId);
@@ -876,6 +943,42 @@ export const filterPWOSearch = async (
       },
     }).select(returnedFields);
     return res.json({ matchingJobOffers });
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error" });
+  }
+};
+
+//
+export const addDate = async (req: express.Request, res: express.Response) => {
+  try {
+    const freelancerId = await freeLancerRouteProtection(req, res);
+    const { date } = req.body;
+
+    if ("_id" in freelancerId) {
+      const frelancerAccount: any = await freelancer.findById(freelancerId);
+      if (frelancerAccount) {
+        frelancerAccount.Schedule.push(date);
+        await frelancerAccount.save();
+        return res.json({ success: "Date Added" });
+      }
+      return res.json({ success: "error" });
+    }
+    return freelancerId;
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error" });
+  }
+};
+
+export const getDate = async (req: express.Request, res: express.Response) => {
+  try {
+    const freelancerId = await freeLancerRouteProtection(req, res);
+    if ("_id" in freelancerId) {
+      const freelancerAccount: any = await freelancer.findById(freelancerId);
+      return res.json({ schedule: freelancerAccount.Schedule });
+    }
+    return freelancerId;
   } catch (err) {
     console.log(err);
     return res.json({ error: "Server Error" });
