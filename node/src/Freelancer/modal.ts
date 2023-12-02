@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
-import usersSchema from "../Users/modal";
+import User from "../Users/modal";
 const freelancerSchema = new Schema({
   PhoneNumber: {
     type: Number,
@@ -189,9 +189,5 @@ const freelancerSchema = new Schema({
     default: new Date(),
   },
 });
-const CombinedFreelancerSchema = new Schema({
-  ...usersSchema.obj,
-  ...freelancerSchema.obj,
-});
-
-export default mongoose.model("freelancer", CombinedFreelancerSchema);
+const freelancer = User.discriminator("freelancer", freelancerSchema);
+export default freelancer;

@@ -1,15 +1,44 @@
 import { Component, OnInit } from '@angular/core';
 import { FreelancerService } from '../../services/freelancer.service';
 import { Router } from '@angular/router';
+import {
+  FormBuilder,
+  FormGroup,
+  FormControl,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-best-matches-component',
   templateUrl: './best-matches-component.component.html',
   styleUrls: ['./best-matches-component.component.css'],
 })
 export class BestMatchesComponentComponent implements OnInit {
-  constructor(private fs: FreelancerService, private router: Router) {}
-  ngOnInit(): void {
+  constructor(
+    private fs: FreelancerService,
+    private router: Router,
+    private formBuilder: FormBuilder,
+    private http: HttpClient
+  ) {}
+  ngOnInit() {
     this.getMatchingWorkOffers();
+    this.citiesDrowdownSettings = {
+      singleSelection: true,
+      idField: 'item_id',
+      textField: 'item_text',
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+    };
+    this.MunicipalityDropdownSettings = {
+      singleSelection: false,
+      idField: 'item_id',
+      textField: 'item_text',
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+    };
+    this.initForm();
+    this.CitiesList = this.getCities();
   }
   freeLancerInfos: any = this.fs.getFreelancerCredits();
   MatchingJobs: any;
@@ -59,7 +88,7 @@ export class BestMatchesComponentComponent implements OnInit {
           this.fs.setFreelancerCredits(JSON.stringify(res.freeLancerAccount));
 
           // Update your FreelancerInfos with the information from the response
-          this.freeLancerInfos = res.freeLancerAccount;
+          this.freeLancerInfos = this.fs.getFreelancerCredits();
 
           // Optionally, you can force Angular to check for changes
           this.isWorkOfferSaved(PWOId); // You need to inject ChangeDetectorRef in the constructor
@@ -96,5 +125,60 @@ export class BestMatchesComponentComponent implements OnInit {
   reset() {
     this.showCancel = false;
     this.getMatchingWorkOffers();
+  }
+
+  //
+  citiesDrowdownSettings: any;
+  MunicipalityList: any;
+  MunicipalityDropdownSettings: any;
+  CitiesList: any;
+  form: any = FormGroup;
+  initForm() {
+    this.form = this.formBuilder.group({
+      cities: [null, [Validators.required]],
+      municipality: [null, [Validators.required]],
+    });
+  }
+  onSpecialitySelect($event: any) {
+    console.log('Selected speciality is ', $event);
+    console.log(this.form.value.municipality);
+  }
+
+  onSpecialityDeselect($event: any) {
+    console.log('Deselected speciality is ', $event);
+  }
+  onCityDeselect($event: any) {
+    this.form.controls['municipality'].reset();
+  }
+  onItemDeselect($event: any) {
+    console.log('Deselected item is ', $event);
+  }
+  async onCitySelect($event: any) {
+    this.MunicipalityList = null;
+    this.form.controls['municipality'].reset();
+    const CityId = $event.item_id;
+    console.log($event.item_text);
+    this.http
+      .post('http://localhost:5000/api/city/getMunicipality', { CityId })
+      .subscribe((res: any) => {
+        this.MunicipalityList = res.Municipality.map(
+          (Municipality: string, index: number) => ({
+            item_id: index,
+            item_text: Municipality,
+          })
+        );
+      });
+  }
+  getCities() {
+    this.http
+      .get('http://localhost:5000/api/city/getAll')
+      .subscribe((response: any) => {
+        console.log(response);
+        this.CitiesList = response.Cities.map((item: any) => ({
+          item_id: item._id,
+          item_text: item.City,
+        }));
+        // Set default selection after data is fetched
+      });
   }
 }

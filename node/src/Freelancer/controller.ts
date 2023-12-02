@@ -714,7 +714,7 @@ export const applyForPublicJob = async (
   try {
     const { freelancerId, jobOfferId } = req.body;
 
-    const freelancer = await Freelancer.findById(freelancerId);
+    const freelancer: any = await Freelancer.findById(freelancerId);
     const freelancerName = freelancer.Name;
 
     const jobOffer = await PublicJobOffer.findById(jobOfferId);
@@ -975,7 +975,7 @@ export const getDate = async (req: express.Request, res: express.Response) => {
   try {
     const freelancerId = await freeLancerRouteProtection(req, res);
     if ("_id" in freelancerId) {
-      const freelancerAccount = await freelancer.findById(freelancerId);
+      const freelancerAccount: any = await freelancer.findById(freelancerId);
       return res.json({ schedule: freelancerAccount.Schedule });
     }
     return freelancerId;

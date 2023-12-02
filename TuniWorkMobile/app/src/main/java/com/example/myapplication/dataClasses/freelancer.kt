@@ -17,7 +17,7 @@ data class Freelancer(
 @SerializedName("Earnings") val earnings: Double = 0.0,
     @SerializedName("PayRate") val payRate: PayRate,
     @SerializedName("WorkHistory") val workHistory: List<WorkHistory>,
-    @SerializedName("Schedule") val schedule: Schedule,
+    @SerializedName("Schedule") val schedule: List<String>,
     @SerializedName("Messages") val messages: List<String>,
     @SerializedName("Languages") val languages: List<String>,
     @SerializedName("EstimateWorkLocation") val estimateWorkLocation: EstimateWorkLocation,
