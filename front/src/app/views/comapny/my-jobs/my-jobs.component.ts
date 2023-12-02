@@ -13,7 +13,6 @@ export class MyJobsComponent implements OnInit {
   constructor(private cs: CompanyService) {}
 
 
-
   ngOnInit(): void {
     this.fetchPrivateJobOffers();
     this.fetchPublicJobOffers();
@@ -33,6 +32,20 @@ export class MyJobsComponent implements OnInit {
       }
     );
   }
+
+
+  onDelete(publicJobOfferId: string): void {
+    this.cs.deletePublicJobOffer(publicJobOfferId).subscribe(
+      (response: any) => {
+        console.log(response.success);
+        this.publicJobOffers = this.publicJobOffers.filter(publicJobOffer => publicJobOffer._id !== publicJobOfferId);
+      },
+      (error) => {
+        console.error('Error deleting public job offer', error);
+      }
+    );
+  }
+
 
   fetchPrivateJobOffers(){
     const companyInfos = this.cs.getCompanyInfos();
@@ -63,24 +76,6 @@ export class MyJobsComponent implements OnInit {
       }
     );
   }
-
-
-
-
-
-
-onDelete(publicJobOfferId: string): void {
-  this.cs.deletePublicJobOffer(publicJobOfferId).subscribe(
-    (response: any) => {
-      console.log(response.success);
-      this.publicJobOffers = this.publicJobOffers.filter(publicJobOffer => publicJobOffer._id !== publicJobOfferId);
-    },
-    (error) => {
-      console.error('Error deleting public job offer', error);
-    }
-  );
-}
-
 
 
 }

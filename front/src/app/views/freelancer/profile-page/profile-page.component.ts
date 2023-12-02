@@ -21,9 +21,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   testimg: any;
   show: any = false;
   ngOnInit() {
-    this.fs.getTunisianCitiesAndTowns().subscribe((cities: any) => {
-      console.log(cities);
-    });
+
   }
   constructor(
     private router: Router,

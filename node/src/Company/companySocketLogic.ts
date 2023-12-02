@@ -29,7 +29,6 @@ const companyNameSpaceLogic = (bidderNameSpace: any) => {
     //send a notification to freelancer about private job offer
     socket.on("createPrivateJob", async (privateJobData: any) => {
       try {
-        // Emit private job offer notification to the freelancer
         freelancerNameSpace.emit('privateJobOfferNotification', {
           freelancerId : privateJobData.freelancerId,
           jobOfferName: privateJobData.jobOfferTitle,

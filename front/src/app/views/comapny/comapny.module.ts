@@ -33,7 +33,7 @@ import { ProfilePageEditComponent } from './profile-page-edit/profile-page-edit.
     ProfilePageEditComponent,
   ],
   imports: [
-    CommonModule, // Add this line to import CommonModule
+    CommonModule, 
     ComapnyRoutingModule,
     FormsModule,
     ReactiveFormsModule,

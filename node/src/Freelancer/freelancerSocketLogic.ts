@@ -26,6 +26,7 @@ const freelancerNameSpaceLogic = (bidderNameSpace: any) => {
       bidderNameSpace.emit("userDisconnected", connectedUsers);
     });
 
+       
   });
 
 
