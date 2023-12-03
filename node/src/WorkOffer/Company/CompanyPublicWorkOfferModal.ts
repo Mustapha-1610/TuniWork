@@ -110,7 +110,12 @@ const CompanyPublicWorkOfferSchema = new Schema({
 
   status: {
     type: String,
-    enum: ["awaiting application requests", "freelancer accepted, awaiting contract" , "in progress", "done"],
+    enum: [
+      "awaiting application requests",
+      "freelancer accepted, awaiting contract",
+      "in progress",
+      "done",
+    ],
     default: "awaiting application requests",
   },
 
@@ -131,6 +136,16 @@ const CompanyPublicWorkOfferSchema = new Schema({
       },
     },
   ],
+  WorkLocation: {
+    City: {
+      type: String,
+      required: true,
+    },
+    Municipality: {
+      type: String,
+      required: true,
+    },
+  },
 });
 
 const PublicJobOffer = mongoose.model(

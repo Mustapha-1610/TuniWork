@@ -12,22 +12,17 @@ export const createPublicJob = async (
   res: express.Response
 ) => {
   try {
-    const {
-      Title,
-      WorkTitle,
-      Description,
-      Note,
-      PayPerTask,
-      PayPerHour,
-      WorkSpeciality,
-      CompanyId,
-    } = req.body;
+    const { publicJobData, cityData } = req.body;
 
-    const offeringCompany = await company.findById(CompanyId);
+    const offeringCompany = await company.findById(publicJobData.CompanyId);
     if (!offeringCompany) {
+      console.log("test");
       return res.json({ error: "Server Error" });
     }
-
+    let SpecialityArray: String[] = [];
+    cityData.specialities.map((item: any) => {
+      SpecialityArray.push(item.item_text);
+    });
     const PaymentMethodVerificationStatus =
       offeringCompany.PaymentMethodVerificationStatus;
     const CompanyName = offeringCompany.CompanyName;
@@ -35,26 +30,30 @@ export const createPublicJob = async (
     const TotalWorkOfferd = offeringCompany.WorkOfferd;
     const TotalMoneyPayed = offeringCompany.MoneySpent;
 
-    let workOffer = await companyPublicWorkOffer.create({
-      Title,
-      WorkTitle,
-      Description,
-      Note,
+    await companyPublicWorkOffer.create({
+      Title: publicJobData.Title,
+      WorkTitle: cityData.workTitles[0].item_text,
+      Description: publicJobData.Description,
+      Note: publicJobData.Note,
       PaymentMethod: {
-        PayPerTask,
-        PayPerHour,
+        PayPerTask: publicJobData.PayPerTask,
+        PayPerHour: publicJobData.PayPerHour,
       },
-      WorkSpeciality,
-
-      CompanyId,
+      WorkSpeciality: SpecialityArray,
+      CompanyId: publicJobData.CompanyId,
       PaymentMethodVerificationStatus,
       CompanyName,
       CompanyLocation,
       TotalMoneyPayed,
       TotalWorkOfferd,
+      WorkLocation: {
+        City: cityData.cities[0].item_text,
+        Municipality: cityData.municipality[0].item_text,
+      },
     });
     return res.json({ success: "work offer created" });
   } catch (err) {
+    console.log("test1");
     console.log(err);
     return res.json({ error: "Server Error !" });
   }

@@ -1,5 +1,5 @@
 // Assuming freelancerNameSpace is the instance of Socket.IO namespace for freelancers
-import { freelancerNameSpace } from '../server'; 
+import { freelancerNameSpace } from "../server";
 
 import axios from "axios";
 
@@ -25,19 +25,15 @@ const companyNameSpaceLogic = (bidderNameSpace: any) => {
       bidderNameSpace.emit("userDisconnected", connectedUsers);
     });
 
-    
     //send a notification to freelancer about private job offer
     socket.on("createPrivateJob", async (privateJobData: any) => {
       try {
-        freelancerNameSpace.emit('privateJobOfferNotification', {
-          freelancerId : privateJobData.freelancerId,
-          jobOfferName: privateJobData.jobOfferTitle,
-          jobOfferId: privateJobData.jobOfferId,
-          jobOfferCompany: privateJobData.jobOfferCompany,
+        freelancerNameSpace.emit("privateJobOfferNotification", {
+          freelancerId: privateJobData.freelancerId,
         });
-        console.log('Private job offer notification emitted to freelancer');
+        console.log("Private job offer notification emitted to freelancer");
       } catch (error) {
-        console.error('Error creating private job offer', error);
+        console.error("Error creating private job offer", error);
       }
     });
   });
