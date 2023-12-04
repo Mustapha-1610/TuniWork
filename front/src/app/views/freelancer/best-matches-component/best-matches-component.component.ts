@@ -45,10 +45,12 @@ export class BestMatchesComponentComponent implements OnInit {
   errMessage: any;
   publicWorkOfferInfos: any;
   showCancel: boolean = false;
+  Speciality: any = null;
   getMatchingWorkOffers() {
     this.fs
       .getBestMatchingWO(this.freeLancerInfos._id)
       .subscribe((res: any) => {
+        console.log('hello' + res);
         this.MatchingJobs = res.matchingJobOffers;
       });
   }
@@ -118,9 +120,19 @@ export class BestMatchesComponentComponent implements OnInit {
   getOptionValue(event: any) {
     this.showCancel = true;
     this.errMessage = null;
-    this.fs.filterPWOSearch(event.target.value).subscribe((res: any) => {
-      this.MatchingJobs = res.matchingJobOffers;
-    });
+    if (event.target.value === '-') {
+      this.MatchingJobs = this.getMatchingWorkOffers();
+    } else {
+      this.Speciality = event.target.value;
+      this.fs
+        .filterPWOSearch(
+          this.Speciality,
+          this.form.value.cities ? this.form.value.cities[0].item_text : null
+        )
+        .subscribe((res: any) => {
+          this.MatchingJobs = res.matchingJobOffers;
+        });
+    }
   }
   reset() {
     this.showCancel = false;
@@ -149,6 +161,14 @@ export class BestMatchesComponentComponent implements OnInit {
   }
   onCityDeselect($event: any) {
     this.form.controls['municipality'].reset();
+    this.form.controls['cities'].reset();
+    if (this.Speciality === null || '-') {
+      this.MatchingJobs === this.getMatchingWorkOffers();
+    } else {
+      this.fs.filterPWOSearch(this.Speciality, null).subscribe((res: any) => {
+        this.MatchingJobs = res.matchingJobOffers;
+      });
+    }
   }
   onItemDeselect($event: any) {
     console.log('Deselected item is ', $event);
@@ -161,6 +181,24 @@ export class BestMatchesComponentComponent implements OnInit {
     this.http
       .post('http://localhost:5000/api/city/getMunicipality', { CityId })
       .subscribe((res: any) => {
+        console.log(this.Speciality);
+        if (this.Speciality === '-' || null) {
+          this.fs
+            .filterPWOSearch(null, this.form.value.cities[0].item_text)
+            .subscribe((res: any) => {
+              this.MatchingJobs = res.matchingJobOffers;
+            });
+        } else {
+          this.fs
+            .filterPWOSearch(
+              this.Speciality,
+              this.form.value.cities[0].item_text
+            )
+            .subscribe((res: any) => {
+              this.MatchingJobs = res.matchingJobOffers;
+            });
+        }
+
         this.MunicipalityList = res.Municipality.map(
           (Municipality: string, index: number) => ({
             item_id: index,

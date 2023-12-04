@@ -65,7 +65,7 @@ export const FindBestMatchesPublicWorkOffers = async (
   res: express.Response
 ) => {
   try {
-    const { freelancerId } = req.body;
+    const { freelancerId, City } = req.body;
     const freeLancer: any = await Freelancer.findById(freelancerId);
     const returnedFields =
       "PaymentMethod _id Title CreationDate CompanyName PaymentMethodVerificationStatus Location TotalWorkOfferd TotalMoneyPayed Description WorkSpeciality";
@@ -375,53 +375,49 @@ export const createPrivateJob = async (
   res: express.Response
 ) => {
   try {
-    const {
-      Title,
-      Description,
-      Note,
-      PayPerTask,
-      PayPerHour,
-      CompanyId,
-      PaymentMethodVerificationStatus,
-      CompanyName,
-      CompanyLocation,
-      TotalWorkOfferd,
-      TotalMoneyPayed,
-      FreelancerId,
-      DeadLine,
-    } = req.body;
-
-    const offeringCompany = await company.findById(CompanyId);
+    const { privateJobOfferData, taskTable } = req.body;
+    const offeringCompany = await company.findById(
+      privateJobOfferData.CompanyId
+    );
     if (!offeringCompany) {
       return res.json({ error: "Server Error" });
     }
 
     // Fetch the freelancer's name based on FreelancerId
-    const freelancer: any = await Freelancer.findById(FreelancerId);
+    const freelancer: any = await Freelancer.findById(
+      privateJobOfferData.FreelancerId
+    );
     const freelancerName = freelancer ? freelancer.Name : null;
-
-    let workOffer = await PrivateJobOffer.create({
-      Title,
-      Description,
-      Note,
+    let workOffer: any = await PrivateJobOffer.create({
+      Title: privateJobOfferData.Title,
+      Description: privateJobOfferData.Description,
+      Note: privateJobOfferData.Note,
       PaymentMethod: {
-        PayPerTask,
-        PayPerHour,
+        PayPerTask: privateJobOfferData.PayPerTask,
+        PayPerHour: privateJobOfferData.PayPerHour,
       },
-      CompanyId,
-      PaymentMethodVerificationStatus,
-      CompanyName,
-      CompanyLocation,
-      TotalMoneyPayed,
-      TotalWorkOfferd,
-      DeadLine,
+      CompanyId: privateJobOfferData.CompanyId,
+      PaymentMethodVerificationStatus:
+        privateJobOfferData.PaymentMethodVerificationStatus,
+      CompanyName: privateJobOfferData.CompanyName,
+      CompanyLocation: privateJobOfferData.CompanyLocation,
+      TotalMoneyPayed: privateJobOfferData.TotalMoneyPayed,
+      TotalWorkOfferd: privateJobOfferData.TotalWorkOfferd,
+      DeadLine: privateJobOfferData.DeadLine,
 
       WorkingFreelancer: {
         FreelancerName: freelancerName, // Use the fetched freelancer name
-        FreelancerId,
+        FreelancerId: privateJobOfferData.FreelancerId,
       },
+      TaskTable: [],
     });
-
+    taskTable.map((item: any) => {
+      workOffer.TaskTable.push({
+        TaskTitle: item,
+      });
+    });
+    await workOffer.save();
+    const FreelancerId = privateJobOfferData.FreelancerId;
     // Update freelancer's ProposedPrivateWorks array
     await Freelancer.findByIdAndUpdate(
       FreelancerId,
@@ -430,6 +426,8 @@ export const createPrivateJob = async (
           ProposedPrivateWorks: {
             PrivateJobOfferId: workOffer._id,
           },
+          Title: privateJobOfferData.Title,
+          Description: privateJobOfferData.Description,
           Notifications: {
             NotificationMessage:
               "New Work Offer Recieved from " +

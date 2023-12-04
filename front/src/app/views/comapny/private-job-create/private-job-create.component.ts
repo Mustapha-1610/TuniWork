@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CompanyService } from '../../services/company.service';
 import { io, Socket } from 'socket.io-client';
@@ -12,15 +17,15 @@ import { io, Socket } from 'socket.io-client';
 export class PrivateJobCreateComponent implements OnInit {
   privateJobCreateForm!: FormGroup;
   freelancerId: any;
+  tasksForm: any;
   private socket: Socket;
-
+  errMessage: any;
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private companyService: CompanyService,
     private router: Router
-  )
-  {
+  ) {
     // Initialize the Socket.IO connection in the constructor
     this.socket = io('http://localhost:5000/company');
   }
@@ -47,36 +52,59 @@ export class PrivateJobCreateComponent implements OnInit {
       WorkTitle: [''],
       CompanyId: companyId,
       FreelancerId: [this.freelancerId, Validators.required],
-
+    });
+    this.tasksForm = new FormGroup({
+      Task: new FormControl(null),
     });
   }
 
   onSubmit(): void {
-    const privateJobCreateData = this.privateJobCreateForm.value;
-    console.log('Private Job Create Data:', privateJobCreateData);
+    if (this.taskTable.length === 0) {
+      this.errMessage = 'You Need To Add Atleast One Task';
+    } else {
+      const privateJobCreateData = this.privateJobCreateForm.value;
+      console.log('Private Job Create Data:', privateJobCreateData);
 
-    this.companyService.createPrivateJobOffer(privateJobCreateData).subscribe(
-      (response: any) => {
-        console.log('API Response:', response);
+      this.companyService
+        .createPrivateJobOffer(privateJobCreateData, this.taskTable)
+        .subscribe(
+          (response: any) => {
+            console.log('API Response:', response);
 
-        const jobOfferId = response.jobOfferId;
+            const jobOfferId = response.jobOfferId;
 
-        console.log('Job Offer ID:', jobOfferId);
+            console.log('Job Offer ID:', jobOfferId);
 
-        this.socket.emit('createPrivateJob', {
-          freelancerId: this.freelancerId,
-          jobOfferTitle: privateJobCreateData.Title,
-          jobOfferId: jobOfferId,
-          jobOfferCompany: privateJobCreateData.CompanyName,
-        });
-        console.log('Private job offer emitted');
-      },
-      (error) => {
-        console.error('Error creating private job offer', error);
-      }
-    );
+            this.socket.emit('createPrivateJob', {
+              freelancerId: this.freelancerId,
+              jobOfferTitle: privateJobCreateData.Title,
+              jobOfferId: jobOfferId,
+              jobOfferCompany: privateJobCreateData.CompanyName,
+            });
+            console.log('Private job offer emitted');
+          },
+          (error) => {
+            console.error('Error creating private job offer', error);
+          }
+        );
 
-    this.router.navigate(['company/my-jobs']);
+      this.router.navigate(['company/my-jobs']);
+    }
   }
-
+  // (Mustapha)
+  taskTable: any[] = [];
+  addToTaskList() {
+    if (this.tasksForm.value.Task.trim() === '') {
+    } else {
+      this.errMessage = null;
+      this.taskTable.push(this.tasksForm.value.Task);
+      this.tasksForm.controls['Task'].reset();
+    }
+  }
+  deleteItem(item: any) {
+    this.taskTable = this.taskTable.filter((task) => task !== item);
+    if (this.taskTable.length === 0) {
+      this.errMessage = 'You Need To Add Atleast One Task';
+    }
+  }
 }

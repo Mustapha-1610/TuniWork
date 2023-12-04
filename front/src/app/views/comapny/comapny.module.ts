@@ -17,6 +17,7 @@ import { PrivateJobDetailsComponent } from './private-job-details/private-job-de
 import { PrivateJobEditComponent } from './private-job-edit/private-job-edit.component';
 import { ProfilePageEditComponent } from './profile-page-edit/profile-page-edit.component';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
     ReactiveFormsModule,
     HttpClientModule,
     NgMultiSelectDropDownModule.forRoot(),
+    MatIconModule,
   ],
 })
 export class ComapnyModule {}

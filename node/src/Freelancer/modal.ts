@@ -144,6 +144,12 @@ const freelancerSchema = new Schema({
         ],
         default: "awaiting response",
       },
+      Title: {
+        type: String,
+      },
+      Description: {
+        type: String,
+      },
     },
   ],
 

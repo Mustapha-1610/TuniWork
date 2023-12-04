@@ -1,65 +1,167 @@
-<form [formGroup]="privateJobCreateForm" (ngSubmit)="onSubmit()">
-
+{{ errMessage }}
+<form
+  [formGroup]="privateJobCreateForm"
+  (ngSubmit)="onSubmit()"
+  class="space-y-6 bg-white p-6 rounded-md shadow-md"
+>
   <!-- Title Input -->
-  <div class="mb-3">
-    <label for="title" class="form-label">Title</label>
-    <input type="text" class="form-control" id="title" formControlName="Title" required>
+  <div>
+    <label for="title" class="block text-sm font-medium text-gray-700"
+      >Title</label
+    >
+    <input
+      type="text"
+      class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+      id="title"
+      formControlName="Title"
+      required
+    />
   </div>
 
   <!-- Description Input -->
-  <div class="mb-3">
-    <label for="description" class="form-label">Description</label>
-    <textarea class="form-control" id="description" formControlName="Description" required></textarea>
+  <div>
+    <label for="description" class="block text-sm font-medium text-gray-700"
+      >Description</label
+    >
+    <textarea
+      class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+      id="description"
+      formControlName="Description"
+      required
+    ></textarea>
   </div>
 
   <!-- Note Input -->
-  <div class="mb-3">
-    <label for="note" class="form-label">Note</label>
-    <input type="text" class="form-control" id="note" formControlName="Note">
+  <div>
+    <label for="note" class="block text-sm font-medium text-gray-700"
+      >Note</label
+    >
+    <input
+      type="text"
+      class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+      id="note"
+      formControlName="Note"
+    />
   </div>
 
   <!-- Experience Level Input -->
-  <div class="mb-3">
-    <label for="experienceLevel" class="form-label">Experience Level</label>
-    <input type="text" class="form-control" id="experienceLevel" formControlName="ExperienceLevel" required>
+  <div>
+    <label for="experienceLevel" class="block text-sm font-medium text-gray-700"
+      >Experience Level</label
+    >
+    <input
+      type="text"
+      class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+      id="experienceLevel"
+      formControlName="ExperienceLevel"
+      required
+    />
   </div>
 
   <!-- Fixed Price Input -->
-  <div class="mb-3">
-    <label for="fixedPrice" class="form-label">Fixed Price</label>
-    <input type="text" class="form-control" id="fixedPrice" formControlName="FixedPrice" required>
-  </div>
-
-  <!-- Company Name Input -->
-  <div class="mb-3" style="display:none">
-    <label for="companyName" class="form-label">Company Name</label>
-    <input type="text" class="form-control" id="companyName" formControlName="CompanyName">
+  <div>
+    <label for="fixedPrice" class="block text-sm font-medium text-gray-700"
+      >Fixed Price</label
+    >
+    <input
+      type="text"
+      class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+      id="fixedPrice"
+      formControlName="FixedPrice"
+      required
+    />
   </div>
 
   <!-- Deadline Input -->
-  <div class="mb-3">
-    <label for="deadline" class="form-label">Deadline</label>
-    <input type="datetime-local" class="form-control" id="deadline" formControlName="DeadLine" required>
+  <div>
+    <label for="deadline" class="block text-sm font-medium text-gray-700"
+      >Deadline</label
+    >
+    <input
+      type="datetime-local"
+      class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+      id="deadline"
+      formControlName="DeadLine"
+      required
+    />
   </div>
 
   <!-- Work Title Input -->
-  <div class="mb-3">
-    <label for="workTitle" class="form-label">Work Title</label>
-    <input type="text" class="form-control" id="workTitle" formControlName="WorkTitle">
+  <div>
+    <label for="workTitle" class="block text-sm font-medium text-gray-700"
+      >Work Title</label
+    >
+    <input
+      type="text"
+      class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+      id="workTitle"
+      formControlName="WorkTitle"
+    />
   </div>
 
-  <!-- Company ID Input -->
-  <div class="mb-3"style="display:none">
-    <label for="companyId" class="form-label">Company ID</label>
-    <input type="text" class="form-control" id="companyId" formControlName="CompanyId">
+  <!-- Freelancer ID Input (Hidden) -->
+  <input
+    type="hidden"
+    id="freelancerId"
+    formControlName="FreelancerId"
+    [value]="freelancerId"
+  />
+
+  <!-- Task List Input -->
+  <div>
+    <form
+      [formGroup]="tasksForm"
+      (ngSubmit)="addToTaskList()"
+      class="flex items-center space-x-3"
+    >
+      <input
+        id="Task"
+        type="text"
+        formControlName="Task"
+        placeholder="Enter a task"
+        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+      />
+      <button
+        type="submit"
+        class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+      >
+        Add
+      </button>
+    </form>
   </div>
 
-  <!-- Freelancer ID Input -->
-  <div class="mb-3" style="display:none">
-    <label for="freelancerId" class="form-label">Freelancer ID</label>
-    <input type="text" class="form-control" id="freelancerId" formControlName="FreelancerId" [value]="freelancerId" readonly>
+  <!-- Task List Display -->
+  <div class="space-y-2">
+    <div class="flex items-center space-x-2" *ngFor="let items of taskTable">
+      <span class="flex-1">{{ items }}</span>
+      <button
+        type="button"
+        (click)="deleteItem(items)"
+        class="text-gray-400 hover:text-gray-600"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+    </div>
   </div>
 
   <!-- Submit Button -->
-  <button type="submit" class="btn btn-primary">Create Private Job Offer</button>
+  <button
+    type="submit"
+    class="w-full px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+  >
+    Create Private Job Offer
+  </button>
 </form>

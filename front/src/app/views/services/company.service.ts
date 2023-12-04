@@ -112,12 +112,12 @@ export class CompanyService {
   }
 
   //create private job offer
-  createPrivateJobOffer(privateJobOfferData: any) {
+  createPrivateJobOffer(privateJobOfferData: any, taskTable: any) {
     return this.http
-      .post(
-        'http://localhost:5000/api/companyWorkOffer/createPrivateJob',
-        privateJobOfferData
-      )
+      .post('http://localhost:5000/api/companyWorkOffer/createPrivateJob', {
+        privateJobOfferData,
+        taskTable,
+      })
       .pipe(
         catchError((error) => {
           console.error('Error creating private job offer:', error);

@@ -934,15 +934,45 @@ export const filterPWOSearch = async (
   res: express.Response
 ) => {
   try {
-    const { workSpeciality } = req.body;
-    const returnedFields =
-      "PaymentMethod _id Title CreationDate CompanyName PaymentMethodVerificationStatus Location TotalWorkOfferd TotalMoneyPayed Description WorkSpeciality";
-    const matchingJobOffers: any = await PublicJobOffer.find({
-      WorkSpeciality: {
-        $in: workSpeciality,
-      },
-    }).select(returnedFields);
-    return res.json({ matchingJobOffers });
+    const { workSpeciality, City } = req.body;
+    if (workSpeciality && City) {
+      const returnedFields =
+        "PaymentMethod _id Title CreationDate CompanyName PaymentMethodVerificationStatus Location TotalWorkOfferd TotalMoneyPayed Description WorkSpeciality";
+      const matchingJobOffers: any = await PublicJobOffer.find({
+        WorkSpeciality: {
+          $in: workSpeciality,
+        },
+        "WorkLocation.City": City,
+      }).select(returnedFields);
+      return res.json({ matchingJobOffers });
+    } else if (workSpeciality && !City) {
+      const returnedFields =
+        "PaymentMethod _id Title CreationDate CompanyName PaymentMethodVerificationStatus Location TotalWorkOfferd TotalMoneyPayed Description WorkSpeciality";
+      const matchingJobOffers: any = await PublicJobOffer.find({
+        WorkSpeciality: {
+          $in: workSpeciality,
+        },
+      }).select(returnedFields);
+      return res.json({ matchingJobOffers });
+    } else if (!workSpeciality && City) {
+      console.log("HELLOOOOOOOOO");
+      const freelancerId = await freeLancerRouteProtection(req, res);
+      if ("_id" in freelancerId) {
+        const freeLancer: any = await freelancer.findById(freelancerId);
+        console.log("hello");
+        const returnedFields =
+          "PaymentMethod _id Title CreationDate CompanyName PaymentMethodVerificationStatus Location TotalWorkOfferd TotalMoneyPayed Description WorkSpeciality";
+        const matchingJobOffers: any = await PublicJobOffer.find({
+          WorkSpeciality: {
+            $in: freeLancer.Speciality,
+          },
+          "WorkLocation.City": City,
+        }).select(returnedFields);
+        return res.json({ matchingJobOffers });
+      }
+
+      return res.json({ freelancerId });
+    }
   } catch (err) {
     console.log(err);
     return res.json({ error: "Server Error" });

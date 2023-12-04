@@ -1,7 +1,7 @@
 <div>
   Filter Search :
   <select (change)="getOptionValue($event)">
-    <option disabled selected>-</option>
+    <option selected>-</option>
     <option
       *ngFor="let option of freeLancerInfos.Specialities"
       [value]="option"

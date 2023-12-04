@@ -2,8 +2,19 @@ import mongoose from "mongoose";
 //import workOfferSchema from "../Modal";
 const Schema = mongoose.Schema;
 
-
 const privateWorkOfferSchema = new Schema({
+  // (Mustapha)
+  TaskTable: [
+    {
+      TaskTitle: {
+        type: String,
+      },
+      TaskDoneStatus: {
+        type: Boolean,
+        default: false,
+      },
+    },
+  ],
   // title mta3 l post
   Title: {
     type: String,
@@ -117,9 +128,6 @@ const privateWorkOfferSchema = new Schema({
     type: Date,
     required: true,
   },
-
-
-
 });
 
 const PrivateJobOffer = mongoose.model(
