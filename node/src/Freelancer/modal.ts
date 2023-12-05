@@ -52,11 +52,17 @@ const freelancerSchema = new Schema({
           TaskTitle: {
             type: String,
           },
+          TaskDescription: {
+            type: String,
+          },
           TaskHolder: {
             type: Schema.Types.ObjectId,
           },
           DueDate: {
             type: Date,
+          },
+          taskId: {
+            type: Schema.Types.ObjectId,
           },
         },
       ],

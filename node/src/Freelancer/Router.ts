@@ -48,7 +48,7 @@ freelancerRouter.post("/LgoogleAuth", freelancerController.googleAuth);
 
 //accept private joboffer (aziz)
 freelancerRouter.post(
-  "/acceptPrivateJob/:jobId",
+  "/acceptPrivateJob",
   freelancerController.acceptPrivateJob
 );
 
@@ -95,6 +95,12 @@ freelancerRouter.get("/refreshProfile", freelancerController.refreshProfile);
 freelancerRouter.get(
   "/cleanNotifications",
   freelancerController.cleanNotification
+);
+
+//
+freelancerRouter.post(
+  "/updatePWOProgress",
+  freelancerController.updatePWOTaskProgression
 );
 
 export default freelancerRouter;

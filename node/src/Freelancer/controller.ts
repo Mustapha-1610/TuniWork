@@ -654,23 +654,40 @@ export const acceptPrivateJob = async (
   res: express.Response
 ) => {
   try {
-    const { freeLancerId, jobId } = req.params;
+    const { jobId } = req.body;
+    const freelancerId = await freeLancerRouteProtection(req, res);
+    if ("_id" in freelancerId) {
+      // Find the private job offer by ID
+      const privateJobOffer = await PrivateJobOffer.findById(jobId);
 
-    // Find the private job offer by ID
-    const privateJobOffer = await PrivateJobOffer.findById(jobId);
+      // Check if the private job offer exists
+      if (!privateJobOffer) {
+        return res.json({ error: "Private job offer not found" });
+      }
 
-    // Check if the private job offer exists
-    if (!privateJobOffer) {
-      return res.json({ error: "Private job offer not found" });
+      const freelancerAccount: any = await freelancer.findByIdAndUpdate(
+        freelancerId,
+        {
+          $push: {
+            "WorkHistory.Ongoing": {
+              TaskTitle: privateJobOffer.Title,
+              TaskHolder: privateJobOffer._id,
+              DueDate: privateJobOffer.DeadLine,
+              TaskDescription: privateJobOffer.Description,
+              taskId: privateJobOffer._id,
+            },
+          },
+        }
+      );
+      // Update the status to "accepted"
+      privateJobOffer.status = "accepted";
+      privateJobOffer.WorkingFreelancer.FreelancerName = freelancerAccount.Name;
+      privateJobOffer.WorkingFreelancer.FreelancerId = freelancerAccount._id;
+
+      await privateJobOffer.save();
+      return res.json({ success: "Private job offer accepted" });
     }
-
-    // Update the status to "accepted"
-    privateJobOffer.status = "accepted";
-
-    // Save the changes
-    await privateJobOffer.save();
-
-    return res.json({ success: "Private job offer accepted" });
+    return freelancerId;
   } catch (err) {
     console.error(err);
     return res.json({ error: "Server Error" });
@@ -1051,6 +1068,28 @@ export const cleanNotification = async (
     }
 
     return freelancerId;
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error" });
+  }
+};
+
+export const updatePWOTaskProgression = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { PWOId, IdsArray } = req.body;
+    let PWO: any = await PrivateJobOffer.findById(PWOId);
+    IdsArray.map((item: any) => {
+      PWO.TaskTable.map((task: any) => {
+        if (item.toString() === task._id.toString()) {
+          task.TaskDoneStatus = !task.TaskDoneStatus;
+        }
+      });
+    });
+    await PWO.save();
+    return res.json({ success: "Marked Successfully", PWO });
   } catch (err) {
     console.log(err);
     return res.json({ error: "Server Error" });

@@ -164,4 +164,16 @@ export class FreelancerService {
       'http://localhost:5000/api/freelancer/cleanNotifications'
     );
   }
+  getWorkOfferProgress(id: any) {
+    return this.http.post(
+      'http://localhost:5000/api/companyWorkOffer/getWorkOfferInfos',
+      { workOfferId: id }
+    );
+  }
+  updateProg(PWOId: any, IdsArray: any) {
+    return this.http.post(
+      'http://localhost:5000/api/freelancer/updatePWOProgress',
+      { PWOId, IdsArray }
+    );
+  }
 }

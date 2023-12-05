@@ -4,8 +4,41 @@ import companyPublicWorkOffer from "./CompanyPublicWorkOfferModal";
 import PrivateJobOffer from "./CompanyPrivateWorkOfferModal";
 import Freelancer from "../../Freelancer/modal";
 import PublicJobOffer from "./CompanyPublicWorkOfferModal";
+import { freeLancerRouteProtection } from "../../Freelancer/routeProtectionMiddleware";
+import freelancer from "../../Freelancer/modal";
 
 /********************PUBLIC JOBS PART ******************/
+// GENERAL (Mustapha)
+export const getWorkOfferProgress = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { workOfferId } = req.body;
+    const freelancerId = await freeLancerRouteProtection(req, res);
+    if ("_id" in freelancerId) {
+      let workOffer = await PrivateJobOffer.findById(workOfferId);
+      if (workOffer) {
+        const freelancerAccount: any = await freelancer.findById(freelancerId);
+        if (
+          !workOffer.WorkingFreelancer.FreelancerId.equals(
+            freelancerAccount._id
+          )
+        ) {
+          return res.json({ error: "Access Denied" });
+        }
+        return res.json({ workOffer });
+      } else {
+        workOffer = await PublicJobOffer.findById(workOfferId);
+        return res.json({ workOffer });
+      }
+    }
+    return freelancerId;
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error" });
+  }
+};
 // create public job offer ( mostfa)
 export const createPublicJob = async (
   req: express.Request,
@@ -425,9 +458,9 @@ export const createPrivateJob = async (
         $push: {
           ProposedPrivateWorks: {
             PrivateJobOfferId: workOffer._id,
+            Title: privateJobOfferData.Title,
+            Description: privateJobOfferData.Description,
           },
-          Title: privateJobOfferData.Title,
-          Description: privateJobOfferData.Description,
           Notifications: {
             NotificationMessage:
               "New Work Offer Recieved from " +
