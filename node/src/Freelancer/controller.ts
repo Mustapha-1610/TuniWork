@@ -1,4 +1,5 @@
 import freelancer from "./modal";
+import customer from "../Customer/modal";
 import jwt from "jsonwebtoken";
 import express from "express";
 import bcrypt from "bcryptjs";
@@ -13,6 +14,7 @@ import { SendPasswordResetEmail } from "./nodemailerConfig";
 import PrivateJobOffer from "../WorkOffer/Company/CompanyPrivateWorkOfferModal";
 import PublicJobOffer from "../WorkOffer/Company/CompanyPublicWorkOfferModal";
 import createPDF from "../PDFServices/freelancerContract";
+import generateCustomerToken from "../Customer/utils";
 
 // function to create a freelancer account (Mustapha)
 export const create = async (req: express.Request, res: express.Response) => {
@@ -638,6 +640,29 @@ export const multiauth = async (
 
       await generateCompanyToken(res, existingAccount._id);
       return res.json({ comapnyAccount: existingAccount });
+    } else if (
+      (existingAccount = await customer.findOne({
+        $or: [{ Email: Email }, { PhoneNumber: PhoneNumber }],
+      })) !== null
+    ) {
+      console.log(existingAccount);
+      const passwordcheck = bcrypt.compareSync(
+        Password,
+        existingAccount.Password
+      );
+      if (!passwordcheck) {
+        return res.json({ error: "Invalid email or password !" });
+      }
+      if (existingAccount.AccountVerficiationStatus === false) {
+        return res.json({
+          emailError: "You need to verify your email first before logging in !",
+        });
+      }
+      if (existingAccount.AccountActivationStatus === false) {
+        return res.json({ error: "This account is disabled !" });
+      }
+      await generateCustomerToken(res, existingAccount._id);
+      return res.json({ customerAccount: existingAccount });
     } else {
       return res.json({ error: "Account Dosent Exist" });
     }
