@@ -35,17 +35,24 @@
     <!-- Dropdown Menu -->
     <div
       *ngIf="dropdownOpen"
-      class="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg z-50"
+      class="absolute right-5 mt-8 w-80 bg-white rounded-md shadow-lg z-50 overflow-auto"
+      style="max-height: 24rem"
     >
       <div class="py-2">
         <h3
           *ngFor="let notification of freeLancerInfos?.Notifications"
-          class="flex items-center px-4 py-3 border-b hover:bg-gray-100 -mx-2"
+          class="flex items-center px-3 py-2 border-b hover:bg-gray-100 -mx-2"
         >
-          <p class="text-black-600 text-sm mx-2">
-            <span class="font-bold">{{
-              notification.NotificationMessage
-            }}</span>
+          <p class="text-gray-600 text-sm mx-2">
+            <span class="font-bold"
+              >{{ notification.NotificationMessage }}
+              <p>
+                {{
+                  notification?.senderInformations?.creationDate
+                    | date : "medium"
+                }}
+              </p>
+            </span>
           </p>
         </h3>
       </div>
