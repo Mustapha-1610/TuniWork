@@ -2,15 +2,21 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { catchError } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CompanyService {
   constructor(private http: HttpClient, private route: Router) {}
+  private dataSource = new BehaviorSubject<any>(null);
+  Load: boolean = true;
+  data$ = this.dataSource.asObservable();
 
 
-
+  sendData(data: any) {
+    this.dataSource.next(data);
+  }
 
   setCompanyInfos(CompanyForm: any) {
     const form = JSON.parse(CompanyForm);
@@ -19,7 +25,8 @@ export class CompanyService {
       Name: form.CompanyName,
       Email: form.CompanyEmail,
       CWebsite: form.CompanyWebsite,
-      Clogo: form.CompanyLogo,
+      CLogo: form.ProfilePicture,
+      Csignature: form.CompanySignature,
       CDescription: form.CompanyDescription,
       CPhone: form.CompanyPhone,
       CLocation: form.Location,
@@ -32,14 +39,61 @@ export class CompanyService {
     localStorage.setItem('companyInfos', JSON.stringify(Company));
   }
 
-  getCompanyInfos() {
+  getCompanyInfos(){
     return JSON.parse(localStorage.getItem('companyInfos')!);
   }
 
-  logout() {
+  logout(){
     localStorage.removeItem('companyInfos');
     this.route.navigate(['/']);
   }
+
+
+
+  /*************sign up ************************/
+  createCompany(languages: any[]) {
+    return this.http.post(
+      'http://localhost:5000/api/company/create',
+      languages
+    );
+  }
+
+  verifyCompany(_id: any, vcode: any) {
+    return this.http.put('http://localhost:5000/api/company/verify', {
+      companyId: _id,
+      VerificationCode: vcode,
+    });
+  }
+  sendVerLink(_id: any, email: any) {
+    return this.http.post('http://localhost:5000/api/company/sendLink', {
+      companyId: _id,
+      companyMail: email,
+    });
+  }
+
+  sendVerificationLink(email: any, _id: any) {
+    return this.http.post('http://localhost:5000/api/company/sendLink', {
+      companyId: _id,
+      companyMail: email, // ken 8alta ija lena
+    });
+  }
+
+  getCities() {
+    return this.http.get('http://localhost:5000/api/city/getAll');
+  }
+
+  getTunisianCitiesAndTowns() {
+    const url =
+      'https://nominatim.openstreetmap.org/search?q=Tunisia&type=city&type=town';
+    return this.http.get<any[]>(url);
+  }
+
+  getAllWorkData() {
+    return this.http.get('http://localhost:5000/api/work/getWorkData');
+  }
+
+
+
 
 /*********************PARTIE PROFILE************************/
 disableAccount() {
@@ -62,12 +116,9 @@ disableAccount() {
 
 
 
-
-
-
-
 /*************************PARTIE MY JOBS**************************************/
-// partie public
+// partie public jobs
+
   getAllPublicJobOffers(id:any){
     return this.http.get(`http://localhost:5000/api/companyWorkOffer/getAllPublicJobOffers/${id}`);
   }
@@ -89,6 +140,32 @@ getPublicJobDetails(publicJobOfferId: any)  {
   return this.http.get(`http://localhost:5000/api/companyWorkOffer/getPublicJobDetails/${publicJobOfferId}`);
 }
 
+
+acceptFreelancer(publicJobOfferId: string, freelancerId: string) {
+  const url = `http://localhost:5000/api/companyWorkOffer/acceptFreelancer/${publicJobOfferId}/${freelancerId}`;
+  return this.http.post(url, {}).pipe(
+    catchError((error) => {
+      console.error('Error accepting freelancer:', error);
+      throw error;
+    })
+  );
+}
+
+
+sendContract(publicJobOfferId: string, freelancerId: string) {
+  const url = `http://localhost:5000/api/freelancer/sendFreelancerContract/${publicJobOfferId}/${freelancerId}`;
+
+    return this.http.post(url, {}).pipe(
+      catchError((error) => {
+        console.error('Error sending contract:', error);
+        throw error;
+      })
+    );
+}
+
+
+
+
 //edit pub job
   editPublicJob(publicJobId: string, updatedData: any) {
     return this.http.put(
@@ -107,9 +184,6 @@ getPublicJobDetails(publicJobOfferId: any)  {
     const url = `http://localhost:5000/api/companyWorkOffer/cancelPublicJobOffer/${jobOfferId}`;
     return this.http.delete(url);
   }
-
-
-
 
 
 
@@ -134,16 +208,7 @@ getPrivateJobOfferDetails(privateJobOfferId: any) {
   return this.http.get(`http://localhost:5000/api/companyWorkOffer/getPrivateJobOfferDetails/${privateJobOfferId}`);
 }
 
-//Accept freelancer
-acceptFreelancer(publicJobOfferId: string, freelancerId: string) {
-  const url = `http://localhost:5000/api/companyWorkOffer/acceptFreelancer/${publicJobOfferId}/${freelancerId}`;
-  return this.http.post(url, {}).pipe(
-    catchError((error) => {
-      console.error('Error accepting freelancer:', error);
-      throw error;
-    })
-  );
-}
+
 
 //cancel prv JO
 deletePrivateJobOffer(privateJobOfferId: string) {
@@ -192,6 +257,8 @@ editPrivateJobOffer(privateJobOfferId: any, updatedJobOfferData: any) {
       })
     );
   }
+
+
   //get l saved freelancers fel page saved freelancers
 getSavedFreelancers(companyId: string) {
   return this.http.get(`http://localhost:5000/api/company/getSavedFreelancers/${companyId}`);
@@ -200,7 +267,6 @@ getSavedFreelancers(companyId: string) {
 
 
   //freelancer profile page
-
 getFreelancerDetails(freelancerId: string) {
   return this.http.get(`http://localhost:5000/api/company/viewFreelancerDetails/${freelancerId}`).pipe(
     catchError((error) => {
@@ -253,7 +319,6 @@ updateLocalStorageAfterUnsaveFreelancer(companyInfos: any, freelancerId: string)
     localStorage.setItem('companyInfos', JSON.stringify(companyInfos));
   }
 }
-
 
 
 

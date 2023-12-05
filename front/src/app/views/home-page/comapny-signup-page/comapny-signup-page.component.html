@@ -1,1 +1,254 @@
-<p>comapny-signup-page works!</p>
+<div class="container mx-auto px-4 py-8">
+  <ngx-spinner
+    bdColor="rgba(51,51,51,0.8)"
+    size="medium"
+    color="#fff"
+    type="ball-scale-multiple"
+  >
+    <p class="text-2xl text-white">Loading...</p>
+  </ngx-spinner>
+
+
+  <div class="text-center text-red-500 font-bold mt-2">
+    {{ errorMessage }}
+  </div>
+
+
+  <div class="flex items-center justify-center mt-1">
+    <img [src]="testimg"  (click)="fileInput.click()"  class="rounded-full cursor-pointer border-4 mb-5 border-white hover:border-gray-300"   style="width: 270px; height: 270px"/>
+  </div>
+
+  <mat-progress-bar
+    *ngIf="uploadProgress !== undefined"
+    mode="determinate"
+    [value]="uploadProgress"
+    class="mt-4 w-1/2"
+    style="height: 10px"
+  ></mat-progress-bar>
+
+
+  <form
+    [formGroup]="comapnyForm"
+    (ngSubmit)="test()"
+    class="max-w-4xl mx-auto bg-white shadow-lg rounded px-8 pt-6 pb-8 mb-4"
+  >
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- company name Field -->
+      <div class="mb-4">
+        <label
+          class="block text-gray-700 text-sm font-bold mb-2"
+          for="CompanyName"
+        >
+          Company Name:
+        </label>
+        <input
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="CompanyName"
+          type="text"
+          formControlName="CompanyName"
+        />
+      </div>
+
+      <!-- email Field -->
+      <div class="mb-4">
+        <label
+          class="block text-gray-700 text-sm font-bold mb-2"
+          for="CompanyEmail"
+        >
+          Company Email
+        </label>
+        <input
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="CompanyEmail"
+          type="email"
+          formControlName="CompanyEmail"
+        />
+      </div>
+
+      <!-- company  Number Field -->
+      <div class="mb-4">
+        <label
+          class="block text-gray-700 text-sm font-bold mb-2"
+          for="CompanyPhone"
+        >
+          Company Phone Number
+        </label>
+        <input
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="CompanyPhone"
+          type="number"
+          formControlName="CompanyPhone"
+        />
+      </div>
+
+      <!-- Password Field -->
+      <div class="mb-4">
+        <label
+          class="block text-gray-700 text-sm font-bold mb-2"
+          for="Password"
+        >
+          Password
+        </label>
+        <input
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="Password"
+          type="password"
+          formControlName="Password"
+        />
+      </div>
+
+      <!-- website Field -->
+      <div class="mb-4">
+        <label
+          class="block text-gray-700 text-sm font-bold mb-2"
+          for="CompanyWebsite"
+        >
+          Company Website
+        </label>
+        <input
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="CompanyWebsite"
+          type="text"
+          formControlName="CompanyWebsite"
+        />
+      </div>
+
+      <!-- Company Description Field -->
+      <div class="mb-4">
+        <label
+          class="block text-gray-700 text-sm font-bold mb-2"
+          for="CompanyDescription"
+        >
+          Company Description
+        </label>
+        <textarea
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="CompanyDescription"
+          formControlName="CompanyDescription"
+        ></textarea>
+      </div>
+
+      <!-- Location Field -->
+      <div class="mb-4">
+        <label
+          class="block text-gray-700 text-sm font-bold mb-2"
+          for="Location"
+        >
+          Location
+        </label>
+        <input
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="Location"
+          type="text"
+          formControlName="Location"
+        />
+      </div>
+
+  <div class="mb-4">
+    <canvas #signatureCanvas width="300" height="150" style="border: 1px solid #ccc;" (mousedown)="startDrawing($event)" (mousemove)="draw($event)" (mouseup)="stopDrawing()" (mouseleave)="stopDrawing()"></canvas>
+
+  </div>
+
+
+    </div>
+
+
+
+
+    <!-- Work Title Dropdown -->
+    <form [formGroup]="form">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="mb-4 flex-item">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="city">
+            City
+          </label>
+          <ng-multiselect-dropdown
+            id="cities"
+            formControlName="cities"
+            [placeholder]="'Select City'"
+            [settings]="citiesDrowdownSettings"
+            [data]="CitiesList"
+            (onSelect)="onCitySelect($event)"
+            (onDeSelect)="onSpecialityDeselect($event)"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          ></ng-multiselect-dropdown>
+        </div>
+
+        <div class="mb-4 flex-item">
+          <label
+            class="block text-gray-700 text-sm font-bold mb-2"
+            for="speciality"
+          >
+            Municipality
+          </label>
+          <ng-multiselect-dropdown
+            id="municipality"
+            formControlName="municipality"
+            [placeholder]="'Select Municipality'"
+            [settings]="MunicipalityDropdownSettings"
+            [data]="MunicipalityList"
+            (onSelect)="onSpecialitySelect($event)"
+            (onDeSelect)="onSpecialityDeselect($event)"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          ></ng-multiselect-dropdown>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="mb-4 flex-item">
+          <label
+            class="block text-gray-700 text-sm font-bold mb-2"
+            for="workTitle"
+          >
+            Work Title
+          </label>
+          <ng-multiselect-dropdown
+            id="workTitle"
+            formControlName="workTitle"
+            [placeholder]="'Select Work Title'"
+            [settings]="dropdownSettings"
+            [data]="dropdownList"
+            (onSelect)="onItemSelect($event)"
+            (onDeSelect)="onItemDeselect($event)"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          ></ng-multiselect-dropdown>
+        </div>
+
+        <!-- Languages Dropdown -->
+        <div class="mb-4">
+          <label
+            class="block text-gray-700 text-sm font-bold mb-2"
+            for="languages"
+          >
+            Languages
+          </label>
+          <ng-multiselect-dropdown
+            id="languages"
+            formControlName="languages"
+            [placeholder]="'Languages You Work With'"
+            [settings]="dropdownSettings3"
+            [data]="languagesList"
+            (onSelect)="onSpecialitySelect($event)"
+            (onDeSelect)="onSpecialityDeselect($event)"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          ></ng-multiselect-dropdown>
+        </div>
+      </div>
+    </form>
+
+    <!-- Submit Button -->
+    <div class="flex justify-center mt-6">
+      <button
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        type="submit"> Submit
+      </button>
+    </div>
+
+  </form>
+
+
+
+  <div>
+    <input  type="file"  #fileInput  class="hidden"  (change)="uploadImage($event)" />
+  </div>
+</div>

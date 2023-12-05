@@ -8,46 +8,67 @@ import generateCompanyToken from "./utils";
 import { companyRouteProtection } from "./routeProtectionMiddleware";
 import PublicJobOffer from "WorkOffer/Company/CompanyPublicWorkOfferModal";
 
+import { FishOff } from "lucide-angular";
+import company from "../Company/modal";
+// import { SendPasswordResetEmail } from "./nodemailerConfig";
+import PrivateJobOffer from "../WorkOffer/Company/CompanyPrivateWorkOfferModal";
+import createPDF from "../PDFServices/freelancerContract";
+
+
 // function to create a comapny account (aziz)
 
-export const create = async (req: express.Request, res: express.Response) => {
-  console.log();
-  const {
-    CompanyEmail,
-    CompanyName,
-    Password,
-    CompanyWebsite,
-    CompanyLogo,
-    CompanyDescription,
-    CompanyPhone,
-    Location,
-  } = req.body;
-  try {
-    if (
-      !Password ||
-      !CompanyName ||
-      !CompanyWebsite ||
-      !CompanyEmail ||
-      !CompanyDescription ||
-      !CompanyPhone ||
-      !Location
-    ) {
-      return res.json({ error: "Missing Input(s)" });
-    }
 
-    // ylawej 3la company  3andou nafs l esm (maybe something else)
+
+export const create = async (req: express.Request, res: express.Response) => {
+  const { companyPersonalInfos, companyAddedInfos } = req.body;
+  if (!companyPersonalInfos.CompanyName) {
+    return res.json({ error: "CompanyName is Required !" });
+  }
+   else if (!companyPersonalInfos.CompanyEmail) {
+    return res.json({ error: "CompanyEmail is Required !" });
+  } 
+  else if (!companyPersonalInfos.CompanyPhone) {
+    return res.json({ error: "CompanyPhone  is Required !" });
+  } 
+  else if (!companyPersonalInfos.Password) {
+    return res.json({ error: "Password is Required !" });
+  } 
+  else if (!companyPersonalInfos.CompanyWebsite) {
+    return res.json({ error: "CompanyWebsite is Required !" });
+  } 
+  else if (!companyPersonalInfos.Location) {
+    return res.json({ error: "Location is Required !" });
+  } 
+  else if (!companyPersonalInfos.CompanyDescription) {
+    return res.json({ error: "CompanyDescription is Required !" });
+  } 
+  else if (!companyAddedInfos.languages) {
+    return res.json({ error: "languages are Required !" });
+  } 
+  else if (!companyAddedInfos.workTitle) {
+    return res.json({ error: "workTitle is Required !" });
+  } 
+
+  try {
+    // ylawej 3la company 3andha  ya nafs ya nafs phone number ya nafs l mail
     let existingCompany = await Company.findOne({
-      $or: [{ CompanyName }],
+      $or: [
+        { CompanyEmail: companyPersonalInfos.CompanyEmail },
+        { CompanyPhone: companyPersonalInfos.CompanyPhone },
+      ],
+    });
+    if (existingCompany) {
+      return res.json({ error: "Account Exists Allready" });
+    }
+    let languagestable: String[] = [];
+    companyAddedInfos.languages.map((item: any) => {
+      languagestable.push(item.item_text);
     });
 
-    if (existingCompany) {
-      return res.json({ error: "A company by this name already exists." });
-    }
-
     // tasna3 password securisé
-    const securePassword = bcrypt.hashSync(Password);
+    const securePassword = bcrypt.hashSync(companyPersonalInfos.Password);
 
-    // generating secret code bech nesta3mlouh mba3d fel verficiation mail
+    // generating secret code bech nesta3mlouh mba3d fel AccountVerificationStatus mail
     const characters =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     let VerificationCode = "";
@@ -55,17 +76,57 @@ export const create = async (req: express.Request, res: express.Response) => {
       VerificationCode +=
         characters[Math.floor(Math.random() * characters.length)];
     }
+    let company: any;
 
-    const company = await Company.create({
-      Password: securePassword,
-      CompanyName,
-      CompanyWebsite,
-      CompanyEmail,
-      CompanyDescription,
-      CompanyPhone,
-      Location,
-      VerificationCode: VerificationCode,
-    });
+    companyPersonalInfos.ProfilePicture ? (company = await Company.create({
+        CompanyName: companyPersonalInfos.CompanyName,
+        CompanyEmail: companyPersonalInfos.CompanyEmail,
+        CompanyPhone: companyPersonalInfos.CompanyPhone,
+        Password: securePassword,
+        Location: companyPersonalInfos.Location,
+        CompanyDescription: companyPersonalInfos.CompanyDescription,
+        CompanyWebsite: companyPersonalInfos.CompanyWebsite,
+        CompanySignature: companyPersonalInfos.CompanySignature,  // Add this line
+
+        VerificationCode: VerificationCode,
+        ProfilePicture: companyPersonalInfos.ProfilePicture,
+
+          Languages: languagestable,
+          EstimateWorkLocation: {
+            City: companyAddedInfos.cities[0].item_text,
+            Municipality: companyAddedInfos.municipality[0].item_text,
+          },
+          WorkTitle: {
+            WorkTitleId: companyAddedInfos.workTitle[0].item_id,
+            WorkTitleText: companyAddedInfos.workTitle[0].item_text,
+          },
+          VerLinkExpDate: new Date(new Date().getTime() + 2 * 60 * 60 * 1000),
+        })) : (company = await Company.create({
+        CompanyName: companyPersonalInfos.CompanyName,
+        CompanyEmail: companyPersonalInfos.CompanyEmail,
+        CompanyPhone: companyPersonalInfos.CompanyPhone,
+        Password: securePassword,
+        Location: companyPersonalInfos.Location,
+        CompanyDescription: companyPersonalInfos.CompanyDescription,
+        CompanyWebsite: companyPersonalInfos.CompanyWebsite,
+
+        CompanySignature: companyPersonalInfos.CompanySignature,  // Add this line
+
+        VerificationCode: VerificationCode,
+        Languages: languagestable,
+
+        EstimateWorkLocation: {
+        City: companyAddedInfos.cities[0].item_text,
+        Municipality: companyAddedInfos.municipality[0].item_text,
+        },
+
+        WorkTitle: {
+        WorkTitleId: companyAddedInfos.workTitle[0].item_id,
+        WorkTitleText: companyAddedInfos.workTitle[0].item_text,
+        },
+        VerLinkExpDate: new Date(new Date().getTime() + 2 * 60 * 60 * 1000),
+        }));
+
 
     await SendCompanyAccountConfirmationMail(
       company.CompanyName,
@@ -73,37 +134,79 @@ export const create = async (req: express.Request, res: express.Response) => {
       company._id,
       company.VerificationCode
     );
-
-    return res.json({ success: "Account Created !" });
+    return res.json({
+      success: "Account Created !",
+      companyAccount: company,
+    });
   } catch (err) {
     console.log(err);
     return res.json({ error: "Server Error" });
   }
 };
 
-// function to verify company account (aziz)
-export const verifyAccount = async (
-  req: express.Request,
-  res: express.Response
-) => {
+
+
+// function to verify freelancer account (aziz)
+export const verifyAccount = async (  req: express.Request,  res: express.Response) => {
   try {
-    const companyId = req.params.companyId;
-    const VerificationCode = req.params.VerificationCode;
+    const {companyId, VerificationCode} = req.body;
     const unverifiedCompany = await Company.findById(companyId);
+    console.log('Found Company:', unverifiedCompany);
     if (!unverifiedCompany) {
       return res.json({ error: "Account dosent exist !" });
     }
     if (VerificationCode != unverifiedCompany.VerificationCode) {
       return res.json({ error: "Try Again Later !" });
     }
+    if (unverifiedCompany.AccountVerificationStatus === true) {
+      return res.json({ error: "Account Allready Verified" });
+    }
+
+
     unverifiedCompany.AccountVerificationStatus = true;
     await unverifiedCompany.save();
-    return res.json({ sucess: "Account verified you can now log in !" });
+    return res.json({ success: "Account verified you can now log in !" });
   } catch (err) {
     console.log(err);
     return res.json({ error: "Server Error!" });
   }
 };
+
+
+
+
+//
+export const sendVerificationLink = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { companyId, mail } = req.body;
+    let existingCompany: any = await company.findOne({
+      $or: [{ CompanyEmail: mail }, { _id: companyId }],
+    });
+    if (!existingCompany) {
+      return res.json({ error: "Error try again later" });
+    }
+    existingCompany.VerLinkExpDate = new Date(
+      new Date().getTime() + 2 * 60 * 60 * 1000
+    );
+    await SendCompanyAccountConfirmationMail(
+      existingCompany.CompanyName,
+      existingCompany.CompanyEmail,
+      existingCompany._id,
+      existingCompany.VerificationCode
+    );
+    await existingCompany.save();
+    return res.json({ success: "Verification Link Sent" });
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error" });
+  }
+};
+
+
+
 
 // function to authenticate company  Using jwt's (aziz) to change fazet l phone
 export const auth = async (req: express.Request, res: express.Response) => {

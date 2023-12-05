@@ -11,6 +11,7 @@ import { FreelancerVerificationPageComponent } from './freelancer-verification-p
 import { FreelancerGoogleSignupComponent } from './freelancer-google-signup/freelancer-google-signup.component';
 import { PasswordResetPageComponent } from './password-reset-page/password-reset-page.component';
 import { ForgetPasswordPageComponent } from './forget-password-page/forget-password-page.component';
+import { CompanyVerificationPageComponent } from './company-verification-page/company-verification-page.component';
 
 const routes: Routes = [
   { path: '', component: IndexComponent },
@@ -33,6 +34,16 @@ const routes: Routes = [
   {
     path: 'ForgetPassword',
     component: ForgetPasswordPageComponent,
+  },
+
+
+
+
+
+  /******company********/
+  {
+    path: 'Cverification',
+    component: CompanyVerificationPageComponent,
   },
 ];
 

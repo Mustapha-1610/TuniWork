@@ -1,6 +1,6 @@
 // company.module.ts
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Make sure to import CommonModule
+import { CommonModule } from '@angular/common';
 
 import { ComapnyRoutingModule } from './comapny-routing.module';
 import { ProfilePageComponent } from './profile-page/profile-page.component';
@@ -17,7 +17,6 @@ import { PrivateJobDetailsComponent } from './private-job-details/private-job-de
 import { PrivateJobEditComponent } from './private-job-edit/private-job-edit.component';
 import { ProfilePageEditComponent } from './profile-page-edit/profile-page-edit.component';
 
-
 @NgModule({
   declarations: [
     ProfilePageComponent,
@@ -33,7 +32,7 @@ import { ProfilePageEditComponent } from './profile-page-edit/profile-page-edit.
     ProfilePageEditComponent,
   ],
   imports: [
-    CommonModule, 
+    CommonModule,
     ComapnyRoutingModule,
     FormsModule,
     ReactiveFormsModule,

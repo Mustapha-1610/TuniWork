@@ -8,7 +8,6 @@ import { LayoutModule } from './layout/layout.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { FreelancerModule } from './views/freelancer/freelancer.module';
-import { HomePageModule } from './views/home-page/home-page.module';
 import 'firebase/compat/storage';
 import { provideFirebaseApp, getApp, initializeApp } from '@angular/fire/app';
 import { getStorage, provideStorage } from '@angular/fire/storage';
@@ -29,6 +28,7 @@ import { WithCredentialsInterceptor } from 'src/with-credentials.interceptor';
 import { PublicJobCreateComponent } from './views/comapny/public-job-create/public-job-create.component';
 import { PublicJobEditFormComponent } from './views/comapny/public-job-edit/public-job-edit.component';
 import { ComapnyModule } from './views/comapny/comapny.module';
+import { HomePageModule } from './views/home-page/home-page.module';
 
 
 

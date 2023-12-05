@@ -19,8 +19,11 @@ export class PublicJobCreateComponent {
 
   private initForm(): void {
     const companyInfos = this.cs.getCompanyInfos();
+    
     const companyId = companyInfos._id;
     const CompanyName = companyInfos.Name;
+    const CompanySignature = companyInfos.Csignature;
+
     this.publicJobOfferForm = this.formBuilder.group({
       Title: [''],
       WorkTitle: [''],
@@ -33,6 +36,7 @@ export class PublicJobCreateComponent {
       WorkSpeciality: [''],
       CompanyName: CompanyName,
       CompanyId: companyId,
+      CompanySignature: CompanySignature,
     });
   }
 

@@ -20,6 +20,7 @@ export const createPublicJob = async (
       PayPerTask,
       PayPerHour,
       WorkSpeciality,
+      CompanySignature,
       CompanyId,
     } = req.body;
 
@@ -28,8 +29,7 @@ export const createPublicJob = async (
       return res.json({ error: "Server Error" });
     }
 
-    const PaymentMethodVerificationStatus =
-      offeringCompany.PaymentMethodVerificationStatus;
+    const PaymentMethodVerificationStatus = offeringCompany.PaymentMethodVerificationStatus;
     const CompanyName = offeringCompany.CompanyName;
     const CompanyLocation = offeringCompany.Location;
     const TotalWorkOfferd = offeringCompany.WorkOfferd;
@@ -49,6 +49,7 @@ export const createPublicJob = async (
       CompanyId,
       PaymentMethodVerificationStatus,
       CompanyName,
+      CompanySignature,
       CompanyLocation,
       TotalMoneyPayed,
       TotalWorkOfferd,
@@ -132,7 +133,7 @@ export const getPublicJobOffer = async (
   }
 };
 
-//idk ver 2
+//view details of public job ver 2
 export const getPublicJobDetails = async (
   req: express.Request,
   res: express.Response
@@ -277,6 +278,11 @@ export const acceptFreelancer = async (
       // Update the status of the accepted freelancer in AppliedFreelancers
       appliedFreelancer.Status = "accepted";
 
+      // Set WorkingFreelancer with FreelancerId and FreelancerName
+        publicJobOffer.WorkingFreelancer = {
+        FreelancerId: appliedFreelancer.FreelancerId,
+        FreelancerName: appliedFreelancer.FreelancerName,
+      };
       // Update the public job offer status
       publicJobOffer.status = 'freelancer accepted, awaiting contract';
       
