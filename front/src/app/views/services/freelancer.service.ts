@@ -51,7 +51,7 @@ export class FreelancerService {
       Schedule: form.Schedule,
       SavedWorkOffers: form.SavedWorkOffers,
       PendingWorkOffers: form.pendingWorkOffers,
-      Notifications: form.Notifications,
+      Notifications: form.Notifications.slice().reverse(),
     };
     localStorage.setItem('freeLancerInfos', JSON.stringify(FreelancerAccount));
   }

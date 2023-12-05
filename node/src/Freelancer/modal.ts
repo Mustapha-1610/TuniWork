@@ -221,7 +221,9 @@ const freelancerSchema = new Schema({
         },
         creationDate: {
           type: Date,
-          default: new Date(),
+        },
+        context: {
+          type: String,
         },
       },
     },
