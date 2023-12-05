@@ -1,10 +1,8 @@
 import { SocialAuthService } from '@abacritt/angularx-social-login';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { io, Socket } from 'socket.io-client';
+import { Socket, io } from 'socket.io-client';
 import { CustomerService } from 'src/app/views/services/customer.service';
-
-import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-customer-layout',
@@ -85,3 +83,4 @@ export class CustomerLayoutComponent implements OnDestroy {
       });
   }
 }
+
