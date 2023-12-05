@@ -1095,3 +1095,30 @@ export const updatePWOTaskProgression = async (
     return res.json({ error: "Server Error" });
   }
 };
+
+//
+export const sendPaymentRequest = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const freelancerId = await freeLancerRouteProtection(req, res);
+    if ("_id" in freelancerId) {
+      const { workId } = req.body;
+      const PWO = await PrivateJobOffer.findById(workId);
+      const test = PWO.TaskTable.map((item) => {
+        if (item.TaskDoneStatus === false) {
+          return false;
+        }
+      });
+      console.log(test);
+      if (test.includes(false)) {
+        return res.json({ error: "Access Denied Tasks Are Not Finiched" });
+      }
+    }
+    return freelancerId;
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error" });
+  }
+};

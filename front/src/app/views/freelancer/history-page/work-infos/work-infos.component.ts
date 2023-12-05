@@ -16,6 +16,7 @@ export class WorkInfosComponent implements OnInit {
   workId: any;
   workData: any;
   add: boolean = true;
+  submitRequestButton: any = null;
   ngOnInit() {
     this.workId = this.route.snapshot.paramMap.get('id');
     this.getCompanyWorkOffer();
@@ -27,6 +28,9 @@ export class WorkInfosComponent implements OnInit {
       } else {
         this.workData = res.workOffer;
         this.progressCounter();
+        if (this.progress === this.workData.TaskTable.length) {
+          this.submitRequestButton = true;
+        }
       }
     });
   }
@@ -36,10 +40,10 @@ export class WorkInfosComponent implements OnInit {
     this.workData.TaskTable[index].TaskDoneStatus =
       !this.workData.TaskTable[index].TaskDoneStatus;
     this.progressCounter();
+    this.submitRequestButton = false;
     if (this.idsArrays.includes(id)) {
       this.idsArrays = this.idsArrays.filter((ids) => ids !== id);
     } else {
-      this.workData;
       this.idsArrays.push(id);
     }
   }
@@ -48,6 +52,7 @@ export class WorkInfosComponent implements OnInit {
     this.workData.TaskTable[index].TaskDoneStatus =
       !this.workData.TaskTable[index].TaskDoneStatus;
     this.progressCounter();
+    this.submitRequestButton = false;
     if (this.idsArrays.includes(id)) {
       this.idsArrays = this.idsArrays.filter((ids) => ids !== id);
     } else {
@@ -69,6 +74,9 @@ export class WorkInfosComponent implements OnInit {
         });
       this.idsArrays = [];
       this.progressCounter();
+      if (this.progress === this.workData.TaskTable.length) {
+        this.submitRequestButton = true;
+      }
     }
   }
   progress: any = 0;
@@ -83,5 +91,11 @@ export class WorkInfosComponent implements OnInit {
     });
     this.progressPercentage =
       (this.progress / this.workData.TaskTable.length) * 100;
+    if (this.progress === this.workData.TaskTable.length) {
+      this.submitRequestButton = true;
+    }
+  }
+  navigateToPaymentRequest(id: any) {
+    this.router.navigate(['/freelancer/submitPaymentRequest', id]);
   }
 }

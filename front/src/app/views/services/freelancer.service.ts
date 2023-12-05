@@ -176,4 +176,10 @@ export class FreelancerService {
       { PWOId, IdsArray }
     );
   }
+  accessPaymentRequestPage(workId: any) {
+    return this.http.post(
+      'http://localhost:5000/api/freelancer/sendPaymentRequest',
+      { workId }
+    );
+  }
 }

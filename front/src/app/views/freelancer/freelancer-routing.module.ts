@@ -7,6 +7,7 @@ import { CheckWorkOfferDetailsComponent } from './check-work-offer-details/check
 import { EditInfosPageComponent } from './edit-infos-page/edit-infos-page.component';
 import { HistoryPageComponent } from './history-page/history-page.component';
 import { WorkInfosComponent } from './history-page/work-infos/work-infos.component';
+import { SubmitPaymentRequestPageComponent } from './submit-payment-request-page/submit-payment-request-page.component';
 
 const routes: Routes = [
   { path: '', component: HomePageComponent },
@@ -17,6 +18,10 @@ const routes: Routes = [
   { path: 'editInfos', component: EditInfosPageComponent },
   { path: 'workHistory', component: HistoryPageComponent },
   { path: 'WPDisplay/:id', component: WorkInfosComponent },
+  {
+    path: 'submitPaymentRequest/:id',
+    component: SubmitPaymentRequestPageComponent,
+  },
 ];
 
 @NgModule({

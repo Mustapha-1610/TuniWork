@@ -103,4 +103,9 @@ freelancerRouter.post(
   freelancerController.updatePWOTaskProgression
 );
 
+//
+freelancerRouter.post(
+  "/sendPaymentRequest",
+  freelancerController.sendPaymentRequest
+);
 export default freelancerRouter;

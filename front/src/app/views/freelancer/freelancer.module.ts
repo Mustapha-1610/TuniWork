@@ -26,6 +26,7 @@ import { HistoryPageComponent } from './history-page/history-page.component';
 import { OngoingWorkComponentComponent } from './history-page/ongoing-work-component/ongoing-work-component.component';
 import { FinichedWorkComponentComponent } from './history-page/finiched-work-component/finiched-work-component.component';
 import { WorkInfosComponent } from './history-page/work-infos/work-infos.component';
+import { SubmitPaymentRequestPageComponent } from './submit-payment-request-page/submit-payment-request-page.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { WorkInfosComponent } from './history-page/work-infos/work-infos.compone
     OngoingWorkComponentComponent,
     FinichedWorkComponentComponent,
     WorkInfosComponent,
+    SubmitPaymentRequestPageComponent,
   ],
   imports: [
     FormsModule,
