@@ -1,0 +1,59 @@
+é
+// create (POST)
+
+http://localhost:5000/api/customer/createCustomerAccount
+
+    body = {
+        "Name" : "jihed",
+        "Surname" : "riahi",
+        "Username" : "JIHED_8,
+        "PhoneNumber" : 25121985,
+        "Email" : "jihed299n@gmail.com",
+        "Password" : "1234"
+    }
+
+-----------------------------------------------------------------------------------------
+
+// verify account (PUT)
+
+http://localhost:5000/api/customer/verify/:customerId/:VerificationCode
+
+
+-----------------------------------------------------------------------------------------
+
+// auth (POST)
+
+http://localhost:5000/api/customer/auth
+
+body = {
+    "Email" : "jihed299n@gmail.com",
+    "Password" : "1234"
+}
+
+-----------------------------------------------------------------------------------------
+
+
+// Profile (POST)
+
+http://localhost:5000/api/customer/profile
+
+body = {
+    "Email" : "jihed299n@gmail.com",
+    "Password" : "1234"
+}
+
+
+
+// Update(Put)
+http://localhost:5000/api/customer/update/customerID
+
+boody ={
+
+     "Name" : "jihed",
+        "Surname" : "riahi",
+        "Username" : "JIHED_8,
+        "PhoneNumber" : 25121985,
+        "Email" : "jihed299n@gmail.com",
+        "Password" : "1234"
+
+}
