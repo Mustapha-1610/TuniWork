@@ -802,6 +802,7 @@ export const applyForPublicJob = async (
               CName: jobOffer.CompanyName,
               TitlePWO: jobOffer.Title,
               DescriptionPWO: jobOffer.Description,
+              
             },
           },
         },
@@ -928,47 +929,59 @@ export const unsavePWO = async (
   }
 };
 
-export const sendFreelancerContract = async (
-  req: express.Request,
-  res: express.Response
-) => {
+
+
+export const sendFreelancerContract = async (  req: express.Request,  res: express.Response) => {
   try {
-    const { PWOId } = req.body;
-    const PWO: any = await PublicJobOffer.findById(PWOId);
-    console.log(PWO);
+    const { publicWorkOfferId, freelancerId } = req.params;
+    const PublicWorkOffer: any = await PublicJobOffer.findById(publicWorkOfferId);
+
     let data: any;
+
     data = {
       CompanyInfos: {
-        CompanyName: PWO.CompanyName,
-        CompanyId: PWO.CompanyId,
+        CompanyName: PublicWorkOffer.CompanyName,
+        CompanyId: PublicWorkOffer.CompanyId,
+        CompanySignature: PublicWorkOffer.CompanySignature,
       },
       FreelancerInfos: {
-        FreelancerName: PWO.WorkingFreelancer.FreelancerName,
-        FreelancerId: PWO.WorkingFreelancer.FreelancerId,
+        FreelancerName: PublicWorkOffer.WorkingFreelancer.FreelancerName,
+        FreelancerId: PublicWorkOffer.WorkingFreelancer.FreelancerId,
       },
       WorkInfos: {
-        WorkTitle: PWO.Title,
-        WorkDescription: PWO.Description,
-        PaymentMethod: PWO.PaymentMethod.PayPerHours
-          ? PWO.PaymentMethod.PayPerHours
-          : PWO.PaymentMethod.PayPerTask,
+        WorkTitle: PublicWorkOffer.Title,
+        WorkDescription: PublicWorkOffer.Description,
+        PaymentMethod: PublicWorkOffer.PaymentMethod.PayPerHours
+          ? PublicWorkOffer.PaymentMethod.PayPerHours
+          : PublicWorkOffer.PaymentMethod.PayPerTask,
       },
     };
+
     const url = await createPDF(data);
-    const contractingCompany: any = await company.findById(PWO.CompanyId);
-    const contractedFreelancer: any = await freelancer.findById(
-      "65678cbe3f07f216e060158a"
-    );
-    contractedFreelancer.CompanyRecievedContracts.push(url);
+    const contractingCompany: any = await company.findById(PublicWorkOffer.CompanyId);
+    
+    // Fetch the contractedFreelancer using the provided ID
+    const acceptedFreelancer: any = await freelancer.findById(freelancerId);
+
+    // Update the arrays
+    acceptedFreelancer.CompanyRecievedContracts.push(url);
     contractingCompany.freelancerSentContracts.push(url);
-    await contractedFreelancer.save();
+
+    // Save the changes
+    await acceptedFreelancer.save();
     await contractingCompany.save();
+    
     return res.json({ success: "Contract Created", Link: url });
   } catch (err) {
     console.log(err);
     return res.json({ error: "Server Error" });
   }
 };
+
+
+
+
+
 
 //
 export const filterPWOSearch = async (

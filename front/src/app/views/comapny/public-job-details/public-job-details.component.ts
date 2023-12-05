@@ -40,4 +40,16 @@ export class PublicJobDetailsComponent implements OnInit {
       }
     );
   }
+
+   createContract(publicJobOfferId: string, freelancerId: string): void {
+    this.companyService.sendContract(publicJobOfferId, freelancerId).subscribe(
+      (response: any) => {
+        console.log(response.success);
+        // Update the local data or perform any necessary actions
+      },
+      (error) => {
+        console.error('Error accepting freelancer', error);
+      }
+    );
+  }
 }

@@ -67,6 +67,7 @@ const routes: Routes = [
   component: PrivateJobEditComponent,
 },
 
+
 ];
 
 @NgModule({

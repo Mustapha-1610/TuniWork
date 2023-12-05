@@ -14,10 +14,21 @@
             <div class="card-body">
 
               <ul class="list-group list-group-flush">
-                <li *ngFor="let freelancer of publicJobOffer?.AppliedFreelancers" class="list-group-item">
-                  {{ freelancer.FreelancerName }} - Status: {{ freelancer.Status }}
-                  <button *ngIf="freelancer.Status === 'pending'" class="btn btn-success" (click)="acceptFreelancer(publicJobOffer._id, freelancer.FreelancerId)">Accept</button>
+                <li *ngIf="publicJobOffer?.AppliedFreelancers?.length">
+                  <div class="card">
+                    <div class="card-body">
+
+                      <ul class="list-group list-group-flush">
+                        <li *ngFor="let freelancer of publicJobOffer?.AppliedFreelancers" class="list-group-item">
+                          {{ freelancer.FreelancerName }} - Status: {{ freelancer.Status }}
+                          <button *ngIf="freelancer.Status === 'pending' " class="btn btn-success" (click)="acceptFreelancer(publicJobOffer._id, freelancer.FreelancerId)">Accept</button>
+                          <button *ngIf="freelancer.Status === 'accepted' " class="btn btn-primary" (click)="createContract(publicJobOffer._id, freelancer.FreelancerId)">Send Contract</button>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
                 </li>
+
               </ul>
             </div>
           </div>

@@ -39,12 +39,25 @@ export const getWorkOfferProgress = async (
     return res.json({ error: "Server Error" });
   }
 };
+
+
 // create public job offer ( mostfa)
 export const createPublicJob = async (
   req: express.Request,
   res: express.Response
 ) => {
   try {
+    const {
+      Title,
+      WorkTitle,
+      Description,
+      Note,
+      PayPerTask,
+      PayPerHour,
+      WorkSpeciality,
+      CompanySignature,
+      CompanyId,
+    } = req.body;
     const { publicJobData, cityData } = req.body;
 
     const offeringCompany = await company.findById(publicJobData.CompanyId);
@@ -76,6 +89,7 @@ export const createPublicJob = async (
       CompanyId: publicJobData.CompanyId,
       PaymentMethodVerificationStatus,
       CompanyName,
+      CompanySignature,
       CompanyLocation,
       TotalMoneyPayed,
       TotalWorkOfferd,
@@ -164,7 +178,7 @@ export const getPublicJobOffer = async (
   }
 };
 
-//idk ver 2
+//view details of public job ver 2
 export const getPublicJobDetails = async (
   req: express.Request,
   res: express.Response
@@ -311,6 +325,11 @@ export const acceptFreelancer = async (
       // Update the status of the accepted freelancer in AppliedFreelancers
       appliedFreelancer.Status = "accepted";
 
+      // Set WorkingFreelancer with FreelancerId and FreelancerName
+        publicJobOffer.WorkingFreelancer = {
+        FreelancerId: appliedFreelancer.FreelancerId,
+        FreelancerName: appliedFreelancer.FreelancerName,
+      };
       // Update the public job offer status
       publicJobOffer.status = "freelancer accepted, awaiting contract";
 

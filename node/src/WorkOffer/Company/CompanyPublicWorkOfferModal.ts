@@ -71,18 +71,22 @@ const CompanyPublicWorkOfferSchema = new Schema({
 
   // lehne bech nkhaliw info l freelancer li actually ktheha l khedma
   WorkingFreelancer: {
-    FreelancerName: {
-      type: String,
-    },
     FreelancerId: {
       type: Schema.Types.ObjectId,
       ref: "freelancer",
+    },
+    FreelancerName: {
+      type: String,
     },
   },
 
   CompanyName: {
     type: String,
     required: true,
+  },
+
+  CompanySignature:{
+    type:String,
   },
 
   Location: {

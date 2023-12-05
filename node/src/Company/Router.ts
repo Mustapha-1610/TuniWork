@@ -5,10 +5,9 @@ const companyRouter = express.Router();
 
 companyRouter.post("/create", companyController.create);
 
-companyRouter.put(
-  "/verify/:companyId/:VerificationCode",
-  companyController.verifyAccount
-);
+companyRouter.put("/verify", companyController.verifyAccount);
+
+companyRouter.post("/sendLink", companyController.sendVerificationLink);
 
 companyRouter.post("/auth", companyController.auth);
 

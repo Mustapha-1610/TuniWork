@@ -1,6 +1,6 @@
 // company.module.ts
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Make sure to import CommonModule
+import { CommonModule } from '@angular/common';
 
 import { ComapnyRoutingModule } from './comapny-routing.module';
 import { ProfilePageComponent } from './profile-page/profile-page.component';

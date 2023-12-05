@@ -1,17 +1,14 @@
 import PDFDocument from "pdfkit";
 import { PassThrough } from "stream";
 import admin from "../Firebase/firebaseAdmin";
-import { isEmpty } from "lodash";
-
+import axios from "axios"; // Import axios for making HTTP requests
 
 async function createPDF(PDFData: any) {
   return new Promise(async (resolve, reject) => {
-
     const doc = new PDFDocument();
     const fileName = `Contract_${Date.now()}.pdf`;
     const passThrough = new PassThrough();
     const bucket = admin.storage().bucket();
-
     const file = bucket.file(fileName);
     const writeStream = file.createWriteStream({
       metadata: {
@@ -19,8 +16,7 @@ async function createPDF(PDFData: any) {
       },
     });
 
-    doc.
-    pipe(passThrough);
+    doc.pipe(passThrough);
     passThrough
       .pipe(writeStream)
       .on("error", (error: any) => reject(error))
@@ -39,8 +35,6 @@ async function createPDF(PDFData: any) {
     const topMargin = 50;
     const leftMargin = 50;
 
-
-    
     doc
       .fontSize(16)
       .font("Helvetica-Bold")
@@ -55,7 +49,6 @@ async function createPDF(PDFData: any) {
 
     doc.moveDown(2);
 
-
     doc
       .fontSize(12)
       .font("Helvetica")
@@ -64,7 +57,6 @@ async function createPDF(PDFData: any) {
         indent: 20,
         height: 300,
       });
-
 
     doc
       .fontSize(12)
@@ -75,7 +67,6 @@ async function createPDF(PDFData: any) {
         height: 300,
       });
 
-      
     doc
       .fontSize(12)
       .font("Helvetica")
@@ -85,9 +76,41 @@ async function createPDF(PDFData: any) {
         height: 300,
       });
 
+    doc
+      .fontSize(12)
+      .font("Helvetica")
+      .text("work offer description: " + PDFData.WorkInfos.WorkDescription, {
+        align: "left",
+        indent: 20,
+        height: 300,
+      });
 
 
-    if (PDFData.WorkInfos.PaymentMethod.FixedPrice) {
+
+    if (PDFData.CompanyInfos.CompanySignature) {
+      try {
+        // Download the image from the URL
+        const response = await axios.get(PDFData.CompanyInfos.CompanySignature, {
+          responseType: "arraybuffer",
+        });
+
+        // Embed the image in the PDF
+        doc.image(response.data, {
+          width: 200, // Set the width as per your requirement
+          height: 100, // Set the height as per your requirement
+          align: "center", // or "right" depending on your preference
+        });
+      } catch (error) {
+        // Handle the case where there's an error downloading the image
+        console.error('Error downloading Company Signature image:', error);
+      }
+    } else {
+      // Handle the case where the Company Signature is missing or invalid
+      console.error('Company Signature is missing or invalid.');
+    }
+
+
+    /* if (PDFData.WorkInfos.PaymentMethod.FixedPrice) {
       doc
         .fontSize(12)
         .font("Helvetica")
@@ -105,7 +128,6 @@ async function createPDF(PDFData: any) {
           indent: 20,
           height: 300,
         });
-
 
       doc
         .fontSize(12)
@@ -130,7 +152,10 @@ async function createPDF(PDFData: any) {
             height: 300,
           }
         );
-    }
+
+     
+    } */
+
     doc.end();
     return file.publicUrl();
   });

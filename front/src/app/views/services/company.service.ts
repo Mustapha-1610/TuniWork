@@ -2,12 +2,21 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { catchError } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CompanyService {
   constructor(private http: HttpClient, private route: Router) {}
+  private dataSource = new BehaviorSubject<any>(null);
+  Load: boolean = true;
+  data$ = this.dataSource.asObservable();
+
+
+  sendData(data: any) {
+    this.dataSource.next(data);
+  }
 
   setCompanyInfos(CompanyForm: any) {
     const form = JSON.parse(CompanyForm);
@@ -16,7 +25,8 @@ export class CompanyService {
       Name: form.CompanyName,
       Email: form.CompanyEmail,
       CWebsite: form.CompanyWebsite,
-      Clogo: form.CompanyLogo,
+      CLogo: form.ProfilePicture,
+      Csignature: form.CompanySignature,
       CDescription: form.CompanyDescription,
       CPhone: form.CompanyPhone,
       CLocation: form.Location,
@@ -29,32 +39,85 @@ export class CompanyService {
     localStorage.setItem('companyInfos', JSON.stringify(Company));
   }
 
-  getCompanyInfos() {
+  getCompanyInfos(){
     return JSON.parse(localStorage.getItem('companyInfos')!);
   }
 
-  logout() {
+  logout(){
     localStorage.removeItem('companyInfos');
     this.route.navigate(['/']);
   }
 
-  /*********************PARTIE PROFILE************************/
-  disableAccount() {
-    const companyId = this.getCompanyInfos()?._id;
-    const url = `http://localhost:5000/api/company/disable/${companyId}`;
 
-    return this.http.put(url, {}).pipe(
-      catchError((error) => {
-        console.error('Error disabling account:', error);
-        throw error;
-      })
+
+  /*************sign up ************************/
+  createCompany(languages: any[]) {
+    return this.http.post(
+      'http://localhost:5000/api/company/create',
+      languages
     );
   }
 
-  //edit profile :
-  //to do
+  verifyCompany(_id: any, vcode: any) {
+    return this.http.put('http://localhost:5000/api/company/verify', {
+      companyId: _id,
+      VerificationCode: vcode,
+    });
+  }
+  sendVerLink(_id: any, email: any) {
+    return this.http.post('http://localhost:5000/api/company/sendLink', {
+      companyId: _id,
+      companyMail: email,
+    });
+  }
 
-  /*************************PARTIE MY JOBS**************************************/
+  sendVerificationLink(email: any, _id: any) {
+    return this.http.post('http://localhost:5000/api/company/sendLink', {
+      companyId: _id,
+      companyMail: email, // ken 8alta ija lena
+    });
+  }
+
+  getCities() {
+    return this.http.get('http://localhost:5000/api/city/getAll');
+  }
+
+  getTunisianCitiesAndTowns() {
+    const url =
+      'https://nominatim.openstreetmap.org/search?q=Tunisia&type=city&type=town';
+    return this.http.get<any[]>(url);
+  }
+
+  getAllWorkData() {
+    return this.http.get('http://localhost:5000/api/work/getWorkData');
+  }
+
+
+
+
+/*********************PARTIE PROFILE************************/
+disableAccount() {
+  const companyId = this.getCompanyInfos()?._id;
+  const url = `http://localhost:5000/api/company/disable/${companyId}`;
+
+  return this.http.put(url, {}).pipe(
+    catchError((error) => {
+      console.error('Error disabling account:', error);
+      throw error;
+    })
+  );
+}
+
+
+//edit profile :
+//to do
+
+
+
+
+
+/*************************PARTIE MY JOBS**************************************/
+
   // partie public
   getAllPublicJobOffers(id: any) {
     return this.http.get(
@@ -76,12 +139,38 @@ export class CompanyService {
       );
   }
 
-  //get details Pub job
-  getPublicJobDetails(publicJobOfferId: any) {
-    return this.http.get(
-      `http://localhost:5000/api/companyWorkOffer/getPublicJobDetails/${publicJobOfferId}`
+//get details Pub job
+getPublicJobDetails(publicJobOfferId: any)  {
+  return this.http.get(`http://localhost:5000/api/companyWorkOffer/getPublicJobDetails/${publicJobOfferId}`);
+}
+
+
+acceptFreelancer(publicJobOfferId: string, freelancerId: string) {
+  const url = `http://localhost:5000/api/companyWorkOffer/acceptFreelancer/${publicJobOfferId}/${freelancerId}`;
+  return this.http.post(url, {}).pipe(
+    catchError((error) => {
+      console.error('Error accepting freelancer:', error);
+      throw error;
+    })
+  );
+}
+
+
+sendContract(publicJobOfferId: string, freelancerId: string) {
+  const url = `http://localhost:5000/api/freelancer/sendFreelancerContract/${publicJobOfferId}/${freelancerId}`;
+
+    return this.http.post(url, {}).pipe(
+      catchError((error) => {
+        console.error('Error sending contract:', error);
+        throw error;
+      })
     );
-  }
+}
+
+
+
+
+
 
   //edit pub job
   editPublicJob(publicJobId: string, updatedData: any) {
@@ -103,6 +192,9 @@ export class CompanyService {
     const url = `http://localhost:5000/api/companyWorkOffer/cancelPublicJobOffer/${jobOfferId}`;
     return this.http.delete(url);
   }
+
+
+
 
   //private jobs
   getAllPrivateJobOffers(id: any) {
@@ -133,10 +225,49 @@ export class CompanyService {
     );
   }
 
-  //Accept freelancer
-  acceptFreelancer(publicJobOfferId: string, freelancerId: string) {
-    const url = `http://localhost:5000/api/companyWorkOffer/acceptFreelancer/${publicJobOfferId}/${freelancerId}`;
-    return this.http.post(url, {}).pipe(
+
+
+//cancel prv JO
+deletePrivateJobOffer(privateJobOfferId: string) {
+  return this.http.delete(
+    `http://localhost:5000/api/companyWorkOffer/cancelJobOffer/${privateJobOfferId}`
+  ).pipe(
+    catchError((error) => {
+      console.error('Error in deletePrivateJobOffer:', error);
+      throw error;
+    })
+  );
+}
+
+//edit prv JO
+editPrivateJobOffer(privateJobOfferId: any, updatedJobOfferData: any) {
+  return this.http.put(
+    `http://localhost:5000/api/companyWorkOffer/editPrivateJob/${privateJobOfferId}`,
+    updatedJobOfferData
+  ).pipe(
+    catchError((error) => {
+      console.error('Error in editPrivateJobOffer:', error);
+      throw error;
+    })
+  );
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/**************************************PARTIE TALENT  ************************/
+
+//freelancers page
+  getAllFreelancers() {
+    return this.http.get('http://localhost:5000/api/company/getAllFreelancers').pipe(
       catchError((error) => {
         console.error('Error accepting freelancer:', error);
         throw error;
@@ -144,48 +275,6 @@ export class CompanyService {
     );
   }
 
-  //cancel prv JO
-  deletePrivateJobOffer(privateJobOfferId: string) {
-    return this.http
-      .delete(
-        `http://localhost:5000/api/companyWorkOffer/cancelJobOffer/${privateJobOfferId}`
-      )
-      .pipe(
-        catchError((error) => {
-          console.error('Error in deletePrivateJobOffer:', error);
-          throw error;
-        })
-      );
-  }
-
-  //edit prv JO
-  editPrivateJobOffer(privateJobOfferId: any, updatedJobOfferData: any) {
-    return this.http
-      .put(
-        `http://localhost:5000/api/companyWorkOffer/editPrivateJob/${privateJobOfferId}`,
-        updatedJobOfferData
-      )
-      .pipe(
-        catchError((error) => {
-          console.error('Error in editPrivateJobOffer:', error);
-          throw error;
-        })
-      );
-  }
-
-  /**************************************PARTIE TALENT  ************************/
-
-  //freelancers page
-  getAllFreelancers() {
-    return this.http
-      .get('http://localhost:5000/api/company/getAllFreelancers')
-      .pipe(
-        catchError((error) => {
-          console.error('Error in getAllFreelancers:', error);
-          throw error;
-        })
-      );
-  }
   //get l saved freelancers fel page saved freelancers
   getSavedFreelancers(companyId: string) {
     return this.http.get(
@@ -194,19 +283,14 @@ export class CompanyService {
   }
 
   //freelancer profile page
-
-  getFreelancerDetails(freelancerId: string) {
-    return this.http
-      .get(
-        `http://localhost:5000/api/company/viewFreelancerDetails/${freelancerId}`
-      )
-      .pipe(
-        catchError((error) => {
-          console.error('Error in getFreelancerDetails:', error);
-          throw error;
-        })
-      );
-  }
+getFreelancerDetails(freelancerId: string) {
+  return this.http.get(`http://localhost:5000/api/company/viewFreelancerDetails/${freelancerId}`).pipe(
+    catchError((error) => {
+      console.error('Error in getFreelancerDetails:', error);
+      throw error;
+    })
+  );
+}
 
   saveFreelancer(companyId: string, freelancerId: string) {
     // Include the companyId and freelancerId in the URL
@@ -232,28 +316,28 @@ export class CompanyService {
     }
   }
 
-  //saved freelancers page
 
-  unsaveFreelancer(companyId: string, freelancerId: string) {
-    const url = `http://localhost:5000/api/company/unsaveFreelancer/${companyId}/${freelancerId}`;
 
-    return this.http.post(url, {}).pipe(
-      catchError((error) => {
-        console.error('Error in unsaveFreelancer:', error);
-        throw error;
-      })
-    );
+//saved freelancers page
+
+unsaveFreelancer(companyId: string, freelancerId: string) {
+  const url = `http://localhost:5000/api/company/unsaveFreelancer/${companyId}/${freelancerId}`;
+
+  return this.http.post(url, {}).pipe(
+    catchError((error) => {
+      console.error('Error in unsaveFreelancer:', error);
+      throw error;
+    })
+  );
+}
+
+updateLocalStorageAfterUnsaveFreelancer(companyInfos: any, freelancerId: string): void {
+  if (companyInfos) {
+    companyInfos.SavedFreelancers = companyInfos.SavedFreelancers.filter((saved: any) => saved.freelancerId !== freelancerId);
+    localStorage.setItem('companyInfos', JSON.stringify(companyInfos));
   }
+}
 
-  updateLocalStorageAfterUnsaveFreelancer(
-    companyInfos: any,
-    freelancerId: string
-  ): void {
-    if (companyInfos) {
-      companyInfos.SavedFreelancers = companyInfos.SavedFreelancers.filter(
-        (saved: any) => saved.freelancerId !== freelancerId
-      );
-      localStorage.setItem('companyInfos', JSON.stringify(companyInfos));
-    }
-  }
+
+
 }
