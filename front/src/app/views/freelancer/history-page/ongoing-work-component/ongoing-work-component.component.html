@@ -1,0 +1,27 @@
+<div class="space-y-4">
+  <div
+    *ngFor="let items of freelancerData.WorkHistory[0].Ongoing"
+    class="bg-white shadow-lg rounded-lg overflow-hidden"
+  >
+    <div class="px-6 py-2">
+      <div class="font-bold text-xl mb-1">{{ items?.TaskTitle }}</div>
+      <p class="text-gray-700 text-base mb-4">
+        {{ items?.TaskDescription }}
+      </p>
+      <p class="text-gray-600 text-sm">
+        Due Date:
+        <span class="font-semibold">{{
+          items?.DueDate | date : "medium"
+        }}</span>
+      </p>
+    </div>
+    <div class="px-6 pt-1 pb-2">
+      <button
+        (click)="check(items.taskId)"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-150 ease-in-out"
+      >
+        Check
+      </button>
+    </div>
+  </div>
+</div>

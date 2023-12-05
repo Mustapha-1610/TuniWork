@@ -654,23 +654,40 @@ export const acceptPrivateJob = async (
   res: express.Response
 ) => {
   try {
-    const { freeLancerId, jobId } = req.params;
+    const { jobId } = req.body;
+    const freelancerId = await freeLancerRouteProtection(req, res);
+    if ("_id" in freelancerId) {
+      // Find the private job offer by ID
+      const privateJobOffer = await PrivateJobOffer.findById(jobId);
 
-    // Find the private job offer by ID
-    const privateJobOffer = await PrivateJobOffer.findById(jobId);
+      // Check if the private job offer exists
+      if (!privateJobOffer) {
+        return res.json({ error: "Private job offer not found" });
+      }
 
-    // Check if the private job offer exists
-    if (!privateJobOffer) {
-      return res.json({ error: "Private job offer not found" });
+      const freelancerAccount: any = await freelancer.findByIdAndUpdate(
+        freelancerId,
+        {
+          $push: {
+            "WorkHistory.Ongoing": {
+              TaskTitle: privateJobOffer.Title,
+              TaskHolder: privateJobOffer._id,
+              DueDate: privateJobOffer.DeadLine,
+              TaskDescription: privateJobOffer.Description,
+              taskId: privateJobOffer._id,
+            },
+          },
+        }
+      );
+      // Update the status to "accepted"
+      privateJobOffer.status = "accepted";
+      privateJobOffer.WorkingFreelancer.FreelancerName = freelancerAccount.Name;
+      privateJobOffer.WorkingFreelancer.FreelancerId = freelancerAccount._id;
+
+      await privateJobOffer.save();
+      return res.json({ success: "Private job offer accepted" });
     }
-
-    // Update the status to "accepted"
-    privateJobOffer.status = "accepted";
-
-    // Save the changes
-    await privateJobOffer.save();
-
-    return res.json({ success: "Private job offer accepted" });
+    return freelancerId;
   } catch (err) {
     console.error(err);
     return res.json({ error: "Server Error" });
@@ -947,15 +964,45 @@ export const filterPWOSearch = async (
   res: express.Response
 ) => {
   try {
-    const { workSpeciality } = req.body;
-    const returnedFields =
-      "PaymentMethod _id Title CreationDate CompanyName PaymentMethodVerificationStatus Location TotalWorkOfferd TotalMoneyPayed Description WorkSpeciality";
-    const matchingJobOffers: any = await PublicJobOffer.find({
-      WorkSpeciality: {
-        $in: workSpeciality,
-      },
-    }).select(returnedFields);
-    return res.json({ matchingJobOffers });
+    const { workSpeciality, City } = req.body;
+    if (workSpeciality && City) {
+      const returnedFields =
+        "PaymentMethod _id Title CreationDate CompanyName PaymentMethodVerificationStatus Location TotalWorkOfferd TotalMoneyPayed Description WorkSpeciality";
+      const matchingJobOffers: any = await PublicJobOffer.find({
+        WorkSpeciality: {
+          $in: workSpeciality,
+        },
+        "WorkLocation.City": City,
+      }).select(returnedFields);
+      return res.json({ matchingJobOffers });
+    } else if (workSpeciality && !City) {
+      const returnedFields =
+        "PaymentMethod _id Title CreationDate CompanyName PaymentMethodVerificationStatus Location TotalWorkOfferd TotalMoneyPayed Description WorkSpeciality";
+      const matchingJobOffers: any = await PublicJobOffer.find({
+        WorkSpeciality: {
+          $in: workSpeciality,
+        },
+      }).select(returnedFields);
+      return res.json({ matchingJobOffers });
+    } else if (!workSpeciality && City) {
+      console.log("HELLOOOOOOOOO");
+      const freelancerId = await freeLancerRouteProtection(req, res);
+      if ("_id" in freelancerId) {
+        const freeLancer: any = await freelancer.findById(freelancerId);
+        console.log("hello");
+        const returnedFields =
+          "PaymentMethod _id Title CreationDate CompanyName PaymentMethodVerificationStatus Location TotalWorkOfferd TotalMoneyPayed Description WorkSpeciality";
+        const matchingJobOffers: any = await PublicJobOffer.find({
+          WorkSpeciality: {
+            $in: freeLancer.Speciality,
+          },
+          "WorkLocation.City": City,
+        }).select(returnedFields);
+        return res.json({ matchingJobOffers });
+      }
+
+      return res.json({ freelancerId });
+    }
   } catch (err) {
     console.log(err);
     return res.json({ error: "Server Error" });
@@ -990,6 +1037,97 @@ export const getDate = async (req: express.Request, res: express.Response) => {
     if ("_id" in freelancerId) {
       const freelancerAccount: any = await freelancer.findById(freelancerId);
       return res.json({ schedule: freelancerAccount.Schedule });
+    }
+    return freelancerId;
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error" });
+  }
+};
+
+//
+export const refreshProfile = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const freelancerId = await freeLancerRouteProtection(req, res);
+    if ("_id" in freelancerId) {
+      const freelancerAccount: any = await freelancer.findById(freelancerId);
+      return res.json({ freelancerAccount });
+    }
+    return freelancerId;
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error" });
+  }
+};
+
+export const cleanNotification = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const freelancerId = await freeLancerRouteProtection(req, res);
+    if ("_id" in freelancerId) {
+      const freelancerAccount: any = await freelancer.findById(freelancerId);
+      freelancerAccount.Notifications.forEach((notification: any) => {
+        if (!notification.readStatus) {
+          notification.readStatus = true;
+        }
+      });
+      await freelancerAccount.save();
+      return res.json({ success: "Notifications Updated" });
+    }
+
+    return freelancerId;
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error" });
+  }
+};
+
+export const updatePWOTaskProgression = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { PWOId, IdsArray } = req.body;
+    let PWO: any = await PrivateJobOffer.findById(PWOId);
+    IdsArray.map((item: any) => {
+      PWO.TaskTable.map((task: any) => {
+        if (item.toString() === task._id.toString()) {
+          task.TaskDoneStatus = !task.TaskDoneStatus;
+        }
+      });
+    });
+    await PWO.save();
+    return res.json({ success: "Marked Successfully", PWO });
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error" });
+  }
+};
+
+//
+export const sendPaymentRequest = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const freelancerId = await freeLancerRouteProtection(req, res);
+    if ("_id" in freelancerId) {
+      const { workId } = req.body;
+      const PWO = await PrivateJobOffer.findById(workId);
+      const test = PWO.TaskTable.map((item) => {
+        if (item.TaskDoneStatus === false) {
+          return false;
+        }
+      });
+      console.log(test);
+      if (test.includes(false)) {
+        return res.json({ error: "Access Denied Tasks Are Not Finiched" });
+      }
     }
     return freelancerId;
   } catch (err) {

@@ -4,8 +4,43 @@ import companyPublicWorkOffer from "./CompanyPublicWorkOfferModal";
 import PrivateJobOffer from "./CompanyPrivateWorkOfferModal";
 import Freelancer from "../../Freelancer/modal";
 import PublicJobOffer from "./CompanyPublicWorkOfferModal";
+import { freeLancerRouteProtection } from "../../Freelancer/routeProtectionMiddleware";
+import freelancer from "../../Freelancer/modal";
 
 /********************PUBLIC JOBS PART ******************/
+// GENERAL (Mustapha)
+export const getWorkOfferProgress = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { workOfferId } = req.body;
+    const freelancerId = await freeLancerRouteProtection(req, res);
+    if ("_id" in freelancerId) {
+      let workOffer = await PrivateJobOffer.findById(workOfferId);
+      if (workOffer) {
+        const freelancerAccount: any = await freelancer.findById(freelancerId);
+        if (
+          !workOffer.WorkingFreelancer.FreelancerId.equals(
+            freelancerAccount._id
+          )
+        ) {
+          return res.json({ error: "Access Denied" });
+        }
+        return res.json({ workOffer });
+      } else {
+        workOffer = await PublicJobOffer.findById(workOfferId);
+        return res.json({ workOffer });
+      }
+    }
+    return freelancerId;
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error" });
+  }
+};
+
+
 // create public job offer ( mostfa)
 export const createPublicJob = async (
   req: express.Request,
@@ -23,39 +58,49 @@ export const createPublicJob = async (
       CompanySignature,
       CompanyId,
     } = req.body;
+    const { publicJobData, cityData } = req.body;
 
-    const offeringCompany = await company.findById(CompanyId);
+    const offeringCompany = await company.findById(publicJobData.CompanyId);
     if (!offeringCompany) {
+      console.log("test");
       return res.json({ error: "Server Error" });
     }
-
-    const PaymentMethodVerificationStatus = offeringCompany.PaymentMethodVerificationStatus;
+    let SpecialityArray: String[] = [];
+    cityData.specialities.map((item: any) => {
+      SpecialityArray.push(item.item_text);
+    });
+    const PaymentMethodVerificationStatus =
+      offeringCompany.PaymentMethodVerificationStatus;
     const CompanyName = offeringCompany.CompanyName;
     const CompanyLocation = offeringCompany.Location;
     const TotalWorkOfferd = offeringCompany.WorkOfferd;
     const TotalMoneyPayed = offeringCompany.MoneySpent;
 
-    let workOffer = await companyPublicWorkOffer.create({
-      Title,
-      WorkTitle,
-      Description,
-      Note,
+    await companyPublicWorkOffer.create({
+      Title: publicJobData.Title,
+      WorkTitle: cityData.workTitles[0].item_text,
+      Description: publicJobData.Description,
+      Note: publicJobData.Note,
       PaymentMethod: {
-        PayPerTask,
-        PayPerHour,
+        PayPerTask: publicJobData.PayPerTask,
+        PayPerHour: publicJobData.PayPerHour,
       },
-      WorkSpeciality,
-
-      CompanyId,
+      WorkSpeciality: SpecialityArray,
+      CompanyId: publicJobData.CompanyId,
       PaymentMethodVerificationStatus,
       CompanyName,
       CompanySignature,
       CompanyLocation,
       TotalMoneyPayed,
       TotalWorkOfferd,
+      WorkLocation: {
+        City: cityData.cities[0].item_text,
+        Municipality: cityData.municipality[0].item_text,
+      },
     });
     return res.json({ success: "work offer created" });
   } catch (err) {
+    console.log("test1");
     console.log(err);
     return res.json({ error: "Server Error !" });
   }
@@ -67,7 +112,7 @@ export const FindBestMatchesPublicWorkOffers = async (
   res: express.Response
 ) => {
   try {
-    const { freelancerId } = req.body;
+    const { freelancerId, City } = req.body;
     const freeLancer: any = await Freelancer.findById(freelancerId);
     const returnedFields =
       "PaymentMethod _id Title CreationDate CompanyName PaymentMethodVerificationStatus Location TotalWorkOfferd TotalMoneyPayed Description WorkSpeciality";
@@ -258,8 +303,10 @@ export const acceptFreelancer = async (
     }
 
     // Check if the public job offer is in the correct status to accept a freelancer
-    if (publicJobOffer.status !== 'awaiting application requests') {
-      return res.status(400).json({ error: 'This job offer is not open for applications.' });
+    if (publicJobOffer.status !== "awaiting application requests") {
+      return res
+        .status(400)
+        .json({ error: "This job offer is not open for applications." });
     }
 
     // Check if the freelancer has applied
@@ -284,8 +331,8 @@ export const acceptFreelancer = async (
         FreelancerName: appliedFreelancer.FreelancerName,
       };
       // Update the public job offer status
-      publicJobOffer.status = 'freelancer accepted, awaiting contract';
-      
+      publicJobOffer.status = "freelancer accepted, awaiting contract";
+
       // Save changes to the database
       await publicJobOffer.save();
 
@@ -315,9 +362,9 @@ export const acceptFreelancer = async (
       );
 
       return res.json({
-        success: 'Freelancer accepted successfully.',
+        success: "Freelancer accepted successfully.",
         acceptedFreelancer: appliedFreelancer,
-        updatedJobOfferStatus: publicJobOffer.status
+        updatedJobOfferStatus: publicJobOffer.status,
       });
     } else {
       return res.json({
@@ -329,8 +376,6 @@ export const acceptFreelancer = async (
     return res.status(500).json({ error: "Server Error!" });
   }
 };
-
-
 
 // function to get all private job offers of a company (aziz)
 export const getAllPublicJobOffers = async (
@@ -382,67 +427,78 @@ export const createPrivateJob = async (
   res: express.Response
 ) => {
   try {
-    const {
-      Title,
-      Description,
-      Note,
-      PayPerTask,
-      PayPerHour,
-      CompanyId,
-      PaymentMethodVerificationStatus,
-      CompanyName,
-      CompanyLocation,
-      TotalWorkOfferd,
-      TotalMoneyPayed,
-      FreelancerId,
-      DeadLine,
-    } = req.body;
-
-    const offeringCompany = await company.findById(CompanyId);
+    const { privateJobOfferData, taskTable } = req.body;
+    const offeringCompany = await company.findById(
+      privateJobOfferData.CompanyId
+    );
     if (!offeringCompany) {
       return res.json({ error: "Server Error" });
     }
 
     // Fetch the freelancer's name based on FreelancerId
-    const freelancer: any = await Freelancer.findById(FreelancerId);
+    const freelancer: any = await Freelancer.findById(
+      privateJobOfferData.FreelancerId
+    );
     const freelancerName = freelancer ? freelancer.Name : null;
-
-    let workOffer = await PrivateJobOffer.create({
-      Title,
-      Description,
-      Note,
+    let workOffer: any = await PrivateJobOffer.create({
+      Title: privateJobOfferData.Title,
+      Description: privateJobOfferData.Description,
+      Note: privateJobOfferData.Note,
       PaymentMethod: {
-        PayPerTask,
-        PayPerHour,
+        PayPerTask: privateJobOfferData.PayPerTask,
+        PayPerHour: privateJobOfferData.PayPerHour,
       },
-      CompanyId,
-      PaymentMethodVerificationStatus,
-      CompanyName,
-      CompanyLocation,
-      TotalMoneyPayed,
-      TotalWorkOfferd,
-      DeadLine,
+      CompanyId: privateJobOfferData.CompanyId,
+      PaymentMethodVerificationStatus:
+        privateJobOfferData.PaymentMethodVerificationStatus,
+      CompanyName: privateJobOfferData.CompanyName,
+      CompanyLocation: privateJobOfferData.CompanyLocation,
+      TotalMoneyPayed: privateJobOfferData.TotalMoneyPayed,
+      TotalWorkOfferd: privateJobOfferData.TotalWorkOfferd,
+      DeadLine: privateJobOfferData.DeadLine,
 
       WorkingFreelancer: {
         FreelancerName: freelancerName, // Use the fetched freelancer name
-        FreelancerId,
+        FreelancerId: privateJobOfferData.FreelancerId,
       },
+      TaskTable: [],
     });
-
+    taskTable.map((item: any) => {
+      workOffer.TaskTable.push({
+        TaskTitle: item,
+      });
+    });
+    await workOffer.save();
+    const FreelancerId = privateJobOfferData.FreelancerId;
     // Update freelancer's ProposedPrivateWorks array
-   await Freelancer.findByIdAndUpdate(
+    await Freelancer.findByIdAndUpdate(
       FreelancerId,
       {
         $push: {
           ProposedPrivateWorks: {
             PrivateJobOfferId: workOffer._id,
+            Title: privateJobOfferData.Title,
+            Description: privateJobOfferData.Description,
+          },
+          Notifications: {
+            NotificationMessage:
+              "New Work Offer Recieved from " +
+              offeringCompany.CompanyName +
+              " Company",
+            senderInformations: {
+              senderId: offeringCompany._id,
+              senderUserType: "Company",
+            },
           },
         },
       },
       { new: true }
     );
 
-    return res.json({ success: "private work offer created", jobOfferId: workOffer._id });
+    return res.json({
+      success: "private work offer created",
+      jobOfferId: workOffer._id,
+    });
   } catch (err) {
     console.log(err);
     return res.json({ error: "Server Error!" });

@@ -52,11 +52,17 @@ const freelancerSchema = new Schema({
           TaskTitle: {
             type: String,
           },
+          TaskDescription: {
+            type: String,
+          },
           TaskHolder: {
             type: Schema.Types.ObjectId,
           },
           DueDate: {
             type: Date,
+          },
+          taskId: {
+            type: Schema.Types.ObjectId,
           },
         },
       ],
@@ -144,6 +150,12 @@ const freelancerSchema = new Schema({
         ],
         default: "awaiting response",
       },
+      Title: {
+        type: String,
+      },
+      Description: {
+        type: String,
+      },
     },
   ],
 
@@ -188,6 +200,32 @@ const freelancerSchema = new Schema({
     type: Date,
     default: new Date(),
   },
+  Notifications: [
+    {
+      NotificationMessage: {
+        type: String,
+        required: true,
+      },
+      readStatus: {
+        type: Boolean,
+        default: false,
+      },
+      senderInformations: {
+        senderId: {
+          type: Schema.Types.ObjectId,
+          required: true,
+        },
+        senderUserType: {
+          type: String,
+          required: true,
+        },
+        creationDate: {
+          type: Date,
+          default: new Date(),
+        },
+      },
+    },
+  ],
 });
 const freelancer = User.discriminator("freelancer", freelancerSchema);
 export default freelancer;

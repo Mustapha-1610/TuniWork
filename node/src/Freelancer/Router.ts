@@ -48,7 +48,7 @@ freelancerRouter.post("/LgoogleAuth", freelancerController.googleAuth);
 
 //accept private joboffer (aziz)
 freelancerRouter.post(
-  "/acceptPrivateJob/:jobId",
+  "/acceptPrivateJob",
   freelancerController.acceptPrivateJob
 );
 
@@ -84,4 +84,25 @@ freelancerRouter.put("/addDate", freelancerController.addDate);
 
 //
 freelancerRouter.get("/getDate", freelancerController.getDate);
+
+//
+freelancerRouter.get("/refreshProfile", freelancerController.refreshProfile);
+
+//
+freelancerRouter.get(
+  "/cleanNotifications",
+  freelancerController.cleanNotification
+);
+
+//
+freelancerRouter.post(
+  "/updatePWOProgress",
+  freelancerController.updatePWOTaskProgression
+);
+
+//
+freelancerRouter.post(
+  "/sendPaymentRequest",
+  freelancerController.sendPaymentRequest
+);
 export default freelancerRouter;

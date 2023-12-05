@@ -1,4 +1,3 @@
-
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
@@ -20,17 +19,13 @@ import {
   SocialAuthServiceConfig,
 } from '@abacritt/angularx-social-login';
 import { WithCredentialsInterceptor } from 'src/with-credentials.interceptor';
-
-
-
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 //aziz
 import { PublicJobCreateComponent } from './views/comapny/public-job-create/public-job-create.component';
 import { PublicJobEditFormComponent } from './views/comapny/public-job-edit/public-job-edit.component';
 import { ComapnyModule } from './views/comapny/comapny.module';
 import { HomePageModule } from './views/home-page/home-page.module';
-
-
 
 @NgModule({
   declarations: [
@@ -45,12 +40,13 @@ import { HomePageModule } from './views/home-page/home-page.module';
     ReactiveFormsModule,
     HttpClientModule,
     FreelancerModule,
+    NgMultiSelectDropDownModule,
     HomePageModule,
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideStorage(() => getStorage(getApp())),
     BrowserAnimationsModule,
     SocialLoginModule,
-    ComapnyModule
+    ComapnyModule,
   ],
   providers: [
     {

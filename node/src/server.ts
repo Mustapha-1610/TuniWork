@@ -8,6 +8,8 @@ import mongoose from "mongoose";
 import freelancerRouter from "./Freelancer/Router";
 
 import companyRouter from "./Company/Router";
+import customerRouter from "./Customer/Router";
+import CustomerWorkOfferRouter from "./WorkOffer/Customer/router";
 
 import adminRouter from "./Admin/Router";
 
@@ -17,6 +19,8 @@ import CompanyWorkOfferRouter from "./WorkOffer/Company/router";
 import freelancerNameSpaceLogic from "./Freelancer/freelancerSocketLogic";
 import companyNameSpaceLogic from "./Company/companySocketLogic";
 import cityRouter from "./utils/City/Router";
+import paymentRequestRouter from "./utils/PaymentRequest/Router";
+
 dotenv.config();
 const app = express();
 
@@ -54,6 +58,13 @@ app.use("/api/companyWorkOffer", CompanyWorkOfferRouter);
 
 app.use("/api/city", cityRouter);
 
+app.use("/api/paymentRequest", paymentRequestRouter);
+
+//customer
+
+app.use("/api/customerWorkOffer", CustomerWorkOfferRouter);
+app.use("/api/customer", customerRouter);
+
 mongoose.Promise = Promise;
 mongoose.connect(process.env.Mongo_Pass);
 mongoose.connection.on("error", (error: Error) => console.log(error));
@@ -67,8 +78,7 @@ serverApp.listen(5000, () => {
 
 const freelancerNameSpace = io.of("/freelancer");
 freelancerNameSpaceLogic(freelancerNameSpace);
-export {freelancerNameSpace}
+export { freelancerNameSpace };
 
 const companyNameSpace = io.of("/company");
 companyNameSpaceLogic(companyNameSpace);
-

@@ -81,5 +81,9 @@ CompanyWorkOfferRouter.post(
   "/acceptFreelancer/:publicJobOfferId/:freelancerId",
   CompanyWorkOfferController.acceptFreelancer
 );
-
+// (Mustapha)
+CompanyWorkOfferRouter.post(
+  "/getWorkOfferInfos",
+  CompanyWorkOfferController.getWorkOfferProgress
+);
 export default CompanyWorkOfferRouter;

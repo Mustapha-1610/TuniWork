@@ -4,23 +4,59 @@
   </div>
   <div class="flex items-center space-x-4">
     <a class="text-white" routerLink="/freelancer/profile">Profile</a>
+    <a class="text-white" routerLink="/freelancer/workHistory">History</a>
     <a class="text-white cursor-pointer" (click)="logout()">Logout</a>
   </div>
   <h3 class="text-white">Connected Freelancers: {{ connectedUsers }}</h3>
-</nav>
+  <!-- notification.component.html -->
+  <div class="relative">
+    <!-- Notification Icon with Badge -->
+    <button (click)="toggleDropdown()" class="relative p-2">
+      <svg
+        class="h-6 w-6 text-gray-600"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M15 17h5l-1.5-1.5m0 0h-13l5 5m-5-5v-6a2 2 0 012-2h3m10 0a2 2 0 011 1.73V12m0 0l-5 5"
+        />
+      </svg>
+      <span
+        *ngIf="unreadCount > 0"
+        class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full"
+        >{{ unreadCount }}</span
+      >
+    </button>
 
-
-
-<button (click)="toggleNotifications()">
-  <img src="../../../assets/images/notif.png" alt="Notification Bell">
-  <span>{{ unreadNotificationCount }}</span>
-</button>
-
-<div *ngIf="showNotifications">
-  <div *ngFor="let notification of notifications" class="notification">
-    <p>{{ notification.message }}</p>
+    <!-- Dropdown Menu -->
+    <div
+      *ngIf="dropdownOpen"
+      class="absolute right-5 mt-8 w-80 bg-white rounded-md shadow-lg z-50 overflow-auto"
+      style="max-height: 24rem"
+    >
+      <div class="py-2">
+        <h3
+          *ngFor="let notification of freeLancerInfos?.Notifications"
+          class="flex items-center px-3 py-2 border-b hover:bg-gray-100 -mx-2"
+        >
+          <p class="text-gray-600 text-sm mx-2">
+            <span class="font-bold"
+              >{{ notification.NotificationMessage }}
+              <p>
+                {{
+                  notification?.senderInformations?.creationDate
+                    | date : "medium"
+                }}
+              </p>
+            </span>
+          </p>
+        </h3>
+      </div>
+    </div>
   </div>
-</div>
-
-
+</nav>
 <router-outlet></router-outlet>

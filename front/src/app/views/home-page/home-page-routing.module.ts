@@ -12,11 +12,12 @@ import { FreelancerGoogleSignupComponent } from './freelancer-google-signup/free
 import { PasswordResetPageComponent } from './password-reset-page/password-reset-page.component';
 import { ForgetPasswordPageComponent } from './forget-password-page/forget-password-page.component';
 import { CompanyVerificationPageComponent } from './company-verification-page/company-verification-page.component';
+import { CustomerSignupPageComponent } from './customer-signup-page copy/customer-signup-page.component';
 
 const routes: Routes = [
   { path: '', component: IndexComponent },
   { path: 'Fsignup', component: FreelancerSignupPageComponent },
-  { path: 'Csignup', component: ComapnySignupPageComponent },
+  { path: 'Csignup', component: CustomerSignupPageComponent },
   { path: 'login', component: LoginPageComponent },
   { path: 'signup', component: SignupPageComponent },
   {

@@ -1,7 +1,7 @@
 <div>
   Filter Search :
   <select (change)="getOptionValue($event)">
-    <option disabled selected>-</option>
+    <option selected>-</option>
     <option
       *ngFor="let option of freeLancerInfos.Specialities"
       [value]="option"
@@ -25,24 +25,6 @@
         [data]="CitiesList"
         (onSelect)="onCitySelect($event)"
         (onDeSelect)="onCityDeselect($event)"
-        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-      ></ng-multiselect-dropdown>
-    </div>
-    <div class="mb-4 flex-item">
-      <label
-        class="block text-gray-700 text-sm font-bold mb-2"
-        for="speciality"
-      >
-        Municipality
-      </label>
-      <ng-multiselect-dropdown
-        id="municipality"
-        formControlName="municipality"
-        [placeholder]="'Select Municipality'"
-        [settings]="MunicipalityDropdownSettings"
-        [data]="MunicipalityList"
-        (onSelect)="onSpecialitySelect($event)"
-        (onDeSelect)="onSpecialityDeselect($event)"
         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
       ></ng-multiselect-dropdown>
     </div>

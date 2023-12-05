@@ -8,6 +8,10 @@ import { CompanyLayoutComponent } from './layout/company-layout/company-layout.c
 import { companyLayoutGuard } from './views/guards/company-layout.guard';
 
 const routes: Routes = [
+ 
+ 
+ 
+ 
   {
     path: 'freelancer',
     component: FreelancerlayoutComponent,

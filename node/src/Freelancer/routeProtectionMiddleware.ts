@@ -9,7 +9,7 @@ const freeLancerRouteProtection = async (
   res: express.Response
 ) => {
   if (!req.cookies.jwt) {
-    return res.json({ error: "Session Expired Login Again" });
+    return res.json({ jwtError: "Session Expired Login Again" });
   } else {
     const freeLancerToken = req.cookies.jwt;
     try {

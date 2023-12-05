@@ -31,6 +31,8 @@ import { FreelancerGoogleSignupComponent } from './freelancer-google-signup/free
 import { ForgetPasswordPageComponent } from './forget-password-page/forget-password-page.component';
 import { PasswordResetPageComponent } from './password-reset-page/password-reset-page.component';
 import { CompanyVerificationPageComponent } from './company-verification-page/company-verification-page.component';
+import { CustomerLoginPageComponent } from './customer-login-page/customer-login-page.component';
+import { CustomerSignupPageComponent } from './customer-signup-page copy/customer-signup-page.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +49,8 @@ import { CompanyVerificationPageComponent } from './company-verification-page/co
     ForgetPasswordPageComponent,
     PasswordResetPageComponent,
     CompanyVerificationPageComponent,
+    CustomerLoginPageComponent,
+    CustomerSignupPageComponent,
   ],
   imports: [
     CommonModule,

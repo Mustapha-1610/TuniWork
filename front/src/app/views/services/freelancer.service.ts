@@ -9,6 +9,9 @@ export class FreelancerService {
   private dataSource = new BehaviorSubject<any>(null);
   Load: boolean = true;
   data$ = this.dataSource.asObservable();
+  refreshProfile() {
+    return this.http.get('http://localhost:5000/api/freelancer/refreshProfile');
+  }
   sendData(data: any) {
     this.dataSource.next(data);
   }
@@ -48,6 +51,7 @@ export class FreelancerService {
       Schedule: form.Schedule,
       SavedWorkOffers: form.SavedWorkOffers,
       PendingWorkOffers: form.pendingWorkOffers,
+      Notifications: form.Notifications,
     };
     localStorage.setItem('freeLancerInfos', JSON.stringify(FreelancerAccount));
   }
@@ -133,11 +137,12 @@ export class FreelancerService {
       PWOId,
     });
   }
-  filterPWOSearch(workSpeciality: any) {
+  filterPWOSearch(workSpeciality: any, city: any) {
     return this.http.post(
       'http://localhost:5000/api/freelancer/filterPWOSearch',
       {
         workSpeciality,
+        City: city,
       }
     );
   }
@@ -153,5 +158,28 @@ export class FreelancerService {
   }
   getCities() {
     return this.http.get('http://localhost:5000/api/city/getAll');
+  }
+  cleanNotifications() {
+    return this.http.get(
+      'http://localhost:5000/api/freelancer/cleanNotifications'
+    );
+  }
+  getWorkOfferProgress(id: any) {
+    return this.http.post(
+      'http://localhost:5000/api/companyWorkOffer/getWorkOfferInfos',
+      { workOfferId: id }
+    );
+  }
+  updateProg(PWOId: any, IdsArray: any) {
+    return this.http.post(
+      'http://localhost:5000/api/freelancer/updatePWOProgress',
+      { PWOId, IdsArray }
+    );
+  }
+  accessPaymentRequestPage(workId: any) {
+    return this.http.post(
+      'http://localhost:5000/api/freelancer/sendPaymentRequest',
+      { workId }
+    );
   }
 }
