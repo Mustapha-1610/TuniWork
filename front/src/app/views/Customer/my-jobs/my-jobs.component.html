@@ -1,1 +1,35 @@
 <p>my-jobs works!</p>
+
+
+<div class="container">
+    <div class="card shadow mb-4">
+      <div class="card-body">
+        <h3>Private Work Offers</h3>
+        <table class="table table-striped">
+          <tr>
+            <th>Title</th>
+            <th>Status</th>
+            <th>Description</th>
+            <th>Creation Date</th>
+            <th>Actions</th>
+          </tr>
+          <tbody *ngFor="let privateJobOffer of privateJobOffers">
+            <tr>
+              <td>{{ privateJobOffer.Title }}</td>
+              <td>{{ privateJobOffer.status }}</td>
+              <td>{{ privateJobOffer.Description }}</td>
+              <td>{{ privateJobOffer.CreationDate | date : "dd/MM/yyyy" }}</td>
+              <td>
+                <a class="btn btn-success" [routerLink]="['/private-job-edit', privateJobOffer._id]">Modifier</a>
+                <a class="btn btn-danger" (click)="onDeletePrivateJobOffer(privateJobOffer._id)">Supprimer</a>
+                <a class="btn btn-info" [routerLink]="['/private-job-details', privateJobOffer._id]">Details</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  
+  
+  </div>
+  

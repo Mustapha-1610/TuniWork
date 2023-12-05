@@ -13,12 +13,20 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar'; // Add this import
 import { RouterModule } from '@angular/router';
+import { PublicJobDetailsComponent } from '../comapny/public-job-details/public-job-details.component';
+import { TalentFreelancersComponent } from '../comapny/talent-freelancers/talent-freelancers.component';
+import { TalentFreelancerProfileComponent } from '../comapny/talent-freelancer-profile/talent-freelancer-profile.component';
+import { TalentSavedFreelancersComponent } from '../comapny/talent-saved-freelancers/talent-saved-freelancers.component';
 
 @NgModule({
   declarations: [
     ProfilePageComponent,
-    MyJobsComponent,
     HomePageComponent,
+    MyJobsComponent,
+    PublicJobDetailsComponent,
+    TalentFreelancersComponent,
+    TalentFreelancerProfileComponent,
+    TalentSavedFreelancersComponent,
     PrivateJobCreateComponent,
     PrivateJobDetailsComponent,
     PrivateJobEditComponent,

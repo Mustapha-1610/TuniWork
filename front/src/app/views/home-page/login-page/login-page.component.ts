@@ -7,6 +7,7 @@ import { FreelancerService } from '../../services/freelancer.service';
 import { Router } from '@angular/router';
 import { SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
 import { CompanyService } from '../../services/company.service';
+import { CustomerService } from '../../services/customer.service';
 @Component({
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',
@@ -16,6 +17,7 @@ export class LoginPageComponent implements OnInit {
   constructor(
     private fs: FreelancerService,
     private cs: CompanyService,
+    private cus:CustomerService,
     private route: Router,
     private authService: SocialAuthService
   ) {}
@@ -32,7 +34,13 @@ export class LoginPageComponent implements OnInit {
           if (res.freelancerAccount) {
             this.fs.setFreelancerCredits(JSON.stringify(res.freelancerAccount));
             this.route.navigate(['/freelancer/profile']);
-          } else {
+          } else if(res.customerAccount){
+            this.cus.setCustomerInfos(JSON.stringify(res.customerAccount));
+            this.route.navigate(['/customer/profile']);
+           
+
+          }
+            else {
             this.fs.sendData(this.user);
             this.route.navigate(['/signup']);
           }
@@ -48,7 +56,7 @@ export class LoginPageComponent implements OnInit {
   submitLoginForm() {
     this.errMessage = '';
     this.mailError = null;
-    this.fs.auth(this.loginForm.value).subscribe((res: any) => {
+    this.cus.authC(this.loginForm.value).subscribe((res: any) => {
       if (res.error) {
         this.errMessage = res.error;
       } else if (res.freelancerAccount) {
@@ -58,6 +66,9 @@ export class LoginPageComponent implements OnInit {
         console.log(res.comapnyAccount);
         this.cs.setCompanyInfos(JSON.stringify(res.comapnyAccount));
         this.route.navigate(['/company/profile']);
+      } else if (res.customerAccount) {
+      //  this.cus.setCustomerInfos(JSON.stringify(res.customerAccount));
+        this.route.navigate(['/Csignup']);
       } else if (res.emailError) {
         this.mailError = res.emailError;
       }

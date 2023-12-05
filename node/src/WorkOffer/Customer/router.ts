@@ -6,5 +6,6 @@ const CustomerWorkOfferRouter = express.Router();
 CustomerWorkOfferRouter.post("/createPrivateJob", CustomerWorkOfferController.createPrivateJob);
 CustomerWorkOfferRouter.put("/editPrivateJob/:PrivateJobOfferId", CustomerWorkOfferController.editPrivateJob);
 
+
 CustomerWorkOfferRouter.get("/getAllPrivateJobOffers", CustomerWorkOfferController.getAllPrivateJobOffers);
 export default CustomerWorkOfferRouter;

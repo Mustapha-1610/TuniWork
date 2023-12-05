@@ -1,52 +1,99 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CustomerService } from '../../services/customer.service';
+import { CustomerService } from '../../services/customer.service'; // Change to your customer service
+import { io, Socket } from 'socket.io-client';
 
 @Component({
   selector: 'app-private-job-create',
   templateUrl: './private-job-create.component.html',
-  styleUrls: ['./private-job-create.component.css']
+  styleUrls: ['./private-job-create.component.css'],
 })
-export class PrivateJobCreateComponent implements OnInit{
+export class PrivateJobCreateComponent implements OnInit {
   privateJobCreateForm!: FormGroup;
-  freelancerId: any;
+  customerId: any; 
+  tasksForm: any;
+  private socket: Socket;
+  errMessage: any;
 
-  constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private customerService: CustomerService, private router: Router) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private route: ActivatedRoute,
+    private customerService: CustomerService, // Change to your customer service
+    private router: Router
+  ) {
+    // Initialize the Socket.IO connection in the constructor
+    this.socket = io('http://localhost:5000/customer'); // Change to your customer socket namespace
+  }
+
   ngOnInit(): void {
-    // Get freelancerId from route params
+    // Get customerId from route params
     this.route.params.subscribe((params) => {
-      this.freelancerId = params['freelancerId'];
+      this.customerId = params['customerId']; 
     });
 
+    const customerInfos: any = this.customerService.setCustomerInfos(this.privateJobCreateForm.value); // Change to your customer service method and pass the form value
+    const customerId = customerInfos?._id;
+    const CustomerName = customerInfos?.Name;
 
-  this.privateJobCreateForm = this.formBuilder.group({
-    Title: ['', Validators.required],
-    Description: ['', Validators.required],
-    Note: [''],
-    ExperienceLevel: ['', Validators.required],
-    FixedPrice: ['', Validators.required],
+    // Initialize form with your desired structure
+    this.privateJobCreateForm = this.formBuilder.group({
+      Title: ['', Validators.required],
+      Description: ['', Validators.required],
+      Note: [''],
+      ExperienceLevel: ['', Validators.required],
+      FixedPrice: ['', Validators.required],
+      CustomerName: CustomerName, // Change from CompanyName to CustomerName
+      DeadLine: ['', Validators.required],
+      WorkTitle: [''],
+      CustomerId: customerId, // Change from CompanyId to CustomerId
+      FreelancerId: [this.customerId, Validators.required], // Change from FreelancerId to customerId
+    });
+
+    this.tasksForm = new FormGroup({
+      Task: new FormControl(null),
+    });
+  }
+
+  onSubmit(): void {
+    const privateJobCreateData = this.privateJobCreateForm.value;
   
-    DeadLine: ['', Validators.required],
-    WorkTitle: [''],
-    CustomerId: [''],
-    FreelancerId: [this.freelancerId, Validators.required],
+    this.customerService.createPrivateJobOffer(privateJobCreateData).subscribe(
+      (response: any) => {
+        console.log(response.success);
+      },
+      (error) => {
+        console.error('Error creating private job offer', error);
+      }
+    );
+    this.router.navigate(['customer/my-jobs']);
+  }
 
-  });
-}
-  
-onSubmit(): void {
-  const privateJobCreateData = this.privateJobCreateForm.value;
-
-  this.customerService.createPrivateJobOffer(privateJobCreateData).subscribe(
-    (response: any) => {
-      console.log(response.success);
-    },
-    (error) => {
-      console.error('Error creating private job offer', error);
+  // (Mustapha)
+  taskTable: any[] = [];
+  addToTaskList() {
+    if (this.tasksForm.value.Task.trim() === '') {
+    } else {
+      this.errMessage = null;
+      this.taskTable.push(this.tasksForm.value.Task);
+      this.tasksForm.controls['Task'].reset();
     }
-  );
-  this.router.navigate(['customer/my-jobs']);
+   
+  }
+
+  deleteItem(item: any) {
+    this.taskTable = this.taskTable.filter((task) => task !== item);
+    if (this.taskTable.length === 0) {
+      this.errMessage = 'You Need To Add Atleast One Task';
+
+ }
+
+
 
 }
 }

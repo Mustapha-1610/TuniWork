@@ -1,14 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError } from 'rxjs';
+import { Router } from '@angular/router';
+import { BehaviorSubject, catchError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CustomerService {
   route: any;
-  setCustomerInfos(arg0: string) {
-    throw new Error('Method not implemented.');
+  getCustomerInfos() {
+    return JSON.parse(localStorage.getItem('customerInfos')!);
   }
  
   private dataSource = new BehaviorSubject<any>(null);
@@ -33,7 +34,7 @@ export class CustomerService {
 
   constructor(private http:HttpClient ) { }
 
-  setCustomerCredits(CustomerForm:any)
+  setCustomerInfos(CustomerForm:any)
   {
     const form :any = JSON.parse(CustomerForm);
     const CustomerAccount: any = {
@@ -93,7 +94,12 @@ export class CustomerService {
       })
     );
   }
-
+  
+  getPrivateJobOfferDetails(privateJobOfferId: any) {
+    return this.http.get(
+      `http://localhost:5000/api/companyWorkOffer/getPrivateJobOfferDetails/${privateJobOfferId}`
+    );
+  }
 
   auth(data: any) {
     return this.http.post(
@@ -109,6 +115,18 @@ export class CustomerService {
     return this.http.post(
       'http://localhost:5000/api/customer/ResetPassword',
       { freelancerEmail: Email }
+    );
+  }
+
+  disableAccount() {
+    const companyId = this.getCustomerInfos()?._id;
+    const url = `http://localhost:5000/api/customer/disable/${companyId}`;
+
+    return this.http.put(url, {}).pipe(
+      catchError((error) => {
+        console.error('Error disabling account:', error);
+        throw error;
+      })
     );
   }
   
