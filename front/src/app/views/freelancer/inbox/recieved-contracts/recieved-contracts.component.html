@@ -1,0 +1,67 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <table class="table table-striped table-hover table-responsive-md">
+        <thead>
+          <tr>
+            <th>Contract Name</th>
+            <th>Creation Date</th>
+            <th>Download</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let items of CompanyContracts; let i = index">
+            <td (click)="setUrl(items?.ContractUrl)" class="cursor-pointer">
+              {{ items?.ContrantName }}
+            </td>
+            <td>{{ items?.CreationDate | date : "medium" }}</td>
+            <td>
+              <a [href]="items?.ContractUrl" download target="_blank">
+                Download
+              </a>
+            </td>
+            <td>
+              <div *ngIf="items?.acceptanceState && items?.ResponseState">
+                Sent
+              </div>
+
+              <div *ngIf="!items?.ResponseState">
+                <button
+                  type="button"
+                  class="red-500 bg-green-500 text-white rounded-md px-4 py-2 mb-2"
+                  (click)="displayInput(items?._id, i)"
+                >
+                  Accept
+                </button>
+                <button
+                  class="red-500 bg-red-500 text-white rounded-md px-4 py-2 mb-2"
+                >
+                  Decline
+                </button>
+              </div>
+              <div *ngIf="items?.ResponseState && i == index && showInput">
+                <input type="file" (change)="selectFile($event)" />
+                <button (click)="decline(i)">Decline</button>
+                <button
+                  (click)="uploadPdf(items?._id)"
+                  *ngIf="showuploadButton"
+                >
+                  Upload
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-md-6">
+      <iframe
+        [src]="ContractUrl"
+        style="width: 100%; height: 800px"
+        frameborder="0"
+        alt="hello"
+      ></iframe>
+    </div>
+  </div>
+</div>

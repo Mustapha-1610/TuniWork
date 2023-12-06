@@ -969,7 +969,23 @@ export const sendFreelancerContract = async (
     const acceptedFreelancer: any = await freelancer.findById(freelancerId);
 
     // Update the arrays
-    acceptedFreelancer.CompanyRecievedContracts.push(url);
+    acceptedFreelancer.CompanyRecievedContracts.push({
+      ContractUrl: url,
+      ContrantName:
+        "Private Work Offer Contract From " +
+        contractingCompany.CompanyName +
+        " Company",
+      CreationDate: new Date(),
+      workOfferId: {
+        PublicWO: publicWorkOfferId,
+      },
+      workOfferInformations: {
+        TaskTile: PublicWorkOffer.Title,
+        TaskDescription: PublicWorkOffer.Description,
+        TaskHolder: contractingCompany._id,
+        taskId: PublicWorkOffer._id,
+      },
+    });
     contractingCompany.freelancerSentContracts.push(url);
 
     // Save the changes
@@ -1158,5 +1174,46 @@ export const sendPaymentRequest = async (
   } catch (err) {
     console.log(err);
     return res.json({ error: "Server Error" });
+  }
+};
+
+//
+export const acceptWorkContract = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { contractId } = req.body;
+    const freelancerId = await freeLancerRouteProtection(req, res);
+    if ("_id" in freelancerId) {
+      const freelancerAccount: any = await freelancer.findById(freelancerId);
+      let PWO: Boolean;
+      const updatedContracts = freelancerAccount.CompanyRecievedContracts.map(
+        (contract: any) => {
+          if (contract._id.equals(contractId)) {
+            freelancerAccount.WorkHistory[0].Ongoing.push({
+              TaskTitle: contract.workOfferInformations.TaskTitle,
+              TaskDescription: contract.workOfferInformations.TaskDescription,
+              TaskHolder: contract.workOfferInformations.TaskHolder,
+              taskId: contract.workOfferInformations.taskId,
+            });
+            return {
+              ...contract.toObject(),
+              acceptanceState: true,
+              ResponseState: true,
+            };
+          }
+          return contract.toObject();
+        }
+      );
+      freelancerAccount.CompanyRecievedContracts = updatedContracts;
+
+      await freelancerAccount.save();
+      return res.json({ freelancerAccount });
+    }
+    return freelancerId;
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "ERROR" });
   }
 };

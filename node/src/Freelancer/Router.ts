@@ -77,7 +77,10 @@ freelancerRouter.put("/unsavePWO", freelancerController.unsavePWO);
 freelancerRouter.post("/filterPWOSearch", freelancerController.filterPWOSearch);
 
 //
-freelancerRouter.post(  "/sendFreelancerContract/:publicWorkOfferId/:freelancerId", freelancerController.sendFreelancerContract);
+freelancerRouter.post(
+  "/sendFreelancerContract/:publicWorkOfferId/:freelancerId",
+  freelancerController.sendFreelancerContract
+);
 
 //
 freelancerRouter.put("/addDate", freelancerController.addDate);
@@ -104,5 +107,11 @@ freelancerRouter.post(
 freelancerRouter.post(
   "/sendPaymentRequest",
   freelancerController.sendPaymentRequest
+);
+
+//
+freelancerRouter.post(
+  "/acceptWorkContract",
+  freelancerController.acceptWorkContract
 );
 export default freelancerRouter;
