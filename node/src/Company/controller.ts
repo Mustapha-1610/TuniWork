@@ -21,6 +21,8 @@ import createPDF from "../PDFServices/freelancerContract";
 
 export const create = async (req: express.Request, res: express.Response) => {
   const { companyPersonalInfos, companyAddedInfos } = req.body;
+
+
   if (!companyPersonalInfos.CompanyName) {
     return res.json({ error: "CompanyName is Required !" });
   }
@@ -147,30 +149,7 @@ export const create = async (req: express.Request, res: express.Response) => {
 
 
 // function to verify freelancer account (aziz)
-export const verifyAccount = async (  req: express.Request,  res: express.Response) => {
-  try {
-    const {companyId, VerificationCode} = req.body;
-    const unverifiedCompany = await Company.findById(companyId);
-    console.log('Found Company:', unverifiedCompany);
-    if (!unverifiedCompany) {
-      return res.json({ error: "Account dosent exist !" });
-    }
-    if (VerificationCode != unverifiedCompany.VerificationCode) {
-      return res.json({ error: "Try Again Later !" });
-    }
-    if (unverifiedCompany.AccountVerificationStatus === true) {
-      return res.json({ error: "Account Allready Verified" });
-    }
-
-
-    unverifiedCompany.AccountVerificationStatus = true;
-    await unverifiedCompany.save();
-    return res.json({ success: "Account verified you can now log in !" });
-  } catch (err) {
-    console.log(err);
-    return res.json({ error: "Server Error!" });
-  }
-};
+ 
 
 
 
@@ -501,3 +480,7 @@ export const viewFreelancerDetails = async (
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
+export function verifyAccount(arg0: string, verifyAccount: any) {
+    throw new Error("Function not implemented.");
+}
+

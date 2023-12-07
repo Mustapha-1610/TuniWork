@@ -14,106 +14,147 @@ import company from "Company/modal";
 
 
 export const createCustomerAccount = async (req: express.Request, res: express.Response) => {
-  try {
-    const { ProfilePicture, Name, LastName, PhoneNumber, Email, Password, EstimateWorkLocation, Location, JoinDate, Reviews, PaymentMethodVerificationStatus, WorkOffered, MoneySpent } = req.body;
+  console.log('Request Body:', req.body);
+  const {customerPersonalInfos } = req.body;
 
-    if (!Name || !LastName || !PhoneNumber || !Email || !Password || !ProfilePicture || !EstimateWorkLocation || !Location) {
-      return res.status(400).json({ error: "Informations manquantes" });
+  
+    if (!customerPersonalInfos.Name) {
+      return res.json({ error: "Name is Required !" });
     }
-    if (!EstimateWorkLocation || !EstimateWorkLocation.City || !EstimateWorkLocation.Municipality) {
-      return res.status(400).json({ error: "Invalid EstimateWorkLocation" });
-    }
-    
-    
-    
-    
-    const { City, Municipality } = EstimateWorkLocation || {};
-     const city = City || '';
-     const municipality = Municipality || '';
+     else if (!customerPersonalInfos.PhoneNumber) {
+      return res.json({ error: "PhoneNumber is Required !" });
+    } 
+    else if (!customerPersonalInfos.LastName) {
+      return res.json({ error: "LastName  is Required !" });
+    } 
+    else if (!customerPersonalInfos.Email) {
+      return res.json({ error: "Email is Required !" });
+    } 
+    else if (!customerPersonalInfos.Password) {
+      return res.json({ error: "Password is Required !" });
+    } 
+    else if (!customerPersonalInfos.Location) {
+      return res.json({ error: "Location is Required !" });
+    } 
+   
 
-    const checkAccountCustomer = await Customer.findOne({
-      $or: [{ Email }, { PhoneNumber }],
-    });
+    try{
+      let existingCustomer = await Customer.findOne({
+        $or: [
+          { Email: customerPersonalInfos.Email },
+          { PhoneNumber: customerPersonalInfos.PhoneNumber },
+        ],
+      });
 
-    if (checkAccountCustomer) {
-      return res.status(400).json({ error: "Le compte existe déjà" });
-    }
+      if (existingCustomer) {
+        return res.json({ error: "Account Exists Allready" });
+      }
+     
 
-    const securePassword = bcrypt.hashSync(Password, 10);
+      const securePassword = bcrypt.hashSync(customerPersonalInfos.Password);
 
-    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+
+      const characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     let VerificationCode = "";
     for (let i = 0; i < 25; i++) {
-      VerificationCode += characters[Math.floor(Math.random() * characters.length)];
+      VerificationCode +=
+        characters[Math.floor(Math.random() * characters.length)];
     }
 
-    const customer = await Customer.create({
-      ProfilePicture,
-      Name,
-      LastName,
-      PhoneNumber,
-      Password: securePassword,
-      Email,
-      Location,
-      VerificationCode,
-      EstimateWorkLocation: {
-        City: city,
-        Municipality: municipality
-      },
-      JoinDate,
-      Reviews,
-      PaymentMethodVerificationStatus,
-      WorkOffered,
-      MoneySpent,
-    });
-    
 
-   
-     await SendCustomerAccountConfirmationMail(
-    customer.Name,
-    customer.Email,
-    customer._id,
-   customer.VerificationCode
-     );
+    let customer: any;
 
-    return res.status(201).json({ success: "Le compte a été créé", customer });
-  } catch (error) {
-    return res.status(500).json({ error: "Erreur serveur", message: error.message });
-  }
-};
+    customerPersonalInfos.ProfilePicture ? (customer = await Customer.create({
+        Name: customerPersonalInfos.Name,
+        LastName: customerPersonalInfos.LastName,
+        Email: customerPersonalInfos.Email,
+        PhoneNumber: customerPersonalInfos.PhoneNumber,
+        Password: securePassword,
+        Location: customerPersonalInfos.Location,
+        
+       
+
+        VerificationCode: VerificationCode,
+        ProfilePicture: customerPersonalInfos.ProfilePicture,
+
+          EstimateWorkLocation: {
+            City: customerPersonalInfos.cities && customerPersonalInfos.cities.length > 0
+            ? customerPersonalInfos.cities[0].item_text
+            : 'VilleParDéfaut',
+            Municipality: customerPersonalInfos.municipality && customerPersonalInfos.municipality.length > 0
+            ? customerPersonalInfos.municipality[0].item_text
+            : 'MunicipalitéParDéfaut',
+          },
+          VerLinkExpDate: new Date(new Date().getTime() + 2 * 60 * 60 * 1000),
+        })) : (customer = await Customer.create({
+        Name: customerPersonalInfos.Name,
+        Email: customerPersonalInfos.Email,
+        PhoneNumber: customerPersonalInfos.PhoneNumber,
+        Password: securePassword,
+        Location: customerPersonalInfos.Location,
+       
+
+      
+        VerificationCode: VerificationCode,
+       
+        EstimateWorkLocation: {
+        City: customerPersonalInfos.cities[0].item_text,
+        Municipality: customerPersonalInfos.municipality[0].item_text,
+        },
+        VerLinkExpDate: new Date(new Date().getTime() + 2 * 60 * 60 * 1000),
+        }));
+
+        await SendCustomerAccountConfirmationMail(
+          customer.Name,
+          customer.Email,
+          customer._id,
+          customer.VerificationCode
+        );
+
+        return res.json({
+          success: "Account Created !",
+          customerAccount: Customer,
+        });
+      } catch (err) {
+        console.log(err);
+        return res.json({ error: "Server Error" });
+      }
+  };
 
 
 
-export const verifyAccount = async (req: express.Request, res: express.Response) => {
-  try {
-    const customerId = req.params.customerId;
-    const VerificationCode = req.params.VerificationCode;
-    const unverifiedCustomer = await Customer.findById(customerId);
-    if (!unverifiedCustomer) {
-      return res.json({ error: "Le compte n'existe pas!" });
+
+  
+  export const verifyAccount = async (req: express.Request, res: express.Response) => {
+    try {
+      const { customerId, VerificationCode } = req.body;
+      const unverifiedCustomer = await Customer.findById(customerId);
+      console.log('Found Customer:', unverifiedCustomer);
+      
+      if (!unverifiedCustomer) {
+        return res.json({ error: "Account doesn't exist!" });
+      }
+  
+      if (VerificationCode !== unverifiedCustomer.VerificationCode) {
+        return res.json({ error: "Try Again Later!" });
+      }
+  
+      if (unverifiedCustomer.AccountVerficiationStatus === true) {
+        return res.json({ error: "Account Already Verified" });
+      }
+  
+      unverifiedCustomer.AccountVerficiationStatus = true;
+      await unverifiedCustomer.save();
+  
+      return res.json({ success: "Account verified, you can now log in!" });
+    } catch (err) {
+      console.log(err);
+      return res.json({ error: "Server Error!" });
     }
-    if (VerificationCode != unverifiedCustomer.VerificationCode) {
-      return res.json({ error: "Réessayez ultérieurement!" });
-    }
-    unverifiedCustomer.AccountActivationStatus = true;
-    await unverifiedCustomer.save();
-    return res.json({ success: "Le compte a été vérifié, vous pouvez maintenant vous connecter!" });
-  } catch (err) {
-    console.log(err);
-    return res.json({ error: "Erreur serveur!" });
-  }
-};
-
-
-
-
-
-
-
-
-
-
-
+  };
+  
 
 
 

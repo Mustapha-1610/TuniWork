@@ -39,12 +39,14 @@ export class CustomerService {
     const form :any = JSON.parse(CustomerForm);
     const CustomerAccount: any = {
       
-      Name: form.Name,
+
       _id: form._id,
-      Surname: form.Surname,
+      Name: form.Name,
+      
+      LastName: form.LastName,
       Email: form.Email,
-      Description: form.Description,
-      Phone: form.Phone,
+  
+      PhoneNumber: form.PhoneNumber,
       Location: form.Location,
       EstimatedWorkLocation: form.EstimatedWorkLocation,
       JoinDate: form.JoinDate,
@@ -53,7 +55,7 @@ export class CustomerService {
       MoneySpent: form.MoneySpent,
       SavedFreelancers: form.savedFreelancers,
       ProfilePicture: form.ProfilePicture,
-      WorkHistory: form.WorkHistory,
+      
 
     };
     localStorage.setItem('customerInfos', JSON.stringify(CustomerAccount));
@@ -62,11 +64,18 @@ export class CustomerService {
 
     
 
-    createCustomerAccount(customerData: any[]) {
-      return this.http.post(`http://localhost:5000/api/customer/createCustomerAccount`, customerData);
+    createCustomerAccount(languages: any[]) {
+      return this.http.post(`http://localhost:5000/api/customer/createCustomerAccount`, languages);
     }
 
     
+
+    verifyCustomer(_id: any, vcode: any) {
+      return this.http.put('http://localhost:5000/api/customer/verify', {
+        customerId: _id,
+        VerificationCode: vcode,
+      });
+    }
 
  
 

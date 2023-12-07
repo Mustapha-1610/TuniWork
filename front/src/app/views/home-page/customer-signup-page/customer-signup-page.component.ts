@@ -111,6 +111,7 @@ export class CustomerSignupPageComponent {
     this.form = this.formBuilder.group({
       cities: [null, [Validators.required]],
       municipality: [null, [Validators.required]],
+      languages: [null, [Validators.required]],
     
     });
   }
@@ -233,11 +234,11 @@ export class CustomerSignupPageComponent {
           console.error('Upload failed', error);
         },
         async () => {
-          // Handle successful uploads on complete
+        
           try {
             const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
 
-            // Update CompanySignature and ProfilePicture in comapnyForm
+            
             this.customerForm.patchValue({
               ProfilePicture: downloadURL,
             });
