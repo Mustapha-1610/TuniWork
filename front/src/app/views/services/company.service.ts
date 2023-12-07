@@ -117,18 +117,16 @@ export class CompanyService {
     );
   }
   //create public job
-  createPublicJob(publicJobData: any, cityData: any) {
-    return this.http
-      .post('http://localhost:5000/api/companyWorkOffer/createPublicJob', {
-        publicJobData,
-        cityData,
+  createPublicJob(publicJobData: any) {
+    return this.http.post(
+      'http://localhost:5000/api/companyWorkOffer/createPublicJob',
+      publicJobData
+    ).pipe(
+      catchError((error) => {
+        console.error('Error in createPublicJob:', error);
+        throw error;
       })
-      .pipe(
-        catchError((error) => {
-          console.error('Error in createPublicJob:', error);
-          throw error;
-        })
-      );
+    );
   }
 
   //get details Pub job

@@ -151,16 +151,7 @@ const CompanyPublicWorkOfferSchema = new Schema({
       },
     },
   ],
-  WorkLocation: {
-    City: {
-      type: String,
-      required: true,
-    },
-    Municipality: {
-      type: String,
-      required: true,
-    },
-  },
+
 });
 
 const PublicJobOffer = mongoose.model(

@@ -11,6 +11,17 @@
     />
   </div>
 
+  <!-- Work Title -->
+  <div class="form-group">
+    <label for="WorkTitle">Work Title:</label>
+    <input
+      type="text"
+      id="WorkTitle"
+      formControlName="WorkTitle"
+      class="form-control"
+    />
+  </div>
+
   <!-- Description -->
   <div class="form-group">
     <label for="Description">Description:</label>
@@ -89,6 +100,18 @@
     </div>
   </div>
 
+  <!-- WorkSpeciality -->
+  <div class="form-group">
+    <label for="WorkSpeciality">Work Speciality:</label>
+    <input
+      type="text"
+      id="WorkSpeciality"
+      formControlName="WorkSpeciality"
+      class="form-control"
+      required
+    />
+  </div>
+
   <!-- CompanyName -->
   <div class="form-group" style="display: none">
     <label for="CompanyName">Company Name:</label>
@@ -112,83 +135,6 @@
       required
     />
   </div>
-  <form [formGroup]="form">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div class="mb-4 flex-item">
-        <label class="block text-gray-700 text-sm font-bold mb-2" for="city">
-          City
-        </label>
-        <ng-multiselect-dropdown
-          id="cities"
-          formControlName="cities"
-          [placeholder]="'Select City'"
-          [settings]="citiesDrowdownSettings"
-          [data]="CitiesList"
-          (onSelect)="onCitySelect($event)"
-          (onDeSelect)="onCityDeselect($event)"
-          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        ></ng-multiselect-dropdown>
-      </div>
-      <div class="mb-4 flex-item">
-        <label
-          class="block text-gray-700 text-sm font-bold mb-2"
-          for="speciality"
-        >
-          Municipality
-        </label>
-        <ng-multiselect-dropdown
-          id="municipality"
-          formControlName="municipality"
-          [placeholder]="'Select Municipality'"
-          [settings]="MunicipalityDropdownSettings"
-          [data]="MunicipalityList"
-          (onSelect)="onSpecialitySelect($event)"
-          (onDeSelect)="onSpecialityDeselect($event)"
-          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        ></ng-multiselect-dropdown>
-      </div>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div class="mb-4 flex-item">
-        <label
-          class="block text-gray-700 text-sm font-bold mb-2"
-          for="workTitle"
-        >
-          Work Title
-        </label>
-        <ng-multiselect-dropdown
-          id="workTitles"
-          formControlName="workTitles"
-          [placeholder]="'Select Work Title'"
-          [settings]="WorkTitleSettings"
-          [data]="WorkTitleList"
-          (onSelect)="onItemSelect($event)"
-          (onDeSelect)="onItemDeselect($event)"
-          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        ></ng-multiselect-dropdown>
-      </div>
-
-      <!-- Work Speciality Dropdown -->
-      <div class="mb-4 flex-item">
-        <label
-          class="block text-gray-700 text-sm font-bold mb-2"
-          for="speciality"
-        >
-          Work Speciality
-        </label>
-        <ng-multiselect-dropdown
-          id="specialities"
-          formControlName="specialities"
-          [placeholder]="'Select Work Speciality'"
-          [settings]="SpecialitySettings"
-          [data]="SpecialityList"
-          (onSelect)="onSpecialitySelect($event)"
-          (onDeSelect)="onSpecialityDeselect($event)"
-          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        ></ng-multiselect-dropdown>
-      </div>
-    </div>
-  </form>
 
   <!-- Submit Button -->
   <button type="submit" class="btn btn-primary">Create Public Job Offer</button>
