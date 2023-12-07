@@ -87,6 +87,7 @@ const CompanyPublicWorkOfferSchema = new Schema({
 
   CompanySignature:{
     type:String,
+    default :'',
   },
 
   Location: {

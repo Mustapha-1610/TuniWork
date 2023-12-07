@@ -39,25 +39,12 @@ export const getWorkOfferProgress = async (
     return res.json({ error: "Server Error" });
   }
 };
-
-
 // create public job offer ( mostfa)
 export const createPublicJob = async (
   req: express.Request,
   res: express.Response
 ) => {
   try {
-    const {
-      Title,
-      WorkTitle,
-      Description,
-      Note,
-      PayPerTask,
-      PayPerHour,
-      WorkSpeciality,
-      CompanySignature,
-      CompanyId,
-    } = req.body;
     const { publicJobData, cityData } = req.body;
 
     const offeringCompany = await company.findById(publicJobData.CompanyId);
@@ -89,7 +76,6 @@ export const createPublicJob = async (
       CompanyId: publicJobData.CompanyId,
       PaymentMethodVerificationStatus,
       CompanyName,
-      CompanySignature,
       CompanyLocation,
       TotalMoneyPayed,
       TotalWorkOfferd,
