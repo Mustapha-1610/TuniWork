@@ -32,7 +32,9 @@ import { ForgetPasswordPageComponent } from './forget-password-page/forget-passw
 import { PasswordResetPageComponent } from './password-reset-page/password-reset-page.component';
 import { CompanyVerificationPageComponent } from './company-verification-page/company-verification-page.component';
 import { CustomerLoginPageComponent } from './customer-login-page/customer-login-page.component';
-import { CustomerSignupPageComponent } from './customer-signup-page copy/customer-signup-page.component';
+import { CustomerSignupPageComponent } from './customer-signup-page/customer-signup-page.component';
+
+
 
 @NgModule({
   declarations: [
@@ -71,6 +73,7 @@ import { CustomerSignupPageComponent } from './customer-signup-page copy/custome
   providers: [
     {
       provide: 'SocialAuthServiceConfig',
+  
       useValue: {
         autoLogin: false,
         providers: [

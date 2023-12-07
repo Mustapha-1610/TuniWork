@@ -16,10 +16,7 @@ customerRouter.put(
 );
 
 
-customerRouter.put(
-  "/verify/:customerId/:VerificationCode",
-  customerController.verifyAccount
-);
+customerRouter.put( "/verify", customerController.verifyAccount);
 customerRouter.post('/api/customer/sendPassResetEmail', customerController.sendPassResetEmail);
 
 

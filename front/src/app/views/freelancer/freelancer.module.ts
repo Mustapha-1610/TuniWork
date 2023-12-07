@@ -32,6 +32,7 @@ import { RecievedContractsComponent } from './inbox/recieved-contracts/recieved-
 import { RecievedWorkOffersComponent } from './inbox/recieved-work-offers/recieved-work-offers.component';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 
+
 @NgModule({
   declarations: [
     HomePageComponent,

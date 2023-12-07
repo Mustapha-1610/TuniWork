@@ -58,7 +58,7 @@ export class PublicJobCreateComponent {
 
   private initForm(): void {
     const companyInfos = this.cs.getCompanyInfos();
-    
+
     const companyId = companyInfos._id;
     const CompanyName = companyInfos.Name;
     const CompanySignature = companyInfos.Csignature;
