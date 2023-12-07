@@ -10,11 +10,15 @@ import { CompanyService } from '../../services/company.service';
 export class PublicJobDetailsComponent implements OnInit {
   publicJobOffer: any; // Adjust the type based on your data model
 
-  constructor(private route: ActivatedRoute, private companyService: CompanyService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private companyService: CompanyService
+  ) {}
 
   ngOnInit(): void {
     // Get the public job offer ID from the route parameters
-    const publicJobOfferId = this.route.snapshot.paramMap.get('publicJobOfferId');
+    const publicJobOfferId =
+      this.route.snapshot.paramMap.get('publicJobOfferId');
 
     // Fetch details of the public job offer
     this.companyService.getPublicJobDetails(publicJobOfferId).subscribe(
@@ -30,19 +34,21 @@ export class PublicJobDetailsComponent implements OnInit {
 
   acceptFreelancer(publicJobOfferId: string, freelancerId: string): void {
     // Call your CompanyService method to send the accept request to the server
-    this.companyService.acceptFreelancer(publicJobOfferId, freelancerId).subscribe(
-      (response: any) => {
-        console.log(response.success);
-        // Update the local data or perform any necessary actions
-      },
-      (error) => {
-        console.error('Error accepting freelancer', error);
-      }
-    );
+    this.companyService
+      .acceptFreelancer(publicJobOfferId, freelancerId)
+      .subscribe(
+        (response: any) => {
+          console.log(response.success);
+          // Update the local data or perform any necessary actions
+        },
+        (error) => {
+          console.error('Error accepting freelancer', error);
+        }
+      );
   }
 
-   createContract(publicJobOfferId: string, freelancerId: string): void {
-    this.companyService.sendContract(publicJobOfferId, freelancerId).subscribe(
+  createContract(publicJobOfferId: string) {
+    this.companyService.sendContract(publicJobOfferId, null).subscribe(
       (response: any) => {
         console.log(response.success);
         // Update the local data or perform any necessary actions

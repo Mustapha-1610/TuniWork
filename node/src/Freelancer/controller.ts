@@ -934,65 +934,129 @@ export const sendFreelancerContract = async (
   res: express.Response
 ) => {
   try {
-    const { publicWorkOfferId, freelancerId } = req.params;
-    const PublicWorkOffer: any = await PublicJobOffer.findById(
-      publicWorkOfferId
-    );
+    const { publicWorkOfferId, privateWorkOfferId } = req.body;
+    if (publicWorkOfferId) {
+      const PublicWorkOffer: any = await PublicJobOffer.findById(
+        publicWorkOfferId
+      );
 
-    let data: any;
+      let data: any;
 
-    data = {
-      CompanyInfos: {
-        CompanyName: PublicWorkOffer.CompanyName,
-        CompanyId: PublicWorkOffer.CompanyId,
-        CompanySignature: PublicWorkOffer.CompanySignature,
-      },
-      FreelancerInfos: {
-        FreelancerName: PublicWorkOffer.WorkingFreelancer.FreelancerName,
-        FreelancerId: PublicWorkOffer.WorkingFreelancer.FreelancerId,
-      },
-      WorkInfos: {
-        WorkTitle: PublicWorkOffer.Title,
-        WorkDescription: PublicWorkOffer.Description,
-        PaymentMethod: PublicWorkOffer.PaymentMethod.PayPerHours
-          ? PublicWorkOffer.PaymentMethod.PayPerHours
-          : PublicWorkOffer.PaymentMethod.PayPerTask,
-      },
-    };
+      data = {
+        CompanyInfos: {
+          CompanyName: PublicWorkOffer.CompanyName,
+          CompanyId: PublicWorkOffer.CompanyId,
+          CompanySignature: PublicWorkOffer.CompanySignature,
+        },
+        FreelancerInfos: {
+          FreelancerName: PublicWorkOffer.WorkingFreelancer.FreelancerName,
+          FreelancerId: PublicWorkOffer.WorkingFreelancer.FreelancerId,
+        },
+        WorkInfos: {
+          WorkTitle: PublicWorkOffer.Title,
+          WorkDescription: PublicWorkOffer.Description,
+          PaymentMethod: PublicWorkOffer.PaymentMethod.PayPerHours
+            ? PublicWorkOffer.PaymentMethod.PayPerHours
+            : PublicWorkOffer.PaymentMethod.PayPerTask,
+        },
+      };
 
-    const url = await createPDF(data);
-    const contractingCompany: any = await company.findById(
-      PublicWorkOffer.CompanyId
-    );
+      const url = await createPDF(data);
+      const contractingCompany: any = await company.findById(
+        PublicWorkOffer.CompanyId
+      );
 
-    // Fetch the contractedFreelancer using the provided ID
-    const acceptedFreelancer: any = await freelancer.findById(freelancerId);
+      // Fetch the contractedFreelancer using the provided ID
+      const acceptedFreelancer: any = await freelancer.findById(
+        PublicWorkOffer.WorkingFreelancer.FreelancerId
+      );
 
-    // Update the arrays
-    acceptedFreelancer.CompanyRecievedContracts.push({
-      ContractUrl: url,
-      ContrantName:
-        "Private Work Offer Contract From " +
-        contractingCompany.CompanyName +
-        " Company",
-      CreationDate: new Date(),
-      workOfferId: {
-        PublicWO: publicWorkOfferId,
-      },
-      workOfferInformations: {
-        TaskTile: PublicWorkOffer.Title,
-        TaskDescription: PublicWorkOffer.Description,
-        TaskHolder: contractingCompany._id,
-        taskId: PublicWorkOffer._id,
-      },
-    });
-    contractingCompany.freelancerSentContracts.push(url);
+      // Update the arrays
+      acceptedFreelancer.CompanyRecievedContracts.push({
+        ContractUrl: url,
+        ContrantName:
+          "Private Work Offer Contract From " +
+          contractingCompany.CompanyName +
+          " Company",
+        CreationDate: new Date(),
+        workOfferId: {
+          PublicWO: publicWorkOfferId,
+        },
+        workOfferInformations: {
+          TaskTile: PublicWorkOffer.Title,
+          TaskDescription: PublicWorkOffer.Description,
+          TaskHolder: contractingCompany._id,
+          taskId: PublicWorkOffer._id,
+          PublicWO: true,
+        },
+      });
+      contractingCompany.freelancerSentContracts.push(url);
 
-    // Save the changes
-    await acceptedFreelancer.save();
-    await contractingCompany.save();
+      // Save the changes
+      await acceptedFreelancer.save();
+      await contractingCompany.save();
 
-    return res.json({ success: "Contract Created", Link: url });
+      return res.json({ success: "Contract Created", Link: url });
+    } else {
+      const PrivateWorkOffer: any = await PrivateJobOffer.findById(
+        privateWorkOfferId
+      );
+      let data: any;
+
+      data = {
+        CompanyInfos: {
+          CompanyName: PrivateWorkOffer.CompanyName,
+          CompanyId: PrivateWorkOffer.CompanyId,
+          CompanySignature: PrivateWorkOffer.CompanySignature,
+        },
+        FreelancerInfos: {
+          FreelancerName: PrivateWorkOffer.WorkingFreelancer.FreelancerName,
+          FreelancerId: PrivateWorkOffer.WorkingFreelancer.FreelancerId,
+        },
+        WorkInfos: {
+          WorkTitle: PrivateWorkOffer.Title,
+          WorkDescription: PrivateWorkOffer.Description,
+          PaymentMethod: PrivateWorkOffer.PaymentMethod.PayPerHours
+            ? PrivateWorkOffer.PaymentMethod.PayPerHours
+            : PrivateWorkOffer.PaymentMethod.PayPerTask,
+        },
+      };
+
+      const url = await createPDF(data);
+      const contractingCompany: any = await company.findById(
+        PrivateWorkOffer.CompanyId
+      );
+      // Fetch the contractedFreelancer using the provided ID
+      const acceptedFreelancer: any = await freelancer.findById(
+        PrivateWorkOffer.WorkingFreelancer.FreelancerId
+      );
+
+      // Update the arrays
+      acceptedFreelancer.CompanyRecievedContracts.push({
+        ContractUrl: url,
+        ContrantName:
+          "Private Work Offer Contract From " +
+          contractingCompany.CompanyName +
+          " Company",
+        CreationDate: new Date(),
+        workOfferId: {
+          PublicWO: publicWorkOfferId,
+        },
+        workOfferInformations: {
+          TaskTile: PrivateWorkOffer.Title,
+          TaskDescription: PrivateWorkOffer.Description,
+          TaskHolder: contractingCompany._id,
+          taskId: PrivateWorkOffer._id,
+        },
+      });
+      contractingCompany.freelancerSentContracts.push(url);
+
+      // Save the changes
+      await acceptedFreelancer.save();
+      await contractingCompany.save();
+
+      return res.json({ success: "Contract Created", Link: url });
+    }
   } catch (err) {
     console.log(err);
     return res.json({ error: "Server Error" });

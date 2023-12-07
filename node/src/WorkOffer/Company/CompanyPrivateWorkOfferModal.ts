@@ -103,6 +103,9 @@ const privateWorkOfferSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  CompanySignature: {
+    type: String,
+  },
 
   // general informations 3al company to display fel work offer like we mentioned before
   TotalWorkOfferd: {
