@@ -1,11 +1,34 @@
+<div class="container mx-auto px-4 py-8">
+  <ngx-spinner
+    bdColor="rgba(51,51,51,0.8)"
+    size="medium"
+    color="#fff"
+    type="ball-scale-multiple"
+  >
+    <p class="text-2xl text-white">Loading...</p>
+  </ngx-spinner>
 
 
+  <div class="text-center text-red-500 font-bold mt-2">
+    {{ errorMessage }}
+  </div>
 
-<section style="background-image: url('/assets/img.jpg'); background-size: cover; background-position: center;">
-  <div class="form-box">
-    <div class="form-value">
-      <form [formGroup]="customerForm"
-       (ngSubmit)="onSubmit()">
+
+  <div class="flex items-center justify-center mt-1">
+    <img [src]="testimg"  (click)="fileInput.click()"  class="rounded-full cursor-pointer border-4 mb-5 border-white hover:border-gray-300"   style="width: 270px; height: 270px"/>
+  </div>
+
+  <mat-progress-bar
+    *ngIf="uploadProgress !== undefined"
+    mode="determinate"
+    [value]="uploadProgress"
+    class="mt-4 w-1/2"
+    style="height: 10px"
+  ></mat-progress-bar>
+
+
+  <form [formGroup]="customerForm"
+       (ngSubmit)="test()">
         <h2>Sign Up</h2>
 
         <!-- Name Field -->
@@ -14,25 +37,21 @@
           <label for="Name" class="block text-gray-700 text-sm font-bold mb-2">Name</label>
           <input id="Name" type="text" formControlName="Name"
             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-          <div class="error-message" *ngIf="customerForm.get('Name').touched && customerForm.get('Name').invalid">
-            Name is required
-          </div>
+    
         </div>
 
         <!-- Surname Field -->
         <div class="inputbox">
-          <label for="Surname">LastName:</label>
-          <input type="text" id="Surname" formControlName="LastName" />
-          <div class="error-message" *ngIf="customerForm.get('LastName').touched && customerForm.get('LastName').invalid">
-            Last NAME is required
-          </div>
+          <label for="LastName" class="block text-gray-700 text-sm font-bold mb-2">LastName</label>
+          <input id="Name" type="text" formControlName="LastName"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+    
         </div>
         <div class="inputbox">
-          <label for="Location">Location </label>
-          <input type="text" id="Surname" formControlName="Location" />
-          <div class="error-message" *ngIf="customerForm.get('Location').touched && customerForm.get('Location').invalid">
-            Location is required
-          </div>
+        <label for="Location" class="block text-gray-700 text-sm font-bold mb-2">Location</label>
+          <input id="Location" type="text" formControlName="Location"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+    
         </div>
 
         <!-- Phone Number Field -->
@@ -40,10 +59,7 @@
           <label for="PhoneNumber" class="block text-gray-700 text-sm font-bold mb-2">Phone Number</label>
           <input id="PhoneNumber" type="number" formControlName="PhoneNumber"
             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-          <div class="error-message"
-            *ngIf="customerForm.get('PhoneNumber').touched && customerForm.get('PhoneNumber').invalid">
-            Phone Number is required
-          </div>
+         
         </div>
 
 
@@ -52,9 +68,7 @@
           <label for="Email" class="block text-gray-700 text-sm font-bold mb-2">Email</label>
           <input id="Email" type="email" formControlName="Email"
             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-          <div class="error-message" *ngIf="customerForm.get('Email').touched && customerForm.get('Email').invalid">
-            Email is required and must be a valid email address
-          </div>
+          
         </div>
 
         <!-- Password Field -->
@@ -62,11 +76,8 @@
           <label for="Password" class="block text-gray-700 text-sm font-bold mb-2">Password</label>
           <input id="Password" type="password" formControlName="Password"
             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-          <div class="error-message"
-            *ngIf="customerForm.get('Password').touched && customerForm.get('Password').invalid">
-            Password is required
-          </div>
           
+        </div>
           
         
             <form [formGroup]="form">
@@ -105,24 +116,32 @@
                   ></ng-multiselect-dropdown>
                 </div>
               </div>
+
               
             </form>
-           
+    
 
-          <!-- Sign Up Button -->
-          <div class="flex justify-center mt-6">
-            <button type="submit">Sign up</button>
-          </div>
-      
+    <!-- Submit Button -->
+    <div class="flex justify-center mt-6">
+      <button
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        type="submit"> Sign Up
+      </button>
 
-          <div class="register">
-            <p>No Lorem ipsum dolor sit amet consectetur <a routerLink="/login">login</a></p>
-          </div>
-        </div>
-      </form>
     </div>
-  </div>
-</section>
 
-<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+  </form>
+</div>
+
+
+
+
+
+  <div>
+
+    <input  type="file"  #fileInput  class="hidden"  (change)="uploadImage($event)" />
+  </div>
+
+
+

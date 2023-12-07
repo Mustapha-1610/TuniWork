@@ -17,12 +17,12 @@ export const createCustomerAccount = async (req: express.Request, res: express.R
   try {
     const { ProfilePicture, Name, LastName, PhoneNumber, Email, Password, EstimateWorkLocation, Location, JoinDate, Reviews, PaymentMethodVerificationStatus, WorkOffered, MoneySpent } = req.body;
 
-    if (!Name || !LastName || !PhoneNumber || !Email || !Password || ProfilePicture || EstimateWorkLocation || !Location) {
+    if (!Name || !LastName || !PhoneNumber || !Email || !Password || !ProfilePicture || !EstimateWorkLocation || !Location) {
       return res.status(400).json({ error: "Informations manquantes" });
     }
-   /* if (!EstimateWorkLocation || !EstimateWorkLocation.City || !EstimateWorkLocation.Municipality) {
+    if (!EstimateWorkLocation || !EstimateWorkLocation.City || !EstimateWorkLocation.Municipality) {
       return res.status(400).json({ error: "Invalid EstimateWorkLocation" });
-    }*/
+    }
     
     
     

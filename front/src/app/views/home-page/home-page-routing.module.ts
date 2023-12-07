@@ -14,6 +14,7 @@ import { ForgetPasswordPageComponent } from './forget-password-page/forget-passw
 import { CompanyVerificationPageComponent } from './company-verification-page/company-verification-page.component';
 import { CustomerSignupPageComponent } from './customer-signup-page copy/customer-signup-page.component';
 
+
 const routes: Routes = [
   { path: '', component: IndexComponent },
   { path: 'Fsignup', component: FreelancerSignupPageComponent },
@@ -51,5 +52,6 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
+ 
 })
 export class HomePageRoutingModule {}

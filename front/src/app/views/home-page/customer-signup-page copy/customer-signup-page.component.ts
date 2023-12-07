@@ -6,47 +6,119 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { NgxSpinnerService } from 'ngx-spinner';
 import { CustomerService } from '../../services/customer.service';
 import { throwError } from 'rxjs';
+import { Storage } from '@angular/fire/storage';
+import {  ref,  getDownloadURL,  uploadBytesResumable,} from 'firebase/storage';
 
 @Component({
   selector: 'app-customer-signup-page',
   templateUrl: './customer-signup-page.component.html',
   styleUrls: ['./customer-signup-page.component.css']
 })
-export class CustomerSignupPageComponent implements OnInit {
-  customerForm: any = {};
- 
-  imgFile: any = null;
-  CitiesList: any;
+export class CustomerSignupPageComponent {
+  customerForm: any;
+  form: any = FormGroup;
+  uploadProgress: number | undefined;
+  errorMessage: string | undefined;
+
+
+  fileInput: any;
+
+  dropdownList: any;
+  dropdownSettings: any;
+  dropdownSettings2: any;
+  dropdownSettings3: any;
 
   citiesDrowdownSettings: any;
 
   MunicipalityDropdownSettings: any;
 
-  errorMessage: string | undefined;
-  
+
+
+  MunicipalityList: any;
+  specialityList: any;
+  languagesList: any;
+  CitiesList: any;
+  imageUrl: string | null = null;
+  testimg: string = 'https://firebasestorage.googleapis.com/v0/b/tunibids.appspot.com/o/Windows_10_Default_Profile_Picture.svg.png?alt=media&token=e7aca30d-6eea-45ff-8522-db048fcb8c38';
+  imgFile: any = null;
+
+
+  testSig: string = ''
+
+
   emailError: string | undefined;
 
   passwordError: string | undefined;
-  
-  router: any;
-  form: any = FormGroup;
 
-  MunicipalityList: any;
+  router: any;
+
+
+
 
 
 
 
 
   constructor(
-    private customerService: CustomerService,
+
 
     private formBuilder: FormBuilder,
-
     private http: HttpClient,
-
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private storage: Storage
 
   ) { }
+
+  ngOnInit() {
+    this.customerForm = new FormGroup({
+      Name:  new FormControl(null),
+      LastName:  new FormControl(null),
+      PhoneNumber:  new FormControl(null),
+      Email:  new FormControl(null),
+      Password:  new FormControl(null),
+      Location:  new FormControl(null),
+      ProfilePicture: new FormControl(null),
+
+
+    });
+
+
+    this.initForm();
+    this.CitiesList = this.getCities();
+
+
+  
+
+
+    this.citiesDrowdownSettings = {
+      singleSelection: true,
+      idField: 'item_id',
+      textField: 'item_text',
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+    };    
+
+    this.MunicipalityDropdownSettings = {
+      singleSelection: true,
+      idField: 'item_id',
+      textField: 'item_text',
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+    };
+  }
+
+  initForm() {
+    this.form = this.formBuilder.group({
+      cities: [null, [Validators.required]],
+      municipality: [null, [Validators.required]],
+    
+    });
+  }
+
+
+
+
+
 
   getErrorMessage(controlName: string) {
     const control = this.customerForm.get(controlName);
@@ -58,56 +130,7 @@ export class CustomerSignupPageComponent implements OnInit {
     return '';
   }
 
-  ngOnInit(): void {
-    this.customerForm = new FormGroup({
-      Name: new FormControl('', [Validators.required]),
-      LastName: new FormControl('', [Validators.required]),
-      PhoneNumber: new FormControl('', [Validators.required]),
-      Email: new FormControl('', [Validators.required, Validators.email]),
-      Password: new FormControl('', [Validators.required]),
-      Location: new FormControl('', [Validators.required]),
 
-
-    });
-
-    this.CitiesList = this.getCities();
-    this.initForm();
-    this.getMunicipality();
-   
-
-
-
-
-    this.citiesDrowdownSettings = {
-      singleSelection: true,
-      idField: 'item_id',
-      textField: 'item_text',
-      selectAllText: 'Select All',
-      unSelectAllText: 'UnSelect All',
-    };
-    this.MunicipalityDropdownSettings = {
-      singleSelection: true,
-      idField: 'item_id',
-      textField: 'item_text',
-      selectAllText: 'Select All',
-      unSelectAllText: 'UnSelect All',
-    };
-  }
-  onFileSelected(event: any) {
-    console.log(event);
-    this.imgFile = event.target.files[0];
-    console.log(this.imgFile);
-  }
-
-  initForm() {
-    this.form = this.formBuilder.group({
-  
-      municipality: ['', Validators.required],
-      cities: ['', Validators.required],
-
-
-    });
-  }
 
   onSpecialitySelect($event: any) {
     console.log('Selected speciality is ', $event);
@@ -124,28 +147,31 @@ export class CustomerSignupPageComponent implements OnInit {
       JSON.parse(JSON.stringify(this.form.value))
 
     );
+    console.log(
+      'Actual data ',
+      this.dropdownList.filter((item: any) =>
+        this.form.value.workTitle.includes(item.item_id)
+      )
+    );
   }
+
+
+
+  
+
+
+
 
   onItemDeselect($event: any) {
     console.log('Deselected item is ', $event);
   }
 
-
-
-
-
-
   async onCitySelect($event: any) {
     this.MunicipalityList = null;
     this.form.controls['municipality'].reset();
-
-
     const CityId = $event.item_id;
-    console.log('Selected city is ', $event);
     this.http
-
       .post('http://localhost:5000/api/city/getMunicipality', { CityId })
-      
       .subscribe((res: any) => {
         this.MunicipalityList = res.Municipality.map(
           (Municipality: string, index: number) => ({
@@ -153,11 +179,8 @@ export class CustomerSignupPageComponent implements OnInit {
             item_text: Municipality,
           })
         );
-
+        // Set default selection after data is fetched
       });
-
-
-
   }
 
 
@@ -165,12 +188,8 @@ export class CustomerSignupPageComponent implements OnInit {
 
 
 
+ 
 
-  
-
-   
-
-  
 
 
   getCities() {
@@ -181,81 +200,83 @@ export class CustomerSignupPageComponent implements OnInit {
           item_id: item._id,
           item_text: item.City,
         }));
+        // Set default selection after data is fetched
       });
   }
 
-  getMunicipality() {
-    this.http
-      .get('http://localhost:5000/api/city/getMunicipality')
-      .subscribe((response: any) => {
-        this.MunicipalityList = response.Municipality.map((item: any) => ({
-          item_id: item._id,
-          item_text: item.Municipality,
-        }));
-      });
-  }
 
-  async onSubmit() {
-    console.log('Form values:', this.customerForm.value);
-    console.log('Request Payload:', this.customerForm.value);
-    this.spinner.show();
 
-    console.log(this.customerForm.value);
-    const formData = new FormData();
-    formData.append('Name', this.customerForm.value.Name);
-    formData.append('LastName', this.customerForm.value.LastName);
-    formData.append('PhoneNumber', this.customerForm.value.PhoneNumber);
-    formData.append('Email', this.customerForm.value.Email);
-    formData.append('Password', this.customerForm.value.Password);
-    //formData.append('ProfilePicture', this.imgFile);
-    try {
-      const response: any = await this.http.post('http://localhost:5000/api/customer/createCustomerAccount', formData).subscribe
-      this.spinner.hide();
-      if (response && response.error) {
-        this.errorMessage = response.error;
-      } else if (response && response.success) {
-        this.errorMessage = response.success;
-      }
-    } catch (error) {
-      console.error('HTTP error:', error);
+  async test() {
+    if (this.imgFile) {
+      const filePath = `CustomerImages/${Date.now()}_${this.imgFile.name}`;
+      const storageRef = ref(this.storage, filePath);
+
+      const uploadTask = uploadBytesResumable(storageRef, this.imgFile);
+
+      uploadTask.on(
+        'state_changed',
+        (snapshot: { bytesTransferred: number; totalBytes: number; state: any; }) => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+          this.uploadProgress = progress;
+
+          switch (snapshot.state) {
+            case 'paused':
+              console.log('Upload is paused');
+              break;
+            case 'running':
+              console.log('Upload is running');
+              break;
+          }
+        },
+        (error) => {
+          console.error('Upload failed', error);
+        },
+        async () => {
+          // Handle successful uploads on complete
+          try {
+            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+
+            // Update CompanySignature and ProfilePicture in comapnyForm
+            this.customerForm.patchValue({
+              ProfilePicture: downloadURL,
+            });
+
+            this.uploadProgress = undefined;
+            this.spinner.show();
+
+            this.http
+              .post('http://localhost:5000/api/customer/createCustomerAccount ', {
+                customerPersonalInfos: this.customerForm.value,
+                customerAddedInfos: this.form.value,
+              })
+              .subscribe((response: any) => {
+                this.spinner.hide();
+                if (response.error) {
+                  this.errorMessage = response.error;
+                } else {
+                  this.errorMessage = response.success;
+                }
+              });
+          } catch (err) {
+            console.error('Error getting download URL', err);
+          }
+        }
+      );
+    } else {
+
     }
+  }
 
-    this.spinner.show();
-    console.log(JSON.parse(JSON.stringify(this.customerForm.value)));
-
-    try {
-      const response: any = await this.http.post('http://localhost:5000/api/customer/createCustomerAccount', {
-        customerPersonalInfos: this.form.value,
-        customerAccountInfos: this.customerForm.value,
-      }).subscribe();
-      this.spinner.hide();
-      if (response && response.error) {
-        this.errorMessage = response.error;
-      } else {
-        this.errorMessage = response?.success || 'An error occurred.';
-      }
-    } catch (error) {
-
-      
-      console.error('HTTP error:', error);
+  uploadImage(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.testimg = URL.createObjectURL(file);
+      this.imgFile = file;
     }
-  }
-
-  async onCityDeselect($event: any) {
-    this.MunicipalityList = null;
-    this.form.controls['municipality'].reset();
-    this.form.controls['cities'].reset();
-  }
-
-  async onMunicipalitySelect($event: any) {
-    console.log('Selected municipality is ', $event);
-  }
-
-  async onMunicipalityDeselect($event: any) {
-    console.log('Deselected municipality is ', $event);
-  }
-
-  async onItemSelect($event: any) {
-    console.log('Selected item is ', $event);
   }
 }
+
+
+
+

@@ -34,6 +34,8 @@ import { CompanyVerificationPageComponent } from './company-verification-page/co
 import { CustomerLoginPageComponent } from './customer-login-page/customer-login-page.component';
 import { CustomerSignupPageComponent } from './customer-signup-page copy/customer-signup-page.component';
 
+
+
 @NgModule({
   declarations: [
     FreelancerSignupPageComponent,
@@ -71,6 +73,7 @@ import { CustomerSignupPageComponent } from './customer-signup-page copy/custome
   providers: [
     {
       provide: 'SocialAuthServiceConfig',
+  
       useValue: {
         autoLogin: false,
         providers: [
