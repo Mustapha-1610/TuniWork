@@ -8,6 +8,7 @@ import { EditInfosPageComponent } from './edit-infos-page/edit-infos-page.compon
 import { HistoryPageComponent } from './history-page/history-page.component';
 import { WorkInfosComponent } from './history-page/work-infos/work-infos.component';
 import { SubmitPaymentRequestPageComponent } from './submit-payment-request-page/submit-payment-request-page.component';
+import { InboxComponent } from './inbox/inbox.component';
 
 const routes: Routes = [
   { path: '', component: HomePageComponent },
@@ -21,6 +22,10 @@ const routes: Routes = [
   {
     path: 'submitPaymentRequest/:id',
     component: SubmitPaymentRequestPageComponent,
+  },
+  {
+    path: 'MyInbox',
+    component: InboxComponent,
   },
 ];
 

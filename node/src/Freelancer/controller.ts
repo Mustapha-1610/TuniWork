@@ -689,12 +689,12 @@ export const acceptPrivateJob = async (
       if (!privateJobOffer) {
         return res.json({ error: "Private job offer not found" });
       }
-
+      console.log(freelancerId);
       const freelancerAccount: any = await freelancer.findByIdAndUpdate(
         freelancerId,
         {
           $push: {
-            "WorkHistory.Ongoing": {
+            "WorkHistory.0.Ongoing": {
               TaskTitle: privateJobOffer.Title,
               TaskHolder: privateJobOffer._id,
               DueDate: privateJobOffer.DeadLine,
@@ -702,7 +702,8 @@ export const acceptPrivateJob = async (
               taskId: privateJobOffer._id,
             },
           },
-        }
+        },
+        { new: true }
       );
       // Update the status to "accepted"
       privateJobOffer.status = "accepted";
@@ -802,7 +803,6 @@ export const applyForPublicJob = async (
               CName: jobOffer.CompanyName,
               TitlePWO: jobOffer.Title,
               DescriptionPWO: jobOffer.Description,
-              
             },
           },
         },
@@ -929,12 +929,15 @@ export const unsavePWO = async (
   }
 };
 
-
-
-export const sendFreelancerContract = async (  req: express.Request,  res: express.Response) => {
+export const sendFreelancerContract = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     const { publicWorkOfferId, freelancerId } = req.params;
-    const PublicWorkOffer: any = await PublicJobOffer.findById(publicWorkOfferId);
+    const PublicWorkOffer: any = await PublicJobOffer.findById(
+      publicWorkOfferId
+    );
 
     let data: any;
 
@@ -958,30 +961,43 @@ export const sendFreelancerContract = async (  req: express.Request,  res: expre
     };
 
     const url = await createPDF(data);
-    const contractingCompany: any = await company.findById(PublicWorkOffer.CompanyId);
-    
+    const contractingCompany: any = await company.findById(
+      PublicWorkOffer.CompanyId
+    );
+
     // Fetch the contractedFreelancer using the provided ID
     const acceptedFreelancer: any = await freelancer.findById(freelancerId);
 
     // Update the arrays
-    acceptedFreelancer.CompanyRecievedContracts.push(url);
+    acceptedFreelancer.CompanyRecievedContracts.push({
+      ContractUrl: url,
+      ContrantName:
+        "Private Work Offer Contract From " +
+        contractingCompany.CompanyName +
+        " Company",
+      CreationDate: new Date(),
+      workOfferId: {
+        PublicWO: publicWorkOfferId,
+      },
+      workOfferInformations: {
+        TaskTile: PublicWorkOffer.Title,
+        TaskDescription: PublicWorkOffer.Description,
+        TaskHolder: contractingCompany._id,
+        taskId: PublicWorkOffer._id,
+      },
+    });
     contractingCompany.freelancerSentContracts.push(url);
 
     // Save the changes
     await acceptedFreelancer.save();
     await contractingCompany.save();
-    
+
     return res.json({ success: "Contract Created", Link: url });
   } catch (err) {
     console.log(err);
     return res.json({ error: "Server Error" });
   }
 };
-
-
-
-
-
 
 //
 export const filterPWOSearch = async (
@@ -1158,5 +1174,46 @@ export const sendPaymentRequest = async (
   } catch (err) {
     console.log(err);
     return res.json({ error: "Server Error" });
+  }
+};
+
+//
+export const acceptWorkContract = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { contractId } = req.body;
+    const freelancerId = await freeLancerRouteProtection(req, res);
+    if ("_id" in freelancerId) {
+      const freelancerAccount: any = await freelancer.findById(freelancerId);
+      let PWO: Boolean;
+      const updatedContracts = freelancerAccount.CompanyRecievedContracts.map(
+        (contract: any) => {
+          if (contract._id.equals(contractId)) {
+            freelancerAccount.WorkHistory[0].Ongoing.push({
+              TaskTitle: contract.workOfferInformations.TaskTitle,
+              TaskDescription: contract.workOfferInformations.TaskDescription,
+              TaskHolder: contract.workOfferInformations.TaskHolder,
+              taskId: contract.workOfferInformations.taskId,
+            });
+            return {
+              ...contract.toObject(),
+              acceptanceState: true,
+              ResponseState: true,
+            };
+          }
+          return contract.toObject();
+        }
+      );
+      freelancerAccount.CompanyRecievedContracts = updatedContracts;
+
+      await freelancerAccount.save();
+      return res.json({ freelancerAccount });
+    }
+    return freelancerId;
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "ERROR" });
   }
 };
