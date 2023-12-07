@@ -40,58 +40,56 @@ export const getWorkOfferProgress = async (
   }
 };
 // create public job offer ( mostfa)
-export const createPublicJob = async (
-  req: express.Request,
-  res: express.Response
-) => {
+export const createPublicJob = async (  req: express.Request,  res: express.Response) => {
   try {
-    const { publicJobData, cityData } = req.body;
+    const {
+      Title,
+      WorkTitle,
+      Description,
+      Note,
+      PayPerTask,
+      PayPerHour,
+      WorkSpeciality,
+      CompanySignature,
+      CompanyId,
+    } = req.body;
 
-    const offeringCompany = await company.findById(publicJobData.CompanyId);
+    const offeringCompany = await company.findById(CompanyId);
     if (!offeringCompany) {
-      console.log("test");
       return res.json({ error: "Server Error" });
     }
-    let SpecialityArray: String[] = [];
-    cityData.specialities.map((item: any) => {
-      SpecialityArray.push(item.item_text);
-    });
-    const PaymentMethodVerificationStatus =
-      offeringCompany.PaymentMethodVerificationStatus;
+
+    const PaymentMethodVerificationStatus = offeringCompany.PaymentMethodVerificationStatus;
     const CompanyName = offeringCompany.CompanyName;
     const CompanyLocation = offeringCompany.Location;
     const TotalWorkOfferd = offeringCompany.WorkOfferd;
     const TotalMoneyPayed = offeringCompany.MoneySpent;
 
-    await companyPublicWorkOffer.create({
-      Title: publicJobData.Title,
-      WorkTitle: cityData.workTitles[0].item_text,
-      Description: publicJobData.Description,
-      Note: publicJobData.Note,
+    let workOffer = await companyPublicWorkOffer.create({
+      Title,
+      WorkTitle,
+      Description,
+      Note,
       PaymentMethod: {
-        PayPerTask: publicJobData.PayPerTask,
-        PayPerHour: publicJobData.PayPerHour,
+        PayPerTask,
+        PayPerHour,
       },
-      WorkSpeciality: SpecialityArray,
-      CompanyId: publicJobData.CompanyId,
+      WorkSpeciality,
+
+      CompanyId,
       PaymentMethodVerificationStatus,
       CompanyName,
+      CompanySignature,
       CompanyLocation,
       TotalMoneyPayed,
       TotalWorkOfferd,
-      WorkLocation: {
-        City: cityData.cities[0].item_text,
-        Municipality: cityData.municipality[0].item_text,
-      },
     });
     return res.json({ success: "work offer created" });
   } catch (err) {
-    console.log("test1");
     console.log(err);
     return res.json({ error: "Server Error !" });
   }
 };
-
 // (mostfa)
 export const FindBestMatchesPublicWorkOffers = async (
   req: express.Request,
