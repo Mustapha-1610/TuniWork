@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { catchError } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
-
+import { io, Socket } from 'socket.io-client';
 @Injectable({
   providedIn: 'root',
 })
@@ -12,7 +12,10 @@ export class CompanyService {
   private dataSource = new BehaviorSubject<any>(null);
   Load: boolean = true;
   data$ = this.dataSource.asObservable();
-
+  private socket: Socket = io('http://localhost:5000/company');
+  sendFreelancerNotification(id: any) {
+    this.socket.emit('sendFreelancerNotification', id);
+  }
   sendData(data: any) {
     this.dataSource.next(data);
   }

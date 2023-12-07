@@ -51,7 +51,9 @@ export class PublicJobDetailsComponent implements OnInit {
     this.companyService.sendContract(publicJobOfferId, null).subscribe(
       (response: any) => {
         console.log(response.success);
-        // Update the local data or perform any necessary actions
+        if (response.freelancerId) {
+          this.companyService.sendFreelancerNotification(response.freelancerId);
+        }
       },
       (error) => {
         console.error('Error accepting freelancer', error);

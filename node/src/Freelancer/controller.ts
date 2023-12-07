@@ -975,7 +975,7 @@ export const sendFreelancerContract = async (
       acceptedFreelancer.CompanyRecievedContracts.push({
         ContractUrl: url,
         ContrantName:
-          "Private Work Offer Contract From " +
+          "Public Work Offer Contract From " +
           contractingCompany.CompanyName +
           " Company",
         CreationDate: new Date(),
@@ -990,13 +990,29 @@ export const sendFreelancerContract = async (
           PublicWO: true,
         },
       });
+      acceptedFreelancer.Notifications.push({
+        NotificationMessage:
+          "New Public Work Offer Contract Recieved From " +
+          PublicWorkOffer.CompanyName +
+          " Company",
+        senderInformations: {
+          senderId: PublicWorkOffer._id,
+          senderUserType: "Company",
+          creationDate: new Date(),
+          context: "PrivateWorkOfferContract",
+        },
+      });
       contractingCompany.freelancerSentContracts.push(url);
 
       // Save the changes
       await acceptedFreelancer.save();
       await contractingCompany.save();
 
-      return res.json({ success: "Contract Created", Link: url });
+      return res.json({
+        success: "Contract Created",
+        Link: url,
+        freelancerId: acceptedFreelancer._id,
+      });
     } else {
       const PrivateWorkOffer: any = await PrivateJobOffer.findById(
         privateWorkOfferId
@@ -1049,13 +1065,29 @@ export const sendFreelancerContract = async (
           taskId: PrivateWorkOffer._id,
         },
       });
+      acceptedFreelancer.Notifications.push({
+        NotificationMessage:
+          "New Private Work Offer Contract Recieved From " +
+          PrivateWorkOffer.CompanyName +
+          " Company",
+        senderInformations: {
+          senderId: PrivateWorkOffer._id,
+          senderUserType: "Company",
+          creationDate: new Date(),
+          context: "PrivateWorkOfferContract",
+        },
+      });
       contractingCompany.freelancerSentContracts.push(url);
 
       // Save the changes
       await acceptedFreelancer.save();
       await contractingCompany.save();
 
-      return res.json({ success: "Contract Created", Link: url });
+      return res.json({
+        success: "Contract Created",
+        Link: url,
+        freelancerId: acceptedFreelancer._id,
+      });
     }
   } catch (err) {
     console.log(err);
