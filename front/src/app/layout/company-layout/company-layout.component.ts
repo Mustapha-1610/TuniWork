@@ -13,6 +13,7 @@ import { CompanyService } from 'src/app/views/services/company.service';
 export class CompanyLayoutComponent implements OnDestroy{
 
   companyInfos = this.cs.getCompanyInfos();
+
   connectedUsers: any;
   private socket: any = Socket;
   constructor(
@@ -51,6 +52,11 @@ export class CompanyLayoutComponent implements OnDestroy{
   }
 
 
-
+  toggleMenu() {
+    const subMenu = document.getElementById('subMenu');
+    if (subMenu) {
+      subMenu.classList.toggle('open-menu');
+    }
+  }
 
 }
