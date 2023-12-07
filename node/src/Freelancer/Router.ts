@@ -78,7 +78,7 @@ freelancerRouter.post("/filterPWOSearch", freelancerController.filterPWOSearch);
 
 //
 freelancerRouter.post(
-  "/sendFreelancerContract/:publicWorkOfferId/:freelancerId",
+  "/sendFreelancerContract",
   freelancerController.sendFreelancerContract
 );
 

@@ -225,6 +225,10 @@ const freelancerSchema = new Schema({
         taskId: {
           type: Schema.Types.ObjectId,
         },
+        PublicWO: {
+          type: Boolean,
+          default: false,
+        },
       },
     },
   ],

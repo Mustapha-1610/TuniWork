@@ -43,7 +43,7 @@ export class FreelancerlayoutComponent implements OnDestroy, OnInit {
     });
 
     //receiving w body l notif
-    this.socket.on('privateJobOfferNotification', (data: any) => {
+    this.socket.on('NotificationRefresh', (data: any) => {
       if (data.freelancerId === this.freeLancerInfos._id) {
         this.refreshProfile();
       }

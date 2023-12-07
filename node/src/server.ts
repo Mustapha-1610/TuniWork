@@ -82,3 +82,5 @@ export { freelancerNameSpace };
 
 const companyNameSpace = io.of("/company");
 companyNameSpaceLogic(companyNameSpace);
+const customerNameSpace = io.of("/customer");
+companyNameSpaceLogic(customerNameSpace);

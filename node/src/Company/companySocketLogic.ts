@@ -28,13 +28,18 @@ const companyNameSpaceLogic = (bidderNameSpace: any) => {
     //send a notification to freelancer about private job offer
     socket.on("createPrivateJob", async (privateJobData: any) => {
       try {
-        freelancerNameSpace.emit("privateJobOfferNotification", {
+        freelancerNameSpace.emit("NotificationRefresh", {
           freelancerId: privateJobData.freelancerId,
         });
         console.log("Private job offer notification emitted to freelancer");
       } catch (error) {
         console.error("Error creating private job offer", error);
       }
+    });
+    socket.on("sendFreelancerNotification", (freelancerId: any) => {
+      freelancerNameSpace.emit("NotificationRefresh", {
+        freelancerId: freelancerId,
+      });
     });
   });
 
