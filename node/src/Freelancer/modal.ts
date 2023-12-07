@@ -192,8 +192,40 @@ const freelancerSchema = new Schema({
   ],
   CompanyRecievedContracts: [
     {
-      type: String,
-      default: [],
+      ContractUrl: {
+        type: String,
+      },
+      ContrantName: {
+        type: String,
+      },
+      CreationDate: {
+        type: Date,
+      },
+      acceptanceState: {
+        type: Boolean,
+        default: false,
+      },
+      ResponseState: {
+        type: Boolean,
+        default: false,
+      },
+      workOfferInformations: {
+        TaskTitle: {
+          type: String,
+        },
+        TaskDescription: {
+          type: String,
+        },
+        TaskHolder: {
+          type: Schema.Types.ObjectId,
+        },
+        DueDate: {
+          type: Date,
+        },
+        taskId: {
+          type: Schema.Types.ObjectId,
+        },
+      },
     },
   ],
   AccountCreationDate: {
@@ -221,7 +253,9 @@ const freelancerSchema = new Schema({
         },
         creationDate: {
           type: Date,
-          default: new Date(),
+        },
+        context: {
+          type: String,
         },
       },
     },

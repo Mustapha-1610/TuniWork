@@ -23,7 +23,8 @@ const companySchema = new Schema({
 
   CompanySignature: {
     type: String,
-    default:"https://firebasestorage.googleapis.com/v0/b/tuniwork-4e603.appspot.com/o/CompanyImages%2Ftest%20sig.jpg?alt=media&token=a3c9e08e-9a01-4274-89b8-39ae26dfd2e8"
+    default:
+      "https://firebasestorage.googleapis.com/v0/b/tuniwork-4e603.appspot.com/o/CompanyImages%2Ftest%20sig.jpg?alt=media&token=a3c9e08e-9a01-4274-89b8-39ae26dfd2e8",
   },
 
   ProfilePicture: {
@@ -105,11 +106,6 @@ const companySchema = new Schema({
       default: null,
     },
   ],
-  //CV w tasri7 document
-
-
-
-  //tba3bis
 
   WorkTitle: {
     WorkTitleId: { type: Schema.Types.ObjectId, ref: "Work" },

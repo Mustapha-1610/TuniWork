@@ -27,6 +27,10 @@ import { OngoingWorkComponentComponent } from './history-page/ongoing-work-compo
 import { FinichedWorkComponentComponent } from './history-page/finiched-work-component/finiched-work-component.component';
 import { WorkInfosComponent } from './history-page/work-infos/work-infos.component';
 import { SubmitPaymentRequestPageComponent } from './submit-payment-request-page/submit-payment-request-page.component';
+import { InboxComponent } from './inbox/inbox.component';
+import { RecievedContractsComponent } from './inbox/recieved-contracts/recieved-contracts.component';
+import { RecievedWorkOffersComponent } from './inbox/recieved-work-offers/recieved-work-offers.component';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 @NgModule({
   declarations: [
@@ -43,6 +47,9 @@ import { SubmitPaymentRequestPageComponent } from './submit-payment-request-page
     FinichedWorkComponentComponent,
     WorkInfosComponent,
     SubmitPaymentRequestPageComponent,
+    InboxComponent,
+    RecievedContractsComponent,
+    RecievedWorkOffersComponent,
   ],
   imports: [
     FormsModule,
@@ -53,6 +60,7 @@ import { SubmitPaymentRequestPageComponent } from './submit-payment-request-page
     provideStorage(() => getStorage(getApp())),
     ReactiveFormsModule,
     MatProgressBarModule,
+    PdfViewerModule,
     NgMultiSelectDropDownModule,
     MatIconModule,
     CalendarModule.forRoot({

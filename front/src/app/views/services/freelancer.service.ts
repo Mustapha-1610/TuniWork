@@ -51,7 +51,8 @@ export class FreelancerService {
       Schedule: form.Schedule,
       SavedWorkOffers: form.SavedWorkOffers,
       PendingWorkOffers: form.pendingWorkOffers,
-      Notifications: form.Notifications,
+      Notifications: form.Notifications.slice().reverse(),
+      CompanyRecievedContracts: form.CompanyRecievedContracts.slice().reverse(),
     };
     localStorage.setItem('freeLancerInfos', JSON.stringify(FreelancerAccount));
   }
@@ -180,6 +181,12 @@ export class FreelancerService {
     return this.http.post(
       'http://localhost:5000/api/freelancer/sendPaymentRequest',
       { workId }
+    );
+  }
+  acceptContract(contractId: any) {
+    return this.http.post(
+      'http://localhost:5000/api/freelancer/acceptWorkContract',
+      { contractId }
     );
   }
 }

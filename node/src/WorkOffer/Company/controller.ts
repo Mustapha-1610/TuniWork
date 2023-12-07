@@ -474,6 +474,8 @@ export const createPrivateJob = async (
             senderInformations: {
               senderId: offeringCompany._id,
               senderUserType: "Company",
+              creationDate: new Date(),
+              context: "PrivateWorkOffer",
             },
           },
         },
