@@ -38,12 +38,33 @@
                             Accept
                           </button>
                           <button
-                            *ngIf="freelancer.Status === 'accepted'"
+                            *ngIf="
+                              publicJobOffer.status === 'freelancer accepted'
+                            "
                             class="btn btn-primary"
                             (click)="createContract(publicJobOffer._id)"
                           >
                             Send Contract
                           </button>
+                          <div
+                            *ngIf="
+                              publicJobOffer.status ===
+                              'Contract Sent Awaiting Freelancer Response'
+                            "
+                          >
+                            Contract Sent Awaiting Freelancer Response
+                          </div>
+                          <div *ngIf="publicJobOffer.status === 'Declined'">
+                            Contract Declined <br />
+                            <button>Make it Public ?</button>
+                          </div>
+                          <div *ngIf="publicJobOffer.status === 'Accepted'">
+                            Contract Accepted <br />
+                            <button>Start Work</button>
+                          </div>
+                          <div *ngIf="publicJobOffer.status === 'in progress'">
+                            In Progress
+                          </div>
                         </li>
                       </ul>
                     </div>

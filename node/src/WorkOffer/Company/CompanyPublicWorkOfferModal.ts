@@ -9,6 +9,13 @@ const CompanyPublicWorkOfferSchema = new Schema({
     required: true,
   },
 
+  //
+  StartTime: {
+    type: Date,
+  },
+  DeadLine: {
+    type: Date,
+  },
   // l Work Title l matloub par example software engineer wala plumber li howa
   WorkTitle: {
     type: String,
@@ -85,9 +92,9 @@ const CompanyPublicWorkOfferSchema = new Schema({
     required: true,
   },
 
-  CompanySignature:{
-    type:String,
-    default :'',
+  CompanySignature: {
+    type: String,
+    default: "",
   },
 
   Location: {
@@ -117,7 +124,10 @@ const CompanyPublicWorkOfferSchema = new Schema({
     type: String,
     enum: [
       "awaiting application requests",
-      "freelancer accepted, awaiting contract",
+      "freelancer accepted",
+      "Contract Sent Awaiting Freelancer Response",
+      "Declined",
+      "Accepted",
       "in progress",
       "done",
     ],

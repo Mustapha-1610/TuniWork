@@ -83,6 +83,8 @@ export const createPublicJob = async (
         City: cityData.cities[0].item_text,
         Municipality: cityData.municipality[0].item_text,
       },
+      StartTime: publicJobData.StartTime,
+      DeadLine: publicJobData.DeadLine,
     });
     return res.json({ success: "work offer created" });
   } catch (err) {
@@ -312,12 +314,12 @@ export const acceptFreelancer = async (
       appliedFreelancer.Status = "accepted";
 
       // Set WorkingFreelancer with FreelancerId and FreelancerName
-        publicJobOffer.WorkingFreelancer = {
+      publicJobOffer.WorkingFreelancer = {
         FreelancerId: appliedFreelancer.FreelancerId,
         FreelancerName: appliedFreelancer.FreelancerName,
       };
       // Update the public job offer status
-      publicJobOffer.status = "freelancer accepted, awaiting contract";
+      publicJobOffer.status = "freelancer accepted";
 
       // Save changes to the database
       await publicJobOffer.save();
