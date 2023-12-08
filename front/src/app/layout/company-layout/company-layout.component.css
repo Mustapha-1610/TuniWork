@@ -58,15 +58,25 @@ header .navbar ul li a:hover {
   color: #EAE3D2 ;
   font-weight: 600;
 
+
 }
 
+li a {
+  font-size: 23px;
+}
 header .navbar ul li ul {
   position: absolute;
   left: 0;
   width: 200px;
   background: #607EAA;
   display: none;
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+  border-top-right-radius: 8px;
+
+
 }
+
 
 header .navbar ul li ul li {
   width: 100%;
