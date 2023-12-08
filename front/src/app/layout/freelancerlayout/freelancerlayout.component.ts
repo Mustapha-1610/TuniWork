@@ -43,11 +43,8 @@ export class FreelancerlayoutComponent implements OnDestroy, OnInit {
     });
 
     //receiving w body l notif
-    this.socket.on('NotificationRefresh', (data: any) => {
-      if (
-        data.freelancerId === this.freeLancerInfos._id ||
-        data.freelancerId.equals(this.freeLancerInfos._id)
-      ) {
+    this.socket.on('privateJobOfferNotification', (data: any) => {
+      if (data.freelancerId === this.freeLancerInfos._id) {
         this.refreshProfile();
       }
     });
@@ -83,9 +80,11 @@ export class FreelancerlayoutComponent implements OnDestroy, OnInit {
   ngOnInit() {
     this.refreshProfile();
     this.freeLancerInfos = this.fs.getFreelancerCredits();
-    this.socket.emit('newUserConnected', {
-      Name: this.freeLancerInfos?.Name,
-      _id: this.freeLancerInfos?._id,
+    this.socket.on('connect', () => {
+      this.socket.emit('newUserConnected', {
+        Name: this.freeLancerInfos?.Name,
+        _id: this.freeLancerInfos?._id,
+      });
     });
   }
 

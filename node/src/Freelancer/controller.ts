@@ -1363,3 +1363,15 @@ export const acceptWorkContract = async (
     return res.json({ error: "ERROR" });
   }
 };
+
+//
+export const DeclineContract = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error" });
+  }
+};
