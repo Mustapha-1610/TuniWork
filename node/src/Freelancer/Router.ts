@@ -54,7 +54,7 @@ freelancerRouter.post(
 
 //decline private joboffer (aziz)
 freelancerRouter.post(
-  "/declinePrivateJob/:jobId",
+  "/declinePrivateJob",
   freelancerController.declinePrivateJob
 );
 
@@ -120,4 +120,7 @@ freelancerRouter.post(
   "/declineWorkContract",
   freelancerController.declineWorkContract
 );
+
+//
+freelancerRouter.post("/getPWOInfos", freelancerController.getPWOInfos);
 export default freelancerRouter;

@@ -166,7 +166,7 @@ export class BestMatchesComponentComponent implements OnInit {
       this.MatchingJobs === this.getMatchingWorkOffers();
     } else {
       this.fs.filterPWOSearch(this.Speciality, null).subscribe((res: any) => {
-        this.MatchingJobs = res.matchingJobOffers;
+        this.MatchingJobs = res.matchingJobOffers.splice().reverse();
       });
     }
   }
@@ -218,5 +218,11 @@ export class BestMatchesComponentComponent implements OnInit {
         }));
         // Set default selection after data is fetched
       });
+  }
+  isAccepted(id: any) {
+    if (id !== null) {
+      return this.freeLancerInfos._id === id;
+    }
+    return null;
   }
 }

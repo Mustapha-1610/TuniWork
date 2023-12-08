@@ -105,13 +105,11 @@ export const FindBestMatchesPublicWorkOffers = async (
     const freeLancer: any = await Freelancer.findById(freelancerId);
     const returnedFields =
       "PaymentMethod _id Title CreationDate CompanyName PaymentMethodVerificationStatus Location TotalWorkOfferd TotalMoneyPayed Description WorkSpeciality";
-    const matchingJobOffers: any = await companyPublicWorkOffer
-      .find({
-        WorkSpeciality: {
-          $in: freeLancer.Speciality,
-        },
-      })
-      .select(returnedFields);
+    const matchingJobOffers: any = await companyPublicWorkOffer.find({
+      WorkSpeciality: {
+        $in: freeLancer.Speciality,
+      },
+    });
     return res.json({ matchingJobOffers });
   } catch (err) {
     console.log(err);

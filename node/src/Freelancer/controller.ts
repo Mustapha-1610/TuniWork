@@ -683,16 +683,16 @@ export const acceptPrivateJob = async (
 ) => {
   try {
     const { jobId } = req.body;
+
     const freelancerId = await freeLancerRouteProtection(req, res);
     if ("_id" in freelancerId) {
       // Find the private job offer by ID
       const privateJobOffer = await PrivateJobOffer.findById(jobId);
-
       // Check if the private job offer exists
       if (!privateJobOffer) {
         return res.json({ error: "Private job offer not found" });
       }
-      console.log(freelancerId);
+
       const freelancerAccount: any = await freelancer.findByIdAndUpdate(
         freelancerId,
         {
@@ -708,13 +708,27 @@ export const acceptPrivateJob = async (
         },
         { new: true }
       );
+      const index = freelancerAccount.ProposedPrivateWorks.findIndex(
+        (work: any) =>
+          work.PrivateJobOfferId === jobId ||
+          work.PrivateJobOfferId.equals(jobId)
+      );
+      console.log(index);
+      if (index !== -1) {
+        // Update the status to "accepted"
+        freelancerAccount.ProposedPrivateWorks[index].Status = "accepted";
+      }
       // Update the status to "accepted"
       privateJobOffer.status = "accepted";
       privateJobOffer.WorkingFreelancer.FreelancerName = freelancerAccount.Name;
       privateJobOffer.WorkingFreelancer.FreelancerId = freelancerAccount._id;
 
+      await freelancerAccount.save();
       await privateJobOffer.save();
-      return res.json({ success: "Private job offer accepted" });
+      return res.json({
+        success: "Private job offer accepted",
+        freelancerAccount,
+      });
     }
     return freelancerId;
   } catch (err) {
@@ -729,23 +743,34 @@ export const declinePrivateJob = async (
   res: express.Response
 ) => {
   try {
-    // Extract the necessary information from the request
-    const { freeLancerId, jobId } = req.params;
+    const { jobId } = req.body;
+    const freelancerId = await freeLancerRouteProtection(req, res);
+    if ("_id" in freelancerId) {
+      const privateJobOffer = await PrivateJobOffer.findById(jobId);
+      if (!privateJobOffer) {
+        return res.json({ error: "Private job offer not found" });
+      }
+      const freelancerAccount: any = await freelancer.findById(freelancerId);
+      const index = freelancerAccount.ProposedPrivateWorks.findIndex(
+        (work: any) =>
+          work.PrivateJobOfferId === jobId ||
+          work.PrivateJobOfferId.equals(jobId)
+      );
 
-    // Find the private job offer by ID
-    const privateJobOffer = await PrivateJobOffer.findById(jobId);
+      if (index !== -1) {
+        freelancerAccount.ProposedPrivateWorks[index].Status = "declined";
+      }
 
-    // Check if the private job offer exists
-    if (!privateJobOffer) {
-      return res.status(404).json({ error: "Private job offer not found" });
+      privateJobOffer.status = "declined";
+      await freelancerAccount.save();
+      await privateJobOffer.save();
+
+      return res.json({
+        success: "Private job offer declined",
+        freelancerAccount,
+      });
     }
-
-    // Update the status to "declined"
-    privateJobOffer.status = "declined";
-
-    await privateJobOffer.save();
-
-    return res.json({ success: "Private job offer declined" });
+    return freelancerId;
   } catch (err) {
     console.error(err);
     return res.json({ error: "Server Error" });
@@ -1447,6 +1472,15 @@ export const acceptWorkContract = async (
             },
           });
           privateWorkOffer.status = "in progress";
+          const index = freelancerAccount.ProposedPrivateWorks.findIndex(
+            (work: any) => work.PrivateJobOfferId === privateWorkOffer._id
+          );
+
+          if (index !== -1) {
+            // Update the status to "accepted"
+            freelancerAccount.ProposedPrivateWorks[index].Status =
+              "in progress";
+          }
           await freelancerAccount.save();
           await privateWorkOffer.save();
           freelancerNameSpace.emit("NotificationRefresh", {
@@ -1468,11 +1502,14 @@ export const acceptWorkContract = async (
 };
 
 //
-export const DeclineContract = async (
+export const getPWOInfos = async (
   req: express.Request,
   res: express.Response
 ) => {
   try {
+    const { pwoId } = req.body;
+    const infos = await PrivateJobOffer.findById(pwoId);
+    return res.json({ infos });
   } catch (err) {
     console.log(err);
     return res.json({ error: "Server Error" });
