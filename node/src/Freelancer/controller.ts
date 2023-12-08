@@ -15,6 +15,9 @@ import PrivateJobOffer from "../WorkOffer/Company/CompanyPrivateWorkOfferModal";
 import PublicJobOffer from "../WorkOffer/Company/CompanyPublicWorkOfferModal";
 import createPDF from "../PDFServices/freelancerContract";
 import generateCustomerToken from "../Customer/utils";
+import nodeSchedule from "node-schedule";
+import { freelancerNameSpace } from "../server";
+import { ObjectId } from "mongoose";
 
 // function to create a freelancer account (Mustapha)
 export const create = async (req: express.Request, res: express.Response) => {
@@ -983,7 +986,7 @@ export const sendFreelancerContract = async (
           PublicWO: publicWorkOfferId,
         },
         workOfferInformations: {
-          TaskTile: PublicWorkOffer.Title,
+          TaskTitle: PublicWorkOffer.Title,
           TaskDescription: PublicWorkOffer.Description,
           TaskHolder: contractingCompany._id,
           taskId: PublicWorkOffer._id,
@@ -1003,8 +1006,9 @@ export const sendFreelancerContract = async (
         },
       });
       contractingCompany.freelancerSentContracts.push(url);
-
+      PublicWorkOffer.status = "Contract Sent Awaiting Freelancer Response";
       // Save the changes
+      await PublicWorkOffer.save();
       await acceptedFreelancer.save();
       await contractingCompany.save();
 
@@ -1284,15 +1288,16 @@ export const acceptWorkContract = async (
     if ("_id" in freelancerId) {
       const freelancerAccount: any = await freelancer.findById(freelancerId);
       let PWO: Boolean;
+      let publicId: any = null;
+      let privateId: any = null;
+      let contractInfos: any = null;
       const updatedContracts = freelancerAccount.CompanyRecievedContracts.map(
         (contract: any) => {
           if (contract._id.equals(contractId)) {
-            freelancerAccount.WorkHistory[0].Ongoing.push({
-              TaskTitle: contract.workOfferInformations.TaskTitle,
-              TaskDescription: contract.workOfferInformations.TaskDescription,
-              TaskHolder: contract.workOfferInformations.TaskHolder,
-              taskId: contract.workOfferInformations.taskId,
-            });
+            contractInfos = contract;
+            contract.workOfferInformations.PublicWO
+              ? (publicId = contract.workOfferInformations.taskId)
+              : (privateId = contract.workOfferInformations.taskId);
             return {
               ...contract.toObject(),
               acceptanceState: true,
@@ -1302,7 +1307,52 @@ export const acceptWorkContract = async (
           return contract.toObject();
         }
       );
+      if (publicId) {
+        console.log(publicId);
+        const publicWorkOffer = await PublicJobOffer.findByIdAndUpdate(
+          publicId,
+          {
+            status: "Accepted",
+          },
+          { new: true }
+        );
+        const date = publicWorkOffer.StartTime;
+        const job = nodeSchedule.scheduleJob(date, async () => {
+          freelancerAccount.WorkHistory[0].Ongoing.push({
+            TaskTitle: contractInfos.workOfferInformations.TaskTitle,
+            TaskDescription:
+              contractInfos.workOfferInformations.TaskDescription,
+            TaskHolder: contractInfos.workOfferInformations.TaskHolder,
+            taskId: contractInfos.workOfferInformations.taskId,
+          });
+          freelancerAccount.Notifications.push({
+            NotificationMessage:
+              publicWorkOffer.Title + " Task Progression Has Started",
+            senderInformations: {
+              senderId: publicWorkOffer._id,
+              senderUserType: "Company",
+              creationDate: new Date(),
+              context: "PublicWorkOfferStart",
+            },
+          });
+          publicWorkOffer.status = "in progress";
+          await freelancerAccount.save();
+          await publicWorkOffer.save();
+          freelancerNameSpace.emit("NotificationRefresh", {
+            freelancerId: freelancerAccount._id.toString(),
+          });
+        });
+      } else if (privateId) {
+        await PrivateJobOffer.findByIdAndUpdate(
+          privateId,
+          {
+            status: "accepted",
+          },
+          { new: true }
+        );
+      }
       freelancerAccount.CompanyRecievedContracts = updatedContracts;
+      // 30 seconds from now
 
       await freelancerAccount.save();
       return res.json({ freelancerAccount });

@@ -20,6 +20,12 @@ const freelancerNameSpaceLogic = (freelancerNameSpace: any) => {
       );
       freelancerNameSpace.emit("userDisconnected", connectedUsers);
     });
+    socket.on("sendFreelancerNotification", (freelancerId: any) => {
+      console.log(freelancerId);
+      freelancerNameSpace.emit("NotificationRefresh", {
+        freelancerId: freelancerId,
+      });
+    });
   });
 
   freelancerNameSpace.on("disconnect", (socket: any) => {});
