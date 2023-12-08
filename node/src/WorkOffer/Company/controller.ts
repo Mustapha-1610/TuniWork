@@ -46,7 +46,7 @@ export const createPublicJob = async (
 ) => {
   try {
     const { publicJobData, cityData } = req.body;
-
+    console.log(publicJobData);
     const offeringCompany = await company.findById(publicJobData.CompanyId);
     if (!offeringCompany) {
       console.log("test");

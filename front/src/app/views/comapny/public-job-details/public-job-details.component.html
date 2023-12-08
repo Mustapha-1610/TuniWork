@@ -59,8 +59,9 @@
                             <button>Make it Public ?</button>
                           </div>
                           <div *ngIf="publicJobOffer.status === 'Accepted'">
-                            Contract Accepted <br />
-                            <button>Start Work</button>
+                            Contract Accepted By The Freelancer<br />
+                            The Work Offer Tasks Progression Tracking Will Start
+                            At {{ publicJobOffer?.StartTime | date : "medium" }}
                           </div>
                           <div *ngIf="publicJobOffer.status === 'in progress'">
                             In Progress
