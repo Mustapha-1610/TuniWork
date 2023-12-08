@@ -85,6 +85,7 @@ export const createPublicJob = async (
       },
       StartTime: publicJobData.StartTime,
       DeadLine: publicJobData.DeadLine,
+      CompanySignature: publicJobData.CompanySignature,
     });
     return res.json({ success: "work offer created" });
   } catch (err) {
