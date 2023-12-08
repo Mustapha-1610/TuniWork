@@ -114,4 +114,10 @@ freelancerRouter.post(
   "/acceptWorkContract",
   freelancerController.acceptWorkContract
 );
+
+//
+freelancerRouter.post(
+  "/declineWorkContract",
+  freelancerController.declineWorkContract
+);
 export default freelancerRouter;

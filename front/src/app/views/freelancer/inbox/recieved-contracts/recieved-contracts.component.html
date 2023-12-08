@@ -25,6 +25,9 @@
               <div *ngIf="items?.acceptanceState && items?.ResponseState">
                 Sent
               </div>
+              <div *ngIf="!items?.acceptanceState && items?.ResponseState">
+                Declined
+              </div>
 
               <div *ngIf="!items?.ResponseState">
                 <button
@@ -36,6 +39,7 @@
                 </button>
                 <button
                   class="red-500 bg-red-500 text-white rounded-md px-4 py-2 mb-2"
+                  (click)="declineContract(items?._id, i)"
                 >
                   Decline
                 </button>

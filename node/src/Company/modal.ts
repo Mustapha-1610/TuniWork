@@ -128,5 +128,6 @@ const companySchema = new Schema({
       type: String,
     },
   ],
+  FreelancerRecievedContracts: [{ type: String }],
 });
 export default mongoose.model("Company", companySchema);

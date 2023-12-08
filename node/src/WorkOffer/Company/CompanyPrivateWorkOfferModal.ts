@@ -20,7 +20,9 @@ const privateWorkOfferSchema = new Schema({
     type: String,
     required: true,
   },
-
+  StartTime: {
+    type: Date,
+  },
   // l Work Title l matloub par example software engineer wala plumber li howa
   WorkTitle: {
     type: String,

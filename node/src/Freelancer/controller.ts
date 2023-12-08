@@ -1278,12 +1278,67 @@ export const sendPaymentRequest = async (
 };
 
 //
-export const acceptWorkContract = async (
+export const declineWorkContract = async (
   req: express.Request,
   res: express.Response
 ) => {
   try {
     const { contractId } = req.body;
+    const freelancerId = await freeLancerRouteProtection(req, res);
+    if ("_id" in freelancerId) {
+      const freelancerAccount: any = await freelancer.findById(freelancerId);
+      let publicId: any = null;
+      let privateId: any = null;
+      const updatedContracts = freelancerAccount.CompanyRecievedContracts.map(
+        (contract: any) => {
+          if (contract._id.equals(contractId)) {
+            contract.workOfferInformations.PublicWO
+              ? (publicId = contract.workOfferInformations.taskId)
+              : (privateId = contract.workOfferInformations.taskId);
+            return {
+              ...contract.toObject(),
+              acceptanceState: false,
+              ResponseState: true,
+            };
+          }
+          return contract.toObject();
+        }
+      );
+      freelancerAccount.CompanyRecievedContracts = updatedContracts;
+      if (publicId) {
+        await PublicJobOffer.findByIdAndUpdate(
+          publicId,
+          {
+            status: "Declined",
+          },
+          { new: true }
+        );
+      } else if (privateId) {
+        await PrivateJobOffer.findByIdAndUpdate(
+          privateId,
+          {
+            status: "declined",
+          },
+          { new: true }
+        );
+      }
+      await freelancerAccount.save();
+      return res.json({ freelancerAccount });
+    }
+    return freelancerId;
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error" });
+  }
+};
+
+//
+export const acceptWorkContract = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { contractId, contractUrl } = req.body;
     const freelancerId = await freeLancerRouteProtection(req, res);
     if ("_id" in freelancerId) {
       const freelancerAccount: any = await freelancer.findById(freelancerId);
@@ -1309,12 +1364,23 @@ export const acceptWorkContract = async (
       );
       if (publicId) {
         console.log(publicId);
-        const publicWorkOffer = await PublicJobOffer.findByIdAndUpdate(
+        const publicWorkOffer: any = await PublicJobOffer.findByIdAndUpdate(
           publicId,
           {
             status: "Accepted",
           },
           { new: true }
+        );
+        await company.findByIdAndUpdate(
+          publicWorkOffer.CompanyId,
+          {
+            $push: {
+              FreelancerRecievedContracts: contractUrl,
+            },
+          },
+          {
+            new: true,
+          }
         );
         const date = publicWorkOffer.StartTime;
         const job = nodeSchedule.scheduleJob(date, async () => {
@@ -1327,7 +1393,7 @@ export const acceptWorkContract = async (
           });
           freelancerAccount.Notifications.push({
             NotificationMessage:
-              publicWorkOffer.Title + " Task Progression Has Started",
+              publicWorkOffer.Title + " Task Progression Tracking Has Started",
             senderInformations: {
               senderId: publicWorkOffer._id,
               senderUserType: "Company",
@@ -1343,13 +1409,50 @@ export const acceptWorkContract = async (
           });
         });
       } else if (privateId) {
-        await PrivateJobOffer.findByIdAndUpdate(
+        const privateWorkOffer: any = await PrivateJobOffer.findByIdAndUpdate(
           privateId,
           {
             status: "accepted",
           },
           { new: true }
         );
+        await company.findByIdAndUpdate(
+          privateWorkOffer.CompanyId,
+          {
+            $push: {
+              FreelancerRecievedContracts: contractUrl,
+            },
+          },
+          {
+            new: true,
+          }
+        );
+        const date = privateWorkOffer.StartTime;
+        const job = nodeSchedule.scheduleJob(date, async () => {
+          freelancerAccount.WorkHistory[0].Ongoing.push({
+            TaskTitle: contractInfos.workOfferInformations.TaskTitle,
+            TaskDescription:
+              contractInfos.workOfferInformations.TaskDescription,
+            TaskHolder: contractInfos.workOfferInformations.TaskHolder,
+            taskId: contractInfos.workOfferInformations.taskId,
+          });
+          freelancerAccount.Notifications.push({
+            NotificationMessage:
+              privateWorkOffer.Title + " Task Progression Tracking Has Started",
+            senderInformations: {
+              senderId: privateWorkOffer._id,
+              senderUserType: "Company",
+              creationDate: new Date(),
+              context: "PublicWorkOfferStart",
+            },
+          });
+          privateWorkOffer.status = "in progress";
+          await freelancerAccount.save();
+          await privateWorkOffer.save();
+          freelancerNameSpace.emit("NotificationRefresh", {
+            freelancerId: freelancerAccount._id.toString(),
+          });
+        });
       }
       freelancerAccount.CompanyRecievedContracts = updatedContracts;
       // 30 seconds from now

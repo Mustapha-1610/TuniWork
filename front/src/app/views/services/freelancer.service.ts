@@ -183,9 +183,15 @@ export class FreelancerService {
       { workId }
     );
   }
-  acceptContract(contractId: any) {
+  acceptContract(contractId: any, contractUrl: any) {
     return this.http.post(
       'http://localhost:5000/api/freelancer/acceptWorkContract',
+      { contractId, contractUrl }
+    );
+  }
+  declineContract(contractId: any) {
+    return this.http.post(
+      'http://localhost:5000/api/freelancer/declineWorkContract',
       { contractId }
     );
   }
