@@ -10,6 +10,7 @@ import { WorkInfosComponent } from './history-page/work-infos/work-infos.compone
 import { SubmitPaymentRequestPageComponent } from './submit-payment-request-page/submit-payment-request-page.component';
 import { InboxComponent } from './inbox/inbox.component';
 import { PwoInfosComponent } from './inbox/recieved-work-offers/pwo-infos/pwo-infos.component';
+import { NotificationsPageComponent } from './notifications-page/notifications-page.component';
 
 const routes: Routes = [
   { path: '', component: HomePageComponent },
@@ -31,6 +32,10 @@ const routes: Routes = [
   {
     path: 'checkPWOInfos/:id',
     component: PwoInfosComponent,
+  },
+  {
+    path: 'Notifications',
+    component: NotificationsPageComponent,
   },
 ];
 

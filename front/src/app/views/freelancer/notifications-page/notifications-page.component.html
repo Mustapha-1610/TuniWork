@@ -1,0 +1,6 @@
+<div *ngFor="let items of freelancerInfos.Notifications">
+  {{ items.NotificationMessage }}<br />
+  Recieved from : {{ items.senderInformations.senderUserType }}<br />
+  Recieved At :
+  {{ items?.senderInformations?.creationDate | date : "medium" }}
+</div>

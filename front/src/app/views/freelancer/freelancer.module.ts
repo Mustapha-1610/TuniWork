@@ -32,6 +32,7 @@ import { RecievedContractsComponent } from './inbox/recieved-contracts/recieved-
 import { RecievedWorkOffersComponent } from './inbox/recieved-work-offers/recieved-work-offers.component';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { PwoInfosComponent } from './inbox/recieved-work-offers/pwo-infos/pwo-infos.component';
+import { NotificationsPageComponent } from './notifications-page/notifications-page.component';
 
 
 @NgModule({
@@ -53,6 +54,7 @@ import { PwoInfosComponent } from './inbox/recieved-work-offers/pwo-infos/pwo-in
     RecievedContractsComponent,
     RecievedWorkOffersComponent,
     PwoInfosComponent,
+    NotificationsPageComponent,
   ],
   imports: [
     FormsModule,

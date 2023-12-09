@@ -469,7 +469,7 @@ export const createPrivateJob = async (
           },
           Notifications: {
             NotificationMessage:
-              "New Work Offer Recieved from " +
+              "New Private Work Offer Recieved from " +
               offeringCompany.CompanyName +
               " Company",
             senderInformations: {
@@ -477,6 +477,7 @@ export const createPrivateJob = async (
               senderUserType: "Company",
               creationDate: new Date(),
               context: "PrivateWorkOffer",
+              objectId: workOffer._id,
             },
           },
         },

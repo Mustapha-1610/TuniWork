@@ -109,4 +109,22 @@ export class FreelancerlayoutComponent implements OnDestroy, OnInit {
       }
     });
   }
+  navigateNotification(notificationObject: any) {
+    if (notificationObject.senderInformations.context === 'PrivateWorkOffer') {
+      this.router.navigate([
+        '/freelancer/checkPWOInfos',
+        notificationObject.senderInformations.objectId,
+      ]);
+    } else if (
+      notificationObject.senderInformations.context === 'PublicWorkOfferStart'
+    ) {
+      this.router.navigate([
+        '/freelancer/WPDisplay',
+        notificationObject.senderInformations.objectId,
+      ]);
+    }
+  }
+  viewAll() {
+    this.router.navigate(['/freelancer//Notifications']);
+  }
 }

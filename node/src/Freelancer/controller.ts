@@ -1139,7 +1139,7 @@ export const filterPWOSearch = async (
           $in: workSpeciality,
         },
         "WorkLocation.City": City,
-      }).select(returnedFields);
+      });
       return res.json({ matchingJobOffers });
     } else if (workSpeciality && !City) {
       const returnedFields =
@@ -1148,7 +1148,7 @@ export const filterPWOSearch = async (
         WorkSpeciality: {
           $in: workSpeciality,
         },
-      }).select(returnedFields);
+      });
       return res.json({ matchingJobOffers });
     } else if (!workSpeciality && City) {
       console.log("HELLOOOOOOOOO");
@@ -1163,7 +1163,7 @@ export const filterPWOSearch = async (
             $in: freeLancer.Speciality,
           },
           "WorkLocation.City": City,
-        }).select(returnedFields);
+        });
         return res.json({ matchingJobOffers });
       }
 
@@ -1424,6 +1424,7 @@ export const acceptWorkContract = async (
               senderUserType: "Company",
               creationDate: new Date(),
               context: "PublicWorkOfferStart",
+              objectId: publicWorkOffer._id,
             },
           });
           publicWorkOffer.status = "in progress";
