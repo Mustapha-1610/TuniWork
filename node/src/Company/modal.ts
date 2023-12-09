@@ -129,5 +129,15 @@ const companySchema = new Schema({
     },
   ],
   FreelancerRecievedContracts: [{ type: String }],
+  PaymentRequests: [
+    {
+      PaymentRequestId: {
+        type: Schema.Types.ObjectId,
+      },
+      FreelancerName: {
+        type: String,
+      },
+    },
+  ],
 });
 export default mongoose.model("Company", companySchema);

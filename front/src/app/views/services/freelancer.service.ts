@@ -217,4 +217,11 @@ export class FreelancerService {
       }
     );
   }
+  submitPaymentRequest(id: any, task: any, hours: any) {
+    return this.http.post('http://localhost:5000/api/paymentRequest/create', {
+      workId: id,
+      payPerTask: task,
+      payperHours: hours,
+    });
+  }
 }
