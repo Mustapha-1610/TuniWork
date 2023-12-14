@@ -94,7 +94,7 @@ export class RecievedContractsComponent implements OnInit {
         // Handle successful uploads on complete
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           this.file = downloadURL;
-          this.fs.acceptContract(id).subscribe((res: any) => {
+          this.fs.acceptContract(id, downloadURL).subscribe((res: any) => {
             if (res.freelancerAccount) {
               console.log(res);
               this.fs.setFreelancerCredits(
@@ -111,5 +111,14 @@ export class RecievedContractsComponent implements OnInit {
         });
       }
     );
+  }
+  declineContract(itemId: any, index: any) {
+    this.fs.declineContract(itemId).subscribe((res: any) => {
+      if (res.freelancerAccount) {
+        this.fs.setFreelancerCredits(JSON.stringify(res.freelancerAccount));
+        this.freelancerInfos = this.fs.getFreelancerCredits();
+        this.CompanyContracts = this.freelancerInfos.CompanyRecievedContracts;
+      }
+    });
   }
 }

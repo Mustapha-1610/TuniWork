@@ -94,6 +94,7 @@
     >
       Save
     </button>
+
     <button
       *ngIf="isWorkOfferSaved(item?._id)"
       type="button"
@@ -102,21 +103,29 @@
     >
       Unsave
     </button>
-    <button
-      type="button"
-      *ngIf="!isWorkOfferApplyed(item?._id)"
-      (click)="PWOApply(item?._id)"
-      class="apply-button"
-    >
-      Apply
-    </button>
-    <button
-      type="button"
-      *ngIf="isWorkOfferApplyed(item?._id)"
-      (click)="PWOUnapply(item?._id)"
-      class="unapply-button"
-    >
-      Unapply
-    </button>
+    <div *ngIf="isAccepted(item?.WorkingFreelancer?.FreelancerId) === true">
+      <button disabled type="button" class="accepted-button">Accepted</button>
+    </div>
+    <div *ngIf="isAccepted(item?.WorkingFreelancer?.FreelancerId) === false">
+      <button disabled type="button" class="rejected-button">Rejected</button>
+    </div>
+    <div *ngIf="isAccepted(item?.WorkingFreelancer?.FreelancerId) === null">
+      <button
+        type="button"
+        *ngIf="!isWorkOfferApplyed(item?._id)"
+        (click)="PWOApply(item?._id)"
+        class="apply-button"
+      >
+        Apply
+      </button>
+      <button
+        type="button"
+        *ngIf="isWorkOfferApplyed(item?._id)"
+        (click)="PWOUnapply(item?._id)"
+        class="unapply-button"
+      >
+        Unapply
+      </button>
+    </div>
   </div>
 </div>

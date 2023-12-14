@@ -76,6 +76,14 @@
   background-color: #5cb85c;
   color: white;
 }
+.accepted-button {
+  background-color: #1a2668;
+  color: white;
+}
+.rejected-button {
+  background-color: #ad1414;
+  color: white;
+}
 
 .unsave-button,
 .unapply-button {

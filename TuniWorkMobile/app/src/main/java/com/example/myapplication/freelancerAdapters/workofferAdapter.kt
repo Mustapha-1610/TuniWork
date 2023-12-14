@@ -1,14 +1,15 @@
 package com.example.myapplication.freelancerAdapters
 
+import PublicJobOffer
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myapplication.dataClasses.publicworkOffer
+import com.example.myapplication.R
 
-class workofferAdapter (private val data: ArrayList<publicworkOffer>): RecyclerView.Adapter<workofferAdapter.MyViewHolder>() {
+class workofferAdapter (private val data: ArrayList<PublicJobOffer>): RecyclerView.Adapter<workofferAdapter.MyViewHolder>() {
     private var selectedPosition= RecyclerView.NO_POSITION;
     fun onItemClick(position: Int) {
         this.selectedPosition=position;
@@ -16,9 +17,7 @@ class workofferAdapter (private val data: ArrayList<publicworkOffer>): RecyclerV
     }
 
     inner class MyViewHolder(itemview: View):RecyclerView.ViewHolder(itemview), View.OnClickListener{
-        val name: TextView =itemview.findViewById(R.id.name);
-        val prenom: TextView =itemview.findViewById(R.id.prenom);
-        val age: TextView =itemview.findViewById(R.id.age);
+        val title: TextView =itemview.findViewById(R.id.Title);
         init {
             itemview.setOnClickListener{
                 onItemClick(bindingAdapterPosition);
@@ -30,20 +29,18 @@ class workofferAdapter (private val data: ArrayList<publicworkOffer>): RecyclerV
             notifyItemChanged(selectedPosition);
         }
     }
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserAdapter.MyViewHolder {
-        val layout= LayoutInflater.from(parent.context).inflate(R.layout.ligne,parent,false);
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): workofferAdapter.MyViewHolder {
+        val layout= LayoutInflater.from(parent.context).inflate(R.layout.workofferbody,parent,false);
         return  MyViewHolder(layout);
     }
-    override fun onBindViewHolder(holder: UserAdapter.MyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: workofferAdapter.MyViewHolder, position: Int) {
         val item=data[position];
         if(position==selectedPosition){
             holder.itemView.setBackgroundColor(Color.RED);
         }else{
             holder.itemView.setBackgroundColor(Color.TRANSPARENT);
         }
-        holder.name.text=item.name;
-        holder.prenom.text=item.prenom;
-        holder.age.text=item.age.toString();
+        holder.title.text=item.title;
     }
 
     override fun getItemCount(): Int {

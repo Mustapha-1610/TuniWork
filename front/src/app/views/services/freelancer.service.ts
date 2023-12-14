@@ -53,6 +53,7 @@ export class FreelancerService {
       PendingWorkOffers: form.pendingWorkOffers,
       Notifications: form.Notifications.slice().reverse(),
       CompanyRecievedContracts: form.CompanyRecievedContracts.slice().reverse(),
+      ProposedPrivateWorks: form.ProposedPrivateWorks.slice().reverse(),
     };
     localStorage.setItem('freeLancerInfos', JSON.stringify(FreelancerAccount));
   }
@@ -183,10 +184,44 @@ export class FreelancerService {
       { workId }
     );
   }
-  acceptContract(contractId: any) {
+  acceptContract(contractId: any, contractUrl: any) {
     return this.http.post(
       'http://localhost:5000/api/freelancer/acceptWorkContract',
+      { contractId, contractUrl }
+    );
+  }
+  declineContract(contractId: any) {
+    return this.http.post(
+      'http://localhost:5000/api/freelancer/declineWorkContract',
       { contractId }
     );
+  }
+  getPrivateWorkOfferInfos(id: any) {
+    return this.http.post('http://localhost:5000/api/freelancer/getPWOInfos', {
+      pwoId: id,
+    });
+  }
+  acceptPrivateWorkOffer(id: any) {
+    return this.http.post(
+      'http://localhost:5000/api/freelancer/acceptPrivateJob',
+      {
+        jobId: id,
+      }
+    );
+  }
+  declinePrivateWorkOffer(id: any) {
+    return this.http.post(
+      'http://localhost:5000/api/freelancer/declinePrivateJob',
+      {
+        jobId: id,
+      }
+    );
+  }
+  submitPaymentRequest(id: any, task: any, hours: any) {
+    return this.http.post('http://localhost:5000/api/paymentRequest/create', {
+      workId: id,
+      payPerTask: task,
+      payperHours: hours,
+    });
   }
 }

@@ -101,17 +101,18 @@ export const FindBestMatchesPublicWorkOffers = async (
   res: express.Response
 ) => {
   try {
-    const { freelancerId, City } = req.body;
+    console.log(req.body);
+    const { freelancerId } = req.body;
+    console.log(freelancerId);
     const freeLancer: any = await Freelancer.findById(freelancerId);
     const returnedFields =
       "PaymentMethod _id Title CreationDate CompanyName PaymentMethodVerificationStatus Location TotalWorkOfferd TotalMoneyPayed Description WorkSpeciality";
-    const matchingJobOffers: any = await companyPublicWorkOffer
-      .find({
-        WorkSpeciality: {
-          $in: freeLancer.Speciality,
-        },
-      })
-      .select(returnedFields);
+    const matchingJobOffers: any = await companyPublicWorkOffer.find({
+      WorkSpeciality: {
+        $in: freeLancer.Speciality,
+      },
+    });
+
     return res.json({ matchingJobOffers });
   } catch (err) {
     console.log(err);
@@ -471,7 +472,7 @@ export const createPrivateJob = async (
           },
           Notifications: {
             NotificationMessage:
-              "New Work Offer Recieved from " +
+              "New Private Work Offer Recieved from " +
               offeringCompany.CompanyName +
               " Company",
             senderInformations: {
@@ -479,6 +480,7 @@ export const createPrivateJob = async (
               senderUserType: "Company",
               creationDate: new Date(),
               context: "PrivateWorkOffer",
+              objectId: workOffer._id,
             },
           },
         },

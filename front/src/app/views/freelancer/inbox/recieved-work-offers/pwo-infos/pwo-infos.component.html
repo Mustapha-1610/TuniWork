@@ -1,0 +1,28 @@
+<div>
+  Title : {{ workData?.Title }} <br />
+  Description : {{ workData?.Description }} <br />
+  Creation Date : {{ workData?.CreationDate | date : "medium" }} <br />
+  Note : {{ workData?.Note }}
+  <div *ngFor="let items of workData?.TaskTable">
+    Task Title : {{ items?.TaskTitle }}
+  </div>
+  <div *ngIf="workData?.status == 'awaiting freelancer response'">
+    <button (click)="acceptWork()">Accept</button> <br /><button
+      (click)="declineWork()"
+    >
+      Deny
+    </button>
+  </div>
+  <div *ngIf="workData?.status == 'accepted'">
+    {{ workData?.status }}
+  </div>
+  <div *ngIf="workData?.status == 'declined'">
+    {{ workData?.status }}
+  </div>
+  <div *ngIf="workData?.status == 'in progress'">
+    {{ workData?.status }}
+  </div>
+  <div *ngIf="workData?.status == 'done'">
+    {{ workData?.status }}
+  </div>
+</div>

@@ -683,16 +683,16 @@ export const acceptPrivateJob = async (
 ) => {
   try {
     const { jobId } = req.body;
+
     const freelancerId = await freeLancerRouteProtection(req, res);
     if ("_id" in freelancerId) {
       // Find the private job offer by ID
       const privateJobOffer = await PrivateJobOffer.findById(jobId);
-
       // Check if the private job offer exists
       if (!privateJobOffer) {
         return res.json({ error: "Private job offer not found" });
       }
-      console.log(freelancerId);
+
       const freelancerAccount: any = await freelancer.findByIdAndUpdate(
         freelancerId,
         {
@@ -708,13 +708,27 @@ export const acceptPrivateJob = async (
         },
         { new: true }
       );
+      const index = freelancerAccount.ProposedPrivateWorks.findIndex(
+        (work: any) =>
+          work.PrivateJobOfferId === jobId ||
+          work.PrivateJobOfferId.equals(jobId)
+      );
+      console.log(index);
+      if (index !== -1) {
+        // Update the status to "accepted"
+        freelancerAccount.ProposedPrivateWorks[index].Status = "accepted";
+      }
       // Update the status to "accepted"
       privateJobOffer.status = "accepted";
       privateJobOffer.WorkingFreelancer.FreelancerName = freelancerAccount.Name;
       privateJobOffer.WorkingFreelancer.FreelancerId = freelancerAccount._id;
 
+      await freelancerAccount.save();
       await privateJobOffer.save();
-      return res.json({ success: "Private job offer accepted" });
+      return res.json({
+        success: "Private job offer accepted",
+        freelancerAccount,
+      });
     }
     return freelancerId;
   } catch (err) {
@@ -729,23 +743,34 @@ export const declinePrivateJob = async (
   res: express.Response
 ) => {
   try {
-    // Extract the necessary information from the request
-    const { freeLancerId, jobId } = req.params;
+    const { jobId } = req.body;
+    const freelancerId = await freeLancerRouteProtection(req, res);
+    if ("_id" in freelancerId) {
+      const privateJobOffer = await PrivateJobOffer.findById(jobId);
+      if (!privateJobOffer) {
+        return res.json({ error: "Private job offer not found" });
+      }
+      const freelancerAccount: any = await freelancer.findById(freelancerId);
+      const index = freelancerAccount.ProposedPrivateWorks.findIndex(
+        (work: any) =>
+          work.PrivateJobOfferId === jobId ||
+          work.PrivateJobOfferId.equals(jobId)
+      );
 
-    // Find the private job offer by ID
-    const privateJobOffer = await PrivateJobOffer.findById(jobId);
+      if (index !== -1) {
+        freelancerAccount.ProposedPrivateWorks[index].Status = "declined";
+      }
 
-    // Check if the private job offer exists
-    if (!privateJobOffer) {
-      return res.status(404).json({ error: "Private job offer not found" });
+      privateJobOffer.status = "declined";
+      await freelancerAccount.save();
+      await privateJobOffer.save();
+
+      return res.json({
+        success: "Private job offer declined",
+        freelancerAccount,
+      });
     }
-
-    // Update the status to "declined"
-    privateJobOffer.status = "declined";
-
-    await privateJobOffer.save();
-
-    return res.json({ success: "Private job offer declined" });
+    return freelancerId;
   } catch (err) {
     console.error(err);
     return res.json({ error: "Server Error" });
@@ -1106,15 +1131,14 @@ export const filterPWOSearch = async (
 ) => {
   try {
     const { workSpeciality, City } = req.body;
+    console.log(workSpeciality, City);
     if (workSpeciality && City) {
-      const returnedFields =
-        "PaymentMethod _id Title CreationDate CompanyName PaymentMethodVerificationStatus Location TotalWorkOfferd TotalMoneyPayed Description WorkSpeciality";
       const matchingJobOffers: any = await PublicJobOffer.find({
         WorkSpeciality: {
           $in: workSpeciality,
         },
         "WorkLocation.City": City,
-      }).select(returnedFields);
+      });
       return res.json({ matchingJobOffers });
     } else if (workSpeciality && !City) {
       const returnedFields =
@@ -1123,14 +1147,12 @@ export const filterPWOSearch = async (
         WorkSpeciality: {
           $in: workSpeciality,
         },
-      }).select(returnedFields);
+      });
       return res.json({ matchingJobOffers });
     } else if (!workSpeciality && City) {
-      console.log("HELLOOOOOOOOO");
       const freelancerId = await freeLancerRouteProtection(req, res);
       if ("_id" in freelancerId) {
         const freeLancer: any = await freelancer.findById(freelancerId);
-        console.log("hello");
         const returnedFields =
           "PaymentMethod _id Title CreationDate CompanyName PaymentMethodVerificationStatus Location TotalWorkOfferd TotalMoneyPayed Description WorkSpeciality";
         const matchingJobOffers: any = await PublicJobOffer.find({
@@ -1138,7 +1160,8 @@ export const filterPWOSearch = async (
             $in: freeLancer.Speciality,
           },
           "WorkLocation.City": City,
-        }).select(returnedFields);
+        });
+        console.log(matchingJobOffers);
         return res.json({ matchingJobOffers });
       }
 
@@ -1278,12 +1301,67 @@ export const sendPaymentRequest = async (
 };
 
 //
-export const acceptWorkContract = async (
+export const declineWorkContract = async (
   req: express.Request,
   res: express.Response
 ) => {
   try {
     const { contractId } = req.body;
+    const freelancerId = await freeLancerRouteProtection(req, res);
+    if ("_id" in freelancerId) {
+      const freelancerAccount: any = await freelancer.findById(freelancerId);
+      let publicId: any = null;
+      let privateId: any = null;
+      const updatedContracts = freelancerAccount.CompanyRecievedContracts.map(
+        (contract: any) => {
+          if (contract._id.equals(contractId)) {
+            contract.workOfferInformations.PublicWO
+              ? (publicId = contract.workOfferInformations.taskId)
+              : (privateId = contract.workOfferInformations.taskId);
+            return {
+              ...contract.toObject(),
+              acceptanceState: false,
+              ResponseState: true,
+            };
+          }
+          return contract.toObject();
+        }
+      );
+      freelancerAccount.CompanyRecievedContracts = updatedContracts;
+      if (publicId) {
+        await PublicJobOffer.findByIdAndUpdate(
+          publicId,
+          {
+            status: "Declined",
+          },
+          { new: true }
+        );
+      } else if (privateId) {
+        await PrivateJobOffer.findByIdAndUpdate(
+          privateId,
+          {
+            status: "declined",
+          },
+          { new: true }
+        );
+      }
+      await freelancerAccount.save();
+      return res.json({ freelancerAccount });
+    }
+    return freelancerId;
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error" });
+  }
+};
+
+//
+export const acceptWorkContract = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { contractId, contractUrl } = req.body;
     const freelancerId = await freeLancerRouteProtection(req, res);
     if ("_id" in freelancerId) {
       const freelancerAccount: any = await freelancer.findById(freelancerId);
@@ -1309,12 +1387,23 @@ export const acceptWorkContract = async (
       );
       if (publicId) {
         console.log(publicId);
-        const publicWorkOffer = await PublicJobOffer.findByIdAndUpdate(
+        const publicWorkOffer: any = await PublicJobOffer.findByIdAndUpdate(
           publicId,
           {
             status: "Accepted",
           },
           { new: true }
+        );
+        await company.findByIdAndUpdate(
+          publicWorkOffer.CompanyId,
+          {
+            $push: {
+              FreelancerRecievedContracts: contractUrl,
+            },
+          },
+          {
+            new: true,
+          }
         );
         const date = publicWorkOffer.StartTime;
         const job = nodeSchedule.scheduleJob(date, async () => {
@@ -1327,12 +1416,13 @@ export const acceptWorkContract = async (
           });
           freelancerAccount.Notifications.push({
             NotificationMessage:
-              publicWorkOffer.Title + " Task Progression Has Started",
+              publicWorkOffer.Title + " Task Progression Tracking Has Started",
             senderInformations: {
               senderId: publicWorkOffer._id,
               senderUserType: "Company",
               creationDate: new Date(),
               context: "PublicWorkOfferStart",
+              objectId: publicWorkOffer._id,
             },
           });
           publicWorkOffer.status = "in progress";
@@ -1343,13 +1433,59 @@ export const acceptWorkContract = async (
           });
         });
       } else if (privateId) {
-        await PrivateJobOffer.findByIdAndUpdate(
+        const privateWorkOffer: any = await PrivateJobOffer.findByIdAndUpdate(
           privateId,
           {
             status: "accepted",
           },
           { new: true }
         );
+        await company.findByIdAndUpdate(
+          privateWorkOffer.CompanyId,
+          {
+            $push: {
+              FreelancerRecievedContracts: contractUrl,
+            },
+          },
+          {
+            new: true,
+          }
+        );
+        const date = privateWorkOffer.StartTime;
+        const job = nodeSchedule.scheduleJob(date, async () => {
+          freelancerAccount.WorkHistory[0].Ongoing.push({
+            TaskTitle: contractInfos.workOfferInformations.TaskTitle,
+            TaskDescription:
+              contractInfos.workOfferInformations.TaskDescription,
+            TaskHolder: contractInfos.workOfferInformations.TaskHolder,
+            taskId: contractInfos.workOfferInformations.taskId,
+          });
+          freelancerAccount.Notifications.push({
+            NotificationMessage:
+              privateWorkOffer.Title + " Task Progression Tracking Has Started",
+            senderInformations: {
+              senderId: privateWorkOffer._id,
+              senderUserType: "Company",
+              creationDate: new Date(),
+              context: "PublicWorkOfferStart",
+            },
+          });
+          privateWorkOffer.status = "in progress";
+          const index = freelancerAccount.ProposedPrivateWorks.findIndex(
+            (work: any) => work.PrivateJobOfferId === privateWorkOffer._id
+          );
+
+          if (index !== -1) {
+            // Update the status to "accepted"
+            freelancerAccount.ProposedPrivateWorks[index].Status =
+              "in progress";
+          }
+          await freelancerAccount.save();
+          await privateWorkOffer.save();
+          freelancerNameSpace.emit("NotificationRefresh", {
+            freelancerId: freelancerAccount._id.toString(),
+          });
+        });
       }
       freelancerAccount.CompanyRecievedContracts = updatedContracts;
       // 30 seconds from now
@@ -1361,5 +1497,20 @@ export const acceptWorkContract = async (
   } catch (err) {
     console.log(err);
     return res.json({ error: "ERROR" });
+  }
+};
+
+//
+export const getPWOInfos = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { pwoId } = req.body;
+    const infos = await PrivateJobOffer.findById(pwoId);
+    return res.json({ infos });
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error" });
   }
 };
