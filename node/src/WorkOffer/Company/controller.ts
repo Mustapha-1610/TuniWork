@@ -101,7 +101,9 @@ export const FindBestMatchesPublicWorkOffers = async (
   res: express.Response
 ) => {
   try {
-    const { freelancerId, City } = req.body;
+    console.log(req.body);
+    const { freelancerId } = req.body;
+    console.log(freelancerId);
     const freeLancer: any = await Freelancer.findById(freelancerId);
     const returnedFields =
       "PaymentMethod _id Title CreationDate CompanyName PaymentMethodVerificationStatus Location TotalWorkOfferd TotalMoneyPayed Description WorkSpeciality";
@@ -110,6 +112,7 @@ export const FindBestMatchesPublicWorkOffers = async (
         $in: freeLancer.Speciality,
       },
     });
+
     return res.json({ matchingJobOffers });
   } catch (err) {
     console.log(err);

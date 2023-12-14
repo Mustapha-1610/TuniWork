@@ -28,7 +28,8 @@ data class Freelancer(
     @SerializedName("PassChangeLinkExpDate") val passChangeLinkExpDate: String?,
     @SerializedName("ProposedPrivateWorks") val proposedPrivateWorks: List<ProposedPrivateWork>,
     @SerializedName("PendingWorkOffers") val pendingWorkOffers: List<PendingWorkOffer>,
-    @SerializedName("CompanyReceivedContracts") val companyReceivedContracts: List<String?>
+    @SerializedName("CompanyReceivedContracts") val companyReceivedContracts: List<String?>,
+    @SerializedName("_id") val id : String
 )
 
 data class PayRate(

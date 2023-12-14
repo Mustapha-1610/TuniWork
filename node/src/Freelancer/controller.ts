@@ -1131,9 +1131,8 @@ export const filterPWOSearch = async (
 ) => {
   try {
     const { workSpeciality, City } = req.body;
+    console.log(workSpeciality, City);
     if (workSpeciality && City) {
-      const returnedFields =
-        "PaymentMethod _id Title CreationDate CompanyName PaymentMethodVerificationStatus Location TotalWorkOfferd TotalMoneyPayed Description WorkSpeciality";
       const matchingJobOffers: any = await PublicJobOffer.find({
         WorkSpeciality: {
           $in: workSpeciality,
@@ -1151,11 +1150,9 @@ export const filterPWOSearch = async (
       });
       return res.json({ matchingJobOffers });
     } else if (!workSpeciality && City) {
-      console.log("HELLOOOOOOOOO");
       const freelancerId = await freeLancerRouteProtection(req, res);
       if ("_id" in freelancerId) {
         const freeLancer: any = await freelancer.findById(freelancerId);
-        console.log("hello");
         const returnedFields =
           "PaymentMethod _id Title CreationDate CompanyName PaymentMethodVerificationStatus Location TotalWorkOfferd TotalMoneyPayed Description WorkSpeciality";
         const matchingJobOffers: any = await PublicJobOffer.find({
@@ -1164,6 +1161,7 @@ export const filterPWOSearch = async (
           },
           "WorkLocation.City": City,
         });
+        console.log(matchingJobOffers);
         return res.json({ matchingJobOffers });
       }
 
