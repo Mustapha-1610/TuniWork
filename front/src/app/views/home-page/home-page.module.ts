@@ -33,6 +33,11 @@ import { PasswordResetPageComponent } from './password-reset-page/password-reset
 import { CompanyVerificationPageComponent } from './company-verification-page/company-verification-page.component';
 import { CustomerLoginPageComponent } from './customer-login-page/customer-login-page.component';
 import { CustomerSignupPageComponent } from './customer-signup-page/customer-signup-page.component';
+import { BRBSComponent } from './index/brbs/brbs.component';
+import { SectionOneComponent } from './index/section-one/section-one.component';
+import { SectionTwoComponent } from './index/section-two/section-two.component';
+import { SectionThreeComponent } from './index/section-three/section-three.component';
+import { FooterComponent } from './index/footer/footer.component';
 
 
 
@@ -53,6 +58,11 @@ import { CustomerSignupPageComponent } from './customer-signup-page/customer-sig
     CompanyVerificationPageComponent,
     CustomerLoginPageComponent,
     CustomerSignupPageComponent,
+    BRBSComponent,
+    SectionOneComponent,
+    SectionTwoComponent,
+    SectionThreeComponent,
+    FooterComponent,
   ],
   imports: [
     CommonModule,

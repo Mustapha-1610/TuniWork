@@ -1,10 +1,56 @@
-<nav class="flex items-center justify-between bg-gray-800 p-4">
-  <div class="flex items-center">
-    <a class="text-white text-xl font-bold" href="/">Home</a>
-  </div>
-  <div class="flex items-center space-x-4">
-    <a class="text-white" href="/login">Login</a>
-    <a class="text-white" href="/signup">Register</a>
-  </div>
-</nav>
-<router-outlet></router-outlet>
+  <!-- Back to top button -->
+  <div class="back-to-top"></div>
+
+  <header>
+    <div class="topbar">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-8 text-sm">
+            <div sty class="site-info">
+              <a href="#"> <span class="mai-call text-primary"></span> +216 72 854 234</a>
+              <span class="divider">|</span>
+              <a href="#"><span class="mai-mail text-primary"></span> Tuni.Work40@gmail.com</a>
+            </div>
+          </div>
+          <div class="col-sm-4 text-right text-sm">
+            <div class="social-mini-button">
+              <a href="#"><span class="mai-logo-facebook-f"></span></a>
+              <a href="#"><span class="mai-logo-twitter"></span></a>
+              <a href="#"><span class="mai-logo-instagram"></span></a>
+            </div>
+          </div>
+        </div> <!-- .row -->
+      </div> <!-- .container -->
+    </div> <!-- .topbar -->
+
+    <nav  style=" background-color: #607EAA;" class="navbar navbar-expand-lg navbar-light shadow-sm">
+      <div class="container">
+        <a class="navbar-brand" href="#">  <img style="height: 65px; width: 200px;" src="../../../assets/templateDental/img/icon.png" > </a>
+
+
+
+        <div>
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a style="font-weight:bold  ;font-size: 16px; color: #EAE3D2; "  class="nav-link" href="#">Homepage</a>
+            </li>
+            <li class="nav-item">
+              <a style=" font-weight:bold  ;font-size: 16px; color: #1C3879;"class="nav-link" href="#about">About</a>
+            </li>
+            <li class="nav-item">
+              <a style="font-weight:bold ;font-size: 16px; color: #1C3879;" class="nav-link" href="#services">Services</a>
+            </li>
+            <li class="nav-item">
+              <a style="font-weight:bold ;font-size :16px; color: #1C3879;" class="nav-link" href="#contact">Contact</a>
+            </li>
+            <li class="nav-item">
+              <a class="btn btn-primary ml-lg-3" href="/login" style="font-weight:bold  ;font-size: 16px; ;color : #607EAA ;background-color: #EAE3D2; transition: background-color 0.3s;" onmouseover="this.style.color='#fff'" onmouseover="this.style.backgroundColor='#f5d893'" onmouseout="this.style.backgroundColor='#EAE3D2'">
+                Login / Sign Up
+              </a>
+                        </li>
+          </ul>
+        </div> <!-- .navbar-collapse -->
+      </div> <!-- .container -->
+    </nav>
+  </header>
+  <router-outlet></router-outlet>

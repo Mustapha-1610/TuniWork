@@ -1,0 +1,48 @@
+
+#venue {
+  position: relative;
+  background: url('../../../../../assets/images/company/bg.jpg') 50% 0 repeat-y fixed;
+  background-size: cover;
+  background-position: center center;
+  padding-top: 7rem;
+  padding-bottom: 7rem;
+}
+
+#venue:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient( #f9f5eb, #ccdac8, #94c0b8, #66a2b5, #607eaa); /* Adjust the opacity values as needed */
+  opacity:0.5;
+  /*   background: linear-gradient(to top , rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)); /* Adjust the opacity values as needed */
+  z-index: 1;
+}
+
+#venue p {
+  padding-top: 12px;
+  padding-bottom: 18px;
+}
+
+#overview h3,
+#detail h3,
+#video h3,
+#register h3,
+#venue h3,
+#contact h3 {
+  padding-bottom: 12px;
+}
+
+.parallax-section {
+  background-attachment: fixed !important;
+  background-size: cover !important;
+}
+
+.gradient {
+  height: 100%;
+  width: 100%;
+  background-color: black;
+  position: absolute;
+}
