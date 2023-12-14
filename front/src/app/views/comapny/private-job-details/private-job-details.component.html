@@ -5,7 +5,24 @@
       <ul>
         <li><strong>Title:</strong> {{ privateJobOffer?.Title }}</li>
         <li><strong>Status:</strong> {{ privateJobOffer?.status }}</li>
-        <li><strong>Description:</strong> {{ privateJobOffer?.Description }}</li>
+        <li>
+          <strong>Description:</strong> {{ privateJobOffer?.Description }}
+        </li>
+        <li *ngIf="privateJobOffer?.status === 'awaiting freelancer response'">
+          <strong>Status:</strong> awaiting freelancer response
+        </li>
+        <li *ngIf="privateJobOffer?.status === 'accepted'">
+          <strong>Status:</strong> accepted
+        </li>
+        <li *ngIf="privateJobOffer?.status === 'declined'">
+          <strong>Status:</strong> declined
+        </li>
+        <li *ngIf="privateJobOffer?.status === 'in progress'">
+          <strong>Status:</strong> in progress
+        </li>
+        <li *ngIf="privateJobOffer?.status === 'done'">
+          <strong>Status:</strong> done
+        </li>
       </ul>
     </div>
   </div>

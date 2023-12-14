@@ -7,6 +7,7 @@ import { FreelancerService } from '../../services/freelancer.service';
 import { Router } from '@angular/router';
 import { SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
 import { CompanyService } from '../../services/company.service';
+import { CustomerService } from '../../services/customer.service';
 @Component({
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',
@@ -16,6 +17,7 @@ export class LoginPageComponent implements OnInit {
   constructor(
     private fs: FreelancerService,
     private cs: CompanyService,
+    private customerServise: CustomerService,
     private route: Router,
     private authService: SocialAuthService
   ) {}
@@ -60,6 +62,11 @@ export class LoginPageComponent implements OnInit {
         this.route.navigate(['/company/profile']);
       } else if (res.emailError) {
         this.mailError = res.emailError;
+      } else if (res.customerAccount) {
+        this.customerServise.setCustomerInfos(
+          JSON.stringify(res.customerAccount)
+        );
+        this.route.navigate(['/customer/profile']);
       }
     });
   }

@@ -10,9 +10,11 @@ export class SubmitPaymentRequestPageComponent implements OnInit {
   constructor(private route: ActivatedRoute, private fs: FreelancerService) {}
   workId: any;
   errMessage: any;
+  workData: any;
   ngOnInit(): void {
     this.workId = this.route.snapshot.paramMap.get('id');
     this.getPaymentRequestPageAccess();
+    this.getCompanyWorkOffer();
   }
   getPaymentRequestPageAccess() {
     this.fs
@@ -22,5 +24,12 @@ export class SubmitPaymentRequestPageComponent implements OnInit {
           this.errMessage = res.error;
         }
       });
+  }
+  getCompanyWorkOffer() {
+    console.log('hello');
+    this.fs.getWorkOfferProgress(this.workId).subscribe((res: any) => {
+      this.workData = res.workOffer;
+      console.log(this.workData);
+    });
   }
 }

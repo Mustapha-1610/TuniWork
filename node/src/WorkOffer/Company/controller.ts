@@ -46,7 +46,7 @@ export const createPublicJob = async (
 ) => {
   try {
     const { publicJobData, cityData } = req.body;
-
+    console.log(publicJobData);
     const offeringCompany = await company.findById(publicJobData.CompanyId);
     if (!offeringCompany) {
       console.log("test");
@@ -83,6 +83,9 @@ export const createPublicJob = async (
         City: cityData.cities[0].item_text,
         Municipality: cityData.municipality[0].item_text,
       },
+      StartTime: publicJobData.StartTime,
+      DeadLine: publicJobData.DeadLine,
+      CompanySignature: publicJobData.CompanySignature,
     });
     return res.json({ success: "work offer created" });
   } catch (err) {
@@ -98,17 +101,18 @@ export const FindBestMatchesPublicWorkOffers = async (
   res: express.Response
 ) => {
   try {
-    const { freelancerId, City } = req.body;
+    console.log(req.body);
+    const { freelancerId } = req.body;
+    console.log(freelancerId);
     const freeLancer: any = await Freelancer.findById(freelancerId);
     const returnedFields =
       "PaymentMethod _id Title CreationDate CompanyName PaymentMethodVerificationStatus Location TotalWorkOfferd TotalMoneyPayed Description WorkSpeciality";
-    const matchingJobOffers: any = await companyPublicWorkOffer
-      .find({
-        WorkSpeciality: {
-          $in: freeLancer.Speciality,
-        },
-      })
-      .select(returnedFields);
+    const matchingJobOffers: any = await companyPublicWorkOffer.find({
+      WorkSpeciality: {
+        $in: freeLancer.Speciality,
+      },
+    });
+
     return res.json({ matchingJobOffers });
   } catch (err) {
     console.log(err);
@@ -312,12 +316,12 @@ export const acceptFreelancer = async (
       appliedFreelancer.Status = "accepted";
 
       // Set WorkingFreelancer with FreelancerId and FreelancerName
-        publicJobOffer.WorkingFreelancer = {
+      publicJobOffer.WorkingFreelancer = {
         FreelancerId: appliedFreelancer.FreelancerId,
         FreelancerName: appliedFreelancer.FreelancerName,
       };
       // Update the public job offer status
-      publicJobOffer.status = "freelancer accepted, awaiting contract";
+      publicJobOffer.status = "freelancer accepted";
 
       // Save changes to the database
       await publicJobOffer.save();
@@ -468,7 +472,7 @@ export const createPrivateJob = async (
           },
           Notifications: {
             NotificationMessage:
-              "New Work Offer Recieved from " +
+              "New Private Work Offer Recieved from " +
               offeringCompany.CompanyName +
               " Company",
             senderInformations: {
@@ -476,6 +480,7 @@ export const createPrivateJob = async (
               senderUserType: "Company",
               creationDate: new Date(),
               context: "PrivateWorkOffer",
+              objectId: workOffer._id,
             },
           },
         },

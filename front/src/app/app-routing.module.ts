@@ -6,12 +6,9 @@ import { FreelancerGuardGuard } from './views/guards/freelancer-guard.guard';
 import { homePageGuard } from './views/guards/home-page.guard';
 import { CompanyLayoutComponent } from './layout/company-layout/company-layout.component';
 import { companyLayoutGuard } from './views/guards/company-layout.guard';
+import { CustomerLayoutComponent } from './layout/customer-layout/customer-layout.component';
 
 const routes: Routes = [
- 
- 
- 
- 
   {
     path: 'freelancer',
     component: FreelancerlayoutComponent,
@@ -54,6 +51,19 @@ const routes: Routes = [
       },
     ],
   },
+  /*{
+    path: 'customer',
+    component: CustomerLayoutComponent,
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import('./views/Customer/customer-routing.module').then(
+            (m) => m.CustomerRoutingModule
+          ),
+      },
+    ],
+  },*/
 ];
 
 @NgModule({

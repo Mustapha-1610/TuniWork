@@ -20,7 +20,9 @@ const privateWorkOfferSchema = new Schema({
     type: String,
     required: true,
   },
-
+  StartTime: {
+    type: Date,
+  },
   // l Work Title l matloub par example software engineer wala plumber li howa
   WorkTitle: {
     type: String,
@@ -102,6 +104,9 @@ const privateWorkOfferSchema = new Schema({
   PaymentMethodVerificationStatus: {
     type: Boolean,
     default: false,
+  },
+  CompanySignature: {
+    type: String,
   },
 
   // general informations 3al company to display fel work offer like we mentioned before

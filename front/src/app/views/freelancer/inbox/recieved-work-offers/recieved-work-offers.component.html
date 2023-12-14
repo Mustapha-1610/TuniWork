@@ -1,1 +1,6 @@
-<p>recieved-work-offers works!</p>
+<div *ngFor="let items of WorkOffers">
+  Title : {{ items.Title }} <br />
+  Description : {{ items.Description }}<br />
+  Status : {{ items.Status }} <br />
+  <button (click)="checkPWO(items.PrivateJobOfferId)">Check</button>
+</div>

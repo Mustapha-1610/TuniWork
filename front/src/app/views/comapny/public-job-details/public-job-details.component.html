@@ -7,28 +7,70 @@
         <li><strong>Work Title:</strong> {{ publicJobOffer?.WorkTitle }}</li>
         <li><strong>Description:</strong> {{ publicJobOffer?.Description }}</li>
 
-        <li><strong>Applied Freelancers:</strong> </li>
+        <li><strong>Applied Freelancers:</strong></li>
 
         <li *ngIf="publicJobOffer?.AppliedFreelancers?.length">
           <div class="card">
             <div class="card-body">
-
               <ul class="list-group list-group-flush">
                 <li *ngIf="publicJobOffer?.AppliedFreelancers?.length">
                   <div class="card">
                     <div class="card-body">
-
                       <ul class="list-group list-group-flush">
-                        <li *ngFor="let freelancer of publicJobOffer?.AppliedFreelancers" class="list-group-item">
-                          {{ freelancer.FreelancerName }} - Status: {{ freelancer.Status }}
-                          <button *ngIf="freelancer.Status === 'pending' " class="btn btn-success" (click)="acceptFreelancer(publicJobOffer._id, freelancer.FreelancerId)">Accept</button>
-                          <button *ngIf="freelancer.Status === 'accepted' " class="btn btn-primary" (click)="createContract(publicJobOffer._id, freelancer.FreelancerId)">Send Contract</button>
+                        <li
+                          *ngFor="
+                            let freelancer of publicJobOffer?.AppliedFreelancers
+                          "
+                          class="list-group-item"
+                        >
+                          {{ freelancer.FreelancerName }} - Status:
+                          {{ freelancer.Status }}
+                          <button
+                            *ngIf="freelancer.Status === 'pending'"
+                            class="btn btn-success"
+                            (click)="
+                              acceptFreelancer(
+                                publicJobOffer._id,
+                                freelancer.FreelancerId
+                              )
+                            "
+                          >
+                            Accept
+                          </button>
+                          <button
+                            *ngIf="
+                              publicJobOffer.status === 'freelancer accepted'
+                            "
+                            class="btn btn-primary"
+                            (click)="createContract(publicJobOffer._id)"
+                          >
+                            Send Contract
+                          </button>
+                          <div
+                            *ngIf="
+                              publicJobOffer.status ===
+                              'Contract Sent Awaiting Freelancer Response'
+                            "
+                          >
+                            Contract Sent Awaiting Freelancer Response
+                          </div>
+                          <div *ngIf="publicJobOffer.status === 'Declined'">
+                            Contract Declined <br />
+                            <button>Make it Public ?</button>
+                          </div>
+                          <div *ngIf="publicJobOffer.status === 'Accepted'">
+                            Contract Accepted By The Freelancer<br />
+                            The Work Offer Tasks Progression Tracking Will Start
+                            At {{ publicJobOffer?.StartTime | date : "medium" }}
+                          </div>
+                          <div *ngIf="publicJobOffer.status === 'in progress'">
+                            In Progress
+                          </div>
                         </li>
                       </ul>
                     </div>
                   </div>
                 </li>
-
               </ul>
             </div>
           </div>

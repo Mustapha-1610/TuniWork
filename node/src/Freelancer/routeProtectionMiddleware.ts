@@ -20,7 +20,7 @@ const freeLancerRouteProtection = async (
       return { _id: decoded.freelancerId };
     } catch (error) {
       console.log(error);
-      return res.status(401).json({ error: "Server Error !" });
+      return res.json({ error: "Server Error !" });
     }
   }
 };

@@ -42,9 +42,11 @@
       style="max-height: 24rem"
     >
       <div class="py-2">
+        <h4 class="cursor-pointer" (click)="viewAll()">View All</h4>
         <h3
           *ngFor="let notification of freeLancerInfos?.Notifications"
           class="flex items-center px-3 py-2 border-b hover:bg-gray-100 -mx-2"
+          (click)="navigateNotification(notification)"
         >
           <p class="text-gray-600 text-sm mx-2">
             <span class="font-bold"

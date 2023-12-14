@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import PublicJobOffer
 import com.example.myapplication.dataClasses.Freelancer
 import com.google.gson.annotations.SerializedName
 import retrofit2.Response
@@ -55,4 +56,12 @@ interface ApiService {
     )
     @POST("/api/freelancer/createMobile")
     suspend fun create(@Body signupRequest: signupRequest): Response<FreelancerResponse>
+    data class MatchingPublicWorkOffersResponse(
+        @SerializedName("matchingJobOffers") val matchingJobOffers : PublicJobOffer
+    )
+    data class SendRequest(
+        @SerializedName("freelancerId") val freelancerId : String
+    )
+    @POST("/api/companyWorkOffer/getMatchingPublicWorkOffers")
+    suspend fun getAll(@Body freelancerId : SendRequest) : Response<List<MatchingPublicWorkOffersResponse>>
 }

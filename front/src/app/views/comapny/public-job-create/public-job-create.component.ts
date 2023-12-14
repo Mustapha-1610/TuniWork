@@ -76,6 +76,8 @@ export class PublicJobCreateComponent {
       CompanyName: CompanyName,
       CompanyId: companyId,
       CompanySignature: CompanySignature,
+      DeadLine: ['', Validators.required],
+      StartTime: ['', Validators.required],
     });
   }
 
