@@ -697,7 +697,7 @@ export const acceptPrivateJob = async (
         freelancerId,
         {
           $push: {
-            "WorkHistory.0.Ongoing": {
+            "WorkHistory.Ongoing": {
               TaskTitle: privateJobOffer.Title,
               TaskHolder: privateJobOffer._id,
               DueDate: privateJobOffer.DeadLine,
@@ -1407,7 +1407,7 @@ export const acceptWorkContract = async (
         );
         const date = publicWorkOffer.StartTime;
         const job = nodeSchedule.scheduleJob(date, async () => {
-          freelancerAccount.WorkHistory[0].Ongoing.push({
+          freelancerAccount.WorkHistory.Ongoing.push({
             TaskTitle: contractInfos.workOfferInformations.TaskTitle,
             TaskDescription:
               contractInfos.workOfferInformations.TaskDescription,
@@ -1453,7 +1453,7 @@ export const acceptWorkContract = async (
         );
         const date = privateWorkOffer.StartTime;
         const job = nodeSchedule.scheduleJob(date, async () => {
-          freelancerAccount.WorkHistory[0].Ongoing.push({
+          freelancerAccount.WorkHistory.Ongoing.push({
             TaskTitle: contractInfos.workOfferInformations.TaskTitle,
             TaskDescription:
               contractInfos.workOfferInformations.TaskDescription,

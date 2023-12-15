@@ -70,6 +70,7 @@ export class LoginPageComponent implements OnInit {
       }
     });
   }
+
   sendEmail() {
     this.fs
       .sendVerLink(null, this.loginForm.value.Email)

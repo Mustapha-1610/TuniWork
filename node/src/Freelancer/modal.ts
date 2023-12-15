@@ -45,45 +45,45 @@ const freelancerSchema = new Schema({
       required: true,
     },
   },
-  WorkHistory: [
-    {
-      Ongoing: [
-        {
-          TaskTitle: {
-            type: String,
-          },
-          TaskDescription: {
-            type: String,
-          },
-          TaskHolder: {
-            type: Schema.Types.ObjectId,
-          },
-          DueDate: {
-            type: Date,
-          },
-          taskId: {
-            type: Schema.Types.ObjectId,
-          },
+  WorkHistory: {
+    Ongoing: [
+      {
+        TaskTitle: {
+          type: String,
         },
-      ],
-      Finiched: [
-        {
-          TaskTitle: {
-            type: String,
-          },
-          TaskHolder: {
-            type: Schema.Types.ObjectId,
-          },
-          EarningsMade: {
-            type: Number,
-          },
-          Review: {
-            type: String,
-          },
+        TaskDescription: {
+          type: String,
         },
-      ],
-    },
-  ],
+        TaskHolder: {
+          type: Schema.Types.ObjectId,
+        },
+        DueDate: {
+          type: Date,
+        },
+        taskId: {
+          type: Schema.Types.ObjectId,
+        },
+      },
+    ],
+    Finiched: [
+      {
+        TaskTitle: {
+          type: String,
+        },
+        TaskHolder: {
+          type: Schema.Types.ObjectId,
+        },
+        EarningsMade: {
+          type: Number,
+        },
+        Review: {
+          type: String,
+        },
+      },
+    ],
+    default: [],
+  },
+
   Schedule: [
     {
       type: Date,
