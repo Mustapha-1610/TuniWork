@@ -22,19 +22,30 @@ companyRouter.put("/update", companyController.updateInfo);
 companyRouter.put("/disable/:companyId", companyController.disableAccount);
 companyRouter.put("/activate/:companyId", companyController.activateCompany);
 
+companyRouter.get("/getAllFreelancers", companyController.getAllFreelancers);
 
-companyRouter.get("/getAllFreelancers",companyController.getAllFreelancers);
+companyRouter.post(
+  "/saveFreelancer/:companyId/:freelancerId",
+  companyController.saveFreelancer
+);
+companyRouter.post(
+  "/unsaveFreelancer/:companyId/:freelancerId",
+  companyController.unsaveFreelancer
+);
 
-companyRouter.post("/saveFreelancer/:companyId/:freelancerId", companyController.saveFreelancer);
-companyRouter.post("/unsaveFreelancer/:companyId/:freelancerId", companyController.unsaveFreelancer);
+companyRouter.get(
+  "/viewFreelancerDetails/:freelancerId",
+  companyController.viewFreelancerDetails
+);
 
+companyRouter.get(
+  "/getSavedFreelancers/:companyId",
+  companyController.getSavedFreelancers
+);
 
-
-companyRouter.get("/viewFreelancerDetails/:freelancerId", companyController.viewFreelancerDetails);
-
-companyRouter.get('/getSavedFreelancers/:companyId', companyController.getSavedFreelancers);
-
-
-
+companyRouter.post(
+  "/acceptPaymentRequest",
+  companyController.acceptPaymentRequest
+);
 
 export default companyRouter;

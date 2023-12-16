@@ -6,50 +6,39 @@ import bcrypt from "bcryptjs";
 import { SendCompanyAccountConfirmationMail } from "./nodemailerConfig";
 import generateCompanyToken from "./utils";
 import { companyRouteProtection } from "./routeProtectionMiddleware";
-import PublicJobOffer from "WorkOffer/Company/CompanyPublicWorkOfferModal";
-
+import PublicJobOffer from "../WorkOffer/Company/CompanyPublicWorkOfferModal";
+import paymentRequest from "../utils/PaymentRequest/modal";
 import { FishOff } from "lucide-angular";
 import company from "../Company/modal";
 // import { SendPasswordResetEmail } from "./nodemailerConfig";
 import PrivateJobOffer from "../WorkOffer/Company/CompanyPrivateWorkOfferModal";
 import createPDF from "../PDFServices/freelancerContract";
-
+import freelancer from "../Freelancer/modal";
 
 // function to create a comapny account (aziz)
-
-
 
 export const create = async (req: express.Request, res: express.Response) => {
   const { companyPersonalInfos, companyAddedInfos } = req.body;
 
-
   if (!companyPersonalInfos.CompanyName) {
     return res.json({ error: "CompanyName is Required !" });
-  }
-   else if (!companyPersonalInfos.CompanyEmail) {
+  } else if (!companyPersonalInfos.CompanyEmail) {
     return res.json({ error: "CompanyEmail is Required !" });
-  } 
-  else if (!companyPersonalInfos.CompanyPhone) {
+  } else if (!companyPersonalInfos.CompanyPhone) {
     return res.json({ error: "CompanyPhone  is Required !" });
-  } 
-  else if (!companyPersonalInfos.Password) {
+  } else if (!companyPersonalInfos.Password) {
     return res.json({ error: "Password is Required !" });
-  } 
-  else if (!companyPersonalInfos.CompanyWebsite) {
+  } else if (!companyPersonalInfos.CompanyWebsite) {
     return res.json({ error: "CompanyWebsite is Required !" });
-  } 
-  else if (!companyPersonalInfos.Location) {
+  } else if (!companyPersonalInfos.Location) {
     return res.json({ error: "Location is Required !" });
-  } 
-  else if (!companyPersonalInfos.CompanyDescription) {
+  } else if (!companyPersonalInfos.CompanyDescription) {
     return res.json({ error: "CompanyDescription is Required !" });
-  } 
-  else if (!companyAddedInfos.languages) {
+  } else if (!companyAddedInfos.languages) {
     return res.json({ error: "languages are Required !" });
-  } 
-  else if (!companyAddedInfos.workTitle) {
+  } else if (!companyAddedInfos.workTitle) {
     return res.json({ error: "workTitle is Required !" });
-  } 
+  }
 
   try {
     // ylawej 3la company 3andha  ya nafs ya nafs phone number ya nafs l mail
@@ -80,18 +69,19 @@ export const create = async (req: express.Request, res: express.Response) => {
     }
     let company: any;
 
-    companyPersonalInfos.ProfilePicture ? (company = await Company.create({
-        CompanyName: companyPersonalInfos.CompanyName,
-        CompanyEmail: companyPersonalInfos.CompanyEmail,
-        CompanyPhone: companyPersonalInfos.CompanyPhone,
-        Password: securePassword,
-        Location: companyPersonalInfos.Location,
-        CompanyDescription: companyPersonalInfos.CompanyDescription,
-        CompanyWebsite: companyPersonalInfos.CompanyWebsite,
-        CompanySignature: companyPersonalInfos.CompanySignature,  // Add this line
+    companyPersonalInfos.ProfilePicture
+      ? (company = await Company.create({
+          CompanyName: companyPersonalInfos.CompanyName,
+          CompanyEmail: companyPersonalInfos.CompanyEmail,
+          CompanyPhone: companyPersonalInfos.CompanyPhone,
+          Password: securePassword,
+          Location: companyPersonalInfos.Location,
+          CompanyDescription: companyPersonalInfos.CompanyDescription,
+          CompanyWebsite: companyPersonalInfos.CompanyWebsite,
+          CompanySignature: companyPersonalInfos.CompanySignature, // Add this line
 
-        VerificationCode: VerificationCode,
-        ProfilePicture: companyPersonalInfos.ProfilePicture,
+          VerificationCode: VerificationCode,
+          ProfilePicture: companyPersonalInfos.ProfilePicture,
 
           Languages: languagestable,
           EstimateWorkLocation: {
@@ -103,32 +93,32 @@ export const create = async (req: express.Request, res: express.Response) => {
             WorkTitleText: companyAddedInfos.workTitle[0].item_text,
           },
           VerLinkExpDate: new Date(new Date().getTime() + 2 * 60 * 60 * 1000),
-        })) : (company = await Company.create({
-        CompanyName: companyPersonalInfos.CompanyName,
-        CompanyEmail: companyPersonalInfos.CompanyEmail,
-        CompanyPhone: companyPersonalInfos.CompanyPhone,
-        Password: securePassword,
-        Location: companyPersonalInfos.Location,
-        CompanyDescription: companyPersonalInfos.CompanyDescription,
-        CompanyWebsite: companyPersonalInfos.CompanyWebsite,
+        }))
+      : (company = await Company.create({
+          CompanyName: companyPersonalInfos.CompanyName,
+          CompanyEmail: companyPersonalInfos.CompanyEmail,
+          CompanyPhone: companyPersonalInfos.CompanyPhone,
+          Password: securePassword,
+          Location: companyPersonalInfos.Location,
+          CompanyDescription: companyPersonalInfos.CompanyDescription,
+          CompanyWebsite: companyPersonalInfos.CompanyWebsite,
 
-        CompanySignature: companyPersonalInfos.CompanySignature,  // Add this line
+          CompanySignature: companyPersonalInfos.CompanySignature, // Add this line
 
-        VerificationCode: VerificationCode,
-        Languages: languagestable,
+          VerificationCode: VerificationCode,
+          Languages: languagestable,
 
-        EstimateWorkLocation: {
-        City: companyAddedInfos.cities[0].item_text,
-        Municipality: companyAddedInfos.municipality[0].item_text,
-        },
+          EstimateWorkLocation: {
+            City: companyAddedInfos.cities[0].item_text,
+            Municipality: companyAddedInfos.municipality[0].item_text,
+          },
 
-        WorkTitle: {
-        WorkTitleId: companyAddedInfos.workTitle[0].item_id,
-        WorkTitleText: companyAddedInfos.workTitle[0].item_text,
-        },
-        VerLinkExpDate: new Date(new Date().getTime() + 2 * 60 * 60 * 1000),
+          WorkTitle: {
+            WorkTitleId: companyAddedInfos.workTitle[0].item_id,
+            WorkTitleText: companyAddedInfos.workTitle[0].item_text,
+          },
+          VerLinkExpDate: new Date(new Date().getTime() + 2 * 60 * 60 * 1000),
         }));
-
 
     await SendCompanyAccountConfirmationMail(
       company.CompanyName,
@@ -146,13 +136,7 @@ export const create = async (req: express.Request, res: express.Response) => {
   }
 };
 
-
-
 // function to verify freelancer account (aziz)
- 
-
-
-
 
 //
 export const sendVerificationLink = async (
@@ -183,9 +167,6 @@ export const sendVerificationLink = async (
     return res.json({ error: "Server Error" });
   }
 };
-
-
-
 
 // function to authenticate company  Using jwt's (aziz) to change fazet l phone
 export const auth = async (req: express.Request, res: express.Response) => {
@@ -307,9 +288,12 @@ export const updateInfo = async (
 };
 
 //disable acc (aziz)
-export const disableAccount = async (  req: express.Request,  res: express.Response) => {
+export const disableAccount = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
-    const {companyId} = req.params;
+    const { companyId } = req.params;
     let company = await Company.findById(companyId);
     if (!company) {
       return res.json({ error: "Error !" });
@@ -321,7 +305,6 @@ export const disableAccount = async (  req: express.Request,  res: express.Respo
     console.log("Server Error !");
   }
 };
-
 
 //re enable acc (aziz)
 export const activateCompany = async (
@@ -342,7 +325,6 @@ export const activateCompany = async (
     return res.json({ error: "Server Error !" });
   }
 };
-
 
 //get all freelancers
 export const getAllFreelancers = async (
@@ -403,7 +385,10 @@ export const saveFreelancer = async (
 };
 
 //unsave freelancer (aziz)
-export const unsaveFreelancer = async (req: express.Request, res: express.Response) => {
+export const unsaveFreelancer = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     const { companyId, freelancerId } = req.params;
 
@@ -411,7 +396,7 @@ export const unsaveFreelancer = async (req: express.Request, res: express.Respon
     const company = await Company.findById(companyId);
 
     if (!company) {
-      return res.json({ error: 'Invalid company ID' });
+      return res.json({ error: "Invalid company ID" });
     }
 
     // Check if the freelancer is saved by the company
@@ -420,7 +405,7 @@ export const unsaveFreelancer = async (req: express.Request, res: express.Respon
     );
 
     if (existingSavedFreelancerIndex === -1) {
-      return res.json({ error: 'Freelancer not saved by the company' });
+      return res.json({ error: "Freelancer not saved by the company" });
     }
 
     // Remove the freelancer from the savedFreelancers array
@@ -429,15 +414,17 @@ export const unsaveFreelancer = async (req: express.Request, res: express.Respon
     // Save the updated company document
     await company.save();
 
-    return res.json({ success: 'Freelancer removed successfully' });
+    return res.json({ success: "Freelancer removed successfully" });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: 'Server Error' });
+    return res.status(500).json({ error: "Server Error" });
   }
 };
 
-
-export const getSavedFreelancers = async (req: express.Request, res: express.Response) => {
+export const getSavedFreelancers = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     const { companyId } = req.params;
 
@@ -481,6 +468,74 @@ export const viewFreelancerDetails = async (
   }
 };
 export function verifyAccount(arg0: string, verifyAccount: any) {
-    throw new Error("Function not implemented.");
+  throw new Error("Function not implemented.");
 }
 
+// (Mustapha)
+export const acceptPaymentRequest = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { workId } = req.body;
+    let work: any = await PublicJobOffer.findById(workId);
+    if (work) {
+      work.PaymentRequest.PaymentStatus = "Payment Sent";
+      work.status = "done";
+      let payingCompany = await company.findById(work.CompanyId);
+      const companyindex = payingCompany.PaymentRequests.findIndex(
+        (paymentInfos: any) => {
+          return (
+            work.PaymentRequest.PaymentRequestId ===
+              paymentInfos.PaymentRequestId ||
+            work.PaymentRequest.PaymentRequestId.equals(
+              paymentInfos.PaymentRequestId
+            )
+          );
+        }
+      );
+      if (companyindex) {
+        console.log(companyindex);
+        payingCompany.PaymentRequests[companyindex].PaymentStatus =
+          "Payment Sent";
+      }
+      let payedFreelancer: any = await freelancer.findById(
+        work.WorkingFreelancer.FreelancerId
+      );
+      const freelancerIndex = payedFreelancer.PaymentRequests.findIndex(
+        (paymentInfos: any) => {
+          work.PaymentRequest.PaymentRequestId ===
+            paymentInfos.PaymentRequests ||
+            work.PaymentRequest.PaymentRequestId.equals(
+              paymentInfos.PaymentRequests
+            );
+        }
+      );
+      if (freelancerIndex) {
+        payedFreelancer.PaymentRequests[companyindex].PaymentStatus =
+          "Payment Sent";
+      }
+      payedFreelancer.Earnings =
+        payedFreelancer.Earnings + work.PaymentRequest.PaymentAmount;
+      payingCompany.PaymentRequests;
+      await paymentRequest.findByIdAndUpdate(
+        work.PaymentRequest.PaymentRequestId,
+        {
+          PaymentStatus: "Payment Sent",
+        },
+        {
+          new: true,
+        }
+      );
+      await payedFreelancer.save();
+      await payingCompany.save();
+      await work.save();
+      return res.json({ success: "Payment Sent" });
+    } else {
+      work = await PrivateJobOffer.findById(workId);
+    }
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error" });
+  }
+};

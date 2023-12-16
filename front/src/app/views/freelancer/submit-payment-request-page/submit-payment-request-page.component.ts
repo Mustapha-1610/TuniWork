@@ -12,6 +12,7 @@ export class SubmitPaymentRequestPageComponent implements OnInit {
   errMessage: any;
   workData: any;
   passed: any = true;
+  submitted = false;
   ngOnInit(): void {
     this.workId = this.route.snapshot.paramMap.get('id');
     this.getPaymentRequestPageAccess();
@@ -30,11 +31,17 @@ export class SubmitPaymentRequestPageComponent implements OnInit {
     this.fs.getWorkOfferProgress(this.workId).subscribe((res: any) => {
       this.workData = res.workOffer;
       console.log(this.workData);
-      console.log(this.workData.DeadLine);
-      console.log(new Date().toDateString());
       if (this.workData.DeadLine < new Date().toDateString()) {
         this.passed = false;
       }
+      if (this.workData.PaymentRequest.PaymentStatus !== 'Tasks Not Done') {
+        this.submitted = true;
+      }
+    });
+  }
+  sumbitReuest(workId: any) {
+    this.fs.submitPaymentRequest(workId).subscribe((res: any) => {
+      console.log('done', res);
     });
   }
 }

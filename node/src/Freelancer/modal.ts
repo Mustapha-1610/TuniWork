@@ -268,6 +268,38 @@ const freelancerSchema = new Schema({
       },
     },
   ],
+  PaymentRequests: [
+    {
+      PaymentRequestId: {
+        type: Schema.Types.ObjectId,
+      },
+      FreelancerName: {
+        type: String,
+      },
+      CompanyName: {
+        type: String,
+      },
+      PaymentAmount: {
+        type: Number,
+      },
+      TaskTitle: {
+        type: String,
+      },
+      workOfferId: {
+        type: Schema.Types.ObjectId,
+      },
+      PaymentStatus: {
+        type: String,
+        enum: [
+          "Awaiting Company Response",
+          "Payment Sent",
+          "Payment Declined",
+          "Reported , Awaiting Admin Review",
+        ],
+        default: "Awaiting Company Response",
+      },
+    },
+  ],
 });
 const freelancer = User.discriminator("freelancer", freelancerSchema);
 export default freelancer;

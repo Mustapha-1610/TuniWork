@@ -1,14 +1,19 @@
 {{ errMessage }}
-<div>Company : {{ workData?.CompanyName }}</div>
-<div>
-  {{ workData }}
+<div *ngIf="submitted">
+  Payment Request Submitted , Status :
+  {{ workData?.PaymentRequest.PaymentStatus }}
 </div>
-<div>Total Tasks Done : {{ workData?.TaskTable?.length }}</div>
-<div *ngIf="workData?.PaymentMethod?.PayPerTask">
-  Total Money Earned : {{ workData?.PaymentMethod?.PayPerTask?.FixedPrice }}
-</div>
-<div *ngIf="workData?.PaymentMethod?.PayPerHours">hello</div>
-<div *ngIf="!passed">Submit Request</div>
-<div *ngIf="passed">
-  Request DeadLine Passed You Cant Submit Payment Requests Anymore
+<div *ngIf="submitted">
+  <div>Company : {{ workData?.CompanyName }}</div>
+  <div>Total Tasks Done : {{ workData?.TaskTable?.length }}</div>
+  <div *ngIf="workData?.PaymentMethod?.PayPerTask">
+    Total Money Earned : {{ workData?.PaymentMethod?.PayPerTask?.FixedPrice }}
+  </div>
+  <div *ngIf="workData?.PaymentMethod?.PayPerHours">hello</div>
+  <div *ngIf="!passed" (click)="sumbitReuest(workData?._id)">
+    Submit Request
+  </div>
+  <div *ngIf="passed">
+    Request DeadLine Passed You Cant Submit Payment Requests Anymore
+  </div>
 </div>
