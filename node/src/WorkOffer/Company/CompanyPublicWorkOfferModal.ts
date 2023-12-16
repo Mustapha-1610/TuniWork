@@ -3,6 +3,18 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const CompanyPublicWorkOfferSchema = new Schema({
+  // (Mustapha)
+  TaskTable: [
+    {
+      TaskTitle: {
+        type: String,
+      },
+      TaskDoneStatus: {
+        type: Boolean,
+        default: false,
+      },
+    },
+  ],
   // title mta3 l post
   Title: {
     type: String,
@@ -151,7 +163,6 @@ const CompanyPublicWorkOfferSchema = new Schema({
       },
     },
   ],
-
 });
 
 const PublicJobOffer = mongoose.model(

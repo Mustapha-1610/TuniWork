@@ -11,6 +11,7 @@ export class SubmitPaymentRequestPageComponent implements OnInit {
   workId: any;
   errMessage: any;
   workData: any;
+  passed: any = true;
   ngOnInit(): void {
     this.workId = this.route.snapshot.paramMap.get('id');
     this.getPaymentRequestPageAccess();
@@ -25,11 +26,15 @@ export class SubmitPaymentRequestPageComponent implements OnInit {
         }
       });
   }
-  getCompanyWorkOffer() {
-    console.log('hello');
+  async getCompanyWorkOffer() {
     this.fs.getWorkOfferProgress(this.workId).subscribe((res: any) => {
       this.workData = res.workOffer;
       console.log(this.workData);
+      console.log(this.workData.DeadLine);
+      console.log(new Date().toDateString());
+      if (this.workData.DeadLine < new Date().toDateString()) {
+        this.passed = false;
+      }
     });
   }
 }

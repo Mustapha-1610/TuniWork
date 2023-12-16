@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { CompanyService } from '../../services/company.service';
 import { Router } from '@angular/router';
 import { FreelancerService } from '../../services/freelancer.service';
@@ -87,7 +92,7 @@ export class PublicJobCreateComponent {
       const cityData = this.form.value;
       console.log('Form Data:', formData);
 
-      this.cs.createPublicJob(formData, cityData).subscribe(
+      this.cs.createPublicJob(formData, cityData, this.taskTable).subscribe(
         (response) => {
           console.log('Work offer created successfully:', response);
 
@@ -115,12 +120,16 @@ export class PublicJobCreateComponent {
   SpecialitySettings: any;
   SpecialityList: any;
   form: any = FormGroup;
+  tasksForm: any;
   initForm2() {
     this.form = this.formBuilder.group({
       cities: [null, [Validators.required]],
       municipality: [null, [Validators.required]],
       workTitles: [null, [Validators.required]],
       specialities: [null, [Validators.required]],
+    });
+    this.tasksForm = new FormGroup({
+      Task: new FormControl(null),
     });
   }
   onSpecialitySelect($event: any) {
@@ -188,5 +197,21 @@ export class PublicJobCreateComponent {
           item_text: item.WorkSpeciality,
         }));
       });
+  }
+  taskTable: any[] = [];
+  errMessage: any;
+  addToTaskList() {
+    if (this.tasksForm.value.Task.trim() === '') {
+    } else {
+      this.errMessage = null;
+      this.taskTable.push(this.tasksForm.value.Task);
+      this.tasksForm.controls['Task'].reset();
+    }
+  }
+  deleteItem(item: any) {
+    this.taskTable = this.taskTable.filter((task) => task !== item);
+    if (this.taskTable.length === 0) {
+      this.errMessage = 'You Need To Add Atleast One Task';
+    }
   }
 }

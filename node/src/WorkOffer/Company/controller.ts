@@ -45,7 +45,7 @@ export const createPublicJob = async (
   res: express.Response
 ) => {
   try {
-    const { publicJobData, cityData } = req.body;
+    const { publicJobData, cityData, taskTable } = req.body;
     console.log(publicJobData);
     const offeringCompany = await company.findById(publicJobData.CompanyId);
     if (!offeringCompany) {
@@ -63,7 +63,7 @@ export const createPublicJob = async (
     const TotalWorkOfferd = offeringCompany.WorkOfferd;
     const TotalMoneyPayed = offeringCompany.MoneySpent;
 
-    await companyPublicWorkOffer.create({
+    let workOffer: any = await companyPublicWorkOffer.create({
       Title: publicJobData.Title,
       WorkTitle: cityData.workTitles[0].item_text,
       Description: publicJobData.Description,
@@ -86,7 +86,14 @@ export const createPublicJob = async (
       StartTime: publicJobData.StartTime,
       DeadLine: publicJobData.DeadLine,
       CompanySignature: publicJobData.CompanySignature,
+      TaskTable: [],
     });
+    taskTable.map((item: any) => {
+      workOffer.TaskTable.push({
+        TaskTitle: item,
+      });
+    });
+    await workOffer.save();
     return res.json({ success: "work offer created" });
   } catch (err) {
     console.log("test1");
@@ -175,6 +182,7 @@ export const getPublicJobDetails = async (
 ) => {
   try {
     const { publicJobOfferId } = req.params;
+    console.log("hello");
 
     // Fetch the details of the public job offer based on the ID
     const publicJobOffer = await PublicJobOffer.findById(publicJobOfferId);

@@ -63,6 +63,7 @@ const freelancerSchema = new Schema({
         taskId: {
           type: Schema.Types.ObjectId,
         },
+        default: [],
       },
     ],
     Finiched: [
@@ -79,9 +80,9 @@ const freelancerSchema = new Schema({
         Review: {
           type: String,
         },
+        default: [],
       },
     ],
-    default: [],
   },
 
   Schedule: [
