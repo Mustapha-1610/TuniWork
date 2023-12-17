@@ -52,6 +52,7 @@ export class PrivateJobCreateComponent implements OnInit {
       WorkTitle: [''],
       CompanyId: companyId,
       FreelancerId: [this.freelancerId, Validators.required],
+      StartTime: ['', Validators.required],
     });
     this.tasksForm = new FormGroup({
       Task: new FormControl(null),

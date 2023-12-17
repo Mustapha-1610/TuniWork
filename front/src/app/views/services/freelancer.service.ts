@@ -54,6 +54,7 @@ export class FreelancerService {
       Notifications: form.Notifications.slice().reverse(),
       CompanyRecievedContracts: form.CompanyRecievedContracts.slice().reverse(),
       ProposedPrivateWorks: form.ProposedPrivateWorks.slice().reverse(),
+      Earnings: form.Earnings,
     };
     localStorage.setItem('freeLancerInfos', JSON.stringify(FreelancerAccount));
   }
@@ -217,11 +218,17 @@ export class FreelancerService {
       }
     );
   }
-  submitPaymentRequest(id: any, task: any, hours: any) {
+  submitPaymentRequest(id: any, attachements: any) {
     return this.http.post('http://localhost:5000/api/paymentRequest/create', {
       workId: id,
-      payPerTask: task,
-      payperHours: hours,
+      attachements,
+    });
+  }
+  submitPaymentReport(workId: any, Title: any, Description: any) {
+    return this.http.post('http://localhost:5000/api/paymentRequest/report', {
+      workId,
+      Title,
+      Description,
     });
   }
 }

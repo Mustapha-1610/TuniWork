@@ -1,1 +1,129 @@
-{{ errMessage }}
+<div class="max-w-md mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+  <div class="px-6 py-4">
+    <div class="font-bold text-xl mb-2 text-blue-500">Payment Request</div>
+
+    <!-- Payment Request Submitted Status -->
+    <div *ngIf="submitted">
+      <div
+        class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
+        role="alert"
+        *ngIf="
+          workData?.PaymentRequest.PaymentStatus === 'Awaiting Company Response'
+        "
+      >
+        <strong class="font-bold">Submitted!</strong><br />
+        <span class="block sm:inline"
+          >Status: {{ workData?.PaymentRequest.PaymentStatus }}</span
+        >
+      </div>
+      <div
+        class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
+        role="alert"
+        *ngIf="workData?.PaymentRequest.PaymentStatus === 'Payment Sent'"
+      >
+        <strong class="font-bold">Payment Sent!</strong><br />
+        <span class="block sm:inline"
+          >Status: {{ workData?.PaymentRequest.PaymentStatus }}</span
+        >
+      </div>
+      <div
+        class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+        role="alert"
+        *ngIf="workData?.PaymentRequest.PaymentStatus === 'Payment Declined'"
+      >
+        <strong class="font-bold">Payment Declined!</strong><br />
+        <span class="block sm:inline"
+          >Status: {{ workData?.PaymentRequest.PaymentStatus }}</span
+        >
+        <div>
+          <button (click)="showForm = true">Submit A Report</button>
+        </div>
+      </div>
+      <div *ngIf="showForm">
+        <form [formGroup]="reportForm" (ngSubmit)="submitReport()">
+          <div>
+            Title
+            <input
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="Title"
+              type="text"
+              formControlName="Title"
+            />
+          </div>
+          <div>
+            Description
+            <textarea
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="Description"
+              formControlName="Description"
+            ></textarea>
+          </div>
+          <button type="submit">Submit Report</button>
+        </form>
+      </div>
+      <div
+        class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative"
+        role="alert"
+        *ngIf="
+          workData?.PaymentRequest.PaymentStatus ===
+          'Reported , Awaiting Admin Review'
+        "
+      >
+        <strong class="font-bold"
+          >Payment Request Under Admin Investigation</strong
+        ><br />
+        <span class="block sm:inline"
+          >Status: {{ workData?.PaymentRequest.PaymentStatus }}</span
+        >
+      </div>
+    </div>
+
+    <!-- Company Info and Tasks -->
+    <div class="mt-4" *ngIf="!submitted">
+      <div class="mb-2">
+        <span class="font-semibold">Company:</span> {{ workData?.CompanyName }}
+      </div>
+      <div class="mb-2">
+        <span class="font-semibold">Total Tasks Done:</span>
+        {{ workData?.TaskTable?.length }}
+      </div>
+
+      <!-- Total Money Earned -->
+      <div class="mb-2" *ngIf="workData?.PaymentMethod?.PayPerTask">
+        <span class="font-semibold">Total Money Earned:</span>
+        {{ workData?.PaymentMethod?.PayPerTask?.FixedPrice }}
+      </div>
+
+      <!-- Additional Message -->
+      <div class="text-blue-500" *ngIf="workData?.PaymentMethod?.PayPerHours">
+        hello
+      </div>
+
+      <!-- File Upload -->
+      <div class="mt-4">
+        <input
+          type="file"
+          multiple
+          (change)="uploadImage($event)"
+          class="block w-full text-sm text-blue-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+        />
+      </div>
+
+      <!-- Submit Request Button -->
+      <div class="mt-4 flex justify-center">
+        <button
+          (click)="sumbitRequest(workData?._id)"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer"
+          *ngIf="!passed"
+        >
+          Submit Request
+        </button>
+
+        <!-- Request Deadline Passed Message -->
+        <div class="text-red-500 text-center" *ngIf="passed">
+          Request Deadline Passed. You can't submit payment requests anymore.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

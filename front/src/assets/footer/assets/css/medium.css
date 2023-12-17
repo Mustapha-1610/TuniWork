@@ -1,0 +1,699 @@
+@media only screen and (max-width: 830px) {
+
+
+
+    
+/*********************************** NAVBAR**********************************/
+
+
+.div1 {
+    grid-area: 1 / 1 / 2 / 2;
+   margin: 0px;
+}
+
+.div2 {
+    grid-area: 1 / 2 / 2 / 3;
+    margin: 0px;
+}
+
+
+
+.div3 {
+    grid-area: 2 / 1 / 3 / 2;
+    margin: 0px;
+}
+
+.div4 {
+    grid-area: 2 / 2 / 3 / 3;
+    margin: 0px;
+}
+
+
+/*****************************************************************************/
+
+
+    
+.btnn {
+    display: inline-block;
+    padding: 7px 20px;
+    background-color: #00bfff;
+    color: #fff;
+    border-radius: 5px;
+    box-shadow: 0px 5px 0px #0080ff;
+    transition: background-color 0.3s ease-in-out;
+    height: 20px;
+    width: 80px;
+    font-size: 12px;
+    text-decoration: none;
+}
+
+.btnn:hover {
+    background-color: #0080ff;
+    box-shadow: 0px 5px 0px #0040ff;
+    color: black;
+
+}
+
+.btnn:before {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.btnn:after {
+    content: ">";
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+
+
+/*************************************** NEWS ******************************/
+
+.parentTestNews {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: repeat(2, 50%);
+    margin-top: 50px;
+    margin-left: 130px;
+    margin-right: 130px;
+    margin-bottom: 25px;
+}
+
+.div1TestNews {
+    grid-area: 1 / 1 / 2 / 3;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 25% 50%;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+}
+
+.div1TN {
+    grid-area: 1 / 1 / 3 / 2;
+    
+}
+
+.div2TN {
+    grid-area: 2 / 1 / 3 / 2;
+    padding-left:10px;
+}
+
+
+
+
+
+
+.div2TestNews {
+    grid-area: 2 / 1 / 3 / 2;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: repeat(2, 50%);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    
+}
+
+
+
+
+
+
+.div3TestNews {
+    grid-area: 2 / 2 / 3 / 3;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: repeat(2, 50%);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+}
+
+
+
+.div1TNSIDE {
+    grid-area: 1 / 1 / 3 / 2;
+}
+
+.div2TNSIDE {
+    grid-area: 2 / 1 / 3 / 2;
+}
+
+
+    .card-animation-cont {
+        flex-direction: column;
+    }
+
+
+
+
+    
+
+/****************************** SCIENCE AND TECH *****************************/
+
+
+.parentTSTEST {
+    display: grid;
+    grid-template-columns: 15% 40% 45%;
+    grid-template-rows: 50% auto;
+    grid-column-gap: 10px;
+    grid-row-gap: 0px;
+    margin-left:60px;
+    margin-right: 80px;
+    margin-bottom: 20px;
+}
+
+
+.div1TSTEST {
+    grid-area: 1 / 1 / 2 / 2;
+}
+
+.div1TSTEST h1{
+    font-size:12px;
+}
+
+.div2TSTEST {
+    grid-area: 2 / 1 / 3 / 2;
+  
+}
+
+.div2TSTEST h1{
+    font-size:15px;
+}
+
+/****************/
+.div3TSTEST {
+    grid-area: 1 / 2 / 2 / 3;
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: 400px 300px;
+    grid-column-gap: 10px;
+
+
+}
+
+.div3p1 {
+    
+    grid-area: 1 / 1 / 2 / 2;
+}
+
+.div3p2 {
+ 
+    grid-area: 2 / 1 / 3 / 2;
+}
+
+.div3TSTEST p{
+    font-size:10px;
+}
+
+.div3TSTEST h1{
+    font-size:20px;
+}
+
+
+.div3TSTEST h2{
+    font-size:15px;
+}
+
+
+
+
+
+/********************/
+
+
+/***************/
+
+.div4TSTESTmere {
+    grid-area: 1 / 3 / 2 / 4;
+}
+
+.div4TSTESTcard {
+    display: grid;
+    grid-template-columns: 40% 60%;
+    grid-template-rows: 100px;
+
+    grid-column-gap: 10px;
+
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+
+    Border-bottom: 2px solid rgb(185, 182, 182);
+
+}
+
+.div4p1 {
+    grid-area: 1 / 1 / 2 / 2;
+}
+
+
+.div4p2 {
+    grid-area: 1 / 2 / 2 / 3;
+}
+
+
+.div4TSTESTmere h1 {
+    font-size: 16px;
+}
+
+.div4TSTESTmere p {
+    font-size: 12px;
+}
+
+
+
+/*****************/
+
+
+
+/****************/
+.div5TSTEST {
+    grid-area: 2 / 2/ 3 / 4;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 100%;
+    grid-row-gap: 20px;
+}
+
+.div5p1 {
+    grid-area: 1 / 1 / 2 / 2;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 135px 130px;
+}
+
+.div5P1P1 {
+    grid-area: 1 / 1 / 3 / 2;
+}
+
+.div5P1P2 {
+    grid-area: 2 / 1 / 3 / 2;
+    padding-left: 10px
+}
+
+
+
+.div5P1P2 p {
+
+color:white;
+    font-size: 12px;
+}
+
+.div5P1P2 h1 {
+    margin-top:-20px;
+    font-size: 24px;
+    color:#0040ff;
+
+}
+
+.div5P1P2 h2 {
+
+    font-size: 18px;
+    color:white;
+    font-weight:none;
+}
+
+.div5P1P2 .btnn {
+    
+    text-align:center;
+}
+
+
+.div5TSTESTcard {
+    grid-area: 1/2/2/3;
+    display: grid;
+    grid-template-columns: 40% 60%;
+    grid-template-rows: 100px;
+
+    grid-column-gap: 10px;
+
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+
+    Border-bottom: 2px solid rgb(185, 182, 182);
+
+}
+
+.div5TESTimage {
+    grid-area: 1 / 1 / 2 / 2;
+}
+
+
+.div5TESTdesc {
+    grid-area: 1 / 2 / 2 / 3;
+}
+
+.div5TSTESTcard h1 {
+    font-size: 16px;
+}
+
+
+.div5TSTESTcard p {
+    font-size: 12px;
+}
+
+
+/************************************************************************************/
+
+
+
+/************************************ opportunity *****************************************/
+.opp {
+    margin-top: -20px;
+    margin-bottom: 50px;
+    padding-top: 20px;
+    padding-bottom: 50px;
+}
+
+
+.cartemere {
+    display: grid;
+    grid-template-columns: repeat(2, 50%);
+    grid-column-gap: 50px;
+    margin-right: 80px;
+    margin-left: 80px;
+    grid-row-gap: 20px;
+}
+
+
+.carteopp {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 200px 200px;
+    /*60% 40%*/
+    grid-row-gap: 0px;
+}
+
+
+.cartepic {
+    grid-area: 1 / 1 / 3 / 2;
+}
+
+.cartedesc {
+    grid-area: 2 / 1 / 3 / 2;
+    padding-left:10px;
+}
+
+
+ 
+.image-wrapper {
+    position: relative;
+}
+
+.image-wrapper img {
+    display: block;
+    max-width: 100%;
+    transition: filter 0.5s ease;
+}
+
+.image-wrapper:hover img {
+    filter: blur(8px);
+}
+
+
+
+
+
+.cartedesc p {
+    position: absolute;
+color:white;
+    font-size: 14px;
+}
+
+.cartedesc h1 {
+    position: absolute;
+    font-size: 25px;
+    color:#0040ff;
+
+}
+
+.cartedesc h2 {
+    position: absolute;
+    font-size: 18px;
+    color:white;
+}
+
+.cartedesc .btnn {
+    position: absolute;
+    text-align:center;
+}
+
+
+
+
+/***************************************************************************************/
+
+
+
+
+
+
+/************************ FORMATION ************************************/
+.parentFORMT {
+    display: grid;
+    grid-template-columns: 65% 30%;
+    grid-template-rows: 350px 300px 350px;
+    grid-column-gap: 70px;
+    grid-row-gap: 30px;
+    margin-right: 80px;
+    margin-left: 80px;
+    margin-bottom: 200px;
+}
+
+/**********************/
+
+.divA {
+    grid-area: 1 / 1 / 2 / 2;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 50% 50%;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+
+}
+
+.divAP1 {
+    grid-area: 1 / 1 / 3 / 2;
+    
+}
+
+.divAP2 {
+    grid-area: 2 / 1 / 3 / 2;
+}
+
+
+
+.image-wrapper {
+    position: relative;
+}
+
+.image-wrapper img {
+    display: block;
+    max-width: 100%;
+    transition: filter 0.5s ease;
+}
+
+.image-wrapper:hover img {
+    filter: blur(8px);
+}
+
+
+
+
+
+.divAP2 p {
+    position: absolute;
+color:white;
+    font-size: 14px;
+    padding-left:10px;
+}
+
+.divAP2 h1 {
+    position: absolute;
+    font-size: 28px;
+    color:#0040ff;
+    padding-left:10px;
+
+}
+
+.divAP2 h2 {
+    position: absolute;
+    font-size: 20px;
+    color:white;
+    padding-left:10px;
+}
+
+.divAP2 .btnn {
+    position: absolute;
+    text-align:center;
+    margin-left:10px;
+}
+
+
+/**********************/
+
+.divB {
+    grid-area: 2 / 1 / 3 / 2;
+    display: grid;
+    grid-template-columns:  50%;
+    grid-template-rows:  50%;
+
+    grid-column-gap: 20px;
+}
+
+
+
+.carteform {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 40% 60%;
+}
+
+.carteformpic {
+    grid-area: 1 / 1 / 2 / 2;
+}
+
+.carteformdesc {
+    grid-area: 1 / 2 / 2 / 3;
+}
+
+.carteformdesc p{
+    font-size:10px;
+    display:none;
+}
+
+.carteformdesc h1{
+    font-size:15px;
+    color:#0040ff;
+}
+
+.carteformdesc h2{
+    font-size:20px;
+}
+
+
+
+
+/*********************/
+.divPUB {
+    grid-area: 1 / 2 / 2 / 3;
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
+}
+
+.divSOCIAL {
+    grid-area: 3 / 1 / 4 / 2;
+    margin-top: -20px;
+    
+}
+
+
+
+
+/********* KEEP IN TOUCH ***********/
+.socialmedia {
+    display: grid;
+    grid-template-columns: 15% 55% 30%;
+    grid-template-rows: 25px;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    padding: 20px 20px 20px 0px;
+    border-radius: 10px;
+
+}
+
+.socialmedia h2 {
+    color: white;
+    font-size: 16px;
+}
+
+.socialmedia i1 {
+    font-size: 1.1rem;
+    color: white;
+    margin-left: 12px;
+
+}
+
+
+.ig {
+    background-image: linear-gradient(to right, #405de6, #9d47d2, #d125b2, #f1008a,
+            #ff0060, #ff324b, #ff4f36, #ff681d, #ff8a2b, #fea842, #fec35f, #ffdc80);
+            box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
+}
+
+
+.linkedin {
+    background-color: #0072BA;
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
+}
+
+.facebook {
+    background-color: #4267B2;
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
+}
+
+/************************************************************************/
+
+
+
+
+/*********************** PERSONAL DEV****************************/
+
+
+
+.parentPersonal {
+    display: grid;
+    grid-template-columns: 65% 30%;
+    grid-template-rows: 50% 50%;
+    grid-column-gap: 20px;
+    grid-row-gap: 0px;
+    margin-right: 70px;
+    margin-left: 70px;
+    margin-bottom: 70px;
+
+}
+
+
+
+.div2personaldesc p {
+    font-size: 12px;
+}
+
+.div2personaldesc h1 {
+    font-size: 20px;
+    color: #0040ff;
+}
+
+.div2personaldesc h2 {
+    font-size: 15px;
+}
+
+
+.divBtip {
+    grid-area: 1 / 2 / 2 / 3;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(2, 1fr);
+    background-color: #e0dd1a;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
+}
+
+.divBtip h1 {
+    color: black;
+    text-align: center;
+    font-size: 18px;
+}
+
+.divBtip p{
+    font-size: 10px;
+}
+
+
+
+/************************************************************************/
+
+
+
+
+
+
+}

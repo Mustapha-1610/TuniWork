@@ -188,6 +188,55 @@
         ></ng-multiselect-dropdown>
       </div>
     </div>
+    <!-- Task List Input -->
+    <div>
+      <form
+        [formGroup]="tasksForm"
+        (ngSubmit)="addToTaskList()"
+        class="flex items-center space-x-3"
+      >
+        <input
+          id="Task"
+          type="text"
+          formControlName="Task"
+          placeholder="Enter a task"
+          class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+        />
+        <button
+          type="submit"
+          class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        >
+          Add
+        </button>
+      </form>
+    </div>
+
+    <!-- Task List Display -->
+    <div class="space-y-2">
+      <div class="flex items-center space-x-2" *ngFor="let items of taskTable">
+        <span class="flex-1">{{ items }}</span>
+        <button
+          type="button"
+          (click)="deleteItem(items)"
+          class="text-gray-400 hover:text-gray-600"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
   </form>
 
   <!-- Submit Button -->

@@ -18,35 +18,10 @@ const paymentRequestSchema = new Schema({
     },
   },
   PayInformations: {
-    PayPerTask: {
-      TotalPay: {
-        type: Number,
-      },
-      NumberOfTasks: {
-        type: Number,
-      },
-      TasksDone: [
-        {
-          type: String,
-        },
-      ],
+    Totalpay: {
+      type: Number,
     },
-    PayPerHours: {
-      TotalHoursWorked: {
-        type: Number,
-      },
-      PayPerHour: {
-        type: Number,
-      },
-      TotalPay: {
-        type: Number,
-      },
-      TasksDone: [
-        {
-          type: String,
-        },
-      ],
-    },
+    TasksDone: [],
   },
   PWODetails: {
     Private: {
@@ -57,9 +32,20 @@ const paymentRequestSchema = new Schema({
       type: Boolean,
       default: false,
     },
-    Id: {
+    _id: {
       type: Schema.Types.ObjectId,
     },
   },
+  PaymentStatus: {
+    type: String,
+    enum: [
+      "Awaiting Company Response",
+      "Payment Sent",
+      "Payment Declined",
+      "Reported , Awaiting Admin Review",
+    ],
+    default: "Awaiting Company Response",
+  },
+  attachements: [],
 });
 export default mongoose.model("paymentRequest", paymentRequestSchema);

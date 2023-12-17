@@ -117,11 +117,12 @@ export class CompanyService {
     );
   }
   //create public job
-  createPublicJob(publicJobData: any, cityData: any) {
+  createPublicJob(publicJobData: any, cityData: any, taskTable: any) {
     return this.http
       .post('http://localhost:5000/api/companyWorkOffer/createPublicJob', {
         publicJobData,
         cityData,
+        taskTable,
       })
       .pipe(
         catchError((error) => {

@@ -697,7 +697,7 @@ export const acceptPrivateJob = async (
         freelancerId,
         {
           $push: {
-            "WorkHistory.0.Ongoing": {
+            "WorkHistory.Ongoing": {
               TaskTitle: privateJobOffer.Title,
               TaskHolder: privateJobOffer._id,
               DueDate: privateJobOffer.DeadLine,
@@ -993,7 +993,6 @@ export const sendFreelancerContract = async (
       const contractingCompany: any = await company.findById(
         PublicWorkOffer.CompanyId
       );
-
       // Fetch the contractedFreelancer using the provided ID
       const acceptedFreelancer: any = await freelancer.findById(
         PublicWorkOffer.WorkingFreelancer.FreelancerId
@@ -1032,11 +1031,11 @@ export const sendFreelancerContract = async (
       });
       contractingCompany.freelancerSentContracts.push(url);
       PublicWorkOffer.status = "Contract Sent Awaiting Freelancer Response";
+
       // Save the changes
       await PublicWorkOffer.save();
-      await acceptedFreelancer.save();
       await contractingCompany.save();
-
+      await acceptedFreelancer.save();
       return res.json({
         success: "Contract Created",
         Link: url,
@@ -1258,15 +1257,28 @@ export const updatePWOTaskProgression = async (
   try {
     const { PWOId, IdsArray } = req.body;
     let PWO: any = await PrivateJobOffer.findById(PWOId);
-    IdsArray.map((item: any) => {
-      PWO.TaskTable.map((task: any) => {
-        if (item.toString() === task._id.toString()) {
-          task.TaskDoneStatus = !task.TaskDoneStatus;
-        }
+    if (PWO) {
+      IdsArray.map((item: any) => {
+        PWO.TaskTable.map((task: any) => {
+          if (item.toString() === task._id.toString()) {
+            task.TaskDoneStatus = !task.TaskDoneStatus;
+          }
+        });
       });
-    });
-    await PWO.save();
-    return res.json({ success: "Marked Successfully", PWO });
+      await PWO.save();
+      return res.json({ success: "Marked Successfully", PWO });
+    } else {
+      let PWO: any = await PublicJobOffer.findById(PWOId);
+      IdsArray.map((item: any) => {
+        PWO.TaskTable.map((task: any) => {
+          if (item.toString() === task._id.toString()) {
+            task.TaskDoneStatus = !task.TaskDoneStatus;
+          }
+        });
+      });
+      await PWO.save();
+      return res.json({ success: "Marked Successfully", PWO });
+    }
   } catch (err) {
     console.log(err);
     return res.json({ error: "Server Error" });
@@ -1282,18 +1294,31 @@ export const sendPaymentRequest = async (
     const freelancerId = await freeLancerRouteProtection(req, res);
     if ("_id" in freelancerId) {
       const { workId } = req.body;
-      const PWO = await PrivateJobOffer.findById(workId);
-      const test = PWO.TaskTable.map((item) => {
-        if (item.TaskDoneStatus === false) {
-          return false;
+      let PWO = await PrivateJobOffer.findById(workId);
+      if (PWO) {
+        const test = PWO.TaskTable.map((item) => {
+          if (item.TaskDoneStatus === false) {
+            return false;
+          }
+        });
+        console.log(test);
+        if (test.includes(false)) {
+          return res.json({ error: "Access Denied Tasks Are Not Finiched" });
         }
-      });
-      console.log(test);
-      if (test.includes(false)) {
-        return res.json({ error: "Access Denied Tasks Are Not Finiched" });
+      } else {
+        PWO = await PublicJobOffer.findById(workId);
+        const test = PWO.TaskTable.map((item) => {
+          if (item.TaskDoneStatus === false) {
+            return false;
+          }
+        });
+        console.log(test);
+        if (test.includes(false)) {
+          return res.json({ error: "Access Denied Tasks Are Not Finiched" });
+        }
       }
+      return freelancerId;
     }
-    return freelancerId;
   } catch (err) {
     console.log(err);
     return res.json({ error: "Server Error" });
@@ -1407,7 +1432,7 @@ export const acceptWorkContract = async (
         );
         const date = publicWorkOffer.StartTime;
         const job = nodeSchedule.scheduleJob(date, async () => {
-          freelancerAccount.WorkHistory[0].Ongoing.push({
+          freelancerAccount.WorkHistory.Ongoing.push({
             TaskTitle: contractInfos.workOfferInformations.TaskTitle,
             TaskDescription:
               contractInfos.workOfferInformations.TaskDescription,
@@ -1453,7 +1478,7 @@ export const acceptWorkContract = async (
         );
         const date = privateWorkOffer.StartTime;
         const job = nodeSchedule.scheduleJob(date, async () => {
-          freelancerAccount.WorkHistory[0].Ongoing.push({
+          freelancerAccount.WorkHistory.Ongoing.push({
             TaskTitle: contractInfos.workOfferInformations.TaskTitle,
             TaskDescription:
               contractInfos.workOfferInformations.TaskDescription,
@@ -1507,8 +1532,13 @@ export const getPWOInfos = async (
 ) => {
   try {
     const { pwoId } = req.body;
-    const infos = await PrivateJobOffer.findById(pwoId);
-    return res.json({ infos });
+    let infos = await PrivateJobOffer.findById(pwoId);
+    if (infos) {
+      return res.json({ infos });
+    } else {
+      let infos = await PublicJobOffer.findById(pwoId);
+      return res.json({ infos });
+    }
   } catch (err) {
     console.log(err);
     return res.json({ error: "Server Error" });

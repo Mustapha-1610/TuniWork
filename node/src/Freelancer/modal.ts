@@ -45,45 +45,49 @@ const freelancerSchema = new Schema({
       required: true,
     },
   },
-  WorkHistory: [
-    {
-      Ongoing: [
-        {
-          TaskTitle: {
-            type: String,
-          },
-          TaskDescription: {
-            type: String,
-          },
-          TaskHolder: {
-            type: Schema.Types.ObjectId,
-          },
-          DueDate: {
-            type: Date,
-          },
-          taskId: {
-            type: Schema.Types.ObjectId,
-          },
+  WorkHistory: {
+    Ongoing: [
+      {
+        TaskTitle: {
+          type: String,
         },
-      ],
-      Finiched: [
-        {
-          TaskTitle: {
-            type: String,
-          },
-          TaskHolder: {
-            type: Schema.Types.ObjectId,
-          },
-          EarningsMade: {
-            type: Number,
-          },
-          Review: {
-            type: String,
-          },
+        TaskDescription: {
+          type: String,
         },
-      ],
-    },
-  ],
+        TaskHolder: {
+          type: Schema.Types.ObjectId,
+        },
+        DueDate: {
+          type: Date,
+        },
+        taskId: {
+          type: Schema.Types.ObjectId,
+        },
+        default: [],
+      },
+    ],
+    Finiched: [
+      {
+        TaskTitle: {
+          type: String,
+        },
+        TaskHolder: {
+          type: Schema.Types.ObjectId,
+        },
+        EarningsMade: {
+          type: Number,
+        },
+        taskId: {
+          type: Schema.Types.ObjectId,
+        },
+        Review: {
+          type: String,
+        },
+        default: [],
+      },
+    ],
+  },
+
   Schedule: [
     {
       type: Date,
@@ -264,6 +268,38 @@ const freelancerSchema = new Schema({
         objectId: {
           type: Schema.Types.ObjectId,
         },
+      },
+    },
+  ],
+  PaymentRequests: [
+    {
+      PaymentRequestId: {
+        type: Schema.Types.ObjectId,
+      },
+      FreelancerName: {
+        type: String,
+      },
+      CompanyName: {
+        type: String,
+      },
+      PaymentAmount: {
+        type: Number,
+      },
+      TaskTitle: {
+        type: String,
+      },
+      workOfferId: {
+        type: Schema.Types.ObjectId,
+      },
+      PaymentStatus: {
+        type: String,
+        enum: [
+          "Awaiting Company Response",
+          "Payment Sent",
+          "Payment Declined",
+          "Reported , Awaiting Admin Review",
+        ],
+        default: "Awaiting Company Response",
       },
     },
   ],

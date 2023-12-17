@@ -17,7 +17,7 @@ export class LoginPageComponent implements OnInit {
   constructor(
     private fs: FreelancerService,
     private cs: CompanyService,
-    private cus: CustomerService,
+    private customerServise: CustomerService,
     private route: Router,
     private authService: SocialAuthService
   ) {}
@@ -60,19 +60,17 @@ export class LoginPageComponent implements OnInit {
         console.log(res.comapnyAccount);
         this.cs.setCompanyInfos(JSON.stringify(res.comapnyAccount));
         this.route.navigate(['/company/profile']);
+      } else if (res.emailError) {
+        this.mailError = res.emailError;
       } else if (res.customerAccount) {
-        this.cus.setCustomerInfos(
+        this.customerServise.setCustomerInfos(
           JSON.stringify(res.customerAccount)
         );
         this.route.navigate(['/customer/profile']);
-      
-      } else if (res.emailError) {
-        this.mailError = res.emailError;
-
       }
-      
     });
   }
+
   sendEmail() {
     this.fs
       .sendVerLink(null, this.loginForm.value.Email)

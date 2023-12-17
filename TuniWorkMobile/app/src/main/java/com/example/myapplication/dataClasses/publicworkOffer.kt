@@ -1,65 +1,68 @@
-import com.google.gson.annotations.SerializedName
 import java.util.Date
 
 data class PublicJobOffer(
-    @SerializedName("TaskTable") val taskTable: List<Task>?,
-    @SerializedName("PaymentRequest") val paymentRequest: PaymentRequest?,
-    @SerializedName("Title") val title: String?,
-    @SerializedName("StartTime") val startTime: Date?,
-    @SerializedName("DeadLine") val deadline: Date?,
-    @SerializedName("WorkTitle") val workTitle: String?,
-    @SerializedName("CreationDate") val creationDate: Date?,
-    @SerializedName("Description") val description: String?,
-    @SerializedName("Note") val note: String?,
-    @SerializedName("PaymentMethod") val paymentMethod: PaymentMethod?,
-    @SerializedName("WorkSpeciality") val workSpeciality: List<String>?,
-    @SerializedName("WorkingFreelancer") val workingFreelancer: WorkingFreelancer?,
-    @SerializedName("CompanyName") val companyName: String?,
-    @SerializedName("CompanySignature") val companySignature: String?,
-    @SerializedName("Location") val location: String?,
-    @SerializedName("CompanyId") val companyId: String?,
-    @SerializedName("PaymentMethodVerificationStatus") val paymentMethodVerificationStatus: Boolean?,
-    @SerializedName("TotalWorkOfferd") val totalWorkOfferd: Int?,
-    @SerializedName("TotalMoneyPayed") val totalMoneyPayed: Double?,
-    @SerializedName("status") val status: String?,
-    @SerializedName("AppliedFreelancers") val appliedFreelancers: List<AppliedFreelancer>?
+    val id: String? = null,
+    val title: String,
+    val startTime: Date?,
+    val deadline: Date?,
+    val workTitle: String,
+    val creationDate: Date = Date(),
+    val description: String,
+    val note: String?,
+    val paymentMethod: PaymentMethod? = null,
+    val workSpeciality: List<String>,
+    val workingFreelancer: WorkingFreelancer? = null,
+    val companyName: String,
+    val companySignature: String = "",
+    val location: String?,
+    val companyId: String,
+    val paymentMethodVerificationStatus: Boolean = false,
+    val totalWorkOfferd: Int,
+    val totalMoneyPayed: Double,
+    val status: JobOfferStatus = JobOfferStatus.AWAITING_APPLICATION_REQUESTS,
+    val appliedFreelancers: List<AppliedFreelancer> = emptyList()
 ) {
-    data class Task(
-        @SerializedName("TaskTitle") val taskTitle: String?,
-        @SerializedName("TaskDoneStatus") val taskDoneStatus: Boolean?
-    )
-
-    data class PaymentRequest(
-        @SerializedName("PaymentRequestId") val paymentRequestId: String?,
-        @SerializedName("PaymentAmount") val paymentAmount: Double?,
-        @SerializedName("PaymentStatus") val paymentStatus: String?
-    )
-
     data class PaymentMethod(
-        @SerializedName("PayPerTask") val payPerTask: PayPerTask?,
-        @SerializedName("PayPerHours") val payPerHours: PayPerHours?
+        val payPerTask: PayPerTask? = null,
+        val payPerHours: PayPerHours? = null
     )
 
     data class PayPerTask(
-        @SerializedName("ExperienceLevel") val experienceLevel: String?,
-        @SerializedName("FixedPrice") val fixedPrice: String?
+        val experienceLevel: String?,
+        val fixedPrice: String?
     )
 
     data class PayPerHours(
-        @SerializedName("HoursPerWeek") val hoursPerWeek: String?,
-        @SerializedName("Duration") val duration: String?,
-        @SerializedName("PayPerHour") val payPerHour: String?,
-        @SerializedName("ExperienceLevel") val experienceLevel: String?
+        val hoursPerWeek: String?,
+        val duration: String?,
+        val payPerHour: String?,
+        val experienceLevel: String?
     )
 
     data class WorkingFreelancer(
-        @SerializedName("FreelancerId") val freelancerId: String?,
-        @SerializedName("FreelancerName") val freelancerName: String?
+        val freelancerId: String,
+        val freelancerName: String
     )
 
     data class AppliedFreelancer(
-        @SerializedName("FreelancerName") val freelancerName: String?,
-        @SerializedName("FreelancerId") val freelancerId: String?,
-        @SerializedName("Status") val status: String?
+        val freelancerName: String,
+        val freelancerId: String,
+        val status: ApplicationStatus = ApplicationStatus.PENDING
     )
+
+    enum class JobOfferStatus {
+        AWAITING_APPLICATION_REQUESTS,
+        FREELANCER_ACCEPTED,
+        CONTRACT_SENT_AWAITING_FREELANCER_RESPONSE,
+        DECLINED,
+        ACCEPTED,
+        IN_PROGRESS,
+        DONE
+    }
+
+    enum class ApplicationStatus {
+        PENDING,
+        ACCEPTED,
+        REJECTED
+    }
 }
