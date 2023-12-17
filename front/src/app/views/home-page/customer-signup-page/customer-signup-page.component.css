@@ -1,11 +1,10 @@
-
 .form-container {
-    width: 30%; 
+    width: 30%;
     background: #F8F9FD;
-    background: linear-gradient(#F8F9FD,  rgb(244, 247, 251) 100%) padding-box,
-              linear-gradient(145deg, transparent 35%,#e81cff, #40c9ff) ;
+    background: linear-gradient(#F8F9FD, rgb(244, 247, 251) 100%) padding-box,
+        linear-gradient(145deg, transparent 35%, #e81cff, #40c9ff);
 
-   
+
     border-radius: 40px;
     padding: 25px 35px;
     border: 5px solid rgb(255, 255, 255);
@@ -20,26 +19,26 @@
     border: 2px solid transparent;
 
 
-    
+
 }
 
 
 
 
 
-  
-  .heading {
-   
+
+.heading {
+
     font-weight: 900;
     font-size: 30px;
     color: rgb(16, 137, 211);
-  }
-  
-  .form {
+}
+
+.form {
     margin-top: 20px;
-  }
-  
-  .form .input {
+}
+
+.form .input {
     width: 100%;
     background: white;
     border: none;
@@ -48,34 +47,34 @@
     margin-top: 15px;
     box-shadow: #cff0ff 0px 10px 10px -5px;
     border-inline: 1px solid transparent;
-  }
-  
-  .form .input::-moz-placeholder {
+}
+
+.form .input::-moz-placeholder {
     color: rgb(170, 170, 170);
-  }
-  
-  .form .input::placeholder {
+}
+
+.form .input::placeholder {
     color: rgb(170, 170, 170);
-  }
-  
-  .form .input:focus {
+}
+
+.form .input:focus {
     outline: none;
     border-inline: 2px solid #12B1D1;
-  }
-  
-  .form .forgot-password {
+}
+
+.form .forgot-password {
     display: block;
     margin-top: 10px;
     margin-left: 10px;
-  }
-  
-  .form .forgot-password a {
+}
+
+.form .forgot-password a {
     font-size: 11px;
     color: #0099ff;
     text-decoration: none;
-  }
-  
-  .form .login-button {
+}
+
+.form .login-button {
     display: block;
     width: 100%;
     font-weight: bold;
@@ -87,38 +86,38 @@
     box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 20px 10px -15px;
     border: none;
     transition: all 0.2s ease-in-out;
-  }
-  
-  .form .login-button:hover {
+}
+
+.form .login-button:hover {
     transform: scale(1.03);
     box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 23px 10px -20px;
-  }
-  
-  .form .login-button:active {
+}
+
+.form .login-button:active {
     transform: scale(0.95);
     box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 15px 10px -10px;
-  }
-  
-  .social-account-container {
+}
+
+.social-account-container {
     margin-top: 25px;
-  }
-  
-  .social-account-container .title {
+}
+
+.social-account-container .title {
     display: block;
     text-align: center;
     font-size: 10px;
     color: rgb(170, 170, 170);
-  }
-  
-  .social-account-container .social-accounts {
+}
+
+.social-account-container .social-accounts {
     width: 100%;
     display: flex;
     justify-content: center;
     gap: 15px;
     margin-top: 5px;
-  }
-  
-  .social-account-container .social-accounts .social-button {
+}
+
+.social-account-container .social-accounts .social-button {
     background: linear-gradient(45deg, rgb(0, 0, 0) 0%, rgb(112, 112, 112) 100%);
     border: 5px solid white;
     padding: 5px;
@@ -129,35 +128,35 @@
     place-content: center;
     box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 12px 10px -8px;
     transition: all 0.2s ease-in-out;
-  }
-  
-  .social-account-container .social-accounts .social-button .svg {
+}
+
+.social-account-container .social-accounts .social-button .svg {
     fill: white;
     margin: auto;
-  }
-  
-  .social-account-container .social-accounts .social-button:hover {
+}
+
+.social-account-container .social-accounts .social-button:hover {
     transform: scale(1.2);
-  }
-  
-  .social-account-container .social-accounts .social-button:active {
+}
+
+.social-account-container .social-accounts .social-button:active {
     transform: scale(0.9);
-  }
-  
-  .agreement {
+}
+
+.agreement {
     display: block;
     text-align: center;
     margin-top: 15px;
-  }
-  
-  .agreement a {
+}
+
+.agreement a {
     text-decoration: none;
     color: #0099ff;
     font-size: 9px;
-  }
+}
 
 
-  .btn {
+.btn {
     font-size: 1.2rem;
     padding: 1rem 2.5rem;
     border: none;
@@ -170,54 +169,54 @@
     font-weight: 700;
     transition: 0.6s;
     box-shadow: 0px 0px 60px #1f4c65;
-    -webkit-box-reflect: below 10px linear-gradient(to bottom, rgba(0,0,0,0.0), rgba(0,0,0,0.4));
-  }
-  
-  .btn:active {
+    -webkit-box-reflect: below 10px linear-gradient(to bottom, rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.4));
+}
+
+.btn:active {
     scale: 0.92;
-  }
-  
+}
 
 
 
 
-  .btn {
+
+.btn {
     display: grid;
     place-items: center;
     background: #e3edf7;
     padding: 0.5em;
     border-radius: 10px;
-    box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.15),
-            -6px -6px 10px -1px rgba(255,255,255,0.7);
-    border: 1px solid rgba(0,0,0,0);
+    box-shadow: 6px 6px 10px -1px rgba(0, 0, 0, 0.15),
+        -6px -6px 10px -1px rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(0, 0, 0, 0);
     cursor: pointer;
     transition: transform 0.5s;
-  }
-  
-  .btn:hover {
-    box-shadow: inset 4px 4px 6px -1px rgba(0,0,0,0.2),
-            inset -4px -4px 6px -1px rgba(255,255,255,0.7),
-            -0.5px -0.5px 0px rgba(255,255,255,1),
-            0.5px 0.5px 0px rgba(0,0,0,0.15),
-            0px 12px 10px -10px rgba(0,0,0,0.05);
-    border: 1px solid rgba(0,0,0,0.1);
+}
+
+.btn:hover {
+    box-shadow: inset 4px 4px 6px -1px rgba(0, 0, 0, 0.2),
+        inset -4px -4px 6px -1px rgba(255, 255, 255, 0.7),
+        -0.5px -0.5px 0px rgba(255, 255, 255, 1),
+        0.5px 0.5px 0px rgba(0, 0, 0, 0.15),
+        0px 12px 10px -10px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     transform: translateY(0.5em);
-  }
-  
-  .btn svg {
+}
+
+.btn svg {
     transition: transform 0.5s;
-  }
-  
-  .btn:hover svg {
+}
+
+.btn:hover svg {
     transform: scale(0.9) rotate(360deg);
     fill: #333333;
-  }
-  
+}
 
-  
-  
-  
-  .avatar {
+
+
+
+
+.avatar {
     height: 100px;
     width: 100px;
     background-color: rgb(85, 156, 243);
@@ -228,36 +227,36 @@
     border: 5px solid rgb(255, 255, 255);
 
 
- 
+
     padding: 2px;
     cursor: pointer;
-    box-shadow: 12.5px 12.5px 10px rgba(0, 0, 0, 0.015),100px 100px 80px rgba(0, 0, 0, 0.03);
-   
+    box-shadow: 12.5px 12.5px 10px rgba(0, 0, 0, 0.015), 100px 100px 80px rgba(0, 0, 0, 0.03);
 
-    
-  }  
 
-    .avatar img {
-        height: 100%;
-        width: 100%;
-        border-radius: 50%;
-        object-fit: cover;
-        
 
-    }
+}
 
-    .avatar input {
-        display: none;
-        
-    }
+.avatar img {
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+    object-fit: cover;
 
-    
 
-  #file {
+}
+
+.avatar input {
     display: none;
-  }
 
-  .form .login-button {
+}
+
+
+
+#file {
+    display: none;
+}
+
+.form .login-button {
     display: block;
     width: 100%;
     font-weight: bold;
@@ -269,73 +268,73 @@
     box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 20px 10px -15px;
     border: none;
     transition: all 0.2s ease-in-out;
-  }
-  
-  .form .login-button:hover {
+}
+
+.form .login-button:hover {
     transform: scale(1.03);
     box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 23px 10px -20px;
-  }
-  
-  .form .login-button:active {
+}
+
+.form .login-button:active {
     transform: scale(0.95);
     box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 15px 10px -10px;
-  }
+}
 
 
 
 
 
 
- 
-  
-  
-  
-  
-  
 
-  
 
-  
-  .form-container .form-group input:focus {
+
+
+
+
+
+
+
+
+.form-container .form-group input:focus {
     outline: none;
     border-color: #e81cff;
-  }
-  
-  
-  
-
-  
+}
 
 
 
-  
-  .pyramid-loader {
+
+
+
+
+
+
+.pyramid-loader {
     position: relative;
     width: 300px;
     height: 300px;
     display: block;
     transform-style: preserve-3d;
     transform: rotateX(-20deg);
-  }
-  
-  .wrapper {
+}
+
+.wrapper {
     position: relative;
     width: 100%;
     height: 100%;
     transform-style: preserve-3d;
     animation: spin 4s linear infinite;
-  }
-  
-  @keyframes spin {
+}
+
+@keyframes spin {
     100% {
-      transform: rotateY(360deg);
+        transform: rotateY(360deg);
     }
-  }
-  
-  .pyramid-loader .wrapper .side {
+}
+
+.pyramid-loader .wrapper .side {
     width: 70px;
     height: 70px;
-  /* you can choose any gradient or color you want */
+    /* you can choose any gradient or color you want */
     /* background: radial-gradient( #2F2585 10%, #F028FD 70%, #2BDEAC 120%); */
     position: absolute;
     top: 0;
@@ -345,29 +344,29 @@
     margin: auto;
     transform-origin: center top;
     clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-  }
-  
-  .pyramid-loader .wrapper .side1 {
+}
+
+.pyramid-loader .wrapper .side1 {
     transform: rotateZ(-30deg) rotateY(90deg);
-    background: conic-gradient( #2BDEAC, #F028FD, #D8CCE6, #2F2585);
-  }
-  
-  .pyramid-loader .wrapper .side2 {
+    background: conic-gradient(#2BDEAC, #F028FD, #D8CCE6, #2F2585);
+}
+
+.pyramid-loader .wrapper .side2 {
     transform: rotateZ(30deg) rotateY(90deg);
-    background: conic-gradient( #2F2585, #D8CCE6, #F028FD, #2BDEAC);
-  }
-  
-  .pyramid-loader .wrapper .side3 {
+    background: conic-gradient(#2F2585, #D8CCE6, #F028FD, #2BDEAC);
+}
+
+.pyramid-loader .wrapper .side3 {
     transform: rotateX(30deg);
-    background: conic-gradient( #2F2585, #D8CCE6, #F028FD, #2BDEAC);
-  }
-  
-  .pyramid-loader .wrapper .side4 {
+    background: conic-gradient(#2F2585, #D8CCE6, #F028FD, #2BDEAC);
+}
+
+.pyramid-loader .wrapper .side4 {
     transform: rotateX(-30deg);
-    background: conic-gradient( #2BDEAC, #F028FD, #D8CCE6, #2F2585);
-  }
-  
-  .pyramid-loader .wrapper .shadow {
+    background: conic-gradient(#2BDEAC, #F028FD, #D8CCE6, #2F2585);
+}
+
+.pyramid-loader .wrapper .shadow {
     width: 60px;
     height: 60px;
     background: #8B5AD5;
@@ -379,8 +378,4 @@
     margin: auto;
     transform: rotateX(90deg) translateZ(-40px);
     filter: blur(12px);
-  } 
-  
-  
-
-
+}
