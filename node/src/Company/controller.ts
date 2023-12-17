@@ -495,7 +495,6 @@ export const acceptPaymentRequest = async (
           );
         }
       );
-      console.log(companyindex);
       if (companyindex !== -1) {
         payingCompany.PaymentRequests[companyindex].PaymentStatus =
           "Payment Sent";
@@ -514,7 +513,6 @@ export const acceptPaymentRequest = async (
           );
         }
       );
-      console.log(freelancerIndex + "AAAAAAAAAAAA");
       if (freelancerIndex !== -1) {
         payedFreelancer.PaymentRequests[freelancerIndex].PaymentStatus =
           "Payment Sent";
@@ -595,7 +593,7 @@ export const declinePaymenyRequest = async (
           );
         }
       );
-      if (companyindex) {
+      if (companyindex !== 1) {
         console.log(companyindex);
         payingCompany.PaymentRequests[companyindex].PaymentStatus =
           "Payment Declined";
@@ -605,14 +603,16 @@ export const declinePaymenyRequest = async (
       );
       const freelancerIndex = payedFreelancer.PaymentRequests.findIndex(
         (paymentInfos: any) => {
-          work.PaymentRequest.PaymentRequestId ===
-            paymentInfos.PaymentRequests ||
+          return (
+            work.PaymentRequest.PaymentRequestId ===
+              paymentInfos.PaymentRequestId ||
             work.PaymentRequest.PaymentRequestId.equals(
-              paymentInfos.PaymentRequests
-            );
+              paymentInfos.PaymentRequestId
+            )
+          );
         }
       );
-      if (freelancerIndex) {
+      if (freelancerIndex !== 1) {
         payedFreelancer.PaymentRequests[companyindex].PaymentStatus =
           "Payment Declined";
       }
