@@ -16,10 +16,11 @@ import { io, Socket } from 'socket.io-client';
 })
 export class PrivateJobCreateComponent implements OnInit {
   privateJobCreateForm!: FormGroup;
-  customerId: any; 
+  freelancerId: any;
   tasksForm: any;
   private socket: Socket;
   errMessage: any;
+
 
   constructor(
     private formBuilder: FormBuilder,
@@ -34,12 +35,12 @@ export class PrivateJobCreateComponent implements OnInit {
   ngOnInit(): void {
     // Get customerId from route params
     this.route.params.subscribe((params) => {
-      this.customerId = params['customerId']; 
+      this.freelancerId = params['freelancerId']; 
     });
 
-    const customerInfos: any = this.customerService.setCustomerInfos(this.privateJobCreateForm.value); // Change to your customer service method and pass the form value
-    const customerId = customerInfos?._id;
-    const CustomerName = customerInfos?.Name;
+    const customerInfos: any = this.customerService.getCustomerInfos();
+    const customerId = customerInfos._id;
+    const CustomerName = customerInfos.Name;
 
     // Initialize form with your desired structure
     this.privateJobCreateForm = this.formBuilder.group({
@@ -52,7 +53,8 @@ export class PrivateJobCreateComponent implements OnInit {
       DeadLine: ['', Validators.required],
       WorkTitle: [''],
       CustomerId: customerId, // Change from CompanyId to CustomerId
-      FreelancerId: [this.customerId, Validators.required], // Change from FreelancerId to customerId
+      FreelancerId: [this.freelancerId, Validators.required],
+      StartTime: ['', Validators.required],
     });
 
     this.tasksForm = new FormGroup({
@@ -61,18 +63,25 @@ export class PrivateJobCreateComponent implements OnInit {
   }
 
   onSubmit(): void {
-    const privateJobCreateData = this.privateJobCreateForm.value;
-  
-    this.customerService.createPrivateJobOffer(privateJobCreateData).subscribe(
-      (response: any) => {
-        console.log(response.success);
-      },
-      (error) => {
-        console.error('Error creating private job offer', error);
-      }
-    );
-    this.router.navigate(['customer/my-jobs']);
+    if (this.taskTable.length === 0) {
+      this.errMessage = 'You Need To Add Atleast One Task';
+    } else {
+      const privateJobCreateData = this.privateJobCreateForm.value;
+      console.log('Private Job Create Data:', privateJobCreateData);
+
+      this.customerService
+        .createPrivateJobOffer(privateJobCreateData)
+        .subscribe(
+          (response: any) => {
+            console.log(response.success);
+          },
+          (error) => {
+            console.error('Error creating private job offer', error);
+          }
+        );
+      this.router.navigate(['customer/my-jobs']);
   }
+}
 
   // (Mustapha)
   taskTable: any[] = [];
@@ -96,6 +105,7 @@ export class PrivateJobCreateComponent implements OnInit {
 
 
 }
+
 }
 
 

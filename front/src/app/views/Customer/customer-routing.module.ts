@@ -15,7 +15,7 @@ import { PrivateJobDetailsComponent } from '../comapny/private-job-details/priva
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'homeC',
     component: HomePageComponent,
   },
   {
