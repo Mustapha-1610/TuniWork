@@ -9,7 +9,7 @@ import { Turtle } from "lucide-angular/src/icons";
 
 export const create = async (req: express.Request, res: express.Response) => {
   try {
-    const { workId } = req.body;
+    const { workId, attachements } = req.body;
     const freelancerId = await freeLancerRouteProtection(req, res);
     if ("_id" in freelancerId) {
       const workInfos: any = await PrivateJobOffer.findById(workId);
@@ -37,7 +37,9 @@ export const create = async (req: express.Request, res: express.Response) => {
             Totalpay: paymentAmount,
             TasksDone: tasksTable,
           },
+          attachements,
         });
+        await payRequest.save();
         await freelancer.findByIdAndUpdate(
           freelancerId,
           {
@@ -80,7 +82,11 @@ export const create = async (req: express.Request, res: express.Response) => {
           PaymentStatus: "Awaiting Company Response",
         };
         await workInfos.save();
-        return res.json({ success: "Created", payRequest });
+        return res.json({
+          success: "Created",
+          payRequest,
+          workData: workInfos,
+        });
       } else {
         const publicPwo: any = await PublicJobOffer.findById(workId);
         let paymentAmount: any = null;
@@ -106,6 +112,7 @@ export const create = async (req: express.Request, res: express.Response) => {
             Totalpay: paymentAmount,
             TasksDone: tasksTable,
           },
+          attachements,
         });
         await freelancer.findByIdAndUpdate(
           freelancerId,

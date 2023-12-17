@@ -43,9 +43,13 @@ companyRouter.get(
   companyController.getSavedFreelancers
 );
 
+// (Mustapha)
 companyRouter.post(
   "/acceptPaymentRequest",
   companyController.acceptPaymentRequest
 );
-
+companyRouter.post(
+  "/declinePaymentRequest",
+  companyController.declinePaymenyRequest
+);
 export default companyRouter;

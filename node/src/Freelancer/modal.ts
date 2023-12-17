@@ -77,6 +77,9 @@ const freelancerSchema = new Schema({
         EarningsMade: {
           type: Number,
         },
+        taskId: {
+          type: Schema.Types.ObjectId,
+        },
         Review: {
           type: String,
         },

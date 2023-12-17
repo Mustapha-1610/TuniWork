@@ -14,6 +14,7 @@ import company from "../Company/modal";
 import PrivateJobOffer from "../WorkOffer/Company/CompanyPrivateWorkOfferModal";
 import createPDF from "../PDFServices/freelancerContract";
 import freelancer from "../Freelancer/modal";
+import { freelancerNameSpace } from "../server";
 
 // function to create a comapny account (aziz)
 
@@ -494,10 +495,110 @@ export const acceptPaymentRequest = async (
           );
         }
       );
+      console.log(companyindex);
+      if (companyindex !== -1) {
+        payingCompany.PaymentRequests[companyindex].PaymentStatus =
+          "Payment Sent";
+      }
+      let payedFreelancer: any = await freelancer.findById(
+        work.WorkingFreelancer.FreelancerId
+      );
+      const freelancerIndex = payedFreelancer.PaymentRequests.findIndex(
+        (paymentInfos: any) => {
+          return (
+            work.PaymentRequest.PaymentRequestId ===
+              paymentInfos.PaymentRequestId ||
+            work.PaymentRequest.PaymentRequestId.equals(
+              paymentInfos.PaymentRequestId
+            )
+          );
+        }
+      );
+      console.log(freelancerIndex + "AAAAAAAAAAAA");
+      if (freelancerIndex !== -1) {
+        payedFreelancer.PaymentRequests[freelancerIndex].PaymentStatus =
+          "Payment Sent";
+      }
+      payedFreelancer.Earnings =
+        payedFreelancer.Earnings + work.PaymentRequest.PaymentAmount;
+      payingCompany.PaymentRequests;
+      await paymentRequest.findByIdAndUpdate(
+        work.PaymentRequest.PaymentRequestId,
+        {
+          PaymentStatus: "Payment Sent",
+        },
+        {
+          new: true,
+        }
+      );
+      payedFreelancer.WorkHistory.Ongoing =
+        payedFreelancer.WorkHistory.Ongoing.filter((item: any) => {
+          return item.taskId.toString() !== work._id.toString();
+        });
+
+      payedFreelancer.WorkHistory.Finiched.push({
+        TaskTitle: work.Title,
+        TaskHolder: work.CompanyId,
+        EarningsMade: work.PaymentRequest.PaymentAmount,
+        taskId: work._id,
+      });
+      payedFreelancer.Notifications.push({
+        NotificationMessage:
+          "Recieved Payment Of " +
+          work.PaymentRequest.PaymentAmount +
+          "$ from " +
+          work.CompanyName +
+          " Company",
+        senderInformations: {
+          senderId: work.CompanyId,
+          senderUserType: "Company",
+          creationDate: new Date(),
+          context: "Payment",
+        },
+      });
+      await payedFreelancer.save();
+      await payingCompany.save();
+      await work.save();
+      freelancerNameSpace.emit("NotificationRefresh", {
+        freelancerId: payedFreelancer._id.toString(),
+      });
+      return res.json({ success: "Payment Sent" });
+    } else {
+      work = await PrivateJobOffer.findById(workId);
+    }
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error" });
+  }
+};
+
+// (Mustapha)
+export const declinePaymenyRequest = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { workId } = req.body;
+    let work: any = await PublicJobOffer.findById(workId);
+    if (work) {
+      work.PaymentRequest.PaymentStatus = "Payment Declined";
+      work.status = "Declined";
+      let payingCompany = await company.findById(work.CompanyId);
+      const companyindex = payingCompany.PaymentRequests.findIndex(
+        (paymentInfos: any) => {
+          return (
+            work.PaymentRequest.PaymentRequestId ===
+              paymentInfos.PaymentRequestId ||
+            work.PaymentRequest.PaymentRequestId.equals(
+              paymentInfos.PaymentRequestId
+            )
+          );
+        }
+      );
       if (companyindex) {
         console.log(companyindex);
         payingCompany.PaymentRequests[companyindex].PaymentStatus =
-          "Payment Sent";
+          "Payment Declined";
       }
       let payedFreelancer: any = await freelancer.findById(
         work.WorkingFreelancer.FreelancerId
@@ -513,24 +614,38 @@ export const acceptPaymentRequest = async (
       );
       if (freelancerIndex) {
         payedFreelancer.PaymentRequests[companyindex].PaymentStatus =
-          "Payment Sent";
+          "Payment Declined";
       }
-      payedFreelancer.Earnings =
-        payedFreelancer.Earnings + work.PaymentRequest.PaymentAmount;
-      payingCompany.PaymentRequests;
       await paymentRequest.findByIdAndUpdate(
         work.PaymentRequest.PaymentRequestId,
         {
-          PaymentStatus: "Payment Sent",
+          PaymentStatus: "Payment Declined",
         },
         {
           new: true,
         }
       );
+      payedFreelancer.Notifications.push({
+        NotificationMessage:
+          "Payment Request Of " +
+          work.Title +
+          " Has Been Declined By " +
+          work.CompanyName +
+          " Company. In Case Of Misagreement You Can Submit A Report To The Administration",
+        senderInformations: {
+          senderId: work.CompanyId,
+          senderUserType: "Company",
+          creationDate: new Date(),
+          context: "Payment",
+        },
+      });
       await payedFreelancer.save();
       await payingCompany.save();
       await work.save();
-      return res.json({ success: "Payment Sent" });
+      freelancerNameSpace.emit("NotificationRefresh", {
+        freelancerId: payedFreelancer._id.toString(),
+      });
+      return res.json({ success: "Payment Declined" });
     } else {
       work = await PrivateJobOffer.findById(workId);
     }

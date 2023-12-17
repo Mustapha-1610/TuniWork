@@ -46,5 +46,6 @@ const paymentRequestSchema = new Schema({
     ],
     default: "Awaiting Company Response",
   },
+  attachements: [],
 });
 export default mongoose.model("paymentRequest", paymentRequestSchema);
