@@ -34,6 +34,7 @@ const privateWorkOfferSchema = new Schema({
       default: "Tasks Not Done",
     },
   },
+
   // title mta3 l post
   Title: {
     type: String,

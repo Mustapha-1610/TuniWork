@@ -156,7 +156,11 @@ export const create = async (req: express.Request, res: express.Response) => {
           PaymentStatus: "Awaiting Company Response",
         };
         await publicPwo.save();
-        return res.json({ success: "Created", payRequest });
+        return res.json({
+          success: "Created",
+          payRequest,
+          workData: publicPwo,
+        });
       }
     }
     return freelancerId;

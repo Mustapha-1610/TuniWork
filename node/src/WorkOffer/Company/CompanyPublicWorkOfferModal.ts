@@ -159,6 +159,7 @@ const CompanyPublicWorkOfferSchema = new Schema({
       "Contract Sent Awaiting Freelancer Response",
       "Declined",
       "Accepted",
+      "Awaiting Admin Payment Report Review",
       "in progress",
       "done",
     ],

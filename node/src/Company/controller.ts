@@ -499,6 +499,8 @@ export const acceptPaymentRequest = async (
         payingCompany.PaymentRequests[companyindex].PaymentStatus =
           "Payment Sent";
       }
+      payingCompany.MoneySpent =
+        work.PaymentRequest.PaymentAmount + payingCompany.MoneySpent;
       let payedFreelancer: any = await freelancer.findById(
         work.WorkingFreelancer.FreelancerId
       );

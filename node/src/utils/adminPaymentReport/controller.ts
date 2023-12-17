@@ -6,12 +6,13 @@ import adminPaymentReport from "./modal";
 import company from "../../Company/modal";
 import paymentRequest from "../PaymentRequest/modal";
 import { freelancerNameSpace } from "../../server";
+
 export const create = async (req: express.Request, res: express.Response) => {
   try {
     const { workId, Title, Description } = req.body;
     let workData: any = await PublicJobOffer.findById(workId);
     if (workData) {
-      const adminReport = await adminPaymentReport.create({
+      await adminPaymentReport.create({
         Title,
         Description,
         PaymentRequestId: workData.PaymentRequest.PaymentRequestId,
@@ -38,7 +39,7 @@ export const create = async (req: express.Request, res: express.Response) => {
         );
       }
     );
-    if (companyindex) {
+    if (companyindex !== -1) {
       console.log(companyindex);
       payingCompany.PaymentRequests[companyindex].PaymentStatus =
         "Reported , Awaiting Admin Review";
@@ -48,14 +49,16 @@ export const create = async (req: express.Request, res: express.Response) => {
     );
     const freelancerIndex = payedFreelancer.PaymentRequests.findIndex(
       (paymentInfos: any) => {
-        workData.PaymentRequest.PaymentRequestId ===
-          paymentInfos.PaymentRequests ||
+        return (
+          workData.PaymentRequest.PaymentRequestId ===
+            paymentInfos.PaymentRequestId ||
           workData.PaymentRequest.PaymentRequestId.equals(
-            paymentInfos.PaymentRequests
-          );
+            paymentInfos.PaymentRequestId
+          )
+        );
       }
     );
-    if (freelancerIndex) {
+    if (freelancerIndex !== 1) {
       payedFreelancer.PaymentRequests[companyindex].PaymentStatus =
         "Reported , Awaiting Admin Review";
     }
@@ -81,6 +84,7 @@ export const create = async (req: express.Request, res: express.Response) => {
         context: "Payment",
       },
     });
+    workData.status = "Awaiting Admin Payment Report Review";
     await payedFreelancer.save();
     await payingCompany.save();
     await workData.save();

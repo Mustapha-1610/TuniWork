@@ -460,6 +460,7 @@ export const createPrivateJob = async (
         FreelancerId: privateJobOfferData.FreelancerId,
       },
       TaskTable: [],
+      StartTime: privateJobOfferData.StartTime,
     });
     taskTable.map((item: any) => {
       workOffer.TaskTable.push({
