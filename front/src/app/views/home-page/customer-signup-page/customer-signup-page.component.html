@@ -1,11 +1,24 @@
-<div class="container mx-auto px-4 py-8">
-  <ngx-spinner
-    bdColor="rgba(51,51,51,0.8)"
+<div class="container">
+<div class="form-container">
+
+  <div class="heading">Sign in</div>
+    <ngx-spinner
+   
     size="medium"
-    color="#fff"
-    type="ball-scale-multiple"
+
   >
-    <p class="text-2xl text-white">Loading...</p>
+
+  <div class="pyramid-loader">
+    <div class="wrapper">
+      <span class="side side1"></span>
+      <span class="side side2"></span>
+      <span class="side side3"></span>
+      <span class="side side4"></span>
+      <span class="shadow"></span>
+    </div>  
+  </div>
+      
+  
   </ngx-spinner>
 
 
@@ -14,9 +27,12 @@
   </div>
 
 
-  <div class="flex items-center justify-center mt-1">
-    <img [src]="testimg"  (click)="fileInput.click()"  class="rounded-full cursor-pointer border-4 mb-5 border-white hover:border-gray-300"   style="width: 270px; height: 270px"/>
+  <div class="avatar">
+    <img [src]="testimg"  (click)="fileInput.click()"  class="avatar"   />
   </div>
+
+
+  
 
   <mat-progress-bar
     *ngIf="uploadProgress !== undefined"
@@ -27,121 +43,88 @@
   ></mat-progress-bar>
 
 
-  <form [formGroup]="customerForm"
-       (ngSubmit)="test()">
-        <h2>Sign Up</h2>
+  <form class="form" [formGroup]="customerForm"
+  (ngSubmit)="test()">
 
-        <!-- Name Field -->
-        <!-- Name Field -->
-        <div class="inputbox mb-4">
-          <label for="Name" class="block text-gray-700 text-sm font-bold mb-2">Name</label>
-          <input id="Name" type="text" formControlName="Name"
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+    <div class="form-group">
+     
+       
+      <input required="" class="input" type="text" formControlName="Name" placeholder="Name" />
+  
+      </div>
+
+      <div class="form-group">
+      
+        <input required="" class="input" type="text" formControlName="LastName" placeholder="LastName"/>
     
         </div>
 
-        <!-- Surname Field -->
-        <div class="inputbox">
-          <label for="LastName" class="block text-gray-700 text-sm font-bold mb-2">LastName</label>
-          <input id="LastName" type="text" formControlName="LastName"
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-    
-        </div>
-        <div class="inputbox">
-        <label for="Location" class="block text-gray-700 text-sm font-bold mb-2">Location</label>
-          <input id="Location" type="text" formControlName="Location"
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-    
-        </div>
+        <div class="form-group">
+       
+          <input required="" class="input" type="text" formControlName="Location" placeholder="Location" />
 
-        <!-- Phone Number Field -->
-        <div class="inputbox">
-          <label for="PhoneNumber" class="block text-gray-700 text-sm font-bold mb-2">Phone Number</label>
-          <input id="PhoneNumber" type="number" formControlName="PhoneNumber"
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-         
-        </div>
-
-
-        <!-- Email Field -->
-        <div class="inputbox">
-          <label for="Email" class="block text-gray-700 text-sm font-bold mb-2">Email</label>
-          <input id="Email" type="email" formControlName="Email"
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-          
-        </div>
-
-        <!-- Password Field -->
-        <div class="inputbox">
-          <label for="Password" class="block text-gray-700 text-sm font-bold mb-2">Password</label>
-          <input id="Password" type="password" formControlName="Password"
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-          
-        </div>
-          
+      </div>
+      <div class="form-group">
+       
+       
+        <input required="" class="input" type="text" formControlName="PhoneNumber" placeholder="Phone Number"/>
+      </div>
+      <div class="form-group">
         
-            <form [formGroup]="form">
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="mb-4 flex-item">
-                  <label class="block text-gray-700 text-sm font-bold mb-2" for="city">
-                    City
-                  </label>
-                  <ng-multiselect-dropdown
-                    id="cities"
-                    formControlName="cities"
-                    [placeholder]="'Select City'"
-                    [settings]="citiesDrowdownSettings"
-                    [data]="CitiesList"
-                    (onSelect)="onCitySelect($event)"
-                    (onDeSelect)="onSpecialityDeselect($event)"
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  ></ng-multiselect-dropdown>
-                </div>
-                <div class="mb-4 flex-item">
-                  <label
-                    class="block text-gray-700 text-sm font-bold mb-2"
-                    for="speciality"
-                  >
-                    Municipality
-                  </label>
-                  <ng-multiselect-dropdown
-                    id="municipality"
-                    formControlName="municipality"
-                    [placeholder]="'Select Municipality'"
-                    [settings]="MunicipalityDropdownSettings"
-                    [data]="MunicipalityList"
-                    (onSelect)="onSpecialitySelect($event)"
-                    (onDeSelect)="onSpecialityDeselect($event)"
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  ></ng-multiselect-dropdown>
-                </div>
-              </div>
+        <input required="" class="input" type="email" formControlName="Email" placeholder="Email"/>
 
-              
-            </form>
+      </div>
+      <div class="form-group">
+      
+        <input required="" class="input" type="password" formControlName="Password" placeholder="Password"/>
+      
+      </div>
     
 
-    <!-- Submit Button -->
-    <div class="flex justify-center mt-6">
-      <button
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-        type="submit"> Sign Up
-      </button>
+    <form class="form" [formGroup]="form">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="mb-4 flex-item">
+         
+          <ng-multiselect-dropdown
+            id="cities"
+            
+            formControlName="cities"
+            [placeholder]="'Select City'"
+            [settings]="citiesDrowdownSettings"
+            [data]="CitiesList"
+            (onSelect)="onCitySelect($event)"
+            (onDeSelect)="onSpecialityDeselect($event)"
+          
+          ></ng-multiselect-dropdown>
+        </div>
+        <div class="mb-4 flex-item">
+         
+      
+          <ng-multiselect-dropdown
+            id="municipality"
+        
+            formControlName="municipality"
+            [placeholder]="'Select Municipality    .'"
+            [settings]="MunicipalityDropdownSettings"
+            [data]="MunicipalityList"
+            (onSelect)="onSpecialitySelect($event)"
+            (onDeSelect)="onSpecialityDeselect($event)"
+           
+          ></ng-multiselect-dropdown>
+        </div>
+      </div>
 
-    </div>
+      
+    </form>
 
 
+    <input class="login-button" type="submit" value="Sign In">
   </form>
 </div>
+<div>
 
+  <input  type="file"  #fileInput  class="hidden"  (change)="uploadImage($event)" />
+</div>
 
-
-
-
-  <div>
-
-    <input  type="file"  #fileInput  class="hidden"  (change)="uploadImage($event)" />
-  </div>
-
-
+</div>
 

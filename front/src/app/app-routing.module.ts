@@ -7,6 +7,7 @@ import { homePageGuard } from './views/guards/home-page.guard';
 import { CompanyLayoutComponent } from './layout/company-layout/company-layout.component';
 import { companyLayoutGuard } from './views/guards/company-layout.guard';
 import { CustomerLayoutComponent } from './layout/customer-layout/customer-layout.component';
+import { customerGuard } from './views/guards/customer.guard';
 
 const routes: Routes = [
   {
@@ -51,9 +52,10 @@ const routes: Routes = [
       },
     ],
   },
-  /*{
+  {
     path: 'customer',
     component: CustomerLayoutComponent,
+    canActivate: [customerGuard],
     children: [
       {
         path: '',
@@ -63,7 +65,7 @@ const routes: Routes = [
           ),
       },
     ],
-  },*/
+  },
 ];
 
 @NgModule({
