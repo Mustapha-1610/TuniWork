@@ -7,7 +7,7 @@ import { CustomerService } from '../../services/customer.service';
   styleUrls: ['./profile-page.component.css']
 })
 export class ProfilePageComponent {
-  companyData: any = this.cus.getCustomerInfos();
+  customerData: any = this.cus.getCustomerInfos();
 
   constructor(private cus: CustomerService) {}
 

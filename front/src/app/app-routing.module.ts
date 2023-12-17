@@ -25,6 +25,20 @@ const routes: Routes = [
     ],
   },
   {
+    path: 'customer',
+    component: CustomerLayoutComponent,
+    canActivate: [customerGuard],
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import('./views/Customer/customer-routing.module').then(
+            (m) => m.CustomerRoutingModule
+          ),
+      },
+    ],
+  },
+  {
     path: '',
     component: HomeLayoutComponent,
     canActivate: [homePageGuard],
@@ -52,20 +66,7 @@ const routes: Routes = [
       },
     ],
   },
-  {
-    path: 'customer',
-    component: CustomerLayoutComponent,
-    canActivate: [customerGuard],
-    children: [
-      {
-        path: '',
-        loadChildren: () =>
-          import('./views/Customer/customer-routing.module').then(
-            (m) => m.CustomerRoutingModule
-          ),
-      },
-    ],
-  },
+ 
 ];
 
 @NgModule({
