@@ -57,11 +57,11 @@ interface ApiService {
     @POST("/api/freelancer/createMobile")
     suspend fun create(@Body signupRequest: signupRequest): Response<FreelancerResponse>
     data class MatchingPublicWorkOffersResponse(
-        @SerializedName("matchingJobOffers") val matchingJobOffers : PublicJobOffer
+        @SerializedName("matchingJobOffers") val matchingJobOffers : List<PublicJobOffer>
     )
     data class SendRequest(
         @SerializedName("freelancerId") val freelancerId : String
     )
     @POST("/api/companyWorkOffer/getMatchingPublicWorkOffers")
-    suspend fun getAll(@Body freelancerId : SendRequest) : Response<List<MatchingPublicWorkOffersResponse>>
+    suspend fun getAll(@Body freelancerId : SendRequest) : Response<MatchingPublicWorkOffersResponse>
 }

@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
 
-class workofferAdapter (private val data: ArrayList<PublicJobOffer>): RecyclerView.Adapter<workofferAdapter.MyViewHolder>() {
+class workofferAdapter (private val data: List<PublicJobOffer>): RecyclerView.Adapter<workofferAdapter.MyViewHolder>() {
     private var selectedPosition= RecyclerView.NO_POSITION;
     fun onItemClick(position: Int) {
         this.selectedPosition=position;
