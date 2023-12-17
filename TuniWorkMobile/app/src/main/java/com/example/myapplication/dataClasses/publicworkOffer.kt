@@ -2,7 +2,7 @@ import com.google.gson.annotations.SerializedName
 import java.util.Date
 
 data class PublicJobOffer(
-    @SerializedName("TaskTable") val taskTable: List<Task>?,
+    @SerializedName("TaskTable") val taskTable: ArrayList<Task>,
     @SerializedName("PaymentRequest") val paymentRequest: PaymentRequest?,
     @SerializedName("Title") val title: String?,
     @SerializedName("StartTime") val startTime: Date?,

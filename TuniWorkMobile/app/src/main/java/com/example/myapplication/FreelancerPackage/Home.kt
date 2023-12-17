@@ -23,8 +23,6 @@ import retrofit2.Response
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 class Home : Fragment() {
-    lateinit var recyle: RecyclerView;
-    lateinit var myadapter : workofferAdapter;
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -45,34 +43,6 @@ class Home : Fragment() {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        recyle = view.findViewById(R.id.RecycleView)
-        recyle.layoutManager=LinearLayoutManager(requireContext());
-
-        val sharedPref = activity?.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
-        val freelancerAccountJson = sharedPref?.getString("freelancer_account", null)
-        Log.i("Success", "Response: ${freelancerAccountJson}")
-        val gson = Gson()
-        val freelancer = freelancerAccountJson?.let {
-            gson.fromJson(it, Freelancer::class.java)
-        }
-        val scope = CoroutineScope(Dispatchers.Main)
-        scope.launch {
-            try {
-                val freelancerId = ApiService.SendRequest(freelancer!!.id)
-                val response : Response<ApiService.MatchingPublicWorkOffersResponse> = ApiClient.apiService.getAll(freelancerId)
-                if (response.isSuccessful && response.body() != null) {
-                    Log.i("HOPEFULLY",response.body().toString())
-                    val matchingJobOffers = response.body()!!.matchingJobOffers
-                    myadapter = workofferAdapter(matchingJobOffers);
-                    recyle.adapter=myadapter
-                }
-            } catch (e: Exception) {
-                Log.e("Error", "API call failed", e)
-                // Handle the exception, e.g., show an error message
-            }
-
-        }
     }
     companion object {
         @JvmStatic
