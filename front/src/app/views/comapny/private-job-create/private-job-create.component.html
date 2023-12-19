@@ -1,9 +1,12 @@
+
+
 {{ errMessage }}
+
 <form
   [formGroup]="privateJobCreateForm"
   (ngSubmit)="onSubmit()"
-  class="space-y-6 bg-white p-6 rounded-md shadow-md"
->
+  class="space-y-6 bg-white p-6 rounded-md shadow-md">
+
   <!-- Title Input -->
   <div>
     <label for="title" class="block text-sm font-medium text-gray-700"
@@ -17,6 +20,21 @@
       required
     />
   </div>
+
+  <div style="display:none">
+    <label for="CompanyName" class="block text-sm font-medium text-gray-700"
+      >CompanyName</label
+    >
+    <input
+      type="text"
+      class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+      id="CompanyName"
+      formControlName="CompanyName"
+      required
+    />
+  </div>
+
+
 
   <!-- Description Input -->
   <div>
@@ -44,33 +62,24 @@
     />
   </div>
 
-  <!-- Experience Level Input -->
+
+
+
   <div>
-    <label for="experienceLevel" class="block text-sm font-medium text-gray-700"
-      >Experience Level</label
-    >
-    <input
-      type="text"
-      class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-      id="experienceLevel"
-      formControlName="ExperienceLevel"
-      required
-    />
+    <label for="PayPerHour" class="block text-sm font-medium text-gray-700">Pay Per Hour : {{ freelancerPPH }}</label>
+    <input type="checkbox" id="PayPerHour" formControlName="PayPerHour" />
   </div>
 
-  <!-- Fixed Price Input -->
+  <!-- Pay Per Task Checkbox -->
   <div>
-    <label for="fixedPrice" class="block text-sm font-medium text-gray-700"
-      >Fixed Price</label
-    >
-    <input
-      type="text"
-      class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-      id="fixedPrice"
-      formControlName="FixedPrice"
-      required
-    />
+    <label for="PayPerTask" class="block text-sm font-medium text-gray-700">Pay Per Task : {{ freelancerPPT }}</label>
+    <input type="checkbox" id="PayPerTask" formControlName="PayPerTask" />
   </div>
+
+
+
+
+
 
   <!-- Deadline Input -->
   <div>
@@ -85,19 +94,24 @@
       required
     />
   </div>
-
-  <!-- Work Title Input -->
+  <!-- Start Time (Mustapha) -->
   <div>
-    <label for="workTitle" class="block text-sm font-medium text-gray-700"
-      >Work Title</label
+    <label for="deadline" class="block text-sm font-medium text-gray-700"
+      >Start Time</label
     >
     <input
-      type="text"
+      type="datetime-local"
       class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-      id="workTitle"
-      formControlName="WorkTitle"
+      id="deadline"
+      formControlName="StartTime"
+      required
     />
   </div>
+
+
+
+
+
 
   <!-- Freelancer ID Input (Hidden) -->
   <input

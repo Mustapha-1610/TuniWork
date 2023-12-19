@@ -1,3 +1,4 @@
+
 import mongoose from "mongoose";
 //import workOfferSchema from "../Modal";
 const Schema = mongoose.Schema;
@@ -20,12 +21,20 @@ const privateWorkOfferSchema = new Schema({
     type: String,
     required: true,
   },
+
+  PayRate: {
+    PayPerHour: {
+      type: Number,
+      default: 0, // Set a default value if needed
+    },
+    PayPerTask: {
+      type: Number,
+      default: 0, // Set a default value if needed
+    },
+  },
+
   StartTime: {
     type: Date,
-  },
-  // l Work Title l matloub par example software engineer wala plumber li howa
-  WorkTitle: {
-    type: String,
   },
 
   // l post wa9teh tsan3et w got published
@@ -45,36 +54,8 @@ const privateWorkOfferSchema = new Schema({
     type: String,
   },
 
-  // hethi fel front bech n7otoulou yekhtar wether i7eb ikhales ya per task ya3ni 3la khedma kemla ya bel se3a
-  PaymentMethod: {
-    PayPerTask: {
-      ExperienceLevel: {
-        type: "String",
-      },
-      FixedPrice: {
-        type: "String",
-      },
-    },
-    PayPerHours: {
-      // 9adeh men se3a lezem yekhdem fel jem3a par example 30 hours a week
-      HoursPerWeek: {
-        type: String,
-      },
-      // 9adeh l khedma estimated enha tched idk kima chehar
-      Duration: {
-        type: String,
-      },
-      // 9adeh bech ikhalsou bel se3a
-      PayPerHour: {
-        type: String,
-      },
-      // chnia l experience level matlouba ya begginer ya advanced or so
-      ExperienceLevel: {
-        type: String,
-      },
-    },
-  },
 
+   
   // lehne bech nkhaliw info l freelancer li actually ktheha l khedma
   WorkingFreelancer: {
     FreelancerName: {
@@ -141,3 +122,8 @@ const PrivateJobOffer = mongoose.model(
 );
 
 export default PrivateJobOffer;
+
+
+
+
+

@@ -480,6 +480,7 @@ export const viewFreelancerDetails = async (
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 export function verifyAccount(arg0: string, verifyAccount: any) {
     throw new Error("Function not implemented.");
 }

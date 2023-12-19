@@ -18,6 +18,9 @@ import { PrivateJobEditComponent } from './private-job-edit/private-job-edit.com
 import { ProfilePageEditComponent } from './profile-page-edit/profile-page-edit.component';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { MatIconModule } from '@angular/material/icon';
+import { FooterComponent } from './footer/footer.component';
+import { ProfilePageSecurityComponent } from './profile-page-security/profile-page-security.component';
+import { ProfilePageVerifLegitComponent } from './profile-page-verif-legit/profile-page-verif-legit.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +35,9 @@ import { MatIconModule } from '@angular/material/icon';
     PrivateJobDetailsComponent,
     PrivateJobEditComponent,
     ProfilePageEditComponent,
+    FooterComponent,
+    ProfilePageSecurityComponent,
+    ProfilePageVerifLegitComponent,
   ],
   imports: [
     CommonModule,
