@@ -89,11 +89,11 @@ export class WorkInfosComponent implements OnInit {
         this.progress = this.progress + 1;
       }
     });
-    this.progressPercentage =
-      (this.progress / this.workData.TaskTable.length) * 100;
+    this.progressPercentage = (this.progress / this.workData.TaskTable.length) * 100;
     if (this.progress === this.workData.TaskTable.length) {
       this.submitRequestButton = true;
     }
+
   }
   navigateToPaymentRequest(id: any) {
     this.router.navigate(['/freelancer/submitPaymentRequest', id]);

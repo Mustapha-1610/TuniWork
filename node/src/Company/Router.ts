@@ -52,4 +52,13 @@ companyRouter.post(
   "/declinePaymentRequest",
   companyController.declinePaymenyRequest
 );
+
+companyRouter.get(
+  "/viewCompanyDetails/:companyId",
+  companyController.viewCompanyDetails
+);
+
+
+
+
 export default companyRouter;

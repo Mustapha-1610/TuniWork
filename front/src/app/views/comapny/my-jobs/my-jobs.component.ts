@@ -16,6 +16,7 @@ export class MyJobsComponent implements OnInit {
   ngOnInit(): void {
     this.fetchPrivateJobOffers();
     this.fetchPublicJobOffers();
+
   }
 
   fetchPublicJobOffers(){
@@ -77,5 +78,7 @@ export class MyJobsComponent implements OnInit {
     );
   }
 
+
+  
 
 }

@@ -17,8 +17,8 @@
             <td>{{ privateJobOffer.Description }}</td>
             <td>{{ privateJobOffer.CreationDate | date : "dd/MM/yyyy" }}</td>
             <td>
-              <a class="btn btn-success" [routerLink]="['/company/private-job-edit', privateJobOffer._id]">Modifier</a>
-              <a class="btn btn-danger" (click)="onDeletePrivateJobOffer(privateJobOffer._id)">Supprimer</a>
+              <a class="btn btn-success" [routerLink]="['/company/private-job-edit', privateJobOffer._id]">Edit </a>
+              <a class="btn btn-danger" (click)="onDeletePrivateJobOffer(privateJobOffer._id)">Delete</a>
               <a class="btn btn-info" [routerLink]="['/company/private-job-details', privateJobOffer._id]">Details</a>
             </td>
           </tr>
@@ -48,8 +48,8 @@
             <td>{{ publicJobOffer.CreationDate | date : "dd/MM/yyyy" }}</td>
             <td>
 
-              <a class="btn btn-success" [routerLink]="['/company/edit-job', publicJobOffer._id]">Modifier</a>
-               <a class="btn btn-danger" (click)="onDelete(publicJobOffer._id)">Supprimer</a>
+              <a class="btn btn-success" [routerLink]="['/company/edit-job', publicJobOffer._id]">Edit</a>
+               <a class="btn btn-danger" (click)="onDelete(publicJobOffer._id)">Delete</a>
                <a class="btn btn-info" [routerLink]="['/company/public-job-details', publicJobOffer._id]">Details</a>
               </td>
           </tr>
@@ -58,3 +58,7 @@
     </div>
   </div>
 </div>
+
+
+
+<app-footer></app-footer>
