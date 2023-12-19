@@ -15,6 +15,25 @@ const CompanyPublicWorkOfferSchema = new Schema({
       },
     },
   ],
+  PaymentRequest: {
+    PaymentRequestId: {
+      type: Schema.Types.ObjectId,
+    },
+    PaymentAmount: {
+      type: Number,
+    },
+    PaymentStatus: {
+      type: String,
+      enum: [
+        "Tasks Not Done",
+        "Awaiting Company Response",
+        "Payment Sent",
+        "Payment Declined",
+        "Reported , Awaiting Admin Review",
+      ],
+      default: "Tasks Not Done",
+    },
+  },
   // title mta3 l post
   Title: {
     type: String,
@@ -140,6 +159,7 @@ const CompanyPublicWorkOfferSchema = new Schema({
       "Contract Sent Awaiting Freelancer Response",
       "Declined",
       "Accepted",
+      "Awaiting Admin Payment Report Review",
       "in progress",
       "done",
     ],

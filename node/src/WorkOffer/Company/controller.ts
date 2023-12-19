@@ -455,6 +455,7 @@ export const createPrivateJob = async ( req: express.Request, res: express.Respo
         FreelancerId: privateJobOfferData.FreelancerId,
       },
       TaskTable: [],
+      StartTime: privateJobOfferData.StartTime,
     });
     taskTable.map((item: any) => {
       workOffer.TaskTable.push({

@@ -134,8 +134,30 @@ const companySchema = new Schema({
       PaymentRequestId: {
         type: Schema.Types.ObjectId,
       },
+      workOfferId: {
+        type: Schema.Types.ObjectId,
+      },
       FreelancerName: {
         type: String,
+      },
+      CompanyName: {
+        type: String,
+      },
+      PaymentAmount: {
+        type: Number,
+      },
+      TaskTitle: {
+        type: String,
+      },
+      PaymentStatus: {
+        type: String,
+        enum: [
+          "Awaiting Company Response",
+          "Payment Sent",
+          "Payment Declined",
+          "Reported , Awaiting Admin Review",
+        ],
+        default: "Awaiting Company Response",
       },
     },
   ],

@@ -7,6 +7,7 @@ import { homePageGuard } from './views/guards/home-page.guard';
 import { CompanyLayoutComponent } from './layout/company-layout/company-layout.component';
 import { companyLayoutGuard } from './views/guards/company-layout.guard';
 import { CustomerLayoutComponent } from './layout/customer-layout/customer-layout.component';
+import { customerGuard } from './views/guards/customer.guard';
 
 const routes: Routes = [
   {
@@ -19,6 +20,20 @@ const routes: Routes = [
         loadChildren: () =>
           import('./views/freelancer/freelancer-routing.module').then(
             (m) => m.FreelancerRoutingModule
+          ),
+      },
+    ],
+  },
+  {
+    path: 'customer',
+    component: CustomerLayoutComponent,
+    canActivate: [customerGuard],
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import('./views/Customer/customer-routing.module').then(
+            (m) => m.CustomerRoutingModule
           ),
       },
     ],
@@ -51,19 +66,7 @@ const routes: Routes = [
       },
     ],
   },
-  /*{
-    path: 'customer',
-    component: CustomerLayoutComponent,
-    children: [
-      {
-        path: '',
-        loadChildren: () =>
-          import('./views/Customer/customer-routing.module').then(
-            (m) => m.CustomerRoutingModule
-          ),
-      },
-    ],
-  },*/
+ 
 ];
 
 @NgModule({
