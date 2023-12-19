@@ -1,81 +1,129 @@
 <div class="container">
   <div class="card shadow mb-4">
     <div class="card-body">
-      <h3>Public Job Offer Details</h3>
+      <h1>Public Job Offer Details</h1>
       <ul>
-        <li><strong>Title:</strong> {{ publicJobOffer?.Title }}</li>
-        <li><strong>Work Title:</strong> {{ publicJobOffer?.WorkTitle }}</li>
-        <li><strong>Description:</strong> {{ publicJobOffer?.Description }}</li>
+        <div class="kabberLi">
+        <ng-container *ngIf="publicJobOffer">
+          <ng-container *ngIf="publicJobOffer.Title">
+            <li style="font-size: 16px"><strong>Title:</strong> {{ publicJobOffer.Title }}</li>
+          </ng-container>
+          <li><strong>Description:</strong> {{ publicJobOffer.Description }}</li>
+          <li><strong>Note: </strong> {{ publicJobOffer.Note }}</li>
+          <li><strong>Supposed Start Time: </strong> {{ publicJobOffer.StartTime | date:'dd-MM-yyyy \'at\' HH:mm:ss' }}</li>
+          <li><strong>Dead Line:</strong> {{ publicJobOffer.DeadLine | date:'dd-MM-yyyy \'at\' HH:mm:ss' }}</li>
+        </ng-container>
+      </div>
 
         <li><strong>Applied Freelancers:</strong></li>
 
-        <li *ngIf="publicJobOffer?.AppliedFreelancers?.length">
+        <li *ngIf="publicJobOffer?.AppliedFreelancers?.length; else noApplications">
           <div class="card">
-            <div class="card-body">
-              <ul class="list-group list-group-flush">
-                <li *ngIf="publicJobOffer?.AppliedFreelancers?.length">
-                  <div class="card">
-                    <div class="card-body">
-                      <ul class="list-group list-group-flush">
-                        <li
-                          *ngFor="
-                            let freelancer of publicJobOffer?.AppliedFreelancers
-                          "
-                          class="list-group-item"
-                        >
-                          {{ freelancer.FreelancerName }} - Status:
-                          {{ freelancer.Status }}
-                          <button
-                            *ngIf="freelancer.Status === 'pending'"
-                            class="btn btn-success"
-                            (click)="
-                              acceptFreelancer(
-                                publicJobOffer._id,
-                                freelancer.FreelancerId
-                              )
-                            "
-                          >
-                            Accept
-                          </button>
-                          <button
-                            *ngIf="
-                              publicJobOffer.status === 'freelancer accepted'
-                            "
-                            class="btn btn-primary"
-                            (click)="createContract(publicJobOffer._id)"
-                          >
-                            Send Contract
-                          </button>
-                          <div
-                            *ngIf="
-                              publicJobOffer.status ===
-                              'Contract Sent Awaiting Freelancer Response'
-                            "
-                          >
-                            Contract Sent Awaiting Freelancer Response
-                          </div>
-                          <div *ngIf="publicJobOffer.status === 'Declined'">
-                            Contract Declined <br />
-                            <button>Make it Public ?</button>
-                          </div>
-                          <div *ngIf="publicJobOffer.status === 'Accepted'">
-                            Contract Accepted By The Freelancer<br />
-                            The Work Offer Tasks Progression Tracking Will Start
-                            At {{ publicJobOffer?.StartTime | date : "medium" }}
-                          </div>
-                          <div *ngIf="publicJobOffer.status === 'in progress'">
-                            In Progress
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
+            <ul class="list-group list-group-flush">
+              <li *ngFor="let freelancer of publicJobOffer?.AppliedFreelancers" class="list-group-item">
+                {{ freelancer.FreelancerName }} - Status: {{ freelancer.Status }}
+                <button *ngIf="freelancer.Status === 'pending'" class="btn btn-success"
+                        (click)="acceptFreelancer(publicJobOffer._id, freelancer.FreelancerId)">Accept
+                </button>
+                <button *ngIf="publicJobOffer.status === 'freelancer accepted'" class="btn btn-primary"
+                        (click)="createContract(publicJobOffer._id)" >   Send Contract
+                </button>
+                <div *ngIf="publicJobOffer.status === 'Contract Sent Awaiting Freelancer Response' ">
+                  Contract Sent Awaiting Freelancer Response
+                </div>
+                <div *ngIf="publicJobOffer.status === 'Declined'">
+                  Contract Declined <br />
+                  <button>Make it Public ?</button>
+                </div>
+                <div *ngIf="publicJobOffer.status === 'Accepted'">
+                  Contract Accepted By The Freelancer<br />
+                  The Work Offer Tasks Progression Tracking Will Start
+                  At {{ publicJobOffer.StartTime | date : "medium" }}
+                </div>
+
+
+
+
+
+
+
+
+
+
+                <div *ngIf="publicJobOffer.status === 'in progress'">
+                   <li>Job Has Started, <strong>tracking progress:</strong>
+                  <br> Note: This Freelancer has to finish the job before :{{ publicJobOffer.DeadLine | date:'dd-MM-yyyy \'at\' HH:mm:ss' }}
                 </li>
-              </ul>
-            </div>
+                  <div class="max-w-2xl mx-auto bg-white rounded-lg border border-gray-200 shadow-md overflow-hidden">
+                    <div class="p-5">
+                       <h2 class="text-lg font-bold mb-2"> List of Tasks:</h2>
+                    </div>
+  <div class="bg-gray-50 p-5">
+    <div class="flex flex-col">
+      <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" >
+                  Task Title
+                </th>
+                <th
+                  scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Status
+                </th>
+              </tr>
+            </thead>
+
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr *ngFor="let items of publicJobOffer?.TaskTable; let i = index">
+                <td
+                  class="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900"
+                >
+                  {{ i + 1 }}. {{ items.TaskTitle }}
+                </td>
+                <td class="px-4 py-2 whitespace-nowrap text-sm">
+                  <span
+                    [ngClass]="{
+                      'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800':
+                        items.TaskDoneStatus,
+                      'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800':
+                        !items.TaskDoneStatus
+                    }"
+                  >
+                    {{ items.TaskDoneStatus ? "Completed" : "Pending" }}
+                  </span>
+                </td>
+                <td
+                  class="px-4 py-2 whitespace-nowrap text-right text-sm font-medium"
+                >
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+                </div>
+
+
+
+              </li>
+            </ul>
           </div>
         </li>
+        <ng-template #noApplications>
+          <div class="alert alert-info">
+            Nobody applied for this job yet.
+          </div>
+        </ng-template>
       </ul>
     </div>
   </div>
 </div>
+
+<app-footer></app-footer>

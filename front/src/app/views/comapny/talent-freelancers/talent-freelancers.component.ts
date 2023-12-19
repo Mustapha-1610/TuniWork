@@ -9,7 +9,10 @@ import { CompanyService } from '../../services/company.service';
   styleUrls: ['./talent-freelancers.component.css']
 })
 export class TalentFreelancersComponent implements OnInit {
+  companyData: any = this.companyService.getCompanyInfos();
+
   freelancers: any[] = [];
+
 
   constructor(private companyService: CompanyService) { }
 

@@ -240,6 +240,28 @@ export const getAllCompanies = async (
   return res.json({ allcompanies });
 };
 
+export const viewCompanyDetails =  async (  req: express.Request,  res: express.Response) => {
+  try {
+    const { companyId } = req.params;
+
+    // Find the freelancer by ID
+    const company = await Company.findById(companyId);
+
+    if (!company) {
+      return res.status(404).json({ error: "company not found" });
+    }
+
+    // Send the freelancer details in the response
+    return res.json({ company });
+  } catch (error) {
+    console.error("Error in getting company infos:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+
+
+
 //update company details (aziz)
 export const updateInfo = async (
   req: express.Request,
@@ -308,10 +330,7 @@ export const disableAccount = async (
 };
 
 //re enable acc (aziz)
-export const activateCompany = async (
-  req: express.Request,
-  res: express.Response
-) => {
+export const activateCompany = async ( req: express.Request,  res: express.Response) => {
   try {
     const { companyId } = req.params;
     let company: any = await Company.findById(companyId);
@@ -328,13 +347,15 @@ export const activateCompany = async (
 };
 
 //get all freelancers
-export const getAllFreelancers = async (
-  req: express.Request,
-  res: express.Response
-) => {
+export const getAllFreelancers = async (  req: express.Request, res: express.Response) => {
+
   let allfreelancers = await Freelancer.find();
   return res.json({ allfreelancers });
+  
 };
+
+
+
 
 //save freelancer (aziz)
 export const saveFreelancer = async (

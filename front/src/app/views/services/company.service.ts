@@ -31,6 +31,10 @@ export class CompanyService {
       Csignature: form.CompanySignature,
       CDescription: form.CompanyDescription,
       CPhone: form.CompanyPhone,
+
+     /*  CWorkTitle: form.WorkTitle,
+      CWorkTtitleText: form.WorkTitle.WorkTitleText,
+ */
       CLocation: form.Location,
       JoinDate: form.JoinDate,
       CReviews: form.Reviews,
@@ -247,6 +251,8 @@ export class CompanyService {
       );
   }
 
+
+
   //get l saved freelancers fel page saved freelancers
   getSavedFreelancers(companyId: string) {
     return this.http.get(
@@ -269,7 +275,9 @@ export class CompanyService {
   }
 
 
-  
+
+
+
   saveFreelancer(companyId: string, freelancerId: string) {
     // Include the companyId and freelancerId in the URL
     const url = `http://localhost:5000/api/company/saveFreelancer/${companyId}/${freelancerId}`;
@@ -307,15 +315,36 @@ export class CompanyService {
     );
   }
 
-  updateLocalStorageAfterUnsaveFreelancer(
-    companyInfos: any,
-    freelancerId: string
-  ): void {
+  updateLocalStorageAfterUnsaveFreelancer( companyInfos: any,  freelancerId: string ): void {
     if (companyInfos) {
       companyInfos.SavedFreelancers = companyInfos.SavedFreelancers.filter(
         (saved: any) => saved.freelancerId !== freelancerId
       );
       localStorage.setItem('companyInfos', JSON.stringify(companyInfos));
     }
+  }
+
+
+
+  updateLocalStorageAfterAcceptingFreelancer(publicJobOffer: any): void {
+    // Update the local storage with the new publicJobOffer details
+    // This is just an example, adjust it according to your actual local storage structure
+    const publicJobOffers = JSON.parse(localStorage.getItem('publicJobOffers') || '[]');
+    const offerIndex = publicJobOffers.findIndex((offer: any) => offer._id === publicJobOffer._id);
+    if (offerIndex !== -1) {
+      publicJobOffers[offerIndex] = publicJobOffer;
+    }
+    localStorage.setItem('publicJobOffers', JSON.stringify(publicJobOffers));
+  }
+
+  updateLocalStorageAfterSendingContract(publicJobOffer: any): void {
+    // Update the local storage with the new publicJobOffer details
+    // This is just an example, adjust it according to your actual local storage structure
+    const publicJobOffers = JSON.parse(localStorage.getItem('publicJobOffers') || '[]');
+    const offerIndex = publicJobOffers.findIndex((offer: any) => offer._id === publicJobOffer._id);
+    if (offerIndex !== -1) {
+      publicJobOffers[offerIndex] = publicJobOffer;
+    }
+    localStorage.setItem('publicJobOffers', JSON.stringify(publicJobOffers));
   }
 }

@@ -14,6 +14,7 @@ export class PrivateJobCreateComponent implements OnInit {
   privateJobCreateForm!: FormGroup;
   freelancerId: any;
   freelancerName: any;
+  freelancerWorktitle: any;
   freelancerPPH: any;
   freelancerPPT:any;
   tasksForm: any;
@@ -41,14 +42,14 @@ export class PrivateJobCreateComponent implements OnInit {
     const companyId = companyInfos._id;
     const CompanyName = companyInfos.Name;
 
-    // Initialize form with your desired structure
+  
     this.privateJobCreateForm = this.formBuilder.group({
       Title: ['', Validators.required],
       CompanyName: CompanyName,
       Description: ['', Validators.required],
       Note: [''],
-      PayPerHour: [false], // Initialize with default value
-      PayPerTask: [false], // Initialize with default value
+      PayPerHour: [false],
+      PayPerTask: [false],
       DeadLine: ['', Validators.required],
       WorkTitle: [''],
       CompanyId: companyId,
@@ -59,45 +60,30 @@ export class PrivateJobCreateComponent implements OnInit {
     this.tasksForm = new FormGroup({
       Task: new FormControl(null),
     });
-            // Add the new form controls for the checkboxes
+
   this.privateJobCreateForm.addControl('PayPerHour', new FormControl(false));
   this.privateJobCreateForm.addControl('PayPerTask', new FormControl(false));
 
-  // Set initial values for PayPerHour and PayPerTask based on freelancer details
   this.privateJobCreateForm.patchValue({
     PayPerHour: false,
     PayPerTask: false,
   });
   }
 
-
-
-
-/*   onPaymentTypeChange(paymentType: string): void {
-    // Ensure that only one checkbox can be true at a time
-    if (paymentType === 'hour') {
-      this.privateJobCreateForm.get('PayPerHour')?.setValue(true);
-      this.privateJobCreateForm.get('PayPerTask')?.setValue(false);
-    } else if (paymentType === 'task') {
-      this.privateJobCreateForm.get('PayPerHour')?.setValue(false);
-      this.privateJobCreateForm.get('PayPerTask')?.setValue(true);
-    }
-  }
- */
   viewFreelancerDetails(freelancerId: string): void {
     this.companyService.getFreelancerDetails(freelancerId).subscribe(
       (response: any) => {
         const freelancerDetails = response.freelancer;
-        // Extract the freelancer name from the response
         const Name = freelancerDetails.Name;
         const PayPerHour = freelancerDetails.PayRate.HourlyRate;
         const PayPerTask = freelancerDetails.PayRate.PayPerTaskRate;
-        // Update your component's data with freelancerDetails and freelancerName if needed
+        const Worktitle = freelancerDetails.WorkTitle.WorkTitleText;
+
         this.freelancerName = Name;
+        this.freelancerWorktitle = Worktitle;
         this.freelancerPPH =PayPerHour;
         this.freelancerPPT=PayPerTask
 
-      // Update the form controls with the retrieved values
       this.privateJobCreateForm.get('PayPerHour')?.setValue(PayPerHour);
       this.privateJobCreateForm.get('PayPerTask')?.setValue(PayPerTask);
 
@@ -116,12 +102,11 @@ export class PrivateJobCreateComponent implements OnInit {
     } else {
       const privateJobCreateData = this.privateJobCreateForm.value;
 
-      // Set PayPerHour and PayPerTask based on checkbox states
       privateJobCreateData.PayRate = {};
       if (this.privateJobCreateForm.get('PayPerHour')?.value) {
-        privateJobCreateData.PayRate.PayPerHour = +this.freelancerPPH; // Use the freelancer's hourly rate
+        privateJobCreateData.PayRate.PayPerHour = +this.freelancerPPH;
       } else if (this.privateJobCreateForm.get('PayPerTask')?.value) {
-        privateJobCreateData.PayRate.PayPerTask = +this.freelancerPPT; // Use the freelancer's task rate
+        privateJobCreateData.PayRate.PayPerTask = +this.freelancerPPT;
       }
 
       console.log('Private Job Create Data:', privateJobCreateData);
