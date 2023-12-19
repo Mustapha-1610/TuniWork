@@ -39,7 +39,9 @@ class workOfferFragment : Fragment() {
 
         // Display the title in the fragment
         val titleTextView = view.findViewById<TextView>(R.id.Title)
-        titleTextView.setText(title.toString())
+        val descriptionTextView = view.findViewById<TextView>(R.id.Description)
+        titleTextView.setText("Title = "+title.toString())
+        descriptionTextView.setText("Description = "+description.toString())
 
         return view
     }
@@ -50,14 +52,11 @@ class workOfferFragment : Fragment() {
         private const val ARG_TASK_TABLE = "taskTable"
         private const val ARG_WORK_SPECIALITY = "workSpeciality"
 
-        fun newInstance(title: String, description: String, taskTable: ArrayList<String>, workSpeciality: List<String>): workOfferFragment {
+        fun newInstance(title: String, description: String): workOfferFragment {
             val fragment = workOfferFragment()
             val args = Bundle()
             args.putString(ARG_TITLE, title)
             args.putString(ARG_DESCRIPTION, description)
-            args.putStringArrayList(ARG_TASK_TABLE,taskTable)
-             // Use putParcelableArrayList() for a list of Parcelable objects
-            args.putStringArrayList(ARG_WORK_SPECIALITY, ArrayList(workSpeciality))
             fragment.arguments = args
             return fragment
         }

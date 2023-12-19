@@ -10,7 +10,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="564dp"
+        android:layout_marginBottom="642dp"
+        android:text="hello"
+        android:textColor="#C30000" />
+
+    <TextView
+        android:id="@+id/Description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="597dp"
         android:text="hello"
         android:textColor="#C30000" />
 </RelativeLayout>

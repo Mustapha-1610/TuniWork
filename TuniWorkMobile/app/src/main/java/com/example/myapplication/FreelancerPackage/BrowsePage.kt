@@ -80,7 +80,7 @@ class BrowsePage : Fragment() {
                         val description = matchingJobOffers[position].description
                         val taskTable = matchingJobOffers[position].taskTable
                         // Create a new instance of the workOfferFragment
-                        val fragment = workOfferFragment.newInstance(title.toString(),description.toString(),taskTable)
+                        val fragment = workOfferFragment.newInstance(title.toString(),description.toString())
 
                         // Get the FragmentManager and begin a transaction
                         val fragmentManager = requireActivity().supportFragmentManager

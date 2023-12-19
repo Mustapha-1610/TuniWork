@@ -19,6 +19,7 @@ class workofferAdapter (private val data: List<PublicJobOffer>): RecyclerView.Ad
 
     inner class MyViewHolder(itemview: View):RecyclerView.ViewHolder(itemview), View.OnClickListener{
         val title: TextView =itemview.findViewById(R.id.Title);
+        val description : TextView = itemview.findViewById(R.id.Description)
         init {
             itemView.setOnClickListener {
                 onItemClick?.invoke(bindingAdapterPosition)
@@ -37,6 +38,7 @@ class workofferAdapter (private val data: List<PublicJobOffer>): RecyclerView.Ad
     override fun onBindViewHolder(holder: workofferAdapter.MyViewHolder, position: Int) {
         val item=data[position];
         holder.title.text=item.title;
+        holder.description.text=item.description;
     }
 
     override fun getItemCount(): Int {
