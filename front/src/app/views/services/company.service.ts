@@ -268,6 +268,8 @@ export class CompanyService {
       );
   }
 
+
+  
   saveFreelancer(companyId: string, freelancerId: string) {
     // Include the companyId and freelancerId in the URL
     const url = `http://localhost:5000/api/company/saveFreelancer/${companyId}/${freelancerId}`;

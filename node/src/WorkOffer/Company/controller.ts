@@ -420,10 +420,7 @@ export const getPublicWorkOffer = async (
 /*************************PRIVATE JOB OFFERS ******************/
 
 // create private job offer ( aziz )
-export const createPrivateJob = async (
-  req: express.Request,
-  res: express.Response
-) => {
+export const createPrivateJob = async ( req: express.Request, res: express.Response) => {
   try {
     const { privateJobOfferData, taskTable } = req.body;
     const offeringCompany = await company.findById(
@@ -434,21 +431,19 @@ export const createPrivateJob = async (
     }
 
     // Fetch the freelancer's name based on FreelancerId
-    const freelancer: any = await Freelancer.findById(
-      privateJobOfferData.FreelancerId
-    );
+    const freelancer: any = await Freelancer.findById(privateJobOfferData.FreelancerId);
     const freelancerName = freelancer ? freelancer.Name : null;
+    
     let workOffer: any = await PrivateJobOffer.create({
       Title: privateJobOfferData.Title,
       Description: privateJobOfferData.Description,
       Note: privateJobOfferData.Note,
-      PaymentMethod: {
-        PayPerTask: privateJobOfferData.PayPerTask,
+      PayRate: {
         PayPerHour: privateJobOfferData.PayPerHour,
+        PayPerTask: privateJobOfferData.PayPerTask,
       },
       CompanyId: privateJobOfferData.CompanyId,
-      PaymentMethodVerificationStatus:
-        privateJobOfferData.PaymentMethodVerificationStatus,
+      PaymentMethodVerificationStatus: privateJobOfferData.PaymentMethodVerificationStatus,
       CompanyName: privateJobOfferData.CompanyName,
       CompanyLocation: privateJobOfferData.CompanyLocation,
       TotalMoneyPayed: privateJobOfferData.TotalMoneyPayed,

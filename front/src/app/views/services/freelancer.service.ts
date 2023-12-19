@@ -36,10 +36,10 @@ export class FreelancerService {
   setFreelancerCredits(freelancerForm: any) {
     const form: any = JSON.parse(freelancerForm);
     const FreelancerAccount: any = {
+      _id: form._id,
       Name: form.Name,
       Surname: form.Surname,
       ProfilePicture: form.ProfilePicture,
-      _id: form._id,
       Email: form.Email,
       PhoneNumber: form.PhoneNumber,
       WorkTitle: form.WorkTitle.WorkTitleText,
@@ -47,20 +47,28 @@ export class FreelancerService {
       WorkHistory: form.WorkHistory,
       EstimatedWorkLocation: form.EstimatedWorkLocation,
       Languages: form.Languages,
-      PayRates: form.PayRate,
+
       Schedule: form.Schedule,
       SavedWorkOffers: form.SavedWorkOffers,
       PendingWorkOffers: form.pendingWorkOffers,
       Notifications: form.Notifications.slice().reverse(),
       CompanyRecievedContracts: form.CompanyRecievedContracts.slice().reverse(),
       ProposedPrivateWorks: form.ProposedPrivateWorks.slice().reverse(),
-      Earnings: form.Earnings,
+
+      PayRate: {
+        HourlyRate: form.PayRate.HourlyRate,
+        PayPerTaskRate: form.PayRate.PayPerTaskRate,
+      },
+
     };
     localStorage.setItem('freeLancerInfos', JSON.stringify(FreelancerAccount));
   }
   getFreelancerCredits() {
     return JSON.parse(localStorage.getItem('freeLancerInfos')!);
   }
+
+
+
   verifyFreelancer(_id: any, vcode: any) {
     return this.http.put('http://localhost:5000/api/freelancer/verify', {
       freeLancerId: _id,
@@ -231,4 +239,13 @@ export class FreelancerService {
       Description,
     });
   }
+
+
+  getFreelancerDetails(freelancerId: string) {
+    return this.http.get(`http://localhost:5000/api/freelancer/${freelancerId}`, {
+    });
+  }
 }
+
+
+

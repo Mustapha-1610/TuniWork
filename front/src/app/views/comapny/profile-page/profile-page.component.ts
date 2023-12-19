@@ -4,7 +4,8 @@ import { CompanyService } from '../../services/company.service';
 @Component({
   selector: 'app-profile-page',
   templateUrl: './profile-page.component.html',
-  styleUrls: ['./profile-page.component.css'],
+  styleUrls: ['./profile-page.component.css',
+'../../../../assets/sideBar/style.css'],
 })
 export class ProfilePageComponent {
   companyData: any = this.cs.getCompanyInfos();

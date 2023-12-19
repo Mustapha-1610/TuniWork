@@ -14,6 +14,7 @@ import { PrivateJobCreateComponent } from './private-job-create/private-job-crea
 import { PrivateJobDetailsComponent } from './private-job-details/private-job-details.component';
 import { PrivateJobEditComponent } from './private-job-edit/private-job-edit.component';
 import { ProfilePageEditComponent } from './profile-page-edit/profile-page-edit.component';
+import { ProfilePageSecurityComponent } from './profile-page-security/profile-page-security.component';
 
 const routes: Routes = [
   {
@@ -66,7 +67,10 @@ const routes: Routes = [
   path: 'private-job-edit/:privateJobOfferId',
   component: PrivateJobEditComponent,
 },
-
+{
+  path:'security',
+  component: ProfilePageSecurityComponent,
+}
 
 ];
 
