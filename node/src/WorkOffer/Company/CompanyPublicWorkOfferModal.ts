@@ -103,8 +103,8 @@ const CompanyPublicWorkOfferSchema = new Schema({
   WorkSpeciality: [
     {
       type: String,
-      required: true,0
-    }
+      required: true,
+    },
   ],
 
   // lehne bech nkhaliw info l freelancer li actually ktheha l khedma
