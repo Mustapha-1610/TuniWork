@@ -22,6 +22,7 @@ export class CompanyService {
 
   setCompanyInfos(CompanyForm: any) {
     const form = JSON.parse(CompanyForm);
+    console.log(form);
     const Company: any = {
       _id: form._id,
       Name: form.CompanyName,
@@ -31,10 +32,7 @@ export class CompanyService {
       Csignature: form.CompanySignature,
       CDescription: form.CompanyDescription,
       CPhone: form.CompanyPhone,
-
-     /*  CWorkTitle: form.WorkTitle,
-      CWorkTtitleText: form.WorkTitle.WorkTitleText,
- */
+      CWorkTitle: form.WorkTitle,
       CLocation: form.Location,
       JoinDate: form.JoinDate,
       CReviews: form.Reviews,
@@ -251,8 +249,6 @@ export class CompanyService {
       );
   }
 
-
-
   //get l saved freelancers fel page saved freelancers
   getSavedFreelancers(companyId: string) {
     return this.http.get(
@@ -273,10 +269,6 @@ export class CompanyService {
         })
       );
   }
-
-
-
-
 
   saveFreelancer(companyId: string, freelancerId: string) {
     // Include the companyId and freelancerId in the URL
@@ -315,7 +307,10 @@ export class CompanyService {
     );
   }
 
-  updateLocalStorageAfterUnsaveFreelancer( companyInfos: any,  freelancerId: string ): void {
+  updateLocalStorageAfterUnsaveFreelancer(
+    companyInfos: any,
+    freelancerId: string
+  ): void {
     if (companyInfos) {
       companyInfos.SavedFreelancers = companyInfos.SavedFreelancers.filter(
         (saved: any) => saved.freelancerId !== freelancerId
@@ -324,13 +319,15 @@ export class CompanyService {
     }
   }
 
-
-
   updateLocalStorageAfterAcceptingFreelancer(publicJobOffer: any): void {
     // Update the local storage with the new publicJobOffer details
     // This is just an example, adjust it according to your actual local storage structure
-    const publicJobOffers = JSON.parse(localStorage.getItem('publicJobOffers') || '[]');
-    const offerIndex = publicJobOffers.findIndex((offer: any) => offer._id === publicJobOffer._id);
+    const publicJobOffers = JSON.parse(
+      localStorage.getItem('publicJobOffers') || '[]'
+    );
+    const offerIndex = publicJobOffers.findIndex(
+      (offer: any) => offer._id === publicJobOffer._id
+    );
     if (offerIndex !== -1) {
       publicJobOffers[offerIndex] = publicJobOffer;
     }
@@ -340,8 +337,12 @@ export class CompanyService {
   updateLocalStorageAfterSendingContract(publicJobOffer: any): void {
     // Update the local storage with the new publicJobOffer details
     // This is just an example, adjust it according to your actual local storage structure
-    const publicJobOffers = JSON.parse(localStorage.getItem('publicJobOffers') || '[]');
-    const offerIndex = publicJobOffers.findIndex((offer: any) => offer._id === publicJobOffer._id);
+    const publicJobOffers = JSON.parse(
+      localStorage.getItem('publicJobOffers') || '[]'
+    );
+    const offerIndex = publicJobOffers.findIndex(
+      (offer: any) => offer._id === publicJobOffer._id
+    );
     if (offerIndex !== -1) {
       publicJobOffers[offerIndex] = publicJobOffer;
     }

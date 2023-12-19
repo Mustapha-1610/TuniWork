@@ -1,32 +1,41 @@
-
-<div style="margin-top: -50px;margin-bottom: 50px;" >
-  <input type="checkbox" id="check"checked>
+<div style="margin-top: -50px; margin-bottom: 50px">
+  <input type="checkbox" id="check" checked />
   <label for="check">
-    <i style="margin-top:50px;" class="fas fa-bars" id="btn"></i>
-    <i style="margin-top:70px;" class="fas fa-times" id="cancel"></i>
+    <i style="margin-top: 50px" class="fas fa-bars" id="btn"></i>
+    <i style="margin-top: 70px" class="fas fa-times" id="cancel"></i>
   </label>
 
-
-
   <div class="sidebar">
-  <ul>
-      <li><a routerLink="../profile"> <i class="fa-solid fa-user"></i> My Info</a></li>
-   <li><a routerLink="../security"><i class="fa-solid fa-lock"></i>Security</a></li>
-   <li><a href="#"><i class="fa-solid fa-address-card"></i>Identity <br> Verification</a></li>
-    <li><a href="#">  <i class="fa-solid fa-right-from-bracket"> </i>Log Out</a></li>
-
-   </ul>
+    <ul>
+      <li>
+        <a routerLink="../profile"> <i class="fa-solid fa-user"></i> My Info</a>
+      </li>
+      <li>
+        <a routerLink="../security"><i class="fa-solid fa-lock"></i>Security</a>
+      </li>
+      <li>
+        <a href="#"
+          ><i class="fa-solid fa-address-card"></i>Identity <br />
+          Verification</a
+        >
+      </li>
+      <li>
+        <a href="#"> <i class="fa-solid fa-right-from-bracket"> </i>Log Out</a>
+      </li>
+    </ul>
   </div>
   <section>
-
     <div class="parent">
-
       <div class="div1">
-
-        <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-gray-300">
-          <img [src]="companyData.CLogo" class="w-full h-full object-cover" alt="Profile Picture" />
+        <div
+          class="w-32 h-32 rounded-full overflow-hidden border-4 border-gray-300"
+        >
+          <img
+            [src]="companyData.CLogo"
+            class="w-full h-full object-cover"
+            alt="Profile Picture"
+          />
         </div>
-
       </div>
 
       <div class="div2">
@@ -34,34 +43,34 @@
         <h3>Description: {{ companyData.CDescription }}</h3>
         <h3>Website: {{ companyData.CWebsite }}</h3>
 
-        <h3><i class="fa-solid fa-envelope"style="color: #f5d893;"></i> {{ companyData.Email }}</h3>
-        <h3><i class="fa-solid fa-phone" style="color: #f5d893;"></i> {{ companyData.CPhone }}</h3>
-        <h3><i class="fa-solid fa-location-dot"style="color: #f5d893;"></i> {{ companyData.CLocation }}</h3>
+        <h3>
+          <i class="fa-solid fa-envelope" style="color: #f5d893"></i>
+          {{ companyData.Email }}
+        </h3>
+        <h3>
+          <i class="fa-solid fa-phone" style="color: #f5d893"></i>
+          {{ companyData.CPhone }}
+        </h3>
+        <h3>
+          <i class="fa-solid fa-location-dot" style="color: #f5d893"></i>
+          {{ companyData.CLocation }}
+        </h3>
 
         <div class="custom-divider"></div>
 
-        <h3> <i class="fa-regular fa-star" style="color: #f5d893;"></i> {{companyData.CReviews}} <i class="fa-solid fa-circle-dot fa-2xs" style="color: #f5d893;"></i> Money Spent: {{companyData.MoneySpent}} </h3>
+        <h3>
+          <i class="fa-regular fa-star" style="color: #f5d893"></i>
+          {{ companyData.CReviews }}
+          <i class="fa-solid fa-circle-dot fa-2xs" style="color: #f5d893"></i>
+          Money Spent: {{ companyData.MoneySpent }}
+        </h3>
 
-<!--         <p>Work offers created: {{ workOffers.length }}</p>-->
-
-
-
-
-
-     </div>
+        <!--         <p>Work offers created: {{ workOffers.length }}</p>-->
+      </div>
     </div>
 
-
-
-
-<!--     <button class="btn btn-danger" (click)="disableAccount()">Disable Account</button>
+    <!--     <button class="btn btn-danger" (click)="disableAccount()">Disable Account</button>
  -->
   </section>
-
 </div>
-  <app-footer></app-footer>
-
-
-
-
-
+<app-footer></app-footer>
