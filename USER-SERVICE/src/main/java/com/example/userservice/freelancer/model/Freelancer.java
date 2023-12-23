@@ -21,6 +21,14 @@ public class Freelancer {
     @Id
     private String id;
 
+    @Field("Name")
+    private String name;
+
+
+    @Field("Surname")
+    private String   surname;
+
+
     @Field("PhoneNumber")
     private Long phoneNumber;
 
@@ -169,11 +177,9 @@ public class Freelancer {
     @AllArgsConstructor
     public static class ProposedPrivateWork {
         @Field("PrivateJobOfferId")
-        private String privateJobOfferId; // Assuming this is a string representation of ObjectId
+        private String privateJobOfferId;
 
         @Field("Status")
         private String status;
-
-        // Constructors, getters, and setters
     }
 }
