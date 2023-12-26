@@ -1,54 +1,68 @@
 package com.example.userservice.admin.entities;
 
-import jakarta.persistence.*;
-import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
+import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
-@Table(name = "users")
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+
 @Data
+@Builder
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(
+        name = "user_app",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "email")
+        })
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false)
-    private Integer id;
+    @SequenceGenerator(
+            name = "user_generator",
+            sequenceName = "user_app_seq",
+            allocationSize = 1
+    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_generator")
+    @Column(name = "id")
+    private Long id;
 
-    @Column(nullable = false)
-    private String fullName;
+    @Column(length = 30)
+    private String firstName;
 
+    @Column(length = 30)
+    private String lastName;
 
-    private String Email;
+    @Column(length = 100)
+    private String email;
 
-    @Column(nullable = false)
     private String password;
 
-    @CreationTimestamp
-    @Column(updatable = false, name = "created_at")
-    private Date createdAt;
+    @Transient
+    private String confirmPassword;
 
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    private Date updatedAt;
-
-    @OneToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false)
+    @Enumerated(EnumType.STRING)
     private Role role;
 
+    /**
+     * the user by default is not enable, until he activates his account.
+     */
+    @Column(name = "enabled")
+    private boolean enabled; // by default is false, until the user activates his account via email verification.
 
+    private boolean accountNonLocked; // by default is true, until the user is blocked by the admin.
 
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role.getName().toString());
+    @OneToMany(mappedBy = "user")
+    private List<Token> tokens;
 
-        return List.of(authority);
+    public static User of(String firstName, String lastName, String email, String password, String confirmPassword, Role role) {
+        return new User(null, firstName, lastName, email, password, confirmPassword, role, false, true, null);
     }
 
-
-    // Getters and setters for the new relationship
 }

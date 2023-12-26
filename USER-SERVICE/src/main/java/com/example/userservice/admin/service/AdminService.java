@@ -1,16 +1,16 @@
 package com.example.userservice.admin.service;
 
-import com.example.userservice.admin.repos.UserRepository;
-import com.example.userservice.admin.entities.User;
+
+import com.example.userservice.admin.repos.AdminRepository;
 import com.example.userservice.company.model.Company;
 import com.example.userservice.company.repo.CompanyRepository;
+import com.example.userservice.customer.model.Customer;
+import com.example.userservice.customer.repo.CustomerRepository;
 import com.example.userservice.freelancer.model.Freelancer;
 import com.example.userservice.freelancer.repo.FreelancerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
 import org.springframework.stereotype.Service;
 
 
@@ -23,31 +23,15 @@ import java.util.List;
 public class AdminService  {
 
     @Autowired
-    private UserRepository adminRepository;
+    private AdminRepository adminRepository;
     @Autowired
     private FreelancerRepository freelancerRepository;
     @Autowired
     private CompanyRepository companyRepository;
+    @Autowired
+    private CustomerRepository customerRepository;
 
-    public UserDetailsService userDetailsService(){
 
-        return new UserDetailsService() {
-            @Override
-            public UserDetails loadUserByUsername(String username) {
-                return adminRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("username not found"));
-            }
-        };
-    }
-
-    public User save(User newUser){
-
-        if(newUser.getId()==null){
-
-            newUser.setCreatedAt(LocalDateTime.now());
-        }
-        newUser.setUpdatedAt(LocalDateTime.now());
-        return adminRepository.save(newUser);
-    }
 
 
     //get freelancers by id
@@ -62,6 +46,11 @@ public class AdminService  {
         return companyRepository.findById(id).orElse(null);
     }
 
+    //get customer by id
+    public Customer getCustomerById(String id) {
+        return customerRepository.findById(id).orElse(null);
+    }
+
 
     //get all disabled companies
     public List<Company> disabledCompanies() {
@@ -72,6 +61,12 @@ public class AdminService  {
 
     public List<Freelancer> disabledFreelancers() {
         return freelancerRepository.findByAccountActivationStatus(false);
+    }
+
+    //get all disabled customers
+
+    public List<Customer> disabledCustomers() {
+        return customerRepository.findByAccountActivationStatus(false);
     }
 
 
@@ -87,6 +82,11 @@ public class AdminService  {
         return companyRepository.findByAccountVerificationStatus(false);
     }
 
+    //get unverified customers
+    public List<Customer> getUnverifiedCustomers() {
+        return customerRepository.findByAccountVerificationStatus(false);
+    }
+
 
 
     //get active companies
@@ -96,12 +96,25 @@ public class AdminService  {
         return  companyRepository.findByAccountActivationStatus(true);
     }
 
+    //get verified companies
+    public List<Company> verifiedCompanies(){
+
+        return  companyRepository.findByAccountVerificationStatus(true);
+    }
+
 
     //get active freelancers
     public List<Freelancer> activeFreelancers(){
 
         return  freelancerRepository.findByAccountActivationStatus(true);
     }
+
+    //get active customers
+    public List<Customer> activeCustomers(){
+
+        return  customerRepository.findByAccountActivationStatus(true);
+    }
+
 
 
 
