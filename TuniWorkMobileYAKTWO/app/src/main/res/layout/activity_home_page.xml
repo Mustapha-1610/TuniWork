@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="#FBEAEB">
+
+    <!-- Your existing FrameLayout -->
+    <FrameLayout
+        android:id="@+id/Home_Container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <!-- Your content goes here -->
+    </FrameLayout>
+
+    <!-- Bottom Navigation Bar -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_nav_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#DF9E7E"
+        app:menu="@menu/bottom_nav_menu"
+
+        /> <!-- You should replace "@menu/bottom_nav_menu" with the actual menu resource for your bottom navigation bar -->
+
+</LinearLayout>

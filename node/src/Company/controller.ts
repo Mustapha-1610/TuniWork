@@ -15,6 +15,8 @@ import PrivateJobOffer from "../WorkOffer/Company/CompanyPrivateWorkOfferModal";
 import createPDF from "../PDFServices/freelancerContract";
 import freelancer from "../Freelancer/modal";
 import { freelancerNameSpace } from "../server";
+import generateFreelancerToken from "./utils";
+
 
 // function to create a comapny account (aziz)
 
@@ -137,9 +139,10 @@ export const create = async (req: express.Request, res: express.Response) => {
   }
 };
 
+
+
 // function to verify freelancer account (aziz)
 
-//
 export const sendVerificationLink = async (
   req: express.Request,
   res: express.Response
@@ -206,6 +209,10 @@ export const auth = async (req: express.Request, res: express.Response) => {
     return res.json({ error: "Server Error!" });
   }
 };
+
+
+
+
 
 // function to retrieve company Account informations (aziz)
 export const getProfile = async (
@@ -350,10 +357,19 @@ export const activateCompany = async ( req: express.Request,  res: express.Respo
 export const getAllFreelancers = async (  req: express.Request, res: express.Response) => {
 
   let allfreelancers = await Freelancer.find();
-  return res.json({ allfreelancers });
+  return res.json({ freelancers: allfreelancers });
   
 };
 
+
+//get all freelancers
+export const getAllFreelancersWeb = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  let allfreelancers = await Freelancer.find();
+  return res.json({ allfreelancers });
+};
 
 
 
@@ -673,6 +689,74 @@ export const declinePaymenyRequest = async (
     } else {
       work = await PrivateJobOffer.findById(workId);
     }
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error" });
+  }
+};
+
+
+
+
+
+
+/*****************MOBILE ************ */
+export const createMobileAccount = async (  req: express.Request,  res: express.Response) => {
+  try {
+    const {
+      CompanyName,
+      CompanyEmail,
+      CompanyDescription,
+      CompanyWebsite,
+      Password,
+      Location,
+      WorkTitle,
+      CompanyPhone,
+      City,
+      Municipality,
+    } = req.body;
+    // ylawej 3la freelancer 3andou ya nafs ya nafs phone number ya nafs l mail
+    let existingCompany = await company.findOne({
+      $or: [{ CompanyEmail: CompanyEmail }, { CompanyPhone: CompanyPhone }],
+    });
+    if (existingCompany) {
+      return res.json({ error: "Account Exists Allready" });
+    }
+    const characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let VerificationCode = "";
+    for (let i = 0; i < 25; i++) {
+      VerificationCode +=
+        characters[Math.floor(Math.random() * characters.length)];
+    }
+    const securePassword = bcrypt.hashSync(Password);
+    const companyAccount: any = await company.create({
+      CompanyName,
+      CompanyEmail,
+      CompanyDescription,
+      CompanyWebsite,
+      Password: securePassword,
+      CompanyPhone,
+      VerificationCode: VerificationCode,
+      Languages: ["Arabic", "English"],
+      EstimateWorkLocation: {
+        City,
+        Municipality,
+      },
+      WorkTitle: {
+        WorkTitleId: null,
+        WorkTitleText: WorkTitle,
+      },
+      VerLinkExpDate: new Date(new Date().getTime() + 2 * 60 * 60 * 1000),
+      Location,
+    });
+    await SendCompanyAccountConfirmationMail(
+      companyAccount.CompanyName,
+      companyAccount.CompanyEmail,
+      companyAccount._id,
+      companyAccount.VerificationCode
+    );
+    return res.json({ success: "Account Created" });
   } catch (err) {
     console.log(err);
     return res.json({ error: "Server Error" });

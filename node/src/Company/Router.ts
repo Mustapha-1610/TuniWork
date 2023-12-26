@@ -5,11 +5,17 @@ const companyRouter = express.Router();
 
 companyRouter.post("/create", companyController.create);
 
+companyRouter.post("/createMobileAccount",companyController.createMobileAccount);
+
+
 companyRouter.put("/verify", companyController.verifyAccount);
 
 companyRouter.post("/sendLink", companyController.sendVerificationLink);
 
 companyRouter.post("/auth", companyController.auth);
+//companyRouter.post("/multiauth", companyController.multiauth);
+
+
 
 companyRouter.post("/profile", companyController.getProfile);
 
@@ -23,6 +29,7 @@ companyRouter.put("/disable/:companyId", companyController.disableAccount);
 companyRouter.put("/activate/:companyId", companyController.activateCompany);
 
 companyRouter.get("/getAllFreelancers", companyController.getAllFreelancers);
+companyRouter.get("/getAllFreelancersWeb", companyController.getAllFreelancersWeb);
 
 companyRouter.post(
   "/saveFreelancer/:companyId/:freelancerId",

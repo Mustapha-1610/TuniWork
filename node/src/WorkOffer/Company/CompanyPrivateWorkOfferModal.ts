@@ -16,6 +16,11 @@ const privateWorkOfferSchema = new Schema({
       },
     },
   ],
+
+  FixedPrice: {
+    type: String,
+  },
+  
   PaymentRequest: {
     PaymentRequestId: {
       type: Schema.Types.ObjectId,

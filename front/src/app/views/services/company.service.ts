@@ -240,7 +240,7 @@ export class CompanyService {
   //freelancers page
   getAllFreelancers() {
     return this.http
-      .get('http://localhost:5000/api/company/getAllFreelancers')
+      .get('http://localhost:5000/api/company/getAllFreelancersWeb')
       .pipe(
         catchError((error) => {
           console.error('Error accepting freelancer:', error);

@@ -139,10 +139,7 @@ export const create = async (req: express.Request, res: express.Response) => {
   }
 };
 
-export const createMobileAccount = async (
-  req: express.Request,
-  res: express.Response
-) => {
+export const createMobileAccount = async (  req: express.Request,  res: express.Response) => {
   try {
     const {
       City,

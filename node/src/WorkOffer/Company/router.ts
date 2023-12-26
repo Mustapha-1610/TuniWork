@@ -7,6 +7,8 @@ CompanyWorkOfferRouter.post(
   CompanyWorkOfferController.createPublicJob
 );
 
+
+
 CompanyWorkOfferRouter.get(
   "/getPublicJobOffer/:publicJobOfferId",
   CompanyWorkOfferController.getPublicJobOffer
@@ -33,6 +35,8 @@ CompanyWorkOfferRouter.get(
   "/getAllPublicJobOffers/:companyId",
   CompanyWorkOfferController.getAllPublicJobOffers
 );
+
+
 
 /************************* partie l private job ***********************/
 CompanyWorkOfferRouter.post(
@@ -67,6 +71,9 @@ CompanyWorkOfferRouter.post(
   CompanyWorkOfferController.FindBestMatchesPublicWorkOffers
 );
 
+
+
+
 CompanyWorkOfferRouter.post(
   "/getPublicWorkOffer",
   CompanyWorkOfferController.getPublicWorkOffer
@@ -86,4 +93,50 @@ CompanyWorkOfferRouter.post(
   "/getWorkOfferInfos",
   CompanyWorkOfferController.getWorkOfferProgress
 );
+
+
+
+
+/**********mobile********* */
+
+CompanyWorkOfferRouter.post(
+  "/createPublicJobMobile",
+  CompanyWorkOfferController.createPublicJobMobile
+);
+
+CompanyWorkOfferRouter.post(
+  "/getAllPublicJobOffersMob",
+  CompanyWorkOfferController.getAllPublicJobOffersMob
+);
+
+CompanyWorkOfferRouter.post(
+  "/getAllPrivateJobOffersMob",
+  CompanyWorkOfferController.getAllPrivateJobOffersMob
+);
+
+
+
+CompanyWorkOfferRouter.delete(
+  "/cancelPublicJobOfferMob/:PublicJobOfferId",
+  CompanyWorkOfferController.cancelPublicJobOfferMob
+);
+
+
+CompanyWorkOfferRouter.delete(
+  "/cancelPrivateJobOfferMob/:PrivateJobOfferId",
+  CompanyWorkOfferController.cancelPrivateJobOfferMob
+);
+
+CompanyWorkOfferRouter.post(
+  "/getAllPublicJobOffersMob",
+  CompanyWorkOfferController.getAllPublicJobOffersMob
+);
+
+
+CompanyWorkOfferRouter.post(
+  "/createPrivateJobMob",
+  CompanyWorkOfferController.createPrivateJobMob
+);
+
+
 export default CompanyWorkOfferRouter;

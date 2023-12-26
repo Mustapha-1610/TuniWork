@@ -1,0 +1,86 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".FreelancerFragment">
+
+    <LinearLayout
+        android:id="@+id/input_fields_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:padding="1dp">
+
+        <EditText
+            android:id="@+id/Email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:background="@android:drawable/edit_text"
+            android:hint="Email"
+            android:padding="10dp" />
+
+        <EditText
+            android:id="@+id/Password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:background="@android:drawable/edit_text"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:padding="10dp" />
+
+        <Button
+            android:id="@+id/LoginButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Login"
+            android:clickable="true"
+            android:background="#FF6200EE"
+            android:textColor="#FFFFFF" />
+
+        <!-- Sign Up TextView -->
+        <TextView
+            android:id="@+id/SignUpText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Sign Up"
+            android:textColor="#FF6200EE"
+            android:layout_below="@id/LoginButton"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="4dp"
+            android:clickable="true"
+             />
+
+        <Button
+            android:id="@+id/SignUpAsCompanyButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Sign Up as Company"
+            android:textColor="#FF6200EE"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:layout_below="@id/SignUpText"
+            android:layout_centerHorizontal="true"/>
+
+        <Button
+            android:id="@+id/btnNavigateToLoginPage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Go to Login company Page"
+            android:textColor="#FF6200EE"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:layout_below="@id/SignUpAsCompanyButton"
+            android:layout_centerHorizontal="true"/>
+
+
+    </LinearLayout>
+</RelativeLayout>

@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const CompanyPublicWorkOfferSchema = new Schema({
-  // (Mustapha)
   TaskTable: [
     {
       TaskTitle: {
@@ -15,6 +14,8 @@ const CompanyPublicWorkOfferSchema = new Schema({
       },
     },
   ],
+
+
   PaymentRequest: {
     PaymentRequestId: {
       type: Schema.Types.ObjectId,
@@ -34,6 +35,9 @@ const CompanyPublicWorkOfferSchema = new Schema({
       default: "Tasks Not Done",
     },
   },
+
+
+  
   // title mta3 l post
   Title: {
     type: String,
@@ -122,6 +126,8 @@ const CompanyPublicWorkOfferSchema = new Schema({
     type: String,
     required: true,
   },
+
+ 
 
   CompanySignature: {
     type: String,

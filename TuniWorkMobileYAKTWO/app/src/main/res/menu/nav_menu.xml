@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <item android:title="Account">
+        <menu>
+<item
+    android:id="@+id/nav_jobs"
+    android:title="Jobs"
+    android:icon="@drawable/jobs"/>
+
+    <item
+        android:id="@+id/nav_message"
+        android:icon="@drawable/employee"
+        android:title="Freelancers"/>
+
+
+    <item
+        android:id="@+id/nav_trash"
+        android:title="Reports"
+        android:icon="@drawable/reports"/>
+
+        </menu>
+    </item>
+
+
+
+
+
+    <item android:title="Profile">
+
+        <menu>
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/logout"
+                android:title="Logout"/>
+            <item
+                android:id="@+id/settings"
+                android:icon="@drawable/settings"
+                android:title="Settings"/>
+         </menu>
+    </item>
+
+    <item android:title="Communicate">
+        <menu>
+
+            <item
+                android:id="@+id/messages"
+                android:icon="@drawable/messages"
+                android:title="Messages"/>
+
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/share"
+                android:title="Share" />
+
+        </menu>
+    </item>
+</menu>

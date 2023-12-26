@@ -10,9 +10,7 @@ import { CompanyService } from '../../services/company.service';
 })
 export class TalentFreelancersComponent implements OnInit {
   companyData: any = this.companyService.getCompanyInfos();
-
   freelancers: any[] = [];
-
 
   constructor(private companyService: CompanyService) { }
 
@@ -23,7 +21,10 @@ export class TalentFreelancersComponent implements OnInit {
   fetchFreelancers(): void {
     this.companyService.getAllFreelancers().subscribe(
       (response: any) => {
-        this.freelancers = response.allfreelancers;
+        // Filter freelancers by the company's work title
+        this.freelancers = response.allfreelancers.filter((freelancer: any) => {
+          return freelancer.WorkTitle.WorkTitleText === this.companyData.CWorkTitle.WorkTitleText;
+        });
         console.log(this.freelancers);
       },
       (error) => {
