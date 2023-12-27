@@ -8,6 +8,7 @@ import { CheckWorkOfferDetailsComponent } from './check-work-offer-details/check
 import { EditInfosPageComponent } from './edit-infos-page/edit-infos-page.component';
 import { PassResetPageComponent } from './pass-reset-page/pass-reset-page.component';
 
+
 const routes: Routes = [
   { path: '', component: HomePageComponent },
   { path: 'browse', component: FindWorkPageComponent },
@@ -15,7 +16,25 @@ const routes: Routes = [
   { path: 'WorkOffer/:id', component: CheckWorkOfferDetailsComponent },
   { path: 'browse', component: FindWorkPageComponent },
   { path: 'editInfos', component: EditInfosPageComponent },
-  { path: 'editPassword', component: PassResetPageComponent },
+  { path: 'workHistory', component: HistoryPageComponent },
+  { path: 'WPDisplay/:id', component: WorkInfosComponent },
+  {
+    path: 'submitPaymentRequest/:id',
+    component: SubmitPaymentRequestPageComponent,
+  },
+  {
+    path: 'MyInbox',
+    component: InboxComponent,
+  },
+  {
+    path: 'checkPWOInfos/:id',
+    component: PwoInfosComponent,
+  },
+  {
+    path: 'Notifications',
+    component: NotificationsPageComponent,
+  },
+  
 ];
 
 @NgModule({

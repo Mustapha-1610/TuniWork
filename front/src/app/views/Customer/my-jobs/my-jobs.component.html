@@ -1,0 +1,93 @@
+
+<br><br><br><br><br>
+<!--
+<div class="container">
+  <div class="card shadow mb-4">
+    <div class="card-body">
+      <h3>Private Work Offers</h3>
+      <table class="table table-striped">
+        <tr>
+          <th>Title</th>
+          <th>Status</th>
+          <th>Description</th>
+          <th>Creation Date</th>
+          <th>Actions</th>
+        </tr>
+
+        <tbody *ngFor="let privatecjoboffer of privateCJoboffers">
+          <tr>
+            <td>{{ privatecjoboffer.Title }}</td>
+            <td>{{ privatecjoboffer.status }}</td>
+            <td>{{ privatecjoboffer.Description }}</td>
+            <td>{{ privatecjoboffer.CreationDate | date : "dd/MM/yyyy" }}</td>
+            <td>
+              <a class="btn btn-success"
+                [routerLink]="'/customer/private-job-edit/' + privatecjoboffer._id">Modifier</a>
+
+                <a class="btn btn-danger" (click)="showDeleteConfirmation(privatecjoboffer)">Supprimer</a>
+              <a class="btn btn-info" [routerLink]="'/customer/private-job-details/' + privatecjoboffer._id">Details</a>
+            </td>
+
+
+          </tr>
+        </tbody>
+
+      </table>
+      <app-delete-confirmation
+      *ngIf="isDeleteConfirmationVisible"
+      (deleteConfirmed)="confirmDelete()"
+      (deleteCanceled)="cancelDelete()"
+    ></app-delete-confirmation>
+    </div>
+  </div>
+
+</div>
+-->
+
+
+<section class="container box feature1">
+  <div class="row">
+    <div class="col-12" >
+      <header class="first major" >
+        <h2>This is an important heading</h2>
+        <p>And this is where we talk about why we’re <strong>pretty awesome</strong> ...</p>
+      </header>
+    </div>
+    <div class="col-4 col-12-medium" *ngFor="let privatecjoboffer of privateCJoboffers">
+      <section >
+        <div class="card">
+          <header class="card-header">
+            <p>{{ privatecjoboffer.CreationDate | date : "dd/MM/yyyy" }}</p>
+            <span class="title">{{ privatecjoboffer.Title }}</span>
+          </header>
+          <div class="card-author">
+            <a class="author-avatar" href="#">
+              <span>
+            </span></a>
+            <svg class="half-circle" viewBox="0 0 106 57">
+              <path d="M102 4c0 27.1-21.9 49-49 49S4 31.1 4 4"></path>
+            </svg>
+            <div class="author-name">
+              <div class="author-name-prefix">Status</div> {{ privatecjoboffer.status }}
+              </div>
+            </div>
+            <div class="tags">
+             
+             <a [routerLink]="'/customer/private-job-edit/' + privatecjoboffer._id">Modifier</a>
+              <a  (click)="showDeleteConfirmation(privatecjoboffer)">Supprimer</a>
+              <a [routerLink]="'/customer/private-job-details/' + privatecjoboffer._id">Details</a>
+              
+            </div>
+          </div>
+      </section>
+    </div>
+    
+    
+    <div class="col-12">
+      <p>Phasellus quam turpis, feugiat sit amet ornare in, hendrerit in lectus. Praesent semper
+      bibendum ipsum, et tristique augue fringilla eu. Vivamus id risus vel dolor auctor euismod
+      quis eget mi. Etiam eu ante risus. Aliquam erat volutpat. Aliquam luctus mattis lectus sit
+      amet pulvinar. Nam nec turpis.</p>
+    </div>
+  </div>
+</section>

@@ -1,8 +1,13 @@
 import express from "express";
 import customer from "../../Customer/modal";
+<<<<<<< Updated upstream
 //import customerPublicWorkOffer from "./CustomerPublicWorkOfferModal";
+=======
+
+>>>>>>> Stashed changes
 import PrivateJobOffer from "./CustomerPrivateWorkOfferModal";
 import Freelancer from "../../Freelancer/modal";
+import PrivateCJobOffer from "./CustomerPrivateWorkOfferModal";
 
 
 
@@ -192,7 +197,195 @@ export const getAllPrivateJobOffers = async (
   req: express.Request,
   res: express.Response
 ) => {
-  let AllPJobs = await PrivateJobOffer.find();
-  return res.json({ AllPJobs });
+  try {
+    const { customerId } = req.params;
+
+   
+    const privateCJobOffers = await  PrivateCJobOffer.find({
+      CustomerId: customerId,
+    });
+
+    res.json(privateCJobOffers);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server Error" });
+  }
 };
 
+<<<<<<< Updated upstream
+=======
+
+
+
+export const createPrivateJob = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { privateJobOfferData, taskTable } = req.body;
+
+
+
+
+   const offeringCustomer = await customer.findById(
+   privateJobOfferData.CustomerId 
+    );
+
+
+    if (!offeringCustomer) {
+      return res.json({ error: "Server Error" });
+    }
+
+  
+    const freelancer: any = await Freelancer.findById(
+      privateJobOfferData.FreelancerId
+    );
+    const freelancerName = freelancer ? freelancer.Name : null;
+
+    let workOffer: any = await PrivateJobOffer.create({
+      Title: privateJobOfferData.Title,
+      Description: privateJobOfferData.Description,
+      Note: privateJobOfferData.Note,
+      PayRate: {
+        PayPerHour: privateJobOfferData.PayPerHour,
+        PayPerTask: privateJobOfferData.PayPerTask,
+        
+      },
+      CustomerId: privateJobOfferData.CustomerId, 
+      PaymentMethodVerificationStatus:
+        privateJobOfferData.PaymentMethodVerificationStatus,
+      CustomerName: privateJobOfferData.CustomerName, 
+      CustomerLocation: privateJobOfferData.CustomerLocation, 
+      TotalMoneyPayed: privateJobOfferData.TotalMoneyPayed,
+      TotalWorkOffered: privateJobOfferData.TotalWorkOffered,
+      DeadLine: privateJobOfferData.DeadLine,
+
+      WorkingFreelancer: {
+        FreelancerName: freelancerName, 
+        FreelancerId: privateJobOfferData.FreelancerId,
+      },
+      TaskTable: [],
+      StartTime: privateJobOfferData.StartTime,
+    });
+    taskTable.map((item: any) => {
+      workOffer.TaskTable.push({
+        TaskTitle: item,
+      });
+    });
+    await workOffer.save();
+    const FreelancerId = privateJobOfferData.FreelancerId;
+  
+    await Freelancer.findByIdAndUpdate(
+      FreelancerId,
+      {
+        $push: {
+          ProposedPrivateWorks: {
+            PrivateJobOfferId: workOffer._id,
+            Title: privateJobOfferData.Title,
+            Description: privateJobOfferData.Description,
+          },
+          Notifications: {
+            NotificationMessage:
+              "New Work Offer Recieved from " +
+              offeringCustomer.Name + 
+              " Customer",
+            senderInformations: {
+              senderId: offeringCustomer._id, 
+              senderUserType: "Customer", 
+              creationDate: new Date(),
+              context: "PrivateWorkOffer",
+              objectId: workOffer._id,
+            },
+          },
+        },
+      },
+      { new: true }
+    );
+
+    return res.json({
+      success: "private work offer created",
+      jobOfferId: workOffer._id,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.json({  error: err.message || "Server Error!" });
+  }
+};
+
+
+
+export const getPrivateJobOfferDetails = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { privateJobOfferId } = req.params;
+
+
+    const privateJobOfferDetails = await PrivateJobOffer.findById(
+      privateJobOfferId
+    );
+
+    res.json(privateJobOfferDetails);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server Error" });
+  }
+};
+
+
+
+
+export const deletePrivateJobOffer = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { privateJobOfferId } = req.params;
+
+    // Delete private job offer based on the privateJobOfferId
+    await PrivateJobOffer.findByIdAndDelete(privateJobOfferId);
+
+    res.json({ success: "Private job offer deleted" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server Error" });
+  }
+};
+
+
+
+
+export const cancelJobOffer = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+   
+
+    const { PrivateJobOfferId } = req.params; 
+  
+    const jobOffer = await PrivateJobOffer.findById(PrivateJobOfferId);
+
+    if (!jobOffer) {
+      return res.json({ error: "Job offer not found" });
+    }
+
+    
+    if (jobOffer.status !== "awaiting freelancer response") {
+      return res.json({
+        error: "Cannot cancel the job offer at its current status",
+      });
+    }
+
+    await PrivateJobOffer.findByIdAndDelete(PrivateJobOfferId);
+
+    return res.json({ success: "Job offer canceled successfully" });
+  } catch (err) {
+    console.log(err);
+    return res.json({ error: "Server Error!" });
+  }
+};
+
+
+>>>>>>> Stashed changes

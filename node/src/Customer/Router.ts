@@ -35,6 +35,33 @@ customerRouter.put("/ResetPassword", customerController.ResetPassword);
 customerRouter.post("/sendLinkEmail", customerController.sendVerificationLink);
 customerRouter.post("/LgoogleAuth", customerController.googleAuth);
 
+<<<<<<< Updated upstream
+=======
+
+customerRouter.post("/multiauth",customerController.Mauth);
+customerRouter.get("/getAllFreelancers", customerController.getAllFreelancers);
+
+customerRouter.post(
+  "/saveFreelancer/:customerId/:freelancerId",
+  customerController.saveFreelancer
+);
+customerRouter.post(
+  "/unsaveFreelancer/:customerId/:freelancerId",
+  customerController.unsaveFreelancer
+);
+
+customerRouter.get(
+  "/viewFreelancerDetails/:freelancerId",
+  customerController.viewFreelancerDetails
+);
+
+customerRouter.get(
+  "/getSavedFreelancers/:customerId",
+  customerController.getSavedFreelancers
+);
+
+
+>>>>>>> Stashed changes
 
 
 

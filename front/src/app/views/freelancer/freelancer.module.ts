@@ -17,6 +17,7 @@ import { OngoingWorkComponent } from './my-work-page/ongoing-work/ongoing-work.c
 import { FinichedWorkComponent } from './my-work-page/finiched-work/finiched-work.component';
 import { PassResetPageComponent } from './pass-reset-page/pass-reset-page.component';
 
+
 @NgModule({
   declarations: [
     HomePageComponent,
@@ -27,9 +28,18 @@ import { PassResetPageComponent } from './pass-reset-page/pass-reset-page.compon
     BestMatchesComponentComponent,
     SavedJobsComponentComponent,
     CheckWorkOfferDetailsComponent,
-    OngoingWorkComponent,
-    FinichedWorkComponent,
-    PassResetPageComponent,
+    ApplyedJobsComponentComponent,
+    HistoryPageComponent,
+    OngoingWorkComponentComponent,
+    FinichedWorkComponentComponent,
+    WorkInfosComponent,
+    SubmitPaymentRequestPageComponent,
+    InboxComponent,
+    RecievedContractsComponent,
+    RecievedWorkOffersComponent,
+    PwoInfosComponent,
+    NotificationsPageComponent,
+
   ],
   imports: [
     FormsModule,
