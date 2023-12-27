@@ -27,10 +27,17 @@ export class PrivateJobEditComponent implements OnInit {
       Note: [''],
       PayPerTask: ['', Validators.required],
       PayPerHour: ['', Validators.required],
+<<<<<<< Updated upstream:src/app/views/comapny/private-job-edit/private-job-edit.component.ts
       CompanyName: ['', Validators.required],
       CompanyLocation: [''],
       TotalWorkOfferd: ['', Validators.required],
       TotalMoneyPayed: ['', Validators.required],
+=======
+      Name: ['', Validators.required], // Change from CompanyName to CustomerName
+      Location: [''], // Change from CompanyLocation to CustomerLocation
+      TotalWorkOffered: ['', Validators.required], // Change from TotalWorkOfferd to TotalWorkOffered
+      TotalMoneyPaid: ['', Validators.required], // Change from TotalMoneyPayed to TotalMoneyPaid
+>>>>>>> Stashed changes:front/src/app/views/Customer/private-job-edit/private-job-edit.component.ts
     });
 
     // Fetch the private job offer ID from the route parameters
@@ -73,6 +80,7 @@ export class PrivateJobEditComponent implements OnInit {
 
     const updatedJobOfferData = this.privateJobEditForm.value;
 
+<<<<<<< Updated upstream:src/app/views/comapny/private-job-edit/private-job-edit.component.ts
     this.cs.editPrivateJobOffer(privateJobOfferId, updatedJobOfferData).subscribe(
       (response: any) => {
         console.log(response.success);
@@ -82,5 +90,19 @@ export class PrivateJobEditComponent implements OnInit {
         console.error('Error editing private job offer', error);
       }
     );
+=======
+    this.customerService
+      .editPrivateJobOffer(privateJobOfferId,updatedJobOfferData)
+      .subscribe(
+        (response: any) => {
+          console.log(response.success);
+        },
+        (error: any) => {
+          console.error('Error updating private job offer', error);
+        }
+      );
+      
+
+>>>>>>> Stashed changes:front/src/app/views/Customer/private-job-edit/private-job-edit.component.ts
   }
 }
