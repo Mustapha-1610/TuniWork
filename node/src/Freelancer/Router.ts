@@ -90,6 +90,10 @@ freelancerRouter.get("/getDate", freelancerController.getDate);
 
 //
 freelancerRouter.get("/refreshProfile", freelancerController.refreshProfile);
+freelancerRouter.post(
+  "/refreshProfileMobile",
+  freelancerController.refreshProfileMobile
+);
 
 //
 freelancerRouter.get(

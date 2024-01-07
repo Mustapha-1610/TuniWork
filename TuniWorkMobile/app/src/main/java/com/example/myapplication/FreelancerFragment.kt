@@ -89,14 +89,10 @@ class FreelancerFragment : Fragment() {
                             val freelancerAccount = response.body()
 
                             if (freelancerAccount?.error.equals(null) && freelancerAccount?.emailError.equals(null)){
-
-                                Log.i("Success", "Response: ${response.body()}")
-                                Log.i("Success", "Name: ${(freelancerAccount?.freelancerAccount?.Name)}")
-
                                 // Convert freelancerAccount to JSON
                                 val gson = Gson()
                                 val freelancerAccountJson = gson.toJson(freelancerAccount?.freelancerAccount)
-                                StyleableToast.makeText(requireContext(),  "Welcome ${(freelancerAccount?.freelancerAccount?.Name)}", Toast.LENGTH_LONG, R.style.SuccessToast).show();
+                                StyleableToast.makeText(requireContext(),  "Welcome ${(freelancerAccount?.freelancerAccount?.name)}", Toast.LENGTH_LONG, R.style.SuccessToast).show();
                                 // Get SharedPreferences
                                 val sharedPref = context?.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
                                 if (sharedPref != null) {
@@ -105,8 +101,9 @@ class FreelancerFragment : Fragment() {
                                         putString("freelancer_account", freelancerAccountJson)
                                         apply()
                                     }
-                                }
 
+                                }
+                                Log.i("AAAAAAAAA" , freelancerAccount?.freelancerAccount!!.notifications.toString())
                                 val intent = Intent(requireContext(), HomePage::class.java)
                                 startActivity(intent)
 

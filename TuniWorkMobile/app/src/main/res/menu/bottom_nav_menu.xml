@@ -2,15 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     >
     <item
-        android:id="@+id/nav_home"
-        android:title="Home"
-        android:icon="@drawable/ic_home" />
-
-    <item
         android:id="@+id/nav_browse"
         android:title="Browse"
         android:icon="@drawable/ic_browse" />
-
+    <item
+        android:id="@+id/nav_inbox"
+        android:title="Inbox"
+        android:icon="@drawable/inbox" />
+    <item
+        android:id="@+id/nav_Notifs"
+        android:title="Notifs"
+        android:icon="@drawable/notiicon" />
     <item
         android:id="@+id/nav_profile"
         android:title="Profile"

@@ -23,6 +23,9 @@ public class GatewayServiceApplication {
                 .route(r -> r.path("/users/**")
                         .filters(f -> f.stripPrefix(1))
                         .uri("lb://USER-SERVICE"))
+                .route(r -> r.path("/users/**")
+                        .filters(f -> f.stripPrefix(1))
+                        .uri("lb://Freelancer-Email-SERVICE"))
                 .build();
     }
 }

@@ -1,6 +1,24 @@
-<div *ngFor="let items of WorkOffers">
-  Title : {{ items.Title }} <br />
-  Description : {{ items.Description }}<br />
-  Status : {{ items.Status }} <br />
-  <button (click)="checkPWO(items.PrivateJobOfferId)">Check</button>
+<div class="container mx-auto px-4">
+  <h2 class="text-2xl font-bold mb-4">Available Work Offers</h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div *ngFor="let items of WorkOffers">
+      <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <div class="p-4">
+          <h3 class="text-xl font-semibold mb-2">{{ items.Title }}</h3>
+          <p class="text-gray-700 mb-4">{{ items.Description }}</p>
+          <span
+            class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
+            >{{ items.Status }}</span
+          >
+          <button
+            (click)="checkPWO(items.PrivateJobOfferId)"
+            class="bg-blue-500 text-white font-bold py-2 px-4 rounded"
+          >
+            Check
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

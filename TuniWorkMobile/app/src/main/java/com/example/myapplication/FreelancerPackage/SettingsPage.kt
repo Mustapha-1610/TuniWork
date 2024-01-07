@@ -10,6 +10,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import com.example.myapplication.MainActivity
 import com.example.myapplication.R
+import com.example.myapplication.dataClasses.Freelancer
+import com.google.gson.Gson
+import org.json.JSONObject
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -49,8 +52,16 @@ class SettingsPage : Fragment() {
         val logoutButton: Button = view.findViewById(R.id.logoutButton)
         logoutButton.setOnClickListener {
             val sharedPref = context?.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
-            sharedPref?.edit()?.remove("freelancer_account")?.apply()
             val intent = Intent(requireContext(), MainActivity::class.java)
+            SocketManager.initSocket("http://192.168.1.20:5000/freelancer")
+            SocketManager.connect()
+            val freelancerAccountJson = sharedPref?.getString("freelancer_account", null)
+            val gson = Gson()
+            val freelancer = freelancerAccountJson?.let {
+                gson.fromJson(it, Freelancer::class.java)
+            }
+            SocketManager.emit("userDisconnected" , freelancer!!.id)
+            sharedPref?.edit()?.remove("freelancer_account")?.apply()
             startActivity(intent)
         }
     }

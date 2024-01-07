@@ -28,7 +28,6 @@ class workofferAdapter (private val data: List<PublicJobOffer>): RecyclerView.Ad
         override fun onClick(v: View?) {
             onItemClick(bindingAdapterPosition);
             println("selectedPosition : " +selectedPosition);
-            notifyItemChanged(selectedPosition);
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): workofferAdapter.MyViewHolder {

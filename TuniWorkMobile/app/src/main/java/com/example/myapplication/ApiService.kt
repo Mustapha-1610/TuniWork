@@ -64,4 +64,11 @@ interface ApiService {
     )
     @POST("/api/companyWorkOffer/getMatchingPublicWorkOffers")
     suspend fun getAll(@Body freelancerId : SendRequest) : Response<MatchingPublicWorkOffersResponse>
+
+    @GET ("/api/freelancer/cleanNotifications")
+    suspend fun cleanNotifications()
+    @GET ("/api/freelancer/refreshProfile")
+    suspend fun refreshFreelancerProfile() : Response<FreelancerResponse>
+    @POST ("/api/freelancer/refreshProfileMobile")
+    suspend fun refreshFreelancerProfileHomePage(@Body freelancerId : SendRequest) : Response<FreelancerResponse>
 }

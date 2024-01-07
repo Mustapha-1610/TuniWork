@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.ApiClient
@@ -14,6 +15,7 @@ import com.example.myapplication.ApiService
 import com.example.myapplication.R
 import com.example.myapplication.dataClasses.Freelancer
 import com.example.myapplication.freelancerAdapters.workofferAdapter
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -41,8 +43,6 @@ class Home : Fragment() {
     ): View? {
 
         return inflater.inflate(R.layout.fragment_home, container, false)
-    }
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     }
     companion object {
         @JvmStatic

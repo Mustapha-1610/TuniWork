@@ -1,20 +1,19 @@
 package com.example.myapplication.dataClasses
 
 import com.google.gson.annotations.SerializedName
+import java.util.Date
 
 data class Freelancer(
-    @SerializedName("Name") val Name: String?,
-    @SerializedName("Surname") val Surname: String?,
+    @SerializedName("Name") val name: String?,
+    @SerializedName("Surname") val surname: String?,
     @SerializedName("PhoneNumber") val phoneNumber: Long?,
     @SerializedName("ProfilePicture") val profilePicture: String?,
     @SerializedName("Email") val email: String,
     @SerializedName("Password") val password: String,
     @SerializedName("VerificationCode") val verificationCode: String?,
     @SerializedName("AccountActivationStatus") val accountActivationStatus: Boolean = true,
-// ... (other fields)
-@SerializedName("AccountVerificationStatus") val accountVerificationStatus: Boolean = false,
-// ... (other field
-@SerializedName("Earnings") val earnings: Double = 0.0,
+    @SerializedName("AccountVerificationStatus") val accountVerificationStatus: Boolean = false,
+    @SerializedName("Earnings") val earnings: Double = 0.0,
     @SerializedName("PayRate") val payRate: PayRate,
     @SerializedName("WorkHistory") val workHistory: WorkHistory,
     @SerializedName("Schedule") val schedule: List<String>,
@@ -29,12 +28,27 @@ data class Freelancer(
     @SerializedName("ProposedPrivateWorks") val proposedPrivateWorks: List<ProposedPrivateWork>,
     @SerializedName("PendingWorkOffers") val pendingWorkOffers: List<PendingWorkOffer>,
     @SerializedName("CompanyReceivedContracts") val companyReceivedContracts: List<String?>,
-    @SerializedName("_id") val id : String
+    @SerializedName("_id") val id: String,
+    @SerializedName("Notifications") val notifications: List<Notification>,
 )
 
 data class PayRate(
     @SerializedName("HourlyRate") val hourlyRate: Double,
     @SerializedName("payPerTaskRate") val payPerTaskRate: Double
+)
+data class Notification(
+    @SerializedName("NotificationMessage") val notificationMessage: String,
+    @SerializedName("readStatus") val readStatus: Boolean,
+    @SerializedName("senderInformations") val senderInformation: SenderInformations, // Fixed the property name
+    @SerializedName("_id") val id: String
+)
+
+data class SenderInformations( // Renamed the class to match the corrected property name
+    @SerializedName("senderId") val senderId: String,
+    @SerializedName("senderUserType") val senderUserType: String,
+    @SerializedName("creationDate") val creationDate: Date,
+    @SerializedName("context") val context: String,
+    @SerializedName("objectId") val objectId: String
 )
 
 data class WorkHistory(

@@ -6,11 +6,22 @@
     android:layout_height="match_parent"
     tools:context=".FreelancerPackage.ProfilePage">
 
+    <TextView
+        android:id="@+id/Count"
+        android:layout_width="140dp"
+        android:layout_height="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.04" />
+
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageView"
         android:layout_width="221dp"
         android:layout_height="209dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="124dp"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

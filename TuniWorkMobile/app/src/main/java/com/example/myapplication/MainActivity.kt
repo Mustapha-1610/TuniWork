@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
                 val freelancer = freelancerAccountJson?.let {
                     gson.fromJson(it, Freelancer::class.java)
                 }
-                StyleableToast.makeText(this,  "Welcome ${(freelancer?.Name)}", Toast.LENGTH_LONG, R.style.SuccessToast).show();
+                StyleableToast.makeText(this,  "Welcome ${(freelancer?.name)}", Toast.LENGTH_LONG, R.style.SuccessToast).show();
                 val intent = Intent(this, HomePage::class.java)
                 startActivity(intent)
             }

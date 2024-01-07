@@ -45,52 +45,56 @@ class ProfilePage : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile_page, container, false)
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val sharedPref = activity?.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
         val freelancerAccountJson = sharedPref?.getString("freelancer_account", null)
-        Log.i("Success", "Response: ${freelancerAccountJson}")
         val gson = Gson()
         val freelancer = freelancerAccountJson?.let {
             gson.fromJson(it, Freelancer::class.java)
         }
-        Log.i("SUCCESS",freelancer?.profilePicture.toString())
         val imageUrl = freelancer?.profilePicture.toString()
         val imageView: ImageView = view.findViewById(R.id.imageView)
         Picasso.get()
-            .load(imageUrl) // add an error placeholder to see if there's an error loading the image
+            .load(imageUrl)
             .into(imageView, object : Callback {
                 override fun onSuccess() {
-                    // Image successfully loaded
                 }
 
                 override fun onError(e: Exception?) {
-                    // Image loading failed
                     e?.printStackTrace()
                 }
             })
         Name = view.findViewById(R.id.Name)
-        Name.setText( "Name = " + freelancer?.Name.toString())
+        Name.setText( "Name = " + freelancer?.name.toString())
         Surname = view.findViewById(R.id.Surname)
-        Surname.setText("Surname = " + freelancer?.Surname.toString())
+        Surname.setText("Surname = " + freelancer?.surname.toString())
         Email = view.findViewById(R.id.Email)
         Email.setText("Email = " + freelancer?.email.toString())
         PhoneNumber = view.findViewById(R.id.PhoneNumber)
         PhoneNumber.setText("PhoneNumber = " + freelancer?.phoneNumber.toString())
+        SocketManager.initSocket("http://192.168.1.20:5000/freelancer")
+        SocketManager.connect()
+        SocketManager.emit("getConnectedFreelancers")
+        SocketManager.on("connectedFreelancersCount") {args ->
+            val count = args[0] as Int
+            val countTextView = view.findViewById<TextView>(R.id.Count)
+            countTextView.setText("Connected Users = "+count.toString())
+        }
+        SocketManager.on("userDisconnectedMobile") {args ->
+            val count = args[0] as Int
+            val countTextView = view.findViewById<TextView>(R.id.Count)
+            countTextView.setText("Connected Users = "+ count.toString())
+        }
+        SocketManager.on("userConnectedMobile") { args ->
+            val count = args[0] as Int
+            val countTextView = view.findViewById<TextView>(R.id.Count)
+            countTextView.setText("Connected Users = "+ count.toString())
+        }
     }
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ProfilePage.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             ProfilePage().apply {
