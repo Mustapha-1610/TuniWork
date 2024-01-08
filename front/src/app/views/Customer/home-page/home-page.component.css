@@ -1,0 +1,51 @@
+/* Carousel */
+#carouselId {
+    position: relative;
+  }
+  
+  .carousel-item {
+    height: 500px; /* Ajustez la hauteur du carousel-item selon vos besoins */
+  }
+  
+  .carousel-caption {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  
+  .carousel-content {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .carousel-content h6 {
+    font-size: 1.5rem;
+  }
+  
+  .carousel-content h1 {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+  }
+  
+  .carousel-content p {
+    font-size: 1.25rem;
+    margin-bottom: 20px;
+  }
+  
+  .carousel-content-btn1,
+  .carousel-content-btn2 {
+    font-size: 1rem;
+  }
+  
+  /* Adjust the button styles as needed */
+  .carousel-content-btn1,
+  .carousel-content-btn2 {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 10px;
+  }
+  
+  /* Add additional styles as needed */
+  

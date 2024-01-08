@@ -21,11 +21,13 @@ import {
 import { WithCredentialsInterceptor } from 'src/with-credentials.interceptor';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
+
 //aziz
 import { PublicJobCreateComponent } from './views/comapny/public-job-create/public-job-create.component';
 import { PublicJobEditFormComponent } from './views/comapny/public-job-edit/public-job-edit.component';
 import { ComapnyModule } from './views/comapny/comapny.module';
 import { HomePageModule } from './views/home-page/home-page.module';
+import { CustomerModule } from './views/Customer/customer.module';
 
 @NgModule({
   declarations: [
@@ -47,6 +49,7 @@ import { HomePageModule } from './views/home-page/home-page.module';
     BrowserAnimationsModule,
     SocialLoginModule,
     ComapnyModule,
+    CustomerModule
   ],
   providers: [
     {

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CustomerService } from '../../services/customer.service'; // Update the import statement
+import { CustomerService } from '../../services/customer.service';
 
 @Component({
   selector: 'app-my-jobs',
@@ -7,26 +7,26 @@ import { CustomerService } from '../../services/customer.service'; // Update the
   styleUrls: ['./my-jobs.component.css']
 })
 export class MyJobsComponent implements OnInit {
-  publicJobOffers: any[] = [];
-  privateJobOffers: any[] = [];
 
-  constructor(private customerService: CustomerService) {} // Update the service injection
+  privateCJoboffers: any[] = [];
+
+  isDeleteConfirmationVisible = false;
+  selectedCJobOffer: any; 
+  
+  constructor(private cus: CustomerService) {} 
 
   ngOnInit(): void {
-    this.fetchPrivateJobOffers();
-   
+    this.fetchPrivateCJoboffers();
   }
 
- 
-
-  fetchPrivateJobOffers() {
-    const customerInfos = this.customerService.getCustomerInfos(); // Update the method and variable names
+  fetchPrivateCJoboffers() {
+    const customerInfos = this.cus.getCustomerInfos(); 
     const customerId = customerInfos?._id;
 
-    this.customerService.getAllPrivateJobOffers(customerId).subscribe( // Update the method name
+    this.cus.getAllPrivateJobOffers(customerId).subscribe(
       (response: any) => {
-        this.privateJobOffers = response;
-        console.log(this.privateJobOffers);
+        this.privateCJoboffers = response;
+        console.log(this.privateCJoboffers);
       },
       (error) => {
         console.error('Error fetching job offers', error);
@@ -34,7 +34,36 @@ export class MyJobsComponent implements OnInit {
     );
   }
 
+  onDeletePrivateJobOffer(privateJobOfferId: string): void {
+    this.cus.deletePrivateJobOffer(privateJobOfferId).subscribe(
+      (response: any) => {
+        console.log(response.success);
+        this.privateCJoboffers = this.privateCJoboffers.filter(jobOffer => jobOffer._id !== privateJobOfferId);
+      },
+      (error) => {
+        console.error('Error deleting private job offer', error);
+      }
+    );
+  }
+
+ /* selectedOffer: any;
+
+  showDeleteConfirmation(privatecjoboffer: any): void {
+    this.isDeleteConfirmationVisible = true;
+    this.selectedOffer = privatecjoboffer;
+  }
+
+  confirmDelete(): void {
+    this.isDeleteConfirmationVisible = false;
+    this.onDeletePrivateJobOffer(this.selectedOffer._id);
+    console.log('Suppression confirmée pour : ', this.selectedOffer);
+    this.cancelDelete();
+  }
+
+  cancelDelete(): void {
+    this.isDeleteConfirmationVisible = false;
+    this.selectedOffer = null;
+  }*/
   
 
- 
 }

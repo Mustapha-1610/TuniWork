@@ -39,6 +39,22 @@
       class="mt-4 w-1/2"
       style="height: 10px"
     ></mat-progress-bar>
+    <h1
+      class="text-3xl md:text-4xl font-semibold text-gray-800 mt-4 cursor-pointer"
+      *ngIf="!isEditing"
+      (click)="isEditing = true"
+    >
+      {{ freeLancerInfos.Name }}
+      <mat-icon style="font-size: 16px">border_color</mat-icon>
+    </h1>
+
+    <input
+      class="text-1xl md:text-1xl font-semibold text-gray-800 mt-4"
+      *ngIf="isEditing"
+      [(ngModel)]="editableName"
+      (blur)="isEditing = false"
+      (keyup.enter)="isEditing = false; saveName()"
+    />
 
     <h1 class="text-3xl md:text-4xl font-semibold text-gray-800 mt-4">
       {{ freeLancerInfos.Name + " " + freeLancerInfos.Surname }}

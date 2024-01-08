@@ -1,14 +1,16 @@
 import Customer from "./modal";
 import jwt from "jsonwebtoken";
-import express from "express";
+import express, { query } from "express";
 import bcrypt from "bcryptjs";
-import { SendCustomerAccountConfirmationMail, SendPasswordResetEmail } from "./nodemailerConfig";
-import { customerRouteProtection } from "./routeProtectionMiddleware";
+import { SendCustomerAccountConfirmationMail } from "./nodemailerConfig";import { customerRouteProtection } from "./routeProtectionMiddleware";
 import generateCustomerToken from "./utils";
 import generateFreelancerToken from "Freelancer/utils";
 import generateCompanyToken from "Company/utils";
-import freelancer from "Freelancer/modal";
-import company from "Company/modal";
+import freelancer from "../Freelancer/modal";
+import { freelancerNameSpace } from "../server";
+import Freelancer from "../Freelancer/modal";
+
+
 
 
 
@@ -118,12 +120,51 @@ export const createCustomerAccount = async (req: express.Request, res: express.R
           customerAccount: Customer,
         });
       } catch (err) {
-        console.log(err);
-        return res.json({ error: "Server Error" });
-      }
+        console.error(err);
+        return res.status(500).json({ error: "Internal Server Error", details: err.message });
+    }
+    
   };
 
-
+  export const auth = async (req: express.Request, res: express.Response) => {
+    try {
+      const { Email, Password } = req.body;
+      let customerAccount;
+  
+      if (!Email && !Password) {
+        return res.status(401).json({ error: "Invalid Input(s)" });
+     
+      } else {
+        customerAccount = await Customer.findOne({ Email });
+      }
+  
+      if (!customerAccount) {
+        return res.json({ error: "Account doesn't exist!" });
+      }
+  
+      const passwordCheck = bcrypt.compareSync(Password, customerAccount.Password);
+      if (!passwordCheck) {
+        return res.status(404).json({ Message: "Invalid email or password!" });
+      }
+  
+      if (customerAccount.AccountVerficiationStatus === false) {
+        return res.json({
+          emailError: "You need to verify your email first before logging in!",
+        });
+      }
+  
+      if (customerAccount.AccountActivationStatus === false) {
+        return res.json({ error: "This account is disabled!" });
+      }
+  
+      await generateCustomerToken(res, customerAccount._id);
+      return res.json({ customerAccount });
+    } catch (err) {
+      console.log(err);
+      return res.json({ error: "Server Error!" });
+    }
+  };
+  
 
 
   
@@ -154,15 +195,6 @@ export const createCustomerAccount = async (req: express.Request, res: express.R
       return res.json({ error: "Server Error!" });
     }
   };
-  
-
-
-
-
-
-
-
-
 
 
 export const authC = async (req: express.Request, res: express.Response) => { 
@@ -297,10 +329,6 @@ export const activateCustomer = async (req: express.Request, res: express.Respon
 
 
 
-
-
-
-
 export const disableAccount = async (req: express.Request, res: express.Response) => {
   try {
     const customerId = req.body.customerId; 
@@ -342,10 +370,10 @@ export const sendPassResetEmail = async (req: express.Request, res: express.Resp
     );
 
     
-    await SendPasswordResetEmail(
+    await sendPassResetEmail(
       existingCustomer.Name,
       existingCustomer.Email,
-      existingCustomer._id
+    
     );
 
 
@@ -552,4 +580,237 @@ export const Mauth = async (
     return res.json({ error: "Erreur serveur!" });
   }
 }
+
+
+export const getAllFreelancers = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  console.log(req.query);
+  let allfreelancers = await freelancer.find()
+ 
+  
+  return res.json({ allfreelancers });
+};
+
+export const saveFreelancer = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { customerId, freelancerId } = req.params;
+
+   
+    const customer = await Customer.findById(customerId);
+    const freelancer: any = await Freelancer.findById(freelancerId);
+    const freelancerName = freelancer ? freelancer.Name : null;
+
+    if (!customer || !freelancer) {
+      return res.json({ error: "Invalid customer or freelancer ID" });
+    }
+
+   
+    const existingSavedFreelancer = customer.savedFreelancers.find(
+      (saved) => saved.freelancerId.toString() === freelancerId
+    );
+
+    if (existingSavedFreelancer) {
+      return res.json({ error: "Freelancer already saved by the customer" });
+    }
+
+    await Customer.findByIdAndUpdate(
+      customerId,
+      {
+        $push: {
+          savedFreelancers: {
+            freelancerId: freelancerId,
+            freelancerName: freelancerName,
+          },
+        },
+      },
+      { new: true }
+    );
+
+  
+    await customer.save();
+
+    return res.json({ success: "Freelancer saved successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Server Error" });
+  }
+};
+
+
+export const unsaveFreelancer = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { customerId, freelancerId } = req.params;
+
+
+    const customer = await Customer.findById(customerId);
+
+    if (!customer) {
+      return res.json({ error: "Invalid customer ID" });
+    }
+
+    
+    const existingSavedFreelancerIndex = customer.savedFreelancers.findIndex(
+      (saved) => saved.freelancerId.toString() === freelancerId
+    );
+
+    if (existingSavedFreelancerIndex === -1) {
+      return res.json({ error: "Freelancer not saved by the customer" });
+    }
+
+  
+    customer.savedFreelancers.splice(existingSavedFreelancerIndex, 1);
+
+ 
+    await customer.save();
+
+    return res.json({ success: "Freelancer removed successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Server Error" });
+  }
+};
+
+
+export const viewFreelancerDetails = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { freelancerId } = req.params;
+
+    // Find the freelancer by ID
+    const freelancer = await Freelancer.findById(freelancerId);
+
+    if (!freelancer) {
+      return res.status(404).json({ error: "Freelancer not found" });
+    }
+
+    // Send the freelancer details in the response
+    return res.json({ freelancer });
+  } catch (error) {
+    console.error("Error in getFreelancerDetails:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+
+export const getSavedFreelancers = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { customerId } = req.params;
+
+   
+    const customer = await Customer.findById(customerId);
+
+    if (!customer) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+
+ 
+    const savedFreelancers = customer.savedFreelancers;
+
+    return res.json({ savedFreelancers });
+  } catch (error) {
+    console.error("Error in getSavedFreelancers:", error);
+    return res.status(500).json({ error: "Server Error" });
+  }
+};
+
+
+
+
+
+
+
+// Define the route handler
+export const createCustomerMobileAccount = async (req: express.Request, res: express.Response) => {
+ 
+  console.log('Request Body:', req.body);
+ 
+  try {
+    // Destructure request body
+    const {
+      
+        Name,
+        LastName,
+        Email,
+        PhoneNumber,
+        Password, 
+        Location,
+        City,
+        Municipality,
+        
+      
+    } = req.body;
+    
+    
+    let existingCustomer = await Customer.findOne({
+      $or: [{ Email: Email }, { PhoneNumber: PhoneNumber }],
+    });
+    
+    if (existingCustomer) {
+      return res.json({ error: "Account Exists Already" });
+    }
+    
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let VerificationCode = "";
+    
+    for (let i = 0; i < 25; i++) {
+      VerificationCode += characters[Math.floor(Math.random() * characters.length)];
+    }
+    
+    const securePassword = bcrypt.hashSync(Password);
+    
+    
+    const customerAccount: any = await Customer.create({
+      Name,
+      LastName,
+      Email,
+      Password: securePassword,
+      PhoneNumber,
+      VerificationCode,
+      EstimateWorkLocation: {
+        City,
+        Municipality,
+      },
+      VerLinkExpDate: new Date(new Date().getTime() + 2 * 60 * 60 * 1000),
+      Location,
+      // Other fields...
+    });
+    // Check if certain properties exist before using them
+    if (
+      customerAccount?.Name &&
+      customerAccount?.Email &&
+      customerAccount?._id &&
+      customerAccount?.VerificationCode
+    ) {
+      // Assuming 'SendCustomerAccountConfirmationMail' is a function you've defined
+      await SendCustomerAccountConfirmationMail(
+        customerAccount.Name,
+        customerAccount.Email,
+        customerAccount._id,
+        customerAccount.VerificationCode
+      );
+    } else {
+      console.error("Invalid parameters for SendCustomerAccountConfirmationMail");
+    }
+
+    // Return success message
+    return res.json({ success: "Account Created" });
+  } catch (err) {
+    // Handle errors and provide details
+    console.error(err);
+    return res.status(500).json({ error: "Internal Server Error", details: err.message });
+  }
+};
 

@@ -139,10 +139,7 @@ export const create = async (req: express.Request, res: express.Response) => {
   }
 };
 
-export const createMobileAccount = async (
-  req: express.Request,
-  res: express.Response
-) => {
+export const createMobileAccount = async (  req: express.Request,  res: express.Response) => {
   try {
     const {
       City,
@@ -420,7 +417,6 @@ export const getProfile = async (
       if (Freelancer.AccountActivationStatus === false) {
         return res.json({ error: "This account is disabled !" });
       }
-      console.log();
       return res.json({ freelancer: Freelancer });
     }
     return freelancerId;
@@ -602,7 +598,6 @@ export const multiauth = async (
     let existingAccount: any = await freelancer.findOne({
       $or: [{ Email }, { PhoneNumber }],
     });
-
     if (existingAccount) {
       const passwordcheck = bcrypt.compareSync(
         Password,
@@ -620,7 +615,6 @@ export const multiauth = async (
         return res.json({ error: "This account is disabled !" });
       }
       await generateFreelancerToken(res, existingAccount._id);
-      console.log(existingAccount);
       return res.json({ freelancerAccount: existingAccount });
     } else if (
       (existingAccount = await company.findOne({
@@ -1218,28 +1212,11 @@ export const refreshProfile = async (
 ) => {
   try {
     const freelancerId = await freeLancerRouteProtection(req, res);
-    console.log(freelancerId);
     if ("_id" in freelancerId) {
       const freelancerAccount: any = await freelancer.findById(freelancerId);
-      console.log(freelancerAccount);
       return res.json({ freelancerAccount });
     }
     return freelancerId;
-  } catch (err) {
-    console.log(err);
-    return res.json({ error: "Server Error" });
-  }
-};
-
-export const refreshProfileMobile = async (
-  req: express.Request,
-  res: express.Response
-) => {
-  try {
-    const { freelancerId } = req.body;
-    const freelancerAccount: any = await freelancer.findById(freelancerId);
-    await generateFreelancerToken(res, freelancerAccount._id);
-    return res.json({ freelancerAccount });
   } catch (err) {
     console.log(err);
     return res.json({ error: "Server Error" });
@@ -1260,9 +1237,6 @@ export const cleanNotification = async (
         }
       });
       await freelancerAccount.save();
-      freelancerNameSpace.emit("NotificationRefresh", {
-        freelancerId: freelancerAccount._id.toString(),
-      });
       return res.json({ success: "Notifications Updated" });
     }
 

@@ -1,1 +1,89 @@
-<p>talent-freelancers works!</p>
+<!--<div class="row">
+  <div class="col-md-4" *ngFor="let freelancer of freelancers">
+    <a [routerLink]="['/customer/talent-freelancer-profile', freelancer._id]">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-header-bar">
+            <a class="btn-message" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg><span class="sr-only">Message</span></a>
+          </div>
+          <span class="image"><img src="{{ freelancer.ProfilePicture }}"></span>
+        </div>
+
+        <div class="card-body">
+          <span class="name">{{ freelancer.Name }} {{ freelancer.Surname }}</span><br>
+          <span class="job-title"><u>{{freelancer.WorkTitle.WorkTitleText }}</u></span>
+          <div class="bio">{{freelancer.Speciality}}</div>
+        </div>
+       
+        <div class="card-footer">
+          <div class="stats">
+            <div class="stat">
+              <span class="label">Rate</span>
+              <span class="value">${{freelancer.PayRate.HourlyRate}}/h</span>
+            </div>
+            <div class="stat">
+              <span class="label">Followers</span>
+              <span class="value">940</span>
+            </div>
+            <div class="stat">
+              <span class="label">Jobs</span>
+              <span class="value">{{ freelancer.ProposedPrivateWorks.length }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>-->
+
+
+ 
+<div class="container-fluid services py-5 mb-5">
+  <div class="container">
+      <div class="text-center mx-auto pb-5 wow fadeIn" data-wow-delay=".3s" style="max-width: 600px;">
+          <h5 class="text-primary">All FRELANCERS</h5>
+          <h1>Your Exclusive Private Job Opportunities</h1>
+      </div>
+      <div class="row g-5 services-inner" >
+          <div class="col-md-6 col-lg-4 wow fadeIn" data-wow-delay=".3s"*ngFor="let freelancer of freelancers">
+            <a [routerLink]="['/customer/talent-freelancer-profile', freelancer._id]">
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-header-bar">
+                    <a class="btn-message" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg><span class="sr-only">Message</span></a>
+                  </div>
+                  <span class="image"><img src="{{ freelancer.ProfilePicture }}"></span>
+                </div>
+        
+                <div class="card-body">
+                  <span class="name">{{ freelancer.Name }} {{ freelancer.Surname }}</span><br>
+                  <span class="job-title"><u>{{freelancer.WorkTitle.WorkTitleText }}</u></span>
+                  <div class="bio">{{freelancer.Speciality}}</div>
+                </div>
+               
+                <div class="card-footer">
+                  <div class="stats">
+                    <div class="stat">
+                      <span class="label">Rate</span>
+                      <span class="value">${{freelancer.PayRate.HourlyRate}}/h</span>
+                    </div>
+                    <div class="stat">
+                      <span class="label">Followers</span>
+                      <span class="value">940</span>
+                    </div>
+                    <div class="stat">
+                      <span class="label">Jobs</span>
+                      <span class="value">{{ freelancer.ProposedPrivateWorks.length }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </a>
+          
+              
+          </div> 
+      </div>
+  </div>
+</div>  
+
+

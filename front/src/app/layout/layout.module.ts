@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomeLayoutComponent } from './home-layout/home-layout.component';
 import { CompanyLayoutComponent } from './company-layout/company-layout.component';
 import { CustomerLayoutComponent } from './customer-layout/customer-layout.component';
+
 @NgModule({
   declarations: [
     FreelancerlayoutComponent,

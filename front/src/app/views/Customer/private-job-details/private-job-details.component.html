@@ -1,1 +1,31 @@
-<p>private-job-details works!</p>
+<div class="container">
+    <div class="card shadow mb-4">
+      <div class="card-body">
+        <h3>Private Job Offer Details</h3>
+        <ul>
+          <li><strong>Title:</strong> {{ privateJobOffer?.Title }}</li>
+          <li><strong>Supposed Start Time: </strong> {{ privateJobOffer.StartTime | date:'dd-MM-yyyy \'at\' HH:mm:ss' }}</li>
+          <li><strong>Dead Line:</strong> {{ privateJobOffer.DeadLine | date:'dd-MM-yyyy \'at\' HH:mm:ss' }}</li>
+          <li>
+            <strong>Description:</strong> {{ privateJobOffer?.Description }}
+          </li>
+          <li *ngIf="privateJobOffer?.status === 'awaiting freelancer response'">
+            <strong>Status:</strong> awaiting freelancer response
+          </li>
+          <li *ngIf="privateJobOffer?.status === 'accepted'">
+            <strong>Status:</strong> accepted
+          </li>
+          <li *ngIf="privateJobOffer?.status === 'declined'">
+            <strong>Status:</strong> declined
+          </li>
+          <li *ngIf="privateJobOffer?.status === 'in progress'">
+            <strong>Status:</strong> in progress
+          </li>
+          <li *ngIf="privateJobOffer?.status === 'done'">
+            <strong>Status:</strong> done
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  

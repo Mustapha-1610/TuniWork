@@ -4,10 +4,23 @@ import { Router } from '@angular/router';
 import { Socket, io } from 'socket.io-client';
 import { CustomerService } from 'src/app/views/services/customer.service';
 
+
+
 @Component({
   selector: 'app-customer-layout',
   templateUrl: './customer-layout.component.html',
-  styleUrls: ['./customer-layout.component.css']
+  styleUrls: ['./customer-layout.component.css',
+  /*"../../../../assets/templateC/css/bootstrap.css",
+  "../../../../assets/templateC/css/style.css",
+  "../../../../assets/templateC/js/main.js",
+  "../../../../assets/templateC/css/lib/animate/animate.css",
+  "../../../../assets/templateC/css/lib/animate/animate.min.css",
+  "../../../../assets/templateC/css/lib/easing/easing.js",
+*/
+  
+
+
+]
 })
 export class CustomerLayoutComponent implements OnDestroy {
   customerInfos: any = this.cus.getCustomerCredits

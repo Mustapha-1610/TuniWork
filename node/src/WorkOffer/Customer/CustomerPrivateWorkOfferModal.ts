@@ -1,135 +1,134 @@
-
 import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
-const PrivateJobOffresCustomerSchemaDef = new Schema({
+
+const privateJOfferSchema = new Schema({
+  TaskTable: [
+    {
+      TaskTitle: {
+        type: String,
+      },
+      TaskDoneStatus: {
+        type: Boolean,
+        default: false,
+      },
+    },
+  ],
+  PaymentRequest: {
+    PaymentRequestId: {
+      type: Schema.Types.ObjectId,
+    },
+    PaymentAmount: {
+      type: Number,
+    },
+    PaymentStatus: {
+      type: String,
+      enum: [
+        "Tasks Not Done",
+        "Awaiting Company Response",
+        "Payment Sent",
+        "Payment Declined",
+        "Reported , Awaiting Admin Review",
+      ],
+      default: "Tasks Not Done",
+    },
+  },
+
 
   Title: {
     type: String,
     required: true,
   },
-
-  WorkTitle: {
-    type: String,
+  StartTime: {
+    type: Date,
   },
 
+ 
 
   CreationDate: {
     type: Date,
     default: new Date(),
   },
 
-  
   Description: {
     type: String,
     required: true,
   },
 
-  
   Note: {
     type: String,
   },
-  
-  
-  SizeP: {
-    type: String,
-    enum: ["Large", "Medium", "Small"],
-    default: "Medium",
-    required: true
-  },
 
-  
-  PaymentMethod: {
-    PayPerTask: {
-      ExperienceLevel: {
-        type: "String",
-      },
-      FixedPrice: {
-        type: "String",
-      },
-    },
-    PayPerHours: {
-      HoursPerWeek: {
-        type: String,
-        default:"0"
-      },
-      Duration: {
-        type: String,
-      },
-      PayPerHour: {
-        type: String,
-        default:"0"
-      },
-    },
-  },
 
-  
-  WorkingCustomer: {  
-    CustomerName: {  
+  WorkingFreelancer: {
+    FreelancerName: {
       type: String,
     },
-    CustomerId: {  
+    FreelancerId: {
       type: Schema.Types.ObjectId,
-      ref: "Customer",  
+      ref: "freelancer",
+    },
+  },
+  PayRate: {
+    PayPerHour: {
+      type: Number,
+      default: 0, 
+    },
+    PayPerTask: {
+      type: Number,
+      default: 0, 
     },
   },
 
+ 
   
-  CustomerName: {  
-    type: String,
-    required: true,
-  },
 
-  
-  Location: {
+  CustomerLocation: {
     type: String,
   },
+  CustomerName: {
+    type: String,
+  },
 
-  
-  CustomerId: { 
+  CustomerId: {
     type: Schema.Types.ObjectId,
-    ref: "Customer",  
+    ref: "Customer",
   },
 
-  
   PaymentMethodVerificationStatus: {
     type: Boolean,
     default: false,
   },
- 
-  TotalWorkOffered: { 
+
+
+  TotalWorkOfferd: {
+    type: Number,
+  },
+  TotalMoneyPayed: {
     type: Number,
   },
 
-
-  TotalMoneyPaid: { 
-    type: Number,
-  },
-
-  
   status: {
     type: String,
     enum: [
-      "awaiting customer response",  
+      "awaiting freelancer response",
       "accepted",
       "declined",
       "in progress",
       "done",
     ],
-    default: "awaiting customer response",  
+    default: "awaiting freelancer response",
   },
 
- 
   DeadLine: {
     type: Date,
     required: true,
   },
 });
 
-const PrivateJobOffresCustomerModel = mongoose.model(
-  "PrivateJobOffresCustomer",
-  PrivateJobOffresCustomerSchemaDef
+const PrivateCJobOffer = mongoose.model(
+  "PrivateCJobOffer",
+  privateJOfferSchema
 );
 
-
-export default PrivateJobOffresCustomerModel;
+export default PrivateCJobOffer;

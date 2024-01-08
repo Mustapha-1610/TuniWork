@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+
+
 import {
   FormBuilder,
   FormControl,
@@ -6,7 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CustomerService } from '../../services/customer.service'; // Change to your customer service
+import { CustomerService } from '../../services/customer.service';
 import { io, Socket } from 'socket.io-client';
 
 @Component({
@@ -17,6 +19,10 @@ import { io, Socket } from 'socket.io-client';
 export class PrivateJobCreateComponent implements OnInit {
   privateJobCreateForm!: FormGroup;
   freelancerId: any;
+  freelancerName: any;
+  freelancerWorktitle: any;
+  freelancerPPH: any;
+  freelancerPPT:any;
   tasksForm: any;
   private socket: Socket;
   errMessage: any;
@@ -25,7 +31,7 @@ export class PrivateJobCreateComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
-    private customerService: CustomerService, // Change to your customer service
+    private customerService: CustomerService,
     private router: Router
   ) {
     // Initialize the Socket.IO connection in the constructor
@@ -35,24 +41,25 @@ export class PrivateJobCreateComponent implements OnInit {
   ngOnInit(): void {
     // Get customerId from route params
     this.route.params.subscribe((params) => {
-      this.freelancerId = params['freelancerId']; 
+      this.freelancerId = params['freelancerId'];
+      this.viewFreelancerDetails(this.freelancerId);
     });
 
-    const customerInfos: any = this.customerService.getCustomerInfos();
-    const customerId = customerInfos._id;
+    const customerInfos = this.customerService.getCustomerInfos();
+    const CustomerId = customerInfos._id;
     const CustomerName = customerInfos.Name;
 
-    // Initialize form with your desired structure
+
     this.privateJobCreateForm = this.formBuilder.group({
       Title: ['', Validators.required],
       Description: ['', Validators.required],
       Note: [''],
-      ExperienceLevel: ['', Validators.required],
-      FixedPrice: ['', Validators.required],
-      CustomerName: CustomerName, // Change from CompanyName to CustomerName
+      PayPerHour: [false],
+      PayPerTask: [false],
+      CustomerName: CustomerName,
       DeadLine: ['', Validators.required],
       WorkTitle: [''],
-      CustomerId: customerId, // Change from CompanyId to CustomerId
+      CustomerId: CustomerId,
       FreelancerId: [this.freelancerId, Validators.required],
       StartTime: ['', Validators.required],
     });
@@ -60,28 +67,85 @@ export class PrivateJobCreateComponent implements OnInit {
     this.tasksForm = new FormGroup({
       Task: new FormControl(null),
     });
+    this.privateJobCreateForm.addControl('PayPerHour', new FormControl(false));
+    this.privateJobCreateForm.addControl('PayPerTask', new FormControl(false));
+    this.privateJobCreateForm.patchValue({
+      PayPerHour: false,
+      PayPerTask: false,
+    });
+
+
   }
+
+
+  viewFreelancerDetails(freelancerId: string): void {
+    this.customerService.getFreelancerDetails(freelancerId).subscribe(
+      (response: any) => {
+        const freelancerDetails = response.freelancer;
+        const Name = freelancerDetails.Name;
+        const PayPerHour = freelancerDetails.PayRate.HourlyRate;
+        const PayPerTask = freelancerDetails.PayRate.PayPerTaskRate;
+        const Worktitle = freelancerDetails.WorkTitle.WorkTitleText;
+
+        this.freelancerName = Name;
+        this.freelancerWorktitle = Worktitle;
+        this.freelancerPPH =PayPerHour;
+        this.freelancerPPT=PayPerTask
+
+      this.privateJobCreateForm.get('PayPerHour')?.setValue(PayPerHour);
+      this.privateJobCreateForm.get('PayPerTask')?.setValue(PayPerTask);
+
+        console.log('Freelancer Details:', freelancerDetails);
+      },
+      (error: any) => {
+        console.error('Error getting freelancer details', error);
+      }
+    );
+  }
+
+  
 
   onSubmit(): void {
     if (this.taskTable.length === 0) {
       this.errMessage = 'You Need To Add Atleast One Task';
     } else {
       const privateJobCreateData = this.privateJobCreateForm.value;
+
+      privateJobCreateData.PayRate = {};
+      if (this.privateJobCreateForm.get('PayPerHour')?.value) {
+        privateJobCreateData.PayRate.PayPerHour = +this.freelancerPPH;
+      } else if (this.privateJobCreateForm.get('PayPerTask')?.value) {
+        privateJobCreateData.PayRate.PayPerTask = +this.freelancerPPT;
+      }
+
       console.log('Private Job Create Data:', privateJobCreateData);
 
-      this.customerService
-        .createPrivateJobOffer(privateJobCreateData)
-        .subscribe(
-          (response: any) => {
-            console.log(response.success);
-          },
-          (error) => {
-            console.error('Error creating private job offer', error);
-          }
-        );
+      this.customerService.createPrivateJobOffer(privateJobCreateData, this.taskTable).subscribe(
+        (response: any) => {
+          console.log('API Response:', response);
+
+          const jobOfferId = response.jobOfferId;
+
+          console.log('Job Offer ID:', jobOfferId);
+
+          this.socket.emit('createPrivateJob', {
+            freelancerId: this.freelancerId,
+            jobOfferTitle: privateJobCreateData.Title,
+            jobOfferId: jobOfferId,
+            jobOfferCompany: privateJobCreateData.CompanyName,
+          });
+          console.log('Private job offer emitted');
+        },
+        (error) => {
+          console.error('Error creating private job offer', error);
+        }
+      );
+
       this.router.navigate(['customer/my-jobs']);
+    }
   }
-}
+
+  
 
   // (Mustapha)
   taskTable: any[] = [];
@@ -92,7 +156,7 @@ export class PrivateJobCreateComponent implements OnInit {
       this.taskTable.push(this.tasksForm.value.Task);
       this.tasksForm.controls['Task'].reset();
     }
-   
+
   }
 
   deleteItem(item: any) {
@@ -100,11 +164,11 @@ export class PrivateJobCreateComponent implements OnInit {
     if (this.taskTable.length === 0) {
       this.errMessage = 'You Need To Add Atleast One Task';
 
- }
+    }
 
 
 
-}
+  }
 
 }
 

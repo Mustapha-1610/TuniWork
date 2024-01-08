@@ -1,35 +1,82 @@
-<p>my-jobs works!</p>
 
-<!--
-<div class="container">
-    <div class="card shadow mb-4">
-      <div class="card-body">
-        <h3>Private Work Offers</h3>
-        <table class="table table-striped">
-          <tr>
-            <th>Title</th>
-            <th>Status</th>
-            <th>Description</th>
-            <th>Creation Date</th>
-            <th>Actions</th>
-          </tr>
-          <tbody *ngFor="let privateJobOffer of privateJobOffers">
-            <tr>
-              <td>{{ privateJobOffer.Title }}</td>
-              <td>{{ privateJobOffer.status }}</td>
-              <td>{{ privateJobOffer.Description }}</td>
-              <td>{{ privateJobOffer.CreationDate | date : "dd/MM/yyyy" }}</td>
-              <td>
-                <a class="btn btn-success" [routerLink]="['/private-job-edit', privateJobOffer._id]">Modifier</a>
-                <a class="btn btn-danger" (click)="onDeletePrivateJobOffer(privateJobOffer._id)">Supprimer</a>
-                <a class="btn btn-info" [routerLink]="['/private-job-details', privateJobOffer._id]">Details</a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+<!--<br><br><br><br><br><br><br><br><br><br>
+
+
+
+<section class="container box feature1">
+  <div class="row">
+    <div class="col-12" >
+      <header class="first major" >
+        <h2>This is an important heading</h2>
+        <p>And this is where we talk about why we’re <strong>pretty awesome</strong> ...</p>
+      </header>
+    </div>
+    <div class="col-4 col-12-medium" *ngFor="let privatecjoboffer of privateCJoboffers">
+      <section >
+        <div class="card">
+          <header class="card-header">
+            <p>{{ privatecjoboffer.CreationDate | date : "dd/MM/yyyy" }}</p>
+            <span class="title">{{ privatecjoboffer.Title }}</span>
+          </header>
+          <div class="card-author">
+            <a class="author-avatar" href="#">
+              <span>
+            </span></a>
+            <svg class="half-circle" viewBox="0 0 106 57">
+              <path d="M102 4c0 27.1-21.9 49-49 49S4 31.1 4 4"></path>
+            </svg>
+            <div class="author-name">
+              <div class="author-name-prefix">Status</div> {{ privatecjoboffer.status }}
+              </div>
+            </div>
+            <div class="tags">
+             
+             <a [routerLink]="'/customer/private-job-edit/' + privatecjoboffer._id">Modifier</a>
+              <a  (click)="showDeleteConfirmation(privatecjoboffer)">Supprimer</a>
+              <a [routerLink]="'/customer/private-job-details/' + privatecjoboffer._id">Details</a>
+              
+            </div>
+          </div>
+      </section>
+    </div>
+    
+    
+    <div class="col-12">
+      <p>Phasellus quam turpis, feugiat sit amet ornare in, hendrerit in lectus. Praesent semper
+      bibendum ipsum, et tristique augue fringilla eu. Vivamus id risus vel dolor auctor euismod
+      quis eget mi. Etiam eu ante risus. Aliquam erat volutpat. Aliquam luctus mattis lectus sit
+      amet pulvinar. Nam nec turpis.</p>
+    </div>
+  </div>
+</section>-->
+
+
+<!-- Services Start -->
+<div class="container-fluid services py-5 mb-5">
+  <div class="container">
+    <div class="text-center mx-auto pb-5 wow fadeIn" data-wow-delay=".3s" style="max-width: 600px;">
+      <h5 class="text-primary">Our Jobs</h5>
+      <h1>Your Exclusive Private Job Opportunities</h1>
+    </div>
+    <div class="row g-5 services-inner">
+      <div class="col-md-6 col-lg-4 wow fadeIn" data-wow-delay=".3s" *ngFor="let privatecjoboffer of privateCJoboffers">
+        <div class="services-item bg-light">
+          <div class="p-4 text-center services-content">
+            <div class="services-content-icon">
+              <h4 class="mb-3">{{ privatecjoboffer.Title }}</h4>
+
+              <p class="mb-4">{{ privatecjoboffer.status }} : {{ privatecjoboffer.CreationDate | date : "dd/MM/yyyy" }} </p>
+
+              <div class="tags">
+                <a [routerLink]="'/customer/private-job-edit/' + privatecjoboffer._id">Update</a>
+                <a class="btn btn-danger" (click)="onDeletePrivateJobOffer(privatecjoboffer._id)" class="delete-link">Delete</a>
+                <a [routerLink]="'/customer/private-job-details/' + privatecjoboffer._id">Details</a>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  
-  
   </div>
-  -->
+</div>
+<!-- Services End -->

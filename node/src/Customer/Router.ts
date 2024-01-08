@@ -7,6 +7,7 @@ const customerRouter = express.Router();
 
 
 customerRouter.post("/createCustomerAccount", customerController.createCustomerAccount);
+customerRouter.post("/createCustomerMobileAccount", customerController.createCustomerMobileAccount);
 
 
 
@@ -14,6 +15,7 @@ customerRouter.put(
   "/update/:customerId",
   customerController.update
 );
+customerRouter.post("/auth", customerController.auth);
 
 
 customerRouter.put( "/verify", customerController.verifyAccount);
@@ -32,7 +34,28 @@ customerRouter.put("/ResetPassword", customerController.ResetPassword);
 customerRouter.post("/sendLinkEmail", customerController.sendVerificationLink);
 customerRouter.post("/LgoogleAuth", customerController.googleAuth);
 
-customerRouter.post("/multiauth",customerController.Mauth)
+
+customerRouter.post("/multiauth",customerController.Mauth);
+customerRouter.get("/getAllFreelancers", customerController.getAllFreelancers);
+
+customerRouter.post(
+  "/saveFreelancer/:customerId/:freelancerId",
+  customerController.saveFreelancer
+);
+customerRouter.post(
+  "/unsaveFreelancer/:customerId/:freelancerId",
+  customerController.unsaveFreelancer
+);
+
+customerRouter.get(
+  "/viewFreelancerDetails/:freelancerId",
+  customerController.viewFreelancerDetails
+);
+
+customerRouter.get(
+  "/getSavedFreelancers/:customerId",
+  customerController.getSavedFreelancers
+);
 
 
 

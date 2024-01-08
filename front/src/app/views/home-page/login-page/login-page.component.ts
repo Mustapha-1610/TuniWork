@@ -64,7 +64,7 @@ export class LoginPageComponent implements OnInit {
         this.cus.setCustomerInfos(
           JSON.stringify(res.customerAccount)
         );
-        this.route.navigate(['/customer/profile']);
+        this.route.navigate(['/customer/homeC']);
       
       } else if (res.emailError) {
         this.mailError = res.emailError;

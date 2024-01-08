@@ -1,0 +1,77 @@
+/* Style for the navigation bar */
+.container-fluid.bg-primary {
+    background-color: #007bff; /* Set your desired background color */
+  }
+  
+  .container {
+    padding: 15px;
+  }
+  
+  .navbar {
+    padding: 0;
+  }
+  
+  .navbar-brand h1 {
+    margin: 0;
+  }
+  
+  .navbar-brand h1 span {
+    color: #6c757d; /* Set your desired secondary text color */
+  }
+  
+  .navbar-toggler {
+    border: none;
+  }
+  
+  .navbar-toggler-icon {
+    background-color: #fff; /* Set your desired background color for the toggler icon */
+  }
+  
+  .navbar-nav a {
+    color: #ffffff !important; /* Set your desired text color for the nav links */
+  }
+  
+  .navbar-nav .nav-link.active {
+    color: #6c757d !important; /* Set your desired text color for the active link */
+  }
+  
+  /* Style for the dropdown menu */
+  .dropdown-menu.rounded {
+    border-radius: 0.375rem;
+  }
+  
+  .dropdown-menu.rounded a {
+    color: #000000 !important; /* Set your desired text color for dropdown items */
+  }
+  
+  /* Style for the phone icon and number */
+  #phone-tada {
+    margin-right: 20px;
+  }
+  
+  .fa-phone-alt {
+    color: #ffffff;
+  }
+  
+  .fa-comment-dots {
+    color: #6c757d;
+  }
+  
+  /* Style for the "Have any questions?" section */
+  .d-flex.flex-column.border-end {
+    border-color: #6c757d; /* Set your desired border color */
+    padding-right: 15px;
+  }
+  
+  .text-white-50, .text-secondary {
+    margin: 0;
+    color: #ffffff;
+  }
+  
+  /* Style for the search icon */
+  .bi-search {
+    color: #ffffff;
+  }
+  
+
+  

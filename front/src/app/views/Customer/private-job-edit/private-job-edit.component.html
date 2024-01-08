@@ -1,1 +1,55 @@
-<p>private-job-edit works!</p>
+<div class="container">
+    <h2>Update Private Job Offer</h2>
+  
+    <form [formGroup]="privateJobEditForm" (ngSubmit)="onSubmit()">
+      <div class="mb-3">
+        <label for="Title" class="form-label">Title</label>
+        <input type="text" class="form-control" id="Title" formControlName="Title" required >
+      </div>
+  
+      <div class="mb-3">
+        <label for="Description" class="form-label">Description</label>
+        <textarea class="form-control" id="Description" formControlName="Description" required></textarea>
+      </div>
+  
+      <div class="mb-3">
+        <label for="Note" class="form-label">Note</label>
+        <textarea class="form-control" id="Note" formControlName="Note"></textarea>
+      </div>
+  
+      <div class="mb-3">
+        <label for="PayPerTask" class="form-label">Pay Per Task</label>
+        <input type="text" class="form-control" id="PayPerTask" formControlName="PayPerTask" required>
+      </div>
+  
+      <div class="mb-3">
+        <label for="PayPerHour" class="form-label">Pay Per Hour</label>
+        <input type="text" class="form-control" id="PayPerHour" formControlName="PayPerHour" required>
+      </div>
+  
+      <div class="mb-3">
+        <label for="CompanyName" class="form-label">Customer Name</label>
+        <input type="text" class="form-control" id="CompanyName" formControlName="CompanyName" required>
+      </div>
+  
+      <div class="mb-3">
+        <label for="Location" class="form-label"> Location</label>
+        <input type="text" class="form-control" id="Location" formControlName="Location">
+      </div>
+  
+      <div class="mb-3">
+        <label for="TotalWorkOffered" class="form-label">Total Work Offered</label>
+        <input type="text" class="form-control" id="TotalWorkOffered" formControlName="TotalWorkOfferd" required>
+      </div>
+  
+      <div class="mb-3">
+        <label for="TotalMoneyPayed" class="form-label">Total Money Payed</label>
+        <input type="text" class="form-control" id="TotalMoneyPayed" formControlName="TotalMoneyPayed" required>
+      </div>
+      
+      <button type="submit" class="btn btn-primary" >retour</button>
+      <button type="submit" class="btn btn-primary">Update Private Job Offer</button>
+      
+    </form>
+  </div>
+  

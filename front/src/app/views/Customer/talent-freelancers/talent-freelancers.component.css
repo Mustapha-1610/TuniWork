@@ -1,0 +1,139 @@
+.card {
+  position: relative;
+  width: 400px;
+  height: 450px;
+ 
+  border-radius: 20px;
+}
+
+
+.card-header {
+  position: relative;
+  height: 220px;
+  background-size: cover;
+  background-position: top;
+ 
+}
+
+
+
+.image {
+  position: absolute;
+  top: 100px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #222;
+  font-size: 20px;
+  font-weight: 100px;
+  height: 100px;
+  width: 100px;
+
+  padding: 2px;
+  cursor: pointer;
+}
+
+.image img {
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.image input {
+  display: none;
+}
+
+.card-header-bar {
+  position: absolute;
+  top: 0;
+  margin: 10px;
+  z-index: 1;
+}
+
+.btn-message {
+  display: inline-block;
+  width: 19.37px;
+  height: 16.99px;
+  margin-right: 10px;
+  margin-top: 10px;
+  float: right;
+}
+
+.card-body {
+  text-align: center;
+  padding-left: 10px;
+}
+
+.name {
+  font-size: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin: 0 auto;
+}
+
+.job-title {
+  font-size: 14px;
+  font-weight: 300;
+  margin-top: 15px;
+  color: #919191;
+}
+
+.bio {
+  font-size: 14px;
+  color: #7B7B7B;
+  font-weight: 300;
+  margin: 10px auto;
+  line-height: 20px;
+}
+
+.social-accounts img {
+  width: 15px;
+}
+
+.social-accounts a {
+  margin-left: 5px;
+}
+
+.social-accounts a:first-child {
+  margin-left: 0;
+}
+
+.card-footer {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  bottom: 20px;
+}
+
+.stats {
+  display: flex;
+  justify-content: space-between;
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat:not(:last-child) {
+  border-right: 1px solid grey;
+}
+
+.stat .label {
+  display: block;
+  text-transform: uppercase;
+  font-weight: 300;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: #95989A;
+}
+
+.stat .value {
+  display: block;
+  font-weight: 700;
+  font-size: 20px;
+  margin-top: 5px;
+}
+
+
+
+

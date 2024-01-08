@@ -27,8 +27,8 @@ export class PrivateJobEditComponent implements OnInit {
       Note: [''],
       PayPerTask: ['', Validators.required],
       PayPerHour: ['', Validators.required],
-      CustomerName: ['', Validators.required], // Change from CompanyName to CustomerName
-      CustomerLocation: [''], // Change from CompanyLocation to CustomerLocation
+      Name: ['', Validators.required], // Change from CompanyName to CustomerName
+      Location: [''], // Change from CompanyLocation to CustomerLocation
       TotalWorkOffered: ['', Validators.required], // Change from TotalWorkOfferd to TotalWorkOffered
       TotalMoneyPaid: ['', Validators.required], // Change from TotalMoneyPayed to TotalMoneyPaid
     });
@@ -74,7 +74,7 @@ export class PrivateJobEditComponent implements OnInit {
     const updatedJobOfferData = this.privateJobEditForm.value;
 
     this.customerService
-      .createPrivateJobOffer(updatedJobOfferData)
+      .editPrivateJobOffer(privateJobOfferId,updatedJobOfferData)
       .subscribe(
         (response: any) => {
           console.log(response.success);
@@ -83,6 +83,7 @@ export class PrivateJobEditComponent implements OnInit {
           console.error('Error updating private job offer', error);
         }
       );
+      
 
   }
 }

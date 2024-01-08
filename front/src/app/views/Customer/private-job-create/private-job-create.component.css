@@ -1,0 +1,87 @@
+/* Ajoutez ces styles dans votre fichier CSS ou balise <style> du composant Angular */
+
+/* Style général du formulaire */
+form {
+    max-width: 400px;
+    margin: auto;
+  }
+  
+  /* Style des étiquettes */
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Style des champs de saisie */
+  input[type="text"],
+  textarea,
+  input[type="datetime-local"] {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+  }
+  
+  /* Style des cases à cocher */
+  input[type="checkbox"] {
+    margin-right: 0.5rem;
+  }
+  
+  /* Style du bouton "Add" */
+  button {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: #4a90e2; /* Couleur d'arrière-plan */
+    color: #fff; /* Couleur du texte */
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+  }
+  
+  /* Style de l'espace entre les éléments du formulaire */
+  .space-y-2 > * {
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Style du message d'erreur */
+  .error-message {
+    color: red;
+    margin-bottom: 1rem;
+  }
+  
+  /* Style du conteneur des tâches */
+  .task-container {
+    margin-top: 1rem;
+  }
+  
+  /* Style des éléments de la liste de tâches */
+  .task-list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Style du bouton de suppression de tâche */
+  .delete-task-button {
+    color: #888;
+    cursor: pointer;
+  }
+  
+  /* Style du bouton de soumission du formulaire */
+  .submit-button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #4a90e2; /* Couleur d'arrière-plan */
+    color: #fff; /* Couleur du texte */
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+  }
+  
+  /* Style du bouton de soumission au survol */
+  .submit-button:hover {
+    background-color: #0056b3; /* Couleur d'arrière-plan au survol */
+  }
+  
